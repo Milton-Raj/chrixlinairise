@@ -1051,6 +1051,10 @@ function renderPricingPlans(overridePlans) {
       </div>
     </div>
   `).join('');
+  // Re-observe new cards so the animation fires (IntersectionObserver only fires once per element)
+  el.querySelectorAll('.animate-in').forEach(card => {
+    if (typeof observer !== 'undefined') observer.observe(card);
+  });
 }
 
 function renderFAQ(data) {
