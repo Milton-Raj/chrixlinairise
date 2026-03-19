@@ -188,3 +188,29 @@ VALUES ('default', 'Chrixlin AI Rise', 'info@chrixlin.tech', '$',
   'Thank you for your purchase! Our team will contact you within 24 hours to schedule your onboarding call.',
   '30-day satisfaction guarantee. Contact us within 30 days for a full refund if you''re not satisfied.')
 ON CONFLICT (profile_key) DO NOTHING;
+
+-- ── ALTER: add billing_cycle to pricing_plans ──────────────────────
+ALTER TABLE public.pricing_plans ADD COLUMN IF NOT EXISTS billing_cycle TEXT NOT NULL DEFAULT 'monthly';
+CREATE INDEX IF NOT EXISTS idx_pricing_billing ON public.pricing_plans (billing_cycle);
+
+-- ── TABLE 7: strategy_calls ────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS public.strategy_calls (
+  id          UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  name        TEXT        NOT NULL DEFAULT '',
+  email       TEXT        NOT NULL DEFAULT '',
+  phone       TEXT        NOT NULL DEFAULT '',
+  date        DATE,
+  notes       TEXT        NOT NULL DEFAULT '',
+  status      TEXT        NOT NULL DEFAULT 'booked',  -- booked | completed | no-show
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_calls_email  ON public.strategy_calls (email);
+CREATE INDEX IF NOT EXISTS idx_calls_status ON public.strategy_calls (status);
+CREATE INDEX IF NOT EXISTS idx_calls_date   ON public.strategy_calls (date);
+CREATE TRIGGER trg_calls_updated_at BEFORE UPDATE ON public.strategy_calls FOR EACH ROW EXECUTE FUNCTION trigger_set_updated_at();
+ALTER TABLE public.strategy_calls ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "calls_anon_insert" ON public.strategy_calls FOR INSERT WITH CHECK (true);
+CREATE POLICY "calls_auth_read"   ON public.strategy_calls FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "calls_auth_update" ON public.strategy_calls FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "calls_auth_delete" ON public.strategy_calls FOR DELETE USING (auth.role() = 'authenticated');

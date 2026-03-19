@@ -280,6 +280,49 @@
     /* ─── DIVIDER ─────────────────────────────────────────── */
     .divider { height: 1px; background: var(--border); margin: 24px 0; }
 
+    /* ─── CEO DASHBOARD ──────────────────────────────────── */
+    .dash-filter-row { display:flex; align-items:center; gap:10px; margin-bottom:24px; flex-wrap:wrap; }
+    .dash-filter-btn { padding:8px 18px; border-radius:8px; background:var(--card); border:1px solid var(--border); color:var(--sub); font-size:13px; font-weight:600; cursor:pointer; transition:var(--transition); }
+    .dash-filter-btn.active, .dash-filter-btn:hover { background:rgba(99,102,241,0.15); color:#a5b4fc; border-color:var(--primary); }
+    .dash-filter-spacer { flex:1; }
+    .dash-export-btn { padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; border:1px solid var(--border); background:var(--card); color:var(--sub); transition:var(--transition); }
+    .dash-export-btn:hover { color:var(--text); border-color:var(--border-h); }
+    .kpi-row2 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:20px; }
+    .kpi-card2 { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:24px; text-align:center; }
+    .kpi-card2-val { font-size:36px; font-weight:800; font-family:var(--font-h); color:var(--text); }
+    .kpi-card2-label { font-size:12px; color:var(--muted); margin-top:6px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+    .dash-table-row { display:grid; grid-template-columns:1fr auto auto; gap:16px; padding:10px 0; border-bottom:1px solid var(--border); font-size:13px; align-items:center; }
+    .dash-table-row:last-child { border-bottom:none; }
+    .dash-table-header { display:grid; grid-template-columns:1fr auto auto; gap:16px; padding:0 0 8px; font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid var(--border); margin-bottom:4px; }
+    .dist-bar-wrap { display:grid; grid-template-columns:80px 1fr 48px; gap:12px; align-items:center; margin-bottom:12px; font-size:13px; }
+    .dist-bar { height:8px; background:var(--border); border-radius:4px; overflow:hidden; }
+    .dist-fill { height:100%; border-radius:4px; transition:width 0.5s ease; }
+
+    /* ─── BILLING TABS ────────────────────────────────────── */
+    .billing-tabs { display:flex; gap:8px; margin-bottom:24px; padding:4px; background:var(--card); border:1px solid var(--border); border-radius:12px; width:fit-content; }
+    .billing-tab { padding:10px 20px; border-radius:9px; background:transparent; border:none; color:var(--sub); font-size:14px; font-weight:600; cursor:pointer; transition:var(--transition); }
+    .billing-tab.active { background:rgba(99,102,241,0.2); color:#a5b4fc; border:1px solid rgba(99,102,241,0.4); }
+
+    /* ─── ADMIN TABLE ─────────────────────────────────────── */
+    .admin-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .admin-table th { text-align:left; padding:10px 12px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); border-bottom:1px solid var(--border); }
+    .admin-table td { padding:12px; border-bottom:1px solid rgba(255,255,255,0.04); vertical-align:top; }
+    .admin-table tr:hover td { background:var(--card); }
+
+    /* ─── ANALYTICS ───────────────────────────────────────── */
+    .analytics-stat { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-size:14px; }
+    .analytics-stat:last-child { border-bottom:none; }
+    .analytics-stat strong { color:var(--text); font-weight:700; }
+
+    /* ─── SETTINGS CARDS ──────────────────────────────────── */
+    .settings-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:24px; cursor:pointer; transition:var(--transition); text-align:left; width:100%; font-family:var(--font-b); }
+    .settings-card:hover { border-color:var(--border-h); background:rgba(99,102,241,0.08); }
+    .settings-card-icon { font-size:28px; margin-bottom:12px; }
+    .settings-card-title { font-size:15px; font-weight:700; color:var(--text); margin-bottom:6px; }
+    .settings-card-desc { font-size:13px; color:var(--muted); line-height:1.5; }
+    .settings-card.sm { padding:14px 16px; display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; color:var(--sub); border-radius:10px; }
+    .settings-card.sm:hover { color:var(--text); }
+
     /* ─── RESPONSIVE ─────────────────────────────────────── */
     @media (max-width: 768px) {
       .sidebar { width: 100%; height: auto; position: relative; }
@@ -306,55 +349,47 @@
         <span class="sb-icon">🏠</span> Dashboard
       </button>
 
-      <div class="sidebar-section-label">Page Sections</div>
-      <button class="sidebar-btn" onclick="showPanel('hero')" data-panel="hero">
-        <span class="sb-icon">⚡</span> Hero Section
-      </button>
-      <button class="sidebar-btn" onclick="showPanel('stats')" data-panel="stats">
-        <span class="sb-icon">📊</span> Stats Bar
-      </button>
-      <button class="sidebar-btn" onclick="showPanel('story')" data-panel="story">
-        <span class="sb-icon">📖</span> Founder Story
-      </button>
-      <button class="sidebar-btn" onclick="showPanel('process')" data-panel="process">
-        <span class="sb-icon">🗺️</span> How It Works
-      </button>
-      <button class="sidebar-btn" onclick="showPanel('features')" data-panel="features">
-        <span class="sb-icon">🎁</span> Features
-      </button>
-      <button class="sidebar-btn" onclick="showPanel('testimonials')" data-panel="testimonials">
-        <span class="sb-icon">⭐</span> Testimonials
-      </button>
-      <button class="sidebar-btn" onclick="showPanel('forwho')" data-panel="forwho">
-        <span class="sb-icon">🎯</span> Who It's For
+      <div class="sidebar-section-label">Management</div>
+      <button class="sidebar-btn" onclick="showPanel('users')" data-panel="users">
+        <span class="sb-icon">👥</span> Users
       </button>
       <button class="sidebar-btn" onclick="showPanel('pricing')" data-panel="pricing">
-        <span class="sb-icon">💎</span> Pricing
+        <span class="sb-icon">💎</span> Plans & Pricing
       </button>
-      <button class="sidebar-btn" onclick="showPanel('faq')" data-panel="faq">
-        <span class="sb-icon">❓</span> FAQ
-      </button>
-      <button class="sidebar-btn" onclick="showPanel('cta')" data-panel="cta">
-        <span class="sb-icon">🚀</span> CTA Section
-      </button>
-      <button class="sidebar-btn" onclick="showPanel('footer')" data-panel="footer">
-        <span class="sb-icon">📄</span> Footer
-      </button>
-
       <button class="sidebar-btn" onclick="showPanel('marketplace')" data-panel="marketplace">
         <span class="sb-icon">🛒</span> Marketplace
       </button>
+      <button class="sidebar-btn" onclick="showPanel('orders')" data-panel="orders">
+        <span class="sb-icon">📦</span> Orders & Transactions
+      </button>
+      <button class="sidebar-btn" onclick="showPanel('calls')" data-panel="calls">
+        <span class="sb-icon">📞</span> Free Strategy Calls
+      </button>
+
+      <div class="sidebar-section-label">Insights</div>
+      <button class="sidebar-btn" onclick="showPanel('analytics')" data-panel="analytics">
+        <span class="sb-icon">📈</span> Analytics & Reports
+      </button>
 
       <div class="sidebar-section-label">Settings</div>
-      <button class="sidebar-btn" onclick="showPanel('bankdetails')" data-panel="bankdetails">
-        <span class="sb-icon">🏦</span> Bank Details
+      <button class="sidebar-btn" onclick="toggleSettingsMenu()" data-panel="settings" id="settingsMenuBtn">
+        <span class="sb-icon">⚙️</span> Settings
+        <span style="margin-left:auto;font-size:11px;color:var(--muted)" id="settingsMenuArrow">▾</span>
       </button>
-      <button class="sidebar-btn" onclick="showPanel('theme')" data-panel="theme">
-        <span class="sb-icon">🎨</span> Theme & Colors
-      </button>
-      <button class="sidebar-btn" onclick="showPanel('seo')" data-panel="seo">
-        <span class="sb-icon">🔍</span> SEO Settings
-      </button>
+      <div id="settingsSubMenu" style="display:none;padding-left:12px">
+        <button class="sidebar-btn" onclick="showPanel('settings');toggleContentEditor()" data-panel="settings-content" style="font-size:13px">
+          <span class="sb-icon">✍️</span> Content Editor
+        </button>
+        <button class="sidebar-btn" onclick="showPanel('bankdetails')" data-panel="bankdetails" style="font-size:13px">
+          <span class="sb-icon">🏦</span> Bank Details
+        </button>
+        <button class="sidebar-btn" onclick="showPanel('theme')" data-panel="theme" style="font-size:13px">
+          <span class="sb-icon">🎨</span> Theme & Colors
+        </button>
+        <button class="sidebar-btn" onclick="showPanel('seo')" data-panel="seo" style="font-size:13px">
+          <span class="sb-icon">🔍</span> SEO Settings
+        </button>
+      </div>
     </nav>
 
     <div class="sidebar-bottom">
@@ -392,65 +427,85 @@
 
       <!-- ── DASHBOARD ─────────────────────────────────────── -->
       <div id="panel-dashboard" class="panel active">
-        <div class="panel-title">Welcome Back 👋</div>
-        <div class="panel-desc">Your complete website control centre — manage content, products, pricing, and payments all in one place.</div>
+        <div class="panel-title">CEO Dashboard</div>
+        <div class="panel-desc">Real-time business intelligence</div>
 
-        <!-- KPI Row -->
+        <!-- Filter Row -->
+        <div class="dash-filter-row">
+          <button class="dash-filter-btn active" data-filter="all" onclick="setDashFilter('all')">All Time</button>
+          <button class="dash-filter-btn" data-filter="weekly" onclick="setDashFilter('weekly')">Weekly</button>
+          <button class="dash-filter-btn" data-filter="monthly" onclick="setDashFilter('monthly')">Monthly</button>
+          <button class="dash-filter-btn" data-filter="yearly" onclick="setDashFilter('yearly')">Yearly</button>
+          <span class="dash-filter-spacer"></span>
+          <button class="dash-export-btn" onclick="exportPDF()">📄 Export PDF</button>
+          <button class="dash-export-btn" onclick="exportExcel()">📊 Export Excel</button>
+        </div>
+
+        <!-- Revenue KPI Row -->
         <div class="dash-kpi-row">
           <div class="dash-kpi kpi-purple">
-            <div class="dash-kpi-icon">🛒</div>
-            <div class="dash-kpi-val" id="dash_productCount">0</div>
-            <div class="dash-kpi-label">Products Listed</div>
-            <div class="dash-kpi-sub" id="dash_productCategories">No products yet</div>
+            <div class="dash-kpi-icon">💰</div>
+            <div class="dash-kpi-val" id="kpi_totalRevenue">$0</div>
+            <div class="dash-kpi-label">Total Revenue</div>
+            <div class="dash-kpi-sub">All time</div>
+          </div>
+          <div class="dash-kpi kpi-cyan">
+            <div class="dash-kpi-icon">📦</div>
+            <div class="dash-kpi-val" id="kpi_marketplaceSales">$0</div>
+            <div class="dash-kpi-label">Marketplace Sales</div>
+            <div class="dash-kpi-sub">Product purchases</div>
           </div>
           <div class="dash-kpi kpi-gold">
             <div class="dash-kpi-icon">💎</div>
-            <div class="dash-kpi-val" id="dash_planCount">0</div>
-            <div class="dash-kpi-label">Pricing Plans</div>
-            <div class="dash-kpi-sub" id="dash_priceRange">No plans configured</div>
-          </div>
-          <div class="dash-kpi kpi-cyan">
-            <div class="dash-kpi-icon">✍️</div>
-            <div class="dash-kpi-val" id="dash_sectionCount">11</div>
-            <div class="dash-kpi-label">Editable Sections</div>
-            <div class="dash-kpi-sub">Hero · Story · Features · FAQ…</div>
+            <div class="dash-kpi-val" id="kpi_subRevenue">$0</div>
+            <div class="dash-kpi-label">Subscription Revenue</div>
+            <div class="dash-kpi-sub">Plan subscriptions</div>
           </div>
           <div class="dash-kpi kpi-green">
-            <div class="dash-kpi-icon">🟢</div>
-            <div class="dash-kpi-val">Live</div>
-            <div class="dash-kpi-label">Site Status</div>
-            <div class="dash-kpi-sub" id="dash_lastSaved">Not yet published</div>
+            <div class="dash-kpi-icon">📞</div>
+            <div class="dash-kpi-val" id="kpi_freeCalls">0</div>
+            <div class="dash-kpi-label">Free Calls Booked</div>
+            <div class="dash-kpi-sub">Strategy sessions</div>
           </div>
         </div>
 
-        <!-- Row 2: Products + Plans -->
-        <div class="dash-row2">
-          <div class="dash-section">
-            <div class="dash-section-title">🛒 Marketplace Products <span style="font-size:11px;color:var(--muted);margin-left:auto;cursor:pointer;font-weight:400" onclick="showPanel('marketplace')">Manage →</span></div>
-            <div id="dash_productList"><div style="color:var(--muted);font-size:13px;padding:20px 0;text-align:center">No products yet</div></div>
+        <!-- Second Row: 3 cards -->
+        <div class="kpi-row2">
+          <div class="kpi-card2">
+            <div class="kpi-card2-val" id="kpi_totalPurchases">0</div>
+            <div class="kpi-card2-label">Total Purchases</div>
           </div>
-          <div class="dash-section">
-            <div class="dash-section-title">💎 Pricing Plans <span style="font-size:11px;color:var(--muted);margin-left:auto;cursor:pointer;font-weight:400" onclick="showPanel('pricing')">Manage →</span></div>
-            <div id="dash_planList"><div style="color:var(--muted);font-size:13px;padding:20px 0;text-align:center">No plans configured</div></div>
+          <div class="kpi-card2">
+            <div class="kpi-card2-val" id="kpi_conversionRate">0%</div>
+            <div class="kpi-card2-label">Conversion Rate — Free → Paid %</div>
+          </div>
+          <div class="kpi-card2">
+            <div class="kpi-card2-val" id="kpi_activePlans">0</div>
+            <div class="kpi-card2-label">Active Plans</div>
           </div>
         </div>
 
-        <!-- Row 3: Content Health + Quick Actions -->
+        <!-- Third Row: Trending + Top Plans -->
         <div class="dash-row2">
           <div class="dash-section">
-            <div class="dash-section-title">📊 Content Health</div>
-            <div class="dash-health" id="dash_healthBars"></div>
+            <div class="dash-section-title">🔥 Trending Products</div>
+            <div class="dash-table-header"><span>Product</span><span>Purchases</span><span>Revenue</span></div>
+            <div id="dash_trendingProducts"><div style="color:var(--muted);padding:16px 0;font-size:13px">No orders yet</div></div>
           </div>
           <div class="dash-section">
-            <div class="dash-section-title">⚡ Quick Actions</div>
-            <div class="dash-actions">
-              <button class="dash-action-btn" onclick="showPanel('hero')"><div class="dash-action-icon">⚡</div><div class="dash-action-title">Hero Section</div><div class="dash-action-sub">Edit headline & CTAs</div></button>
-              <button class="dash-action-btn" onclick="showPanel('pricing')"><div class="dash-action-icon">💎</div><div class="dash-action-title">Pricing Plans</div><div class="dash-action-sub">Create / edit plans</div></button>
-              <button class="dash-action-btn" onclick="showPanel('marketplace')"><div class="dash-action-icon">🛒</div><div class="dash-action-title">Marketplace</div><div class="dash-action-sub">Add / edit products</div></button>
-              <button class="dash-action-btn" onclick="showPanel('testimonials')"><div class="dash-action-icon">⭐</div><div class="dash-action-title">Testimonials</div><div class="dash-action-sub">Student results</div></button>
-              <button class="dash-action-btn" onclick="showPanel('bankdetails')"><div class="dash-action-icon">🏦</div><div class="dash-action-title">Bank Details</div><div class="dash-action-sub">Payment settings</div></button>
-              <button class="dash-action-btn" onclick="showPanel('faq')"><div class="dash-action-icon">❓</div><div class="dash-action-title">FAQ</div><div class="dash-action-sub">Questions & answers</div></button>
-            </div>
+            <div class="dash-section-title">💎 Top Plans</div>
+            <div class="dash-table-header"><span>Plan</span><span>Type</span><span>Revenue</span></div>
+            <div id="dash_topPlans"><div style="color:var(--muted);padding:16px 0;font-size:13px">No plans yet</div></div>
+          </div>
+        </div>
+
+        <!-- Fourth Row: Sales Distribution -->
+        <div class="dash-section" style="margin-bottom:24px">
+          <div class="dash-section-title">📊 Sales Distribution</div>
+          <div id="dash_salesDistribution" style="margin-top:12px">
+            <div class="dist-bar-wrap"><span>Monthly</span><div class="dist-bar"><div class="dist-fill" style="width:0%;background:var(--primary)"></div></div><span>0%</span></div>
+            <div class="dist-bar-wrap"><span>Yearly</span><div class="dist-bar"><div class="dist-fill" style="width:0%;background:var(--gold)"></div></div><span>0%</span></div>
+            <div class="dist-bar-wrap"><span>One-Time</span><div class="dist-bar"><div class="dist-fill" style="width:100%;background:var(--cyan)"></div></div><span>100%</span></div>
           </div>
         </div>
       </div>
@@ -660,27 +715,16 @@
 
       <!-- ── PRICING ────────────────────────────────────────── -->
       <div id="panel-pricing" class="panel">
-        <div class="panel-title">💎 Pricing Plans</div>
-        <div class="panel-desc">Create up to 3 pricing plans shown on the landing page. The first plan should always be your free offer.</div>
+        <div class="panel-title">💎 Plans & Pricing</div>
+        <div class="panel-desc">Configure pricing plans for each billing model. Max 3 plans per billing cycle.</div>
 
-        <!-- Pricing Manager Header -->
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
-          <div style="font-family:var(--font-h);font-weight:700;font-size:15px;color:var(--sub)">
-            <span id="pricingPlanCount">0</span> / 3 plans configured
-          </div>
-          <button class="btn btn-primary" id="addPlanBtn" onclick="openPlanModal(null)">＋ Add Pricing Plan</button>
+        <!-- Billing Tabs -->
+        <div class="billing-tabs">
+          <button class="billing-tab active" data-cycle="monthly" onclick="switchPricingTab('monthly')">📅 Monthly</button>
+          <button class="billing-tab" data-cycle="yearly" onclick="switchPricingTab('yearly')">📆 Yearly</button>
+          <button class="billing-tab" data-cycle="one-time" onclick="switchPricingTab('one-time')">💳 One-Time</button>
         </div>
-
-        <!-- Plan Cards -->
-        <div id="pricingPlanCards" style="display:flex;flex-direction:column;gap:12px"></div>
-
-        <!-- Empty State -->
-        <div id="pricingEmptyState" style="display:none;text-align:center;padding:60px 20px;color:var(--muted)">
-          <div style="font-size:48px;margin-bottom:12px">💎</div>
-          <div style="font-family:var(--font-h);font-weight:700;font-size:16px;margin-bottom:8px">No pricing plans yet</div>
-          <div style="font-size:14px;margin-bottom:20px">Add up to 3 plans. Start with a free strategy call offer.</div>
-          <button class="btn btn-primary btn-sm" onclick="openPlanModal(null)">＋ Add First Plan</button>
-        </div>
+        <div id="pricingTabContent"></div>
       </div>
 
       <!-- ── PLAN MODAL ─────────────────────────────────────── -->
@@ -694,6 +738,7 @@
             <button onclick="closePlanModal()" style="width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center">✕</button>
           </div>
           <div style="flex:1;overflow-y:auto;padding:28px">
+            <input type="hidden" id="pp_billingCycle" value="monthly" />
             <div class="form-grid" style="margin-bottom:20px">
               <div class="form-row" style="margin:0"><label>Plan Name *</label><input type="text" id="pp_name" placeholder="e.g. AI Accelerator" /></div>
               <div class="form-row" style="margin:0"><label>Badge Label</label><input type="text" id="pp_badge" placeholder="e.g. ⚡ Best Value" /></div>
@@ -1177,6 +1222,127 @@
         <button class="btn btn-primary" style="margin-top:8px" onclick="saveBankDetails()">💾 Save Payment Settings</button>
       </div>
 
+      <!-- ── ORDERS & TRANSACTIONS ───────────────────────────── -->
+      <div id="panel-orders" class="panel">
+        <div class="panel-title">📦 Orders & Transactions</div>
+        <div class="panel-desc">All customer purchases and payment records.</div>
+        <div id="ordersTableWrap">
+          <div style="color:var(--muted);text-align:center;padding:48px 0">No orders yet. Orders submitted via the checkout form will appear here.</div>
+        </div>
+      </div>
+
+      <!-- ── FREE STRATEGY CALLS ─────────────────────────────── -->
+      <div id="panel-calls" class="panel">
+        <div class="panel-title">📞 Free Strategy Calls</div>
+        <div class="panel-desc">Track booked strategy calls from the Free Plan offer.</div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+          <button class="btn btn-primary btn-sm" onclick="openCallModal(null)">+ Log Call</button>
+        </div>
+        <div id="callsTableWrap"></div>
+
+        <!-- Log Call Modal -->
+        <div id="callModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9002;backdrop-filter:blur(8px)" onclick="closeCallModalOnBg(event)">
+          <div id="callModalDrawer" style="position:absolute;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transform:translateX(100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1)">
+            <div style="padding:24px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--bg3)">
+              <div>
+                <div style="font-family:var(--font-h);font-weight:800;font-size:18px" id="callModalTitle">Log Strategy Call</div>
+                <div style="font-size:13px;color:var(--muted);margin-top:2px">Enter call details below</div>
+              </div>
+              <button onclick="closeCallModal()" style="width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center">✕</button>
+            </div>
+            <div style="flex:1;overflow-y:auto;padding:28px">
+              <input type="hidden" id="call_editId" value="" />
+              <div class="form-grid" style="margin-bottom:20px">
+                <div class="form-row" style="margin:0"><label>Full Name *</label><input type="text" id="call_name" placeholder="e.g. John Smith" /></div>
+                <div class="form-row" style="margin:0"><label>Email</label><input type="email" id="call_email" placeholder="e.g. john@email.com" /></div>
+              </div>
+              <div class="form-grid" style="margin-bottom:20px">
+                <div class="form-row" style="margin:0"><label>Phone</label><input type="text" id="call_phone" placeholder="e.g. +44 7700 000000" /></div>
+                <div class="form-row" style="margin:0"><label>Call Date</label><input type="date" id="call_date" /></div>
+              </div>
+              <div class="form-row"><label>Status</label>
+                <select id="call_status">
+                  <option value="booked">Booked</option>
+                  <option value="completed">Completed</option>
+                  <option value="no-show">No-Show</option>
+                </select>
+              </div>
+              <div class="form-row"><label>Notes</label><textarea id="call_notes" rows="4" placeholder="Call notes, outcome, follow-up actions…"></textarea></div>
+            </div>
+            <div style="padding:20px 28px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-shrink:0;background:var(--bg3)">
+              <button class="btn btn-ghost btn-sm" onclick="closeCallModal()">Cancel</button>
+              <button class="btn btn-primary" onclick="saveCall()">💾 Save Call</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── USERS ───────────────────────────────────────────── -->
+      <div id="panel-users" class="panel">
+        <div class="panel-title">👥 Users</div>
+        <div class="panel-desc">Customer and subscriber management. Connect Supabase auth to populate this list.</div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:48px;text-align:center">
+          <div style="font-size:48px;margin-bottom:16px">👥</div>
+          <div style="font-size:18px;font-weight:700;margin-bottom:8px">User Management</div>
+          <div style="color:var(--muted);font-size:14px;max-width:400px;margin:0 auto">User accounts will appear here once Supabase auth is connected. Each subscriber and buyer will have a profile with purchase history.</div>
+        </div>
+      </div>
+
+      <!-- ── ANALYTICS & REPORTS ────────────────────────────── -->
+      <div id="panel-analytics" class="panel">
+        <div class="panel-title">📈 Analytics & Reports</div>
+        <div class="panel-desc">Deep-dive revenue insights, export reports in PDF or Excel.</div>
+        <div id="analyticsContent"></div>
+        <div style="display:flex;gap:12px;margin-top:24px">
+          <button class="btn btn-primary" onclick="exportPDF()">📄 Export PDF</button>
+          <button class="btn btn-ghost" onclick="exportExcel()">📊 Export Excel</button>
+        </div>
+      </div>
+
+      <!-- ── SETTINGS ────────────────────────────────────────── -->
+      <div id="panel-settings" class="panel">
+        <div class="panel-title">⚙️ Settings</div>
+        <div class="panel-desc">Configure your site, payment settings, and appearance.</div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:8px">
+          <div class="settings-card" onclick="showPanel('bankdetails')">
+            <div class="settings-card-icon">🏦</div>
+            <div class="settings-card-title">Bank Details</div>
+            <div class="settings-card-desc">Configure payment methods, bank transfer, PayPal, crypto</div>
+          </div>
+          <div class="settings-card" onclick="showPanel('theme')">
+            <div class="settings-card-icon">🎨</div>
+            <div class="settings-card-title">Theme & Colors</div>
+            <div class="settings-card-desc">Customize brand colors and visual appearance</div>
+          </div>
+          <div class="settings-card" onclick="showPanel('seo')">
+            <div class="settings-card-icon">🔍</div>
+            <div class="settings-card-title">SEO Settings</div>
+            <div class="settings-card-desc">Meta title, description, Open Graph for search ranking</div>
+          </div>
+          <div class="settings-card" onclick="toggleContentEditor()">
+            <div class="settings-card-icon">✍️</div>
+            <div class="settings-card-title">Content Editor</div>
+            <div class="settings-card-desc">Edit hero, features, FAQ, testimonials, and all page sections</div>
+          </div>
+        </div>
+        <!-- Content Editor sub-section -->
+        <div id="contentEditorSub" style="display:none;margin-top:24px">
+          <div class="dash-section-title" style="margin-bottom:16px">✍️ Page Sections</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            <button class="settings-card sm" onclick="showPanel('hero')"><span>⚡</span> Hero Section</button>
+            <button class="settings-card sm" onclick="showPanel('stats')"><span>📊</span> Stats Bar</button>
+            <button class="settings-card sm" onclick="showPanel('story')"><span>📖</span> Founder Story</button>
+            <button class="settings-card sm" onclick="showPanel('process')"><span>🗺️</span> How It Works</button>
+            <button class="settings-card sm" onclick="showPanel('features')"><span>🎁</span> Features</button>
+            <button class="settings-card sm" onclick="showPanel('testimonials')"><span>⭐</span> Testimonials</button>
+            <button class="settings-card sm" onclick="showPanel('forwho')"><span>🎯</span> Who It's For</button>
+            <button class="settings-card sm" onclick="showPanel('faq')"><span>❓</span> FAQ</button>
+            <button class="settings-card sm" onclick="showPanel('cta')"><span>🚀</span> CTA Section</button>
+            <button class="settings-card sm" onclick="showPanel('footer')"><span>📄</span> Footer</button>
+          </div>
+        </div>
+      </div>
+
     </div><!-- /content -->
   </main>
 </div>
@@ -1289,21 +1455,40 @@ function showToast(msg, type = 'success') {
 // ─── NAV / PANELS ─────────────────────────────────────────────────────────────
 function showPanel(name) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + name).classList.add('active');
-  document.querySelector(`.sidebar-btn[data-panel="${name}"]`).classList.add('active');
-  const labels = {
-    dashboard:'Dashboard', hero:'Hero Section', stats:'Stats Bar',
-    story:'Founder Story', process:'How It Works', features:'Features',
-    testimonials:'Testimonials', forwho:"Who It's For", pricing:'Pricing',
-    faq:'FAQ', cta:'CTA Section', footer:'Footer', theme:'Theme & Colors',
-    seo:'SEO Settings', marketplace:'Marketplace', bankdetails:'Bank Details'
+  const panel = document.getElementById('panel-' + name);
+  if (panel) panel.classList.add('active');
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.toggle('active', b.dataset.panel === name));
+  const titles = {
+    dashboard:'CEO Dashboard', users:'Users', pricing:'Plans & Pricing',
+    marketplace:'Marketplace', orders:'Orders & Transactions', calls:'Free Strategy Calls',
+    analytics:'Analytics & Reports', settings:'Settings',
+    bankdetails:'Bank Details', theme:'Theme & Colors', seo:'SEO Settings',
+    hero:'Hero Section', stats:'Stats Bar', story:'Founder Story', process:'How It Works',
+    features:'Features', testimonials:'Testimonials', forwho:"Who It's For",
+    faq:'FAQ', cta:'CTA Section', footer:'Footer'
   };
-  document.getElementById('panelTitle').textContent = labels[name] || name;
+  document.getElementById('panelTitle').textContent = titles[name] || name;
   if (name === 'marketplace') populateMarketplace();
   if (name === 'bankdetails') populateBankDetails();
-  if (name === 'pricing') populatePricing();
+  if (name === 'pricing') { renderPricingPlanCards(_activePricingCycle); }
   if (name === 'dashboard') refreshDashboard();
+  if (name === 'orders') renderOrdersPanel();
+  if (name === 'calls') renderCallsPanel();
+  if (name === 'analytics') renderAnalyticsPanel();
+}
+
+function toggleSettingsMenu() {
+  const menu = document.getElementById('settingsSubMenu');
+  const arrow = document.getElementById('settingsMenuArrow');
+  const isOpen = menu.style.display !== 'none';
+  menu.style.display = isOpen ? 'none' : 'block';
+  arrow.textContent = isOpen ? '▾' : '▴';
+  if (!isOpen) showPanel('settings');
+}
+
+function toggleContentEditor() {
+  const el = document.getElementById('contentEditorSub');
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
 }
 
 function toggleBox(header) {
@@ -1357,14 +1542,6 @@ function populateAll() {
   document.getElementById('forWho_title').value = val('forWho.title', "This Program is Built For <span class='text-grad'>Ambitious People</span>");
   document.getElementById('forWho_subtitle').value = val('forWho.subtitle', "Whether you're escaping a 9-5, in college, or already freelancing — we've helped people in every situation.");
 
-  // Pricing
-  document.getElementById('pricing_title').value = val('pricing.title', "The Only Program <span class='text-grad'>Guaranteed by Results</span>");
-  document.getElementById('pricing_subtitle').value = val('pricing.subtitle', "We don't get paid unless you make money. That's our promise.");
-  document.getElementById('pricing_cardTitle').value = val('pricing.cardTitle', 'Pay Nothing Until You Earn');
-  document.getElementById('pricing_cardSub').value = val('pricing.cardSub', 'No upfront cost. No monthly fees. No hidden charges. You only pay a small success fee from revenue generated in your first 6 months — after you\'re already making money.');
-  document.getElementById('pricing_cta').value = val('pricing.cta', 'Book My Free Strategy Call');
-  document.getElementById('pricing_note').value = val('pricing.note', '🔒 No credit card required · No contracts · Cancel anytime');
-
   // FAQ
   document.getElementById('faq_title').value = val('faq.title', "Frequently Asked <span class='text-grad'>Questions</span>");
   document.getElementById('faq_subtitle').value = val('faq.subtitle', 'Everything you need to know before booking your call.');
@@ -1396,7 +1573,7 @@ function populateAll() {
   buildFeaturesEditor();
   buildTestimonialsEditor();
   buildForWhoEditor();
-  buildPricingFeaturesEditor();
+  // buildPricingFeaturesEditor() — removed (pricing now uses billing tabs)
   buildFaqEditor();
 }
 
@@ -1578,49 +1755,78 @@ function addForWhoItem() {
 
 // ─── PRICING PLANS MANAGER ────────────────────────────────────────────────────
 const DEFAULT_PRICING_PLANS_ADMIN = [
-  { id:1, name:"Free Strategy Call", priceLabel:"FREE", price:0, period:"No credit card needed", badge:"🎯 No Risk", badgeColor:"#22c55e", badgeBg:"rgba(34,197,94,0.12)", description:"Start with a free 30-min 1-on-1 consultation. Get your personalised AI business roadmap with zero commitment.", cta:"Book My Free Call →", ctaStyle:"outline", highlighted:false, features:["30-min 1-on-1 strategy session","Custom 60-day AI roadmap","Market opportunity audit","Skill gap analysis","Zero sales pressure","No credit card required"] },
-  { id:2, name:"AI Starter", priceLabel:"$197", price:197, period:"One-time · No subscription", badge:"🔥 Most Popular", badgeColor:"#6366f1", badgeBg:"rgba(99,102,241,0.15)", description:"Everything you need to build your first AI product and land your first clients.", cta:"Get Started Today", ctaStyle:"primary", highlighted:false, features:["Full 60-day curriculum access","Weekly group coaching calls","AI tools & automation templates","Private community membership","Client proposal templates","Email & chat support"] },
-  { id:3, name:"AI Accelerator", priceLabel:"$497", price:497, period:"One-time · Best value", badge:"⚡ Best Value", badgeColor:"#f59e0b", badgeBg:"rgba(245,158,11,0.12)", description:"Done-with-you. We connect you with clients, co-deliver projects, and guarantee results.", cta:"Join AI Accelerator", ctaStyle:"primary", highlighted:true, features:["Everything in Starter, plus:","2× weekly 1-on-1 mentorship calls","Direct client introductions","Done-with-you project delivery","Priority Slack support channel","Income guarantee or full refund"] }
+  { id:1, name:"Free Strategy Call", priceLabel:"FREE", price:0, period:"No credit card needed", billingCycle:"monthly", badge:"🎯 No Risk", badgeColor:"#22c55e", badgeBg:"rgba(34,197,94,0.12)", description:"Start with a free 30-min 1-on-1 consultation. Get your personalised AI business roadmap with zero commitment.", cta:"Book My Free Call →", ctaStyle:"outline", highlighted:false, features:["30-min 1-on-1 strategy session","Custom 60-day AI roadmap","Market opportunity audit","Skill gap analysis","Zero sales pressure","No credit card required"] },
+  { id:2, name:"AI Starter", priceLabel:"$197", price:197, period:"Per month", billingCycle:"monthly", badge:"🔥 Most Popular", badgeColor:"#6366f1", badgeBg:"rgba(99,102,241,0.15)", description:"Everything you need to build your first AI product and land your first clients.", cta:"Get Started Today", ctaStyle:"primary", highlighted:false, features:["Full 60-day curriculum access","Weekly group coaching calls","AI tools & automation templates","Private community membership","Client proposal templates","Email & chat support"] },
+  { id:3, name:"AI Accelerator", priceLabel:"$497", price:497, period:"Per month · Best value", billingCycle:"monthly", badge:"⚡ Best Value", badgeColor:"#f59e0b", badgeBg:"rgba(245,158,11,0.12)", description:"Done-with-you. We connect you with clients, co-deliver projects, and guarantee results.", cta:"Join AI Accelerator", ctaStyle:"primary", highlighted:true, features:["Everything in Starter, plus:","2× weekly 1-on-1 mentorship calls","Direct client introductions","Done-with-you project delivery","Priority Slack support channel","Income guarantee or full refund"] },
+  { id:4, name:"Free Strategy Call", priceLabel:"FREE", price:0, period:"No credit card needed", billingCycle:"yearly", badge:"🎯 No Risk", badgeColor:"#22c55e", badgeBg:"rgba(34,197,94,0.12)", description:"Start with a free 30-min 1-on-1 consultation. Get your personalised AI business roadmap with zero commitment.", cta:"Book My Free Call →", ctaStyle:"outline", highlighted:false, features:["30-min 1-on-1 strategy session","Custom 60-day AI roadmap","Market opportunity audit","Skill gap analysis","Zero sales pressure","No credit card required"] },
+  { id:5, name:"AI Starter Yearly", priceLabel:"$1,497", price:1497, period:"Per year · Save 37%", billingCycle:"yearly", badge:"🔥 Most Popular", badgeColor:"#6366f1", badgeBg:"rgba(99,102,241,0.15)", description:"Everything you need to build your first AI product and land your first clients.", cta:"Get Started Today", ctaStyle:"primary", highlighted:false, features:["Full 60-day curriculum access","Weekly group coaching calls","AI tools & automation templates","Private community membership","Client proposal templates","Email & chat support"] },
+  { id:6, name:"AI Accelerator Yearly", priceLabel:"$3,997", price:3997, period:"Per year · Best value", billingCycle:"yearly", badge:"⚡ Best Value", badgeColor:"#f59e0b", badgeBg:"rgba(245,158,11,0.12)", description:"Done-with-you. We connect you with clients, co-deliver projects, and guarantee results.", cta:"Join AI Accelerator", ctaStyle:"primary", highlighted:true, features:["Everything in Starter, plus:","2× weekly 1-on-1 mentorship calls","Direct client introductions","Done-with-you project delivery","Priority Slack support channel","Income guarantee or full refund"] },
+  { id:7, name:"AI Starter", priceLabel:"$197", price:197, period:"One-time · No subscription", billingCycle:"one-time", badge:"🔥 Most Popular", badgeColor:"#6366f1", badgeBg:"rgba(99,102,241,0.15)", description:"Everything you need to build your first AI product and land your first clients.", cta:"Get Started Today", ctaStyle:"primary", highlighted:false, features:["Full 60-day curriculum access","Weekly group coaching calls","AI tools & automation templates","Private community membership","Client proposal templates","Email & chat support"] },
+  { id:8, name:"AI Accelerator", priceLabel:"$497", price:497, period:"One-time · Best value", billingCycle:"one-time", badge:"⚡ Best Value", badgeColor:"#f59e0b", badgeBg:"rgba(245,158,11,0.12)", description:"Done-with-you. We connect you with clients, co-deliver projects, and guarantee results.", cta:"Join AI Accelerator", ctaStyle:"primary", highlighted:true, features:["Everything in Starter, plus:","2× weekly 1-on-1 mentorship calls","Direct client introductions","Done-with-you project delivery","Priority Slack support channel","Income guarantee or full refund"] }
 ];
 
-function loadPricingPlans() {
+function loadPricingPlans(cycle) {
   try {
     const s = localStorage.getItem('chrixlin_pricing');
-    return s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT_PRICING_PLANS_ADMIN));
-  } catch { return JSON.parse(JSON.stringify(DEFAULT_PRICING_PLANS_ADMIN)); }
+    const all = s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT_PRICING_PLANS_ADMIN));
+    if (!cycle) return all;
+    const filtered = all.filter(p => (p.billingCycle||'monthly') === cycle);
+    return filtered.length ? filtered : JSON.parse(JSON.stringify(DEFAULT_PRICING_PLANS_ADMIN)).filter(p => (p.billingCycle||'monthly') === cycle);
+  } catch { return cycle ? JSON.parse(JSON.stringify(DEFAULT_PRICING_PLANS_ADMIN)).filter(p=>(p.billingCycle||'monthly')===cycle) : JSON.parse(JSON.stringify(DEFAULT_PRICING_PLANS_ADMIN)); }
 }
 
 let _ppEditId = null;
+let _activePricingCycle = 'monthly';
 
-function populatePricing() {
-  renderPricingPlanCards();
+function switchPricingTab(cycle) {
+  _activePricingCycle = cycle;
+  document.querySelectorAll('.billing-tab').forEach(b => b.classList.toggle('active', b.dataset.cycle === cycle));
+  renderPricingPlanCards(cycle);
 }
 
-function renderPricingPlanCards() {
-  const plans = loadPricingPlans();
-  const cards  = document.getElementById('pricingPlanCards');
-  const empty  = document.getElementById('pricingEmptyState');
-  const count  = document.getElementById('pricingPlanCount');
-  const addBtn = document.getElementById('addPlanBtn');
-  count.textContent = plans.length;
-  addBtn.style.display = plans.length >= 3 ? 'none' : '';
-  if (!plans.length) { cards.innerHTML=''; empty.style.display='block'; return; }
-  empty.style.display = 'none';
-  cards.innerHTML = plans.map(p => `
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:16px;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
-      <div style="flex:1;min-width:0">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-          <span style="font-family:var(--font-h);font-weight:700;font-size:15px">${escHtml(p.name)}</span>
-          <span style="background:${p.badgeBg||'rgba(99,102,241,0.15)'};color:${p.badgeColor||'#a78bfa'};padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700">${escHtml(p.badge)}</span>
-          ${p.highlighted?'<span style="background:rgba(245,158,11,0.15);color:#f59e0b;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600">⭐ Featured</span>':''}
-        </div>
-        <div style="font-size:13px;color:var(--muted)">${escHtml(p.priceLabel)} · ${escHtml(p.period)} · ${(p.features||[]).length} features</div>
-      </div>
-      <div style="display:flex;gap:8px;flex-shrink:0">
-        <button class="btn btn-ghost btn-sm" onclick="openPlanModal(${p.id})" style="padding:7px 14px;font-size:13px">✏️ Edit</button>
-        <button class="btn btn-sm" onclick="deletePricingPlan(${p.id})" style="padding:7px 14px;font-size:13px;background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.25)">🗑 Delete</button>
-      </div>
-    </div>`).join('');
+function populatePricing() {
+  renderPricingPlanCards(_activePricingCycle);
+}
+
+function renderPricingPlanCards(cycle) {
+  cycle = cycle || _activePricingCycle || 'monthly';
+  const plans = loadPricingPlans(cycle);
+  const container = document.getElementById('pricingTabContent');
+  if (!container) return;
+
+  const cycleLabel = {monthly:'Monthly', yearly:'Yearly', 'one-time':'One-Time'}[cycle] || cycle;
+  let html = '';
+
+  if (!plans.length) {
+    html = `<div style="text-align:center;padding:60px 20px;color:var(--muted)">
+      <div style="font-size:48px;margin-bottom:12px">💎</div>
+      <div style="font-family:var(--font-h);font-weight:700;font-size:16px;margin-bottom:8px">No ${cycleLabel} plans yet</div>
+      <div style="font-size:14px;margin-bottom:20px">Add up to 3 plans for this billing cycle.</div>
+      <button class="btn btn-primary btn-sm" onclick="openPlanModal(null)">＋ Add First Plan</button>
+    </div>`;
+  } else {
+    html = `<div style="display:flex;flex-direction:column;gap:12px">` +
+      plans.map(p => `
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:16px;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+              <span style="font-family:var(--font-h);font-weight:700;font-size:15px">${escHtml(p.name)}</span>
+              <span style="background:${p.badgeBg||'rgba(99,102,241,0.15)'};color:${p.badgeColor||'#a78bfa'};padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700">${escHtml(p.badge)}</span>
+              ${p.highlighted?'<span style="background:rgba(245,158,11,0.15);color:#f59e0b;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600">⭐ Featured</span>':''}
+            </div>
+            <div style="font-size:13px;color:var(--muted)">${escHtml(p.priceLabel)} · ${escHtml(p.period||'')} · ${(p.features||[]).length} features · <span style="color:var(--cyan)">${escHtml(p.billingCycle||'monthly')}</span></div>
+          </div>
+          <div style="display:flex;gap:8px;flex-shrink:0">
+            <button class="btn btn-ghost btn-sm" onclick="openPlanModal(${p.id})" style="padding:7px 14px;font-size:13px">✏️ Edit</button>
+            <button class="btn btn-sm" onclick="deletePricingPlan(${p.id})" style="padding:7px 14px;font-size:13px;background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.25)">🗑 Delete</button>
+          </div>
+        </div>`).join('') + `</div>`;
+
+    if (plans.length < 3) {
+      html += `<div style="margin-top:12px"><button class="btn btn-primary" onclick="openPlanModal(null)">＋ Add ${cycleLabel} Plan</button></div>`;
+    }
+  }
+  container.innerHTML = html;
 }
 
 function openPlanModal(id) {
@@ -1630,6 +1836,7 @@ function openPlanModal(id) {
   ['pp_name','pp_badge','pp_priceLabel','pp_period','pp_badgeColor','pp_cta','pp_desc','pp_features'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
   document.getElementById('pp_highlighted').checked = false;
   document.getElementById('ppSaveStatus').textContent = '';
+  document.getElementById('pp_billingCycle').value = _activePricingCycle || 'monthly';
   if (id !== null) {
     const p = loadPricingPlans().find(x=>x.id===id);
     if (p) {
@@ -1644,6 +1851,7 @@ function openPlanModal(id) {
       document.getElementById('pp_desc').value        = p.description||'';
       document.getElementById('pp_features').value   = (p.features||[]).join('\n');
       document.getElementById('pp_highlighted').checked = !!p.highlighted;
+      document.getElementById('pp_billingCycle').value = p.billingCycle || _activePricingCycle || 'monthly';
     }
   } else {
     document.getElementById('planModalTitle').textContent = 'Add Pricing Plan';
@@ -1674,14 +1882,17 @@ function savePricingPlan() {
     return;
   }
   document.getElementById('pp_name').style.borderColor='';
-  const plans = loadPricingPlans();
+  const allPlans = loadPricingPlans();
+  const billingCycle = document.getElementById('pp_billingCycle').value || _activePricingCycle || 'monthly';
+  const plansForCycle = allPlans.filter(p => (p.billingCycle||'monthly') === billingCycle);
   const priceLabel = document.getElementById('pp_priceLabel').value.trim();
   const badgeColor = document.getElementById('pp_badgeColor').value.trim() || '#6366f1';
   const plan = {
-    id:          _ppEditId!==null ? _ppEditId : (plans.reduce((m,p)=>Math.max(m,p.id||0),0)+1),
+    id:          _ppEditId!==null ? _ppEditId : (allPlans.reduce((m,p)=>Math.max(m,p.id||0),0)+1),
     name, badge: document.getElementById('pp_badge').value.trim(),
     priceLabel,  price: priceLabel==='FREE'||priceLabel==='0'?0:parseFloat(priceLabel.replace(/[^0-9.]/g,''))||0,
     period:      document.getElementById('pp_period').value.trim(),
+    billingCycle,
     badgeColor,  badgeBg: badgeColor+'22',
     description: document.getElementById('pp_desc').value.trim(),
     cta:         document.getElementById('pp_cta').value.trim(),
@@ -1689,11 +1900,16 @@ function savePricingPlan() {
     highlighted: document.getElementById('pp_highlighted').checked,
     features:    document.getElementById('pp_features').value.split('\n').map(f=>f.trim()).filter(Boolean)
   };
-  if (_ppEditId!==null) { const idx=plans.findIndex(p=>p.id===_ppEditId); if(idx!==-1) plans[idx]=plan; else plans.push(plan); }
-  else { if (plans.length>=3) { document.getElementById('ppSaveStatus').textContent='Max 3 plans allowed'; return; } plans.push(plan); }
-  localStorage.setItem('chrixlin_pricing', JSON.stringify(plans));
+  if (_ppEditId!==null) {
+    const idx=allPlans.findIndex(p=>p.id===_ppEditId);
+    if(idx!==-1) allPlans[idx]=plan; else allPlans.push(plan);
+  } else {
+    if (plansForCycle.length>=3) { document.getElementById('ppSaveStatus').textContent='Max 3 plans per billing cycle'; document.getElementById('ppSaveStatus').style.color='var(--red)'; return; }
+    allPlans.push(plan);
+  }
+  localStorage.setItem('chrixlin_pricing', JSON.stringify(allPlans));
   if (typeof ChrixlinDB !== 'undefined') ChrixlinDB.upsertPricingPlan(plan).catch(() => {});
-  renderPricingPlanCards();
+  renderPricingPlanCards(_activePricingCycle);
   showToast('💎 Pricing plan saved!');
   closePlanModal();
 }
@@ -1705,7 +1921,7 @@ function deletePricingPlan(id) {
   if (!confirm(`Delete "${p.name}"?`)) return;
   localStorage.setItem('chrixlin_pricing', JSON.stringify(plans.filter(x=>x.id!==id)));
   if (typeof ChrixlinDB !== 'undefined') ChrixlinDB.deletePricingPlan(id).catch(() => {});
-  renderPricingPlanCards();
+  renderPricingPlanCards(_activePricingCycle);
   showToast('🗑 Plan deleted');
 }
 
@@ -2208,70 +2424,273 @@ function saveBankDetails() {
   showToast('🏦 Payment settings saved!');
 }
 
+// ─── ORDERS / CALLS HELPERS ───────────────────────────────────────────────────
+function _getOrdersLS() {
+  try { return JSON.parse(localStorage.getItem('chrixlin_orders') || '[]'); } catch { return []; }
+}
+function _getCallsLS() {
+  try { return JSON.parse(localStorage.getItem('chrixlin_calls') || '[]'); } catch { return []; }
+}
+function _saveCallsLS(calls) { localStorage.setItem('chrixlin_calls', JSON.stringify(calls)); }
+
 // ─── DASHBOARD REFRESH ────────────────────────────────────────────────────────
+let _dashFilter = 'all';
+
+function setDashFilter(f) {
+  _dashFilter = f;
+  document.querySelectorAll('.dash-filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  refreshDashboard();
+}
+
 function refreshDashboard() {
-  const products = (mpData.products || []);
-  const plans    = loadPricingPlans();
-  const siteD    = loadData();
+  const orders = _getOrdersLS();
+  const filter = _dashFilter || 'all';
+  const now = Date.now();
+  const filtered = orders.filter(o => {
+    if (filter === 'weekly')  return now - new Date(o.created_at||o.date||0).getTime() < 7*86400000;
+    if (filter === 'monthly') return now - new Date(o.created_at||o.date||0).getTime() < 30*86400000;
+    if (filter === 'yearly')  return now - new Date(o.created_at||o.date||0).getTime() < 365*86400000;
+    return true;
+  });
 
-  // KPIs
-  document.getElementById('dash_productCount').textContent = products.length;
-  document.getElementById('dash_planCount').textContent    = plans.length;
+  const parsePrice = s => parseFloat((s||'0').replace(/[^0-9.]/g,'')) || 0;
+  const totalRev  = filtered.reduce((s,o)=>s+parsePrice(o.product_price||o.productPrice),0);
+  const mktSales  = filtered.filter(o=>o.payment_method!=='subscription').reduce((s,o)=>s+parsePrice(o.product_price||o.productPrice),0);
+  const subRev    = filtered.filter(o=>o.payment_method==='subscription').reduce((s,o)=>s+parsePrice(o.product_price||o.productPrice),0);
+  const callsAll  = _getCallsLS();
+  const callsFiltered = callsAll.filter(c => {
+    if (filter === 'all') return true;
+    const ms = {weekly:7,monthly:30,yearly:365}[filter]*86400000;
+    return now - new Date(c.date||0).getTime() < ms;
+  });
+  const paidOrders = filtered.filter(o=>parsePrice(o.product_price||o.productPrice)>0);
+  const convRate   = filtered.length > 0 ? Math.round(paidOrders.length/filtered.length*100) : 0;
+  const plans      = loadPricingPlans();
 
-  // Product categories breakdown
-  const cats = {};
-  products.forEach(p => { cats[p.categoryLabel||p.category] = (cats[p.categoryLabel||p.category]||0)+1; });
-  document.getElementById('dash_productCategories').textContent = products.length
-    ? Object.entries(cats).map(([k,v])=>`${k}: ${v}`).join(' · ')
-    : 'No products yet';
+  // Update KPIs
+  document.getElementById('kpi_totalRevenue').textContent      = '$'+totalRev.toLocaleString();
+  document.getElementById('kpi_marketplaceSales').textContent  = '$'+mktSales.toLocaleString();
+  document.getElementById('kpi_subRevenue').textContent        = '$'+subRev.toLocaleString();
+  document.getElementById('kpi_freeCalls').textContent         = callsFiltered.length;
+  document.getElementById('kpi_totalPurchases').textContent    = filtered.length;
+  document.getElementById('kpi_conversionRate').textContent    = convRate+'%';
+  document.getElementById('kpi_activePlans').textContent       = plans.length;
 
-  // Price range
-  const prices = plans.map(p=>p.price||0).filter(n=>n>0);
-  document.getElementById('dash_priceRange').textContent = plans.length
-    ? (prices.length ? `$${Math.min(...prices)} – $${Math.max(...prices)}` : 'Free only')
-    : 'No plans configured';
+  // Trending products
+  const prodMap = {};
+  filtered.forEach(o => {
+    const t = o.product_title||o.productTitle||'Unknown';
+    const p = parsePrice(o.product_price||o.productPrice);
+    if (!prodMap[t]) prodMap[t]={purchases:0,revenue:0};
+    prodMap[t].purchases++; prodMap[t].revenue+=p;
+  });
+  const trending = Object.entries(prodMap).sort((a,b)=>b[1].purchases-a[1].purchases).slice(0,5);
+  const trendEl  = document.getElementById('dash_trendingProducts');
+  trendEl.innerHTML = trending.length
+    ? trending.map(([name,d])=>`<div class="dash-table-row"><span>${escHtml(name)}</span><span>${d.purchases}</span><span>$${d.revenue.toLocaleString()}</span></div>`).join('')
+    : '<div style="color:var(--muted);padding:16px 0;font-size:13px">No orders yet</div>';
 
-  // Last saved
-  const ls = localStorage.getItem('chrixlin_last_save');
-  document.getElementById('dash_lastSaved').textContent = ls ? 'Saved ' + ls : 'Not yet published';
+  // Top plans
+  const planEl = document.getElementById('dash_topPlans');
+  planEl.innerHTML = plans.length
+    ? plans.map(p=>`<div class="dash-table-row"><span>${escHtml(p.name)}</span><span style="font-size:11px;color:var(--muted)">${escHtml(p.billingCycle||'one-time')}</span><span>${escHtml(p.priceLabel||p.price||'Free')}</span></div>`).join('')
+    : '<div style="color:var(--muted);padding:16px 0;font-size:13px">No plans yet</div>';
 
-  // Product list
-  const pList = document.getElementById('dash_productList');
-  pList.innerHTML = products.length ? products.slice(0,5).map(p=>`
-    <div class="dash-product-row">
-      <div class="dash-product-emoji">${p.emoji||'🤖'}</div>
-      <div class="dash-product-name">${escHtml(p.title)}</div>
-      <div class="dash-product-price">${escHtml(p.price)}</div>
-    </div>`).join('') + (products.length>5?`<div style="font-size:12px;color:var(--muted);padding-top:8px">+${products.length-5} more products</div>`:'')
-    : '<div style="color:var(--muted);font-size:13px;padding:16px 0;text-align:center">No products yet — <span style="color:#a78bfa;cursor:pointer" onclick="showPanel(\'marketplace\')">add one →</span></div>';
+  // Sales distribution
+  const monthly = filtered.filter(o=>o.billing_cycle==='monthly').length;
+  const yearly  = filtered.filter(o=>o.billing_cycle==='yearly').length;
+  const onetime = filtered.filter(o=>!o.billing_cycle||o.billing_cycle==='one-time').length;
+  const total   = monthly+yearly+onetime||1;
+  document.getElementById('dash_salesDistribution').innerHTML = `
+    <div class="dist-bar-wrap"><span>Monthly</span><div class="dist-bar"><div class="dist-fill" style="width:${monthly/total*100}%;background:var(--primary)"></div></div><span>${Math.round(monthly/total*100)}%</span></div>
+    <div class="dist-bar-wrap"><span>Yearly</span><div class="dist-bar"><div class="dist-fill" style="width:${yearly/total*100}%;background:var(--gold)"></div></div><span>${Math.round(yearly/total*100)}%</span></div>
+    <div class="dist-bar-wrap"><span>One-Time</span><div class="dist-bar"><div class="dist-fill" style="width:${onetime/total*100}%;background:var(--cyan)"></div></div><span>${Math.round(onetime/total*100)}%</span></div>
+  `;
+}
 
-  // Plan list
-  const planList = document.getElementById('dash_planList');
-  planList.innerHTML = plans.length ? plans.map(p=>`
-    <div class="dash-plan-row">
-      <div class="dash-plan-name">${escHtml(p.name)}</div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <span class="dash-plan-price">${escHtml(p.priceLabel)}</span>
-        <span class="dash-plan-type">${escHtml(p.period||'one-time')}</span>
+// ─── ORDERS PANEL ─────────────────────────────────────────────────────────────
+function renderOrdersPanel() {
+  const orders = _getOrdersLS();
+  const el = document.getElementById('ordersTableWrap');
+  if (!orders.length) { el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:48px 0">No orders yet.</div>'; return; }
+  el.innerHTML = `<table class="admin-table"><thead><tr><th>Ref</th><th>Product</th><th>Amount</th><th>Customer</th><th>Method</th><th>Date</th><th>Status</th></tr></thead><tbody>
+    ${orders.map(o=>`<tr>
+      <td style="font-family:monospace;font-size:12px">${escHtml(o.order_ref||o.orderRef||'-')}</td>
+      <td>${escHtml(o.product_title||o.productTitle||'-')}</td>
+      <td style="color:var(--green);font-weight:700">${escHtml(o.product_price||o.productPrice||'-')}</td>
+      <td>${escHtml((o.first_name||o.firstName||'')+' '+(o.last_name||o.lastName||''))}<br><span style="font-size:11px;color:var(--muted)">${escHtml(o.email||'')}</span></td>
+      <td style="text-transform:capitalize">${escHtml(o.payment_method||o.paymentMethod||'card')}</td>
+      <td style="font-size:12px;color:var(--muted)">${new Date(o.created_at||o.date||Date.now()).toLocaleDateString()}</td>
+      <td><span style="padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;background:rgba(34,197,94,0.15);color:#4ade80">${escHtml(o.status||'pending')}</span></td>
+    </tr>`).join('')}
+  </tbody></table>`;
+}
+
+// ─── CALLS PANEL ──────────────────────────────────────────────────────────────
+function renderCallsPanel() {
+  const calls = _getCallsLS();
+  const el = document.getElementById('callsTableWrap');
+  if (!calls.length) {
+    el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:48px 0">No calls logged yet. Click "+ Log Call" to add one.</div>';
+    return;
+  }
+  el.innerHTML = `<table class="admin-table"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Date</th><th>Status</th><th>Notes</th><th>Actions</th></tr></thead><tbody>
+    ${calls.map(c=>`<tr>
+      <td style="font-weight:600">${escHtml(c.name||'-')}</td>
+      <td style="font-size:12px;color:var(--muted)">${escHtml(c.email||'-')}</td>
+      <td style="font-size:12px">${escHtml(c.phone||'-')}</td>
+      <td style="font-size:12px;color:var(--muted)">${c.date ? new Date(c.date).toLocaleDateString() : '-'}</td>
+      <td><span style="padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;background:${{booked:'rgba(99,102,241,0.15)',completed:'rgba(34,197,94,0.15)','no-show':'rgba(239,68,68,0.15)'}[c.status]||'rgba(99,102,241,0.15)'};color:${{booked:'#a5b4fc',completed:'#4ade80','no-show':'#f87171'}[c.status]||'#a5b4fc'}">${escHtml(c.status||'booked')}</span></td>
+      <td style="font-size:12px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(c.notes||'-')}</td>
+      <td style="display:flex;gap:6px;flex-wrap:nowrap">
+        <button class="btn btn-ghost btn-sm" onclick="openCallModal('${escHtml(c.id)}')" style="padding:5px 10px;font-size:12px">✏️</button>
+        <button class="btn btn-sm" onclick="deleteCall('${escHtml(c.id)}')" style="padding:5px 10px;font-size:12px;background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.25)">🗑</button>
+      </td>
+    </tr>`).join('')}
+  </tbody></table>`;
+}
+
+function openCallModal(id) {
+  const overlay = document.getElementById('callModalOverlay');
+  const drawer  = document.getElementById('callModalDrawer');
+  ['call_name','call_email','call_phone','call_date','call_notes'].forEach(f=>{const el=document.getElementById(f);if(el)el.value='';});
+  document.getElementById('call_status').value = 'booked';
+  document.getElementById('call_editId').value = '';
+  document.getElementById('callModalTitle').textContent = 'Log Strategy Call';
+
+  if (id) {
+    const call = _getCallsLS().find(c=>c.id===id);
+    if (call) {
+      document.getElementById('callModalTitle').textContent = 'Edit Strategy Call';
+      document.getElementById('call_editId').value = call.id;
+      document.getElementById('call_name').value   = call.name||'';
+      document.getElementById('call_email').value  = call.email||'';
+      document.getElementById('call_phone').value  = call.phone||'';
+      document.getElementById('call_date').value   = call.date||'';
+      document.getElementById('call_status').value = call.status||'booked';
+      document.getElementById('call_notes').value  = call.notes||'';
+    }
+  }
+
+  overlay.style.display = 'block';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ drawer.style.transform='translateX(0)'; }));
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCallModal() {
+  const drawer = document.getElementById('callModalDrawer');
+  drawer.style.transform = 'translateX(100%)';
+  setTimeout(()=>{ document.getElementById('callModalOverlay').style.display='none'; }, 300);
+  document.body.style.overflow = '';
+}
+
+function closeCallModalOnBg(e) {
+  if (e.target===document.getElementById('callModalOverlay')) closeCallModal();
+}
+
+function saveCall() {
+  const name = document.getElementById('call_name').value.trim();
+  if (!name) { document.getElementById('call_name').style.borderColor='var(--red)'; return; }
+  document.getElementById('call_name').style.borderColor='';
+  const calls  = _getCallsLS();
+  const editId = document.getElementById('call_editId').value;
+  const call = {
+    id:     editId || ('call_'+(Date.now())),
+    name,
+    email:  document.getElementById('call_email').value.trim(),
+    phone:  document.getElementById('call_phone').value.trim(),
+    date:   document.getElementById('call_date').value,
+    status: document.getElementById('call_status').value,
+    notes:  document.getElementById('call_notes').value.trim(),
+    created_at: editId ? (calls.find(c=>c.id===editId)||{}).created_at || new Date().toISOString() : new Date().toISOString()
+  };
+  if (editId) {
+    const idx = calls.findIndex(c=>c.id===editId);
+    if (idx!==-1) calls[idx]=call; else calls.push(call);
+  } else {
+    calls.push(call);
+  }
+  _saveCallsLS(calls);
+  renderCallsPanel();
+  closeCallModal();
+  showToast('📞 Strategy call saved!');
+}
+
+function deleteCall(id) {
+  if (!confirm('Delete this call record?')) return;
+  const calls = _getCallsLS().filter(c=>c.id!==id);
+  _saveCallsLS(calls);
+  renderCallsPanel();
+  showToast('🗑 Call deleted');
+}
+
+// ─── ANALYTICS PANEL ──────────────────────────────────────────────────────────
+function renderAnalyticsPanel() {
+  const orders = _getOrdersLS();
+  const calls  = _getCallsLS();
+  const plans  = loadPricingPlans();
+  const parsePrice = s => parseFloat((s||'0').replace(/[^0-9.]/g,''))||0;
+  const totalRev   = orders.reduce((s,o)=>s+parsePrice(o.product_price||o.productPrice),0);
+  const el = document.getElementById('analyticsContent');
+  if (!el) return;
+
+  // Monthly data for last 6 months
+  const monthlyData = {};
+  for (let i=5;i>=0;i--) {
+    const d = new Date(); d.setMonth(d.getMonth()-i);
+    const key = d.toLocaleString('en',{month:'short',year:'2-digit'});
+    monthlyData[key] = 0;
+  }
+  orders.forEach(o => {
+    const d   = new Date(o.created_at||o.date||Date.now());
+    const key = d.toLocaleString('en',{month:'short',year:'2-digit'});
+    if (monthlyData[key]!==undefined) monthlyData[key]+=parsePrice(o.product_price||o.productPrice);
+  });
+  const maxRev = Math.max(...Object.values(monthlyData),1);
+
+  el.innerHTML = `
+    <div class="dash-row2">
+      <div class="dash-section">
+        <div class="dash-section-title">💰 Revenue Summary</div>
+        <div style="display:grid;gap:12px;margin-top:12px">
+          <div class="analytics-stat"><span>Total Revenue</span><strong>$${totalRev.toLocaleString()}</strong></div>
+          <div class="analytics-stat"><span>Total Orders</span><strong>${orders.length}</strong></div>
+          <div class="analytics-stat"><span>Avg Order Value</span><strong>$${orders.length?Math.round(totalRev/orders.length).toLocaleString():0}</strong></div>
+          <div class="analytics-stat"><span>Free Calls Booked</span><strong>${calls.length}</strong></div>
+          <div class="analytics-stat"><span>Active Plans</span><strong>${plans.length}</strong></div>
+        </div>
       </div>
-    </div>`).join('')
-    : '<div style="color:var(--muted);font-size:13px;padding:16px 0;text-align:center">No plans — <span style="color:#a78bfa;cursor:pointer" onclick="showPanel(\'pricing\')">add one →</span></div>';
+      <div class="dash-section">
+        <div class="dash-section-title">📅 Monthly Revenue (Last 6 Months)</div>
+        <div style="margin-top:16px">
+          ${Object.entries(monthlyData).map(([month,rev])=>`
+            <div class="dist-bar-wrap" style="grid-template-columns:60px 1fr 64px">
+              <span style="font-size:12px">${month}</span>
+              <div class="dist-bar"><div class="dist-fill" style="width:${rev/maxRev*100}%;background:linear-gradient(90deg,var(--primary),var(--cyan))"></div></div>
+              <span style="font-size:12px;text-align:right">$${rev.toLocaleString()}</span>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
 
-  // Content health bars
-  const healthItems = [
-    { label:'Hero & Brand',   pct: (siteD.stats?.length>0?34:0)+(localStorage.getItem('agentrise_textkeys')?33:0)+33 },
-    { label:'Products',       pct: Math.min(100, products.length*17) },
-    { label:'Pricing Plans',  pct: Math.min(100, plans.length*34) },
-    { label:'Testimonials',   pct: Math.min(100, (siteD.testimonials?.length||0)*25) },
-    { label:'FAQ',             pct: Math.min(100, (siteD.faq?.length||0)*17) },
-    { label:'Bank Details',   pct: localStorage.getItem('chrixlin_bank_details') ? 100 : 0 },
-  ];
-  document.getElementById('dash_healthBars').innerHTML = healthItems.map(h=>`
-    <div class="dash-health-item">
-      <div class="dash-health-label">${h.label}</div>
-      <div class="dash-health-bar-wrap"><div class="dash-health-bar" style="width:${h.pct}%"></div></div>
-      <div class="dash-health-pct">${h.pct}%</div>
-    </div>`).join('');
+function exportPDF() { window.print(); }
+
+function exportExcel() {
+  const orders = _getOrdersLS();
+  if (!orders.length) { showToast('No orders to export'); return; }
+  const headers = ['Order Ref','Product','Price','First Name','Last Name','Email','Phone','Country','Method','Status','Date'];
+  const rows = orders.map(o=>[
+    o.order_ref||o.orderRef||'',o.product_title||o.productTitle||'',o.product_price||o.productPrice||'',
+    o.first_name||o.firstName||'',o.last_name||o.lastName||'',o.email||'',o.phone||'',o.country||'',
+    o.payment_method||o.paymentMethod||'',o.status||'pending',new Date(o.created_at||o.date||Date.now()).toLocaleDateString()
+  ]);
+  const csv = [headers,...rows].map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download = 'chrixlin-orders-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+  showToast('📊 CSV exported!');
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
