@@ -384,8 +384,13 @@
         <input type="email" class="field-input" id="regEmail" placeholder="you@example.com" autocomplete="email" />
       </div>
       <div class="field-group">
-        <label class="field-label">Password</label>
-        <input type="password" class="field-input" id="regPassword" placeholder="At least 8 characters" autocomplete="new-password" />
+        <label class="field-label">Password <span style="color:#ef4444">*</span></label>
+        <input type="password" class="field-input" id="regPassword" placeholder="At least 8 characters" autocomplete="new-password" required />
+      </div>
+      <div class="field-group">
+        <label class="field-label">Confirm Password <span style="color:#ef4444">*</span></label>
+        <input type="password" class="field-input" id="regConfirmPassword" placeholder="Re-enter your password" autocomplete="new-password" required oninput="checkPasswordMatch()" />
+        <div id="confirmPasswordHint" style="font-size:12px;margin-top:6px;display:none;"></div>
       </div>
       <button class="auth-btn" id="registerBtn" onclick="handleRegister()">
         <div class="spinner" id="registerSpinner"></div>
@@ -504,9 +509,12 @@ async function handleRegister() {
   const name = document.getElementById('regName').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const password = document.getElementById('regPassword').value;
+  const confirmPassword = document.getElementById('regConfirmPassword').value;
   if (!name) { showError('Please enter your full name.'); return; }
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Please enter a valid email address.'); return; }
   if (!password || password.length < 8) { showError('Password must be at least 8 characters.'); return; }
+  if (!confirmPassword) { showError('Please confirm your password.'); document.getElementById('regConfirmPassword').focus(); return; }
+  if (password !== confirmPassword) { showError('Passwords do not match. Please check and try again.'); document.getElementById('regConfirmPassword').focus(); return; }
   setLoading('registerBtn', 'registerSpinner', 'registerBtnText', true);
   try {
     const result = await ChrixlinDB.customerSignUp(email, password, name);
@@ -525,6 +533,26 @@ async function handleRegister() {
     let msg = err.message || 'Registration failed.';
     if (msg.includes('already registered') || msg.includes('already exists')) msg = 'This email is already registered. Try signing in instead.';
     showError(msg);
+  }
+}
+
+// ─── CONFIRM PASSWORD LIVE CHECK ──────────────────────────────────────────────
+function checkPasswordMatch() {
+  const pw  = document.getElementById('regPassword').value;
+  const cpw = document.getElementById('regConfirmPassword').value;
+  const hint = document.getElementById('confirmPasswordHint');
+  const input = document.getElementById('regConfirmPassword');
+  if (!cpw) { hint.style.display = 'none'; input.style.borderColor = ''; return; }
+  if (pw === cpw) {
+    hint.style.display = 'block';
+    hint.style.color = '#22c55e';
+    hint.textContent = '✓ Passwords match';
+    input.style.borderColor = '#22c55e';
+  } else {
+    hint.style.display = 'block';
+    hint.style.color = '#ef4444';
+    hint.textContent = '✗ Passwords do not match';
+    input.style.borderColor = '#ef4444';
   }
 }
 
