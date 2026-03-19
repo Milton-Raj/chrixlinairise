@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-key="seo.title">Chrixlin AI Rise — Build Your AI Bot Business</title>
+  <meta name="description" data-key="seo.description" content="Learn to build and sell AI automation bots. Join 160+ entrepreneurs who hit $5K–$50K/month — risk-free income share model." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── RESET & TOKENS ───────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --c-bg:       #05050c;
+      --c-bg2:      #0a0a16;
+      --c-card:     rgba(255,255,255,0.035);
+      --c-card-h:   rgba(255,255,255,0.07);
+      --c-border:   rgba(255,255,255,0.07);
+      --c-border-h: rgba(124,58,237,0.5);
+      --c-primary:  #7c3aed;
+      --c-primary2: #4f46e5;
+      --c-cyan:     #06b6d4;
+      --c-gold:     #f59e0b;
+      --c-text:     #f1f5f9;
+      --c-muted:    #64748b;
+      --c-sub:      #94a3b8;
+      --grad:       linear-gradient(135deg, #7c3aed, #06b6d4);
+      --grad-gold:  linear-gradient(135deg, #f59e0b, #ef4444);
+      --r-card:     16px;
+      --r-btn:      50px;
+      --shadow:     0 25px 50px rgba(0,0,0,0.5);
+      --shadow-glow:0 0 40px rgba(124,58,237,0.3);
+      --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      --font-head:  'Plus Jakarta Sans', sans-serif;
+      --font-body:  'Inter', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--c-bg); color: var(--c-text); font-family: var(--font-body); line-height: 1.6; overflow-x: hidden; }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    section { position: relative; }
+
+    /* ─── UTILITIES ─────────────────────────────────────── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section-pad { padding: 100px 0; }
+    .section-pad-sm { padding: 70px 0; }
+    .text-grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .text-gold { background: var(--grad-gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.35);
+      color: #a78bfa; padding: 6px 16px; border-radius: 50px; font-size: 13px;
+      font-weight: 600; letter-spacing: 0.5px; font-family: var(--font-head);
+    }
+    .section-label { text-align: center; margin-bottom: 16px; }
+    .section-title {
+      font-family: var(--font-head); font-size: clamp(32px,5vw,52px);
+      font-weight: 800; line-height: 1.15; text-align: center; margin-bottom: 18px;
+    }
+    .section-sub {
+      text-align: center; color: var(--c-sub); font-size: 18px;
+      max-width: 600px; margin: 0 auto 60px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 16px 32px; border-radius: var(--r-btn); font-family: var(--font-head);
+      font-weight: 700; font-size: 16px; cursor: pointer; border: none;
+      transition: var(--transition); white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--grad); color: #fff;
+      box-shadow: 0 8px 30px rgba(124,58,237,0.4);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(124,58,237,0.6); }
+    .btn-outline {
+      background: transparent; color: var(--c-text);
+      border: 1.5px solid var(--c-border); backdrop-filter: blur(10px);
+    }
+    .btn-outline:hover { border-color: var(--c-primary); color: #a78bfa; }
+    .card {
+      background: var(--c-card); border: 1px solid var(--c-border);
+      border-radius: var(--r-card); backdrop-filter: blur(10px);
+      transition: var(--transition);
+    }
+    .card:hover { background: var(--c-card-h); border-color: var(--c-border-h); }
+    .animate-in { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .animate-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── NAVBAR ────────────────────────────────────────── */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 18px 0; transition: var(--transition);
+    }
+    #navbar.scrolled {
+      background: rgba(5,5,12,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--c-border); padding: 12px 0;
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--font-head); font-weight: 800; font-size: 22px;
+      background: var(--grad); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a { color: var(--c-sub); font-size: 15px; font-weight: 500; transition: var(--transition); }
+    .nav-links a:hover { color: var(--c-text); }
+    .nav-cta .btn { padding: 10px 22px; font-size: 14px; }
+    .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--c-text); transition: var(--transition); border-radius: 2px; }
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; background: rgba(5,5,12,0.98);
+      backdrop-filter: blur(20px); z-index: 999; flex-direction: column;
+      align-items: center; justify-content: center; gap: 32px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-family: var(--font-head); font-size: 24px; font-weight: 700; }
+    .mobile-close { position: absolute; top: 24px; right: 24px; font-size: 32px; cursor: pointer; color: var(--c-muted); }
+
+    /* ─── HERO ──────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 120px 0 80px; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+    }
+    .hero-orb {
+      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.25;
+      animation: float 8s ease-in-out infinite alternate;
+    }
+    .hero-orb-1 { width: 600px; height: 600px; background: #7c3aed; top: -200px; right: -100px; }
+    .hero-orb-2 { width: 400px; height: 400px; background: #06b6d4; bottom: -100px; left: -100px; animation-delay: -4s; }
+    .hero-orb-3 { width: 300px; height: 300px; background: #f59e0b; top: 40%; left: 40%; opacity: 0.1; animation-delay: -2s; }
+    @keyframes float { from { transform: translateY(0) scale(1); } to { transform: translateY(-30px) scale(1.05); } }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-badge { margin-bottom: 24px; }
+    .hero-title {
+      font-family: var(--font-head); font-size: clamp(40px,6vw,68px);
+      font-weight: 900; line-height: 1.08; margin-bottom: 24px;
+    }
+    .hero-sub { font-size: 18px; color: var(--c-sub); margin-bottom: 36px; max-width: 540px; line-height: 1.7; }
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 40px; }
+    .hero-trust { display: flex; flex-wrap: wrap; gap: 20px; }
+    .trust-item {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--c-sub); font-size: 14px; font-weight: 500;
+    }
+    .trust-check {
+      width: 20px; height: 20px; background: rgba(34,197,94,0.2);
+      border: 1px solid rgba(34,197,94,0.4); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #4ade80; font-size: 11px;
+    }
+    .hero-visual { position: relative; z-index: 1; }
+    .hero-card-main {
+      background: var(--c-card); border: 1px solid var(--c-border);
+      border-radius: 20px; padding: 32px; backdrop-filter: blur(20px);
+      box-shadow: var(--shadow), var(--shadow-glow);
+    }
+    .hero-card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+    .hero-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--grad); display: flex; align-items: center;
+      justify-content: center; font-size: 22px;
+    }
+    .hero-card-name { font-family: var(--font-head); font-weight: 700; }
+    .hero-card-role { font-size: 13px; color: var(--c-muted); }
+    .hero-earnings {
+      font-family: var(--font-head); font-size: 48px; font-weight: 900;
+      background: var(--grad); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 4px;
+    }
+    .hero-earnings-label { font-size: 13px; color: var(--c-muted); margin-bottom: 20px; }
+    .hero-progress-bar {
+      height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;
+    }
+    .hero-progress-fill {
+      height: 100%; background: var(--grad); border-radius: 3px; width: 78%;
+      animation: progress-in 2s ease 1s both;
+    }
+    @keyframes progress-in { from { width: 0; } }
+    .hero-stats-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+    .hero-stat-mini {
+      background: rgba(255,255,255,0.04); border-radius: 10px; padding: 14px 16px;
+      border: 1px solid var(--c-border);
+    }
+    .hero-stat-mini-val { font-family: var(--font-head); font-weight: 800; font-size: 22px; }
+    .hero-stat-mini-label { font-size: 12px; color: var(--c-muted); margin-top: 2px; }
+    .floating-badge {
+      position: absolute; background: var(--c-card); border: 1px solid var(--c-border);
+      backdrop-filter: blur(20px); border-radius: 12px; padding: 12px 16px;
+      display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow);
+    }
+    .fb-top { top: -24px; left: -32px; animation: float-badge 4s ease-in-out infinite; }
+    .fb-bottom { bottom: -24px; right: -24px; animation: float-badge 4s ease-in-out infinite 2s; }
+    @keyframes float-badge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .fb-icon { font-size: 24px; }
+    .fb-val { font-family: var(--font-head); font-weight: 700; font-size: 15px; }
+    .fb-label { font-size: 12px; color: var(--c-muted); }
+
+    /* ─── STATS BAR ─────────────────────────────────────── */
+    #stats { padding: 50px 0; background: var(--c-bg2); border-top: 1px solid var(--c-border); border-bottom: 1px solid var(--c-border); }
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 40px; }
+    .stat-item { text-align: center; }
+    .stat-val {
+      font-family: var(--font-head); font-size: clamp(36px,4vw,54px);
+      font-weight: 900; background: var(--grad);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .stat-label { font-size: 14px; color: var(--c-muted); margin-top: 4px; }
+    .stat-divider { width: 1px; background: var(--c-border); }
+
+    /* ─── FOUNDER STORY ─────────────────────────────────── */
+    #story { background: var(--c-bg); }
+    .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .story-timeline { position: relative; padding-left: 32px; }
+    .story-timeline::before {
+      content: ''; position: absolute; left: 8px; top: 0; bottom: 0;
+      width: 2px; background: linear-gradient(to bottom, var(--c-primary), var(--c-cyan));
+    }
+    .story-item { position: relative; margin-bottom: 40px; }
+    .story-dot {
+      position: absolute; left: -28px; top: 4px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--grad); border: 3px solid var(--c-bg); box-shadow: 0 0 10px rgba(124,58,237,0.5);
+    }
+    .story-year { font-size: 12px; color: var(--c-primary); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .story-item-title { font-family: var(--font-head); font-weight: 700; font-size: 18px; margin: 4px 0 8px; }
+    .story-item-text { color: var(--c-sub); font-size: 15px; }
+    .story-content h2 { font-family: var(--font-head); font-size: clamp(30px,4vw,44px); font-weight: 800; margin-bottom: 20px; }
+    .story-content p { color: var(--c-sub); font-size: 17px; margin-bottom: 16px; line-height: 1.7; }
+    .story-press {
+      display: flex; align-items: center; gap: 12px; margin-top: 32px;
+      background: var(--c-card); border: 1px solid var(--c-border);
+      border-radius: 12px; padding: 16px 20px; width: fit-content;
+    }
+    .press-icon { font-size: 28px; }
+    .press-text { font-size: 13px; color: var(--c-muted); }
+    .press-name { font-family: var(--font-head); font-weight: 700; font-size: 15px; }
+
+    /* ─── HOW IT WORKS ──────────────────────────────────── */
+    #process { background: var(--c-bg2); }
+    .process-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 30px; }
+    .process-card {
+      padding: 36px 28px; border-radius: var(--r-card);
+      background: var(--c-card); border: 1px solid var(--c-border);
+      position: relative; overflow: hidden; transition: var(--transition);
+    }
+    .process-card:hover { transform: translateY(-4px); border-color: var(--c-border-h); box-shadow: 0 20px 40px rgba(0,0,0,0.3), var(--shadow-glow); }
+    .process-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--grad); opacity: 0; transition: var(--transition);
+    }
+    .process-card:hover::before { opacity: 0.05; }
+    .process-num {
+      font-family: var(--font-head); font-size: 60px; font-weight: 900;
+      background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; opacity: 0.2; line-height: 1; margin-bottom: 16px;
+    }
+    .process-week {
+      display: inline-block; background: rgba(124,58,237,0.15);
+      border: 1px solid rgba(124,58,237,0.3); color: #a78bfa;
+      font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px;
+      margin-bottom: 16px; font-family: var(--font-head);
+    }
+    .process-title { font-family: var(--font-head); font-weight: 800; font-size: 22px; margin-bottom: 12px; }
+    .process-text { color: var(--c-sub); font-size: 15px; line-height: 1.6; }
+    .process-connector { display: flex; align-items: center; justify-content: center; color: var(--c-muted); font-size: 24px; }
+
+    /* ─── FEATURES ──────────────────────────────────────── */
+    #features { background: var(--c-bg); }
+    .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .feature-card {
+      padding: 32px; border-radius: var(--r-card);
+      background: var(--c-card); border: 1px solid var(--c-border); transition: var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .feature-card:hover { background: var(--c-card-h); border-color: var(--c-border-h); transform: translateY(-3px); }
+    .feature-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin-bottom: 20px;
+    }
+    .feature-title { font-family: var(--font-head); font-weight: 700; font-size: 18px; margin-bottom: 10px; }
+    .feature-text { color: var(--c-sub); font-size: 14px; line-height: 1.6; }
+    .feature-highlight {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: var(--grad); opacity: 0; transition: var(--transition);
+    }
+    .feature-card:hover .feature-highlight { opacity: 1; }
+
+    /* ─── TESTIMONIALS ──────────────────────────────────── */
+    #testimonials { background: var(--c-bg2); }
+    .testimonials-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; }
+    .testimonial-card {
+      padding: 32px; border-radius: var(--r-card);
+      background: var(--c-card); border: 1px solid var(--c-border); transition: var(--transition);
+    }
+    .testimonial-card:hover { border-color: var(--c-border-h); transform: translateY(-3px); }
+    .t-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+    .t-avatar {
+      width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
+      background: var(--grad); display: flex; align-items: center;
+      justify-content: center; font-size: 22px; border: 2px solid rgba(124,58,237,0.4);
+    }
+    .t-name { font-family: var(--font-head); font-weight: 700; font-size: 16px; }
+    .t-role { font-size: 13px; color: var(--c-muted); }
+    .t-stars { display: flex; gap: 4px; color: #f59e0b; margin-bottom: 16px; font-size: 14px; }
+    .t-quote { color: var(--c-sub); font-size: 15px; line-height: 1.7; font-style: italic; margin-bottom: 20px; }
+    .t-result {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25);
+      color: #4ade80; padding: 8px 16px; border-radius: 50px; font-size: 13px; font-weight: 700;
+      font-family: var(--font-head);
+    }
+
+    /* ─── WHO IS THIS FOR ───────────────────────────────── */
+    #for-who { background: var(--c-bg); }
+    .for-who-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+    .for-who-card {
+      padding: 32px 24px; border-radius: var(--r-card); text-align: center;
+      background: var(--c-card); border: 1px solid var(--c-border); transition: var(--transition);
+    }
+    .for-who-card:hover { border-color: var(--c-border-h); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+    .for-who-icon { font-size: 40px; margin-bottom: 16px; }
+    .for-who-title { font-family: var(--font-head); font-weight: 700; font-size: 17px; margin-bottom: 10px; }
+    .for-who-text { color: var(--c-muted); font-size: 14px; line-height: 1.6; }
+
+    /* ─── PRICING ───────────────────────────────────────── */
+    #pricing { background: var(--c-bg2); }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; max-width: 1080px; margin: 0 auto; }
+    .pricing-plan {
+      background: var(--c-card); border: 1.5px solid var(--c-border); border-radius: 20px;
+      padding: 36px 28px; display: flex; flex-direction: column; transition: var(--transition); position: relative;
+    }
+    .pricing-plan:hover { border-color: rgba(124,58,237,0.45); transform: translateY(-5px); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+    .pricing-plan.featured {
+      border-color: rgba(124,58,237,0.55); background: linear-gradient(145deg,rgba(124,58,237,0.09),rgba(6,182,212,0.04));
+      box-shadow: 0 24px 64px rgba(124,58,237,0.22);
+    }
+    .plan-popular-tag {
+      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+      background: var(--grad); color: #fff; font-size: 11px; font-weight: 800;
+      padding: 4px 16px; border-radius: 50px; white-space: nowrap; font-family: var(--font-head);
+    }
+    .plan-badge {
+      display: inline-flex; align-items: center; padding: 4px 14px; border-radius: 50px;
+      font-size: 12px; font-weight: 700; margin-bottom: 16px; font-family: var(--font-head);
+    }
+    .plan-name { font-family: var(--font-head); font-size: 18px; font-weight: 800; margin-bottom: 10px; }
+    .plan-price { font-family: var(--font-head); font-size: 46px; font-weight: 900; line-height: 1; margin-bottom: 2px; }
+    .plan-period { font-size: 12px; color: var(--c-muted); margin-bottom: 14px; }
+    .plan-desc { color: var(--c-sub); font-size: 13px; line-height: 1.6; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--c-border); }
+    .plan-features { display: flex; flex-direction: column; gap: 10px; flex: 1; margin-bottom: 24px; }
+    .plan-feature { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.5; }
+    .plan-check {
+      width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 9px; margin-top: 2px;
+      background: rgba(124,58,237,0.18); border: 1px solid rgba(124,58,237,0.35); color: #a78bfa;
+    }
+    .plan-check.green { background: rgba(34,197,94,0.18); border-color: rgba(34,197,94,0.4); color: #4ade80; }
+    .plan-cta { margin-top: auto; }
+    .plan-cta a {
+      display: block; text-align: center; padding: 13px 20px; border-radius: 50px;
+      font-family: var(--font-head); font-weight: 700; font-size: 14px; transition: var(--transition);
+    }
+    .plan-cta a.cta-primary { background: var(--grad); color: #fff; box-shadow: 0 8px 24px rgba(124,58,237,0.3); }
+    .plan-cta a.cta-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(124,58,237,0.5); }
+    .plan-cta a.cta-outline { border: 1.5px solid var(--c-border); color: var(--c-text); }
+    .plan-cta a.cta-outline:hover { border-color: rgba(124,58,237,0.45); color: #a78bfa; }
+
+    /* ─── FAQ ───────────────────────────────────────────── */
+    #faq { background: var(--c-bg); }
+    .faq-wrapper { max-width: 760px; margin: 0 auto; }
+    .faq-item {
+      border: 1px solid var(--c-border); border-radius: 12px;
+      margin-bottom: 12px; overflow: hidden; transition: var(--transition);
+    }
+    .faq-item.open { border-color: rgba(124,58,237,0.4); }
+    .faq-q {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 28px; cursor: pointer; font-family: var(--font-head);
+      font-weight: 700; font-size: 16px; gap: 16px;
+      background: var(--c-card); transition: var(--transition);
+    }
+    .faq-q:hover { background: var(--c-card-h); }
+    .faq-icon {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3);
+      display: flex; align-items: center; justify-content: center;
+      color: #a78bfa; font-size: 16px; font-weight: 700; transition: var(--transition);
+    }
+    .faq-item.open .faq-icon { background: var(--c-primary); border-color: var(--c-primary); color: #fff; transform: rotate(45deg); }
+    .faq-a {
+      padding: 0 28px; max-height: 0; overflow: hidden;
+      color: var(--c-sub); font-size: 15px; line-height: 1.7;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+    }
+    .faq-item.open .faq-a { max-height: 300px; padding: 0 28px 22px; }
+
+    /* ─── FINAL CTA ─────────────────────────────────────── */
+    #cta {
+      padding: 120px 0; text-align: center; position: relative; overflow: hidden;
+    }
+    #cta::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(124,58,237,0.15), transparent);
+    }
+    #cta .container { position: relative; z-index: 1; }
+    .cta-title {
+      font-family: var(--font-head); font-size: clamp(36px,6vw,64px);
+      font-weight: 900; line-height: 1.1; margin-bottom: 20px;
+    }
+    .cta-sub { color: var(--c-sub); font-size: 18px; margin-bottom: 40px; }
+    .cta-btns { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .cta-note { color: var(--c-muted); font-size: 14px; margin-top: 20px; }
+
+    /* ─── FOOTER ────────────────────────────────────────── */
+    footer {
+      background: var(--c-bg2); border-top: 1px solid var(--c-border);
+      padding: 60px 0 30px;
+    }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand p { color: var(--c-muted); font-size: 14px; margin-top: 12px; max-width: 280px; line-height: 1.6; }
+    .footer-col h4 { font-family: var(--font-head); font-weight: 700; font-size: 14px; color: var(--c-text); margin-bottom: 16px; letter-spacing: 0.5px; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a { color: var(--c-muted); font-size: 14px; transition: var(--transition); }
+    .footer-col ul li a:hover { color: var(--c-text); }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--c-border); }
+    .footer-copy { color: var(--c-muted); font-size: 13px; }
+    .footer-social { display: flex; gap: 12px; }
+    .social-btn {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--c-card); border: 1px solid var(--c-border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--c-muted); font-size: 14px; transition: var(--transition);
+    }
+    .social-btn:hover { border-color: var(--c-primary); color: #a78bfa; }
+
+    /* ─── SCROLL TO TOP ─────────────────────────────────── */
+    #scrollTop {
+      position: fixed; bottom: 30px; right: 30px; z-index: 100;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--grad); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 18px; box-shadow: 0 8px 20px rgba(124,58,237,0.4);
+      opacity: 0; transform: translateY(20px); transition: var(--transition);
+      pointer-events: none;
+    }
+    #scrollTop.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+
+    /* ─── RESPONSIVE ────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .story-grid { grid-template-columns: 1fr; gap: 50px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .for-who-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 768px) {
+      .section-pad { padding: 70px 0; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-toggle { display: flex; }
+      .stats-grid { grid-template-columns: repeat(2,1fr); gap: 24px; }
+      .process-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 480px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 16px; }
+    }
+    @media (max-width: 480px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .for-who-grid { grid-template-columns: 1fr 1fr; }
+      .hero-btns { flex-direction: column; }
+      .hero-btns .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="container nav-inner">
+    <a href="#hero" class="nav-logo" data-key="nav.logo">Chrixlin AI Rise</a>
+    <div class="nav-links">
+      <a href="#process" data-key="nav.link1">How It Works</a>
+      <a href="#features" data-key="nav.link2">What You Get</a>
+      <a href="#testimonials" data-key="nav.link3">Results</a>
+      <a href="marketplace.html">Marketplace</a>
+      <a href="#pricing" data-key="nav.link4">Pricing</a>
+      <a href="#faq" data-key="nav.link5">FAQ</a>
+    </div>
+    <div class="nav-cta">
+      <a href="mailto:info@chrixlin.tech" class="btn btn-primary" data-key="nav.cta">Book Free Call</a>
+    </div>
+    <div class="nav-toggle" id="navToggle">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <span class="mobile-close" id="mobileClose">✕</span>
+  <a href="#process" onclick="closeMobile()">How It Works</a>
+  <a href="#features" onclick="closeMobile()">What You Get</a>
+  <a href="#testimonials" onclick="closeMobile()">Results</a>
+  <a href="marketplace.html" onclick="closeMobile()">Marketplace</a>
+  <a href="#pricing" onclick="closeMobile()">Pricing</a>
+  <a href="#faq" onclick="closeMobile()">FAQ</a>
+  <a href="mailto:info@chrixlin.tech" class="btn btn-primary" onclick="closeMobile()">Book Free Call</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+  </div>
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-content">
+        <div class="hero-badge animate-in">
+          <span class="badge">
+            <span>🚀</span>
+            <span data-key="hero.badge">Join 160+ AI Entrepreneurs</span>
+          </span>
+        </div>
+        <h1 class="hero-title animate-in" style="animation-delay:0.1s" data-key="hero.title">
+          Build a <span class="text-grad">$5K–$50K/Mo</span><br>AI Bot Business
+        </h1>
+        <p class="hero-sub animate-in" style="animation-delay:0.2s" data-key="hero.subtitle">
+          Learn to create, sell, and scale AI automation solutions for real businesses. Get your first paying client by Week 4 — or you don't pay a cent.
+        </p>
+        <div class="hero-btns animate-in" style="animation-delay:0.3s">
+          <a href="mailto:info@chrixlin.tech" class="btn btn-primary">
+            <span data-key="hero.cta1">Book My Free Strategy Call</span>
+            <span>→</span>
+          </a>
+          <a href="#testimonials" class="btn btn-outline" data-key="hero.cta2">See Real Results</a>
+        </div>
+        <div class="hero-trust animate-in" style="animation-delay:0.4s">
+          <div class="trust-item">
+            <div class="trust-check">✓</div>
+            <span data-key="hero.trust1">100% Risk-Free</span>
+          </div>
+          <div class="trust-item">
+            <div class="trust-check">✓</div>
+            <span data-key="hero.trust2">No Experience Required</span>
+          </div>
+          <div class="trust-item">
+            <div class="trust-check">✓</div>
+            <span data-key="hero.trust3">Results in 60 Days</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="floating-badge fb-top">
+          <div class="fb-icon">🏆</div>
+          <div>
+            <div class="fb-val">Featured In</div>
+            <div class="fb-label">Business Insider</div>
+          </div>
+        </div>
+        <div class="hero-card-main">
+          <div class="hero-card-top">
+            <div class="hero-avatar">🤖</div>
+            <div>
+              <div class="hero-card-name">Student Revenue Dashboard</div>
+              <div class="hero-card-role">Live results · Updated daily</div>
+            </div>
+          </div>
+          <div class="hero-earnings">$1.8M+</div>
+          <div class="hero-earnings-label">Total mentee revenue generated</div>
+          <div class="hero-progress-bar"><div class="hero-progress-fill"></div></div>
+          <div class="hero-stats-mini">
+            <div class="hero-stat-mini">
+              <div class="hero-stat-mini-val text-grad">160+</div>
+              <div class="hero-stat-mini-label">Students trained</div>
+            </div>
+            <div class="hero-stat-mini">
+              <div class="hero-stat-mini-val text-grad">60</div>
+              <div class="hero-stat-mini-label">Days avg. to client</div>
+            </div>
+            <div class="hero-stat-mini">
+              <div class="hero-stat-mini-val text-grad">$12K</div>
+              <div class="hero-stat-mini-label">Avg. monthly income</div>
+            </div>
+            <div class="hero-stat-mini">
+              <div class="hero-stat-mini-val text-grad">4.9★</div>
+              <div class="hero-stat-mini-label">Mentor rating</div>
+            </div>
+          </div>
+        </div>
+        <div class="floating-badge fb-bottom">
+          <div class="fb-icon">💰</div>
+          <div>
+            <div class="fb-val">$12,000/mo</div>
+            <div class="fb-label">Shubham's side income</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid" id="statsGrid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER STORY -->
+<section id="story" class="section-pad">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-timeline animate-in" id="storyTimeline">
+        <!-- Populated by JS -->
+      </div>
+      <div class="story-content animate-in">
+        <div class="badge" style="margin-bottom:20px">📖 The Origin Story</div>
+        <h2 data-key="story.title">From College Student to <span class="text-grad">AI Business Pioneer</span></h2>
+        <p data-key="story.p1">In 2020, I was a broke college student with zero connections and no clear path. But I discovered something that would change everything — businesses were desperate for automation, and almost nobody knew how to build it.</p>
+        <p data-key="story.p2">By senior year, I had crossed $150,000 in revenue building AI and automation tools. After being featured in Business Insider, I made it my mission to help others replicate the same path — faster.</p>
+        <div class="story-press">
+          <div class="press-icon">📰</div>
+          <div>
+            <div class="press-name" data-key="story.press">Featured in Business Insider</div>
+            <div class="press-text" data-key="story.pressText">For pioneering AI bot development as a business model</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="process" class="section-pad">
+  <div class="container">
+    <div class="section-label"><span class="badge">🗺️ The Roadmap</span></div>
+    <h2 class="section-title" data-key="process.title">Your <span class="text-grad">60-Day Roadmap</span> to Your First AI Client</h2>
+    <p class="section-sub" data-key="process.subtitle">A proven system built on 160+ success stories. No guesswork — just a clear path to income.</p>
+    <div class="process-grid" id="processGrid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU GET -->
+<section id="features" class="section-pad">
+  <div class="container">
+    <div class="section-label"><span class="badge">🎁 What's Included</span></div>
+    <h2 class="section-title" data-key="features.title">Everything You Need to <span class="text-grad">Succeed</span></h2>
+    <p class="section-sub" data-key="features.subtitle">Not just a course — a complete system for building your AI business with real support at every step.</p>
+    <div class="features-grid" id="featuresGrid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="section-pad">
+  <div class="container">
+    <div class="section-label"><span class="badge">🌟 Real Results</span></div>
+    <h2 class="section-title" data-key="testimonials.title">Students Who <span class="text-grad">Changed Their Lives</span></h2>
+    <p class="section-sub" data-key="testimonials.subtitle">These aren't cherry-picked outliers. This is what happens when you follow the system.</p>
+    <div class="testimonials-grid" id="testimonialsGrid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- WHO IS THIS FOR -->
+<section id="for-who" class="section-pad">
+  <div class="container">
+    <div class="section-label"><span class="badge">🎯 Is This For You?</span></div>
+    <h2 class="section-title" data-key="forWho.title">This Program is Built For <span class="text-grad">Ambitious People</span></h2>
+    <p class="section-sub" data-key="forWho.subtitle">Whether you're escaping a 9-5, in college, or already freelancing — we've helped people in every situation.</p>
+    <div class="for-who-grid" id="forWhoGrid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="section-pad">
+  <div class="container">
+    <div class="section-label"><span class="badge">💎 Pricing</span></div>
+    <h2 class="section-title">Simple, Transparent <span class="text-grad">Pricing For Everyone</span></h2>
+    <p class="section-sub">Start free. Upgrade when you're ready. No hidden fees, no contracts, no risk.</p>
+    <div class="pricing-grid" id="pricingGrid">
+      <!-- Populated by JS -->
+    </div>
+    <p style="text-align:center;color:var(--c-muted);font-size:13px;margin-top:28px">🔒 Secure checkout · 30-day money-back guarantee · Cancel anytime</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="section-pad">
+  <div class="container">
+    <div class="section-label"><span class="badge">❓ FAQ</span></div>
+    <h2 class="section-title" data-key="faq.title">Frequently Asked <span class="text-grad">Questions</span></h2>
+    <p class="section-sub" data-key="faq.subtitle">Everything you need to know before booking your call.</p>
+    <div class="faq-wrapper" id="faqWrapper">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="cta">
+  <div class="container">
+    <div class="animate-in">
+      <div class="badge" style="margin-bottom:24px;display:inline-flex">🚀 Ready to Start?</div>
+      <h2 class="cta-title" data-key="cta.title">
+        Your AI Business <span class="text-grad">Starts Today</span>
+      </h2>
+      <p class="cta-sub" data-key="cta.subtitle">Join 160+ entrepreneurs who took the first step. Book your free 1-on-1 strategy call and get a custom 60-day roadmap — no strings attached.</p>
+      <div class="cta-btns">
+        <a href="mailto:info@chrixlin.tech" class="btn btn-primary" style="font-size:18px;padding:18px 44px" data-key="cta.btnText">
+          Book My Free Strategy Call →
+        </a>
+      </div>
+      <p class="cta-note" data-key="cta.note">100% Free · No obligation · Limited spots available each week</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" data-key="footer.logo">Chrixlin AI Rise</div>
+        <p data-key="footer.tagline">Helping ambitious people build profitable AI businesses through mentorship, real projects, and a proven 60-day system.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Program</h4>
+        <ul>
+          <li><a href="#process">How It Works</a></li>
+          <li><a href="#features">What You Get</a></li>
+          <li><a href="#testimonials">Success Stories</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#story">Our Story</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="mailto:info@chrixlin.tech" data-key="footer.email">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#" data-key="footer.privacy">Privacy Policy</a></li>
+          <li><a href="#" data-key="footer.terms">Terms of Service</a></li>
+          <li><a href="#" data-key="footer.disclaimer">Disclaimer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy" data-key="footer.copy">© 2025 Chrixlin AI Rise. All rights reserved.</div>
+      <div class="footer-social">
+        <a href="#" class="social-btn" title="Twitter/X">𝕏</a>
+        <a href="#" class="social-btn" title="LinkedIn">in</a>
+        <a href="#" class="social-btn" title="YouTube">▶</a>
+        <a href="#" class="social-btn" title="Instagram">✦</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- SCROLL TO TOP -->
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ─── SITE DATA (defaults — overridden by localStorage) ───────────────────────
+const DEFAULT_DATA = {
+  stats: [
+    { value: "160+", label: "Entrepreneurs Trained", suffix: "" },
+    { value: "$1.8M+", label: "Mentee Revenue Generated", suffix: "" },
+    { value: "60", label: "Days Avg. to First Client", suffix: "" },
+    { value: "4.9★", label: "Average Mentor Rating", suffix: "" }
+  ],
+  story: [
+    { year: "2020", title: "The Beginning", text: "Broke college student with big ambitions. Discovered that businesses would pay premium prices for automation tools." },
+    { year: "2021", title: "First Big Win", text: "Built a PS5 automation tool during the GPU shortage. First taste of what AI bots could generate." },
+    { year: "2022–2023", title: "Scaling to $150K", text: "By senior year, crossed $150,000 in revenue. Word spread fast — people wanted to learn the playbook." },
+    { year: "2024–2025", title: "Chrixlin AI Rise Launch", text: "Launched the mentorship program. Featured in Business Insider. 160+ students, $1.8M+ in combined revenue." }
+  ],
+  process: [
+    { week: "Week 1–2", num: "01", title: "Strategy & Foundation", text: "Book your free call. We build your personalized 60-day AI business roadmap based on your skills, goals, and timeline. Zero guesswork." },
+    { week: "Week 2–4", num: "02", title: "Build & Master AI Tools", text: "Learn the exact AI tools clients pay $2,000–$10,000+ for. Build real projects under mentor guidance. No tutorials — actual deliverables." },
+    { week: "Week 4+", num: "03", title: "Get Clients & Scale", text: "Start earning with live paid projects. We personally connect you with clients. Hit your income targets and scale to $5K–$50K/mo." }
+  ],
+  features: [
+    { icon: "🎯", title: "Personalized Strategy Call", text: "A custom 60-day business roadmap tailored to your background, skills, and income goals. Not a generic plan." },
+    { icon: "📹", title: "Weekly Live Coaching", text: "Group sessions covering AI tools, client acquisition, pricing strategies, and scaling your business." },
+    { icon: "💼", title: "Real Client Projects", text: "Access to live paid projects starting Week 4. We make warm introductions — you close and deliver." },
+    { icon: "🤝", title: "1-on-1 Mentorship", text: "Direct access to mentors who have built $50K+/month AI businesses. Get unstuck fast." },
+    { icon: "🛠️", title: "Done-With-You Support", text: "We don't just teach. We roll up our sleeves and help you build and deliver your first projects." },
+    { icon: "🏆", title: "Private Community", text: "Network with 160+ AI entrepreneurs. Share wins, get feedback, find accountability partners." }
+  ],
+  testimonials: [
+    { name: "Shubham S.", role: "Software Engineer @ Big Tech", emoji: "👨‍💻", result: "$0 → $120,000+ in profits", quote: "I was skeptical — I already had a good job. But within 8 weeks I was earning an extra $12,000 a month. The mentorship showed me exactly how to package my existing skills for premium AI clients.", stars: 5 },
+    { name: "Ilya P.", role: "Former Food Delivery Driver", emoji: "🚗", result: "$0 → $100,000+ in profits", quote: "I had zero tech background. The program walked me through everything step by step. I made $1,000 in my very first day selling an AI QR generator. It changed my entire life trajectory.", stars: 5 },
+    { name: "Ron M.", role: "College Student", emoji: "🎓", result: "$0 → $30,000+ secured", quote: "While my classmates were applying for $15/hr internships, I closed my first $25,000 AI development project. This is the best investment I've made in my college career, bar none.", stars: 5 },
+    { name: "Sarah C.", role: "Former Marketing Manager", emoji: "💼", result: "$0 → $30K+/month agency", quote: "I quit my corporate job after 3 months in the program. I was terrified at first, but the risk-free model made it easy to start. Now I run a full AI agency making $30K+ a month on my own terms.", stars: 5 }
+  ],
+  forWho: [
+    { icon: "🏢", title: "9-5 Employees", text: "Tired of trading time for money. Ready to build a business that generates income while you sleep." },
+    { icon: "🎓", title: "College Students", text: "Build real income and high-demand skills while your peers are still figuring out their career." },
+    { icon: "💻", title: "Freelancers", text: "Level up from generic gigs to high-value AI development projects that pay 10x more." },
+    { icon: "⚙️", title: "Tech Professionals", text: "Monetize your existing skills in the fastest-growing market before your role gets automated." }
+  ],
+  pricingFeatures: [
+    "Full 60-day mentorship program",
+    "Weekly live coaching sessions",
+    "Direct client introductions",
+    "All AI tools & templates",
+    "1-on-1 mentor access",
+    "Lifetime community access",
+    "Done-with-you project support",
+    "Income strategy playbook"
+  ],
+  faq: [
+    { q: "Do I need coding experience to join?", a: "No coding experience is required. Many of our most successful students started with zero technical background. We teach you exactly what you need, at the pace you need it. What matters most is your drive and commitment." },
+    { q: "How does the income share model work?", a: "You pay nothing upfront. Once you start generating revenue from the skills and clients we help you land, a small percentage is shared with us for the first 6 months — only from income generated through the program. If you make nothing, we make nothing." },
+    { q: "When can I realistically expect my first client?", a: "Most students who follow the program diligently land their first paid project between weeks 4 and 8. We actively help make client introductions, so you're not starting from zero." },
+    { q: "What kind of AI projects will I be building?", a: "You'll build AI chatbots for businesses, automation workflows, AI content tools, lead generation systems, customer service bots, and custom AI agents. These are tools businesses pay $2,000–$15,000+ for." },
+    { q: "How much time do I need to commit each week?", a: "We recommend 10–15 hours per week to follow the program properly. This includes live sessions (2–3 hours), self-study, and project work. Many students do this alongside a full-time job." },
+    { q: "What if I don't get results?", a: "Because of our income share model, our incentives are fully aligned — we only win when you win. If you're not making money within the program framework, we don't get paid. We have every reason to ensure your success." }
+  ]
+};
+
+// ─── LOAD DATA FROM LOCALSTORAGE OR USE DEFAULTS ─────────────────────────────
+function loadData() {
+  try {
+    const stored = localStorage.getItem('agentrise_data');
+    if (!stored) return DEFAULT_DATA;
+    return Object.assign({}, DEFAULT_DATA, JSON.parse(stored));
+  } catch { return DEFAULT_DATA; }
+}
+
+// ─── RENDER FUNCTIONS ─────────────────────────────────────────────────────────
+function renderStats(data) {
+  const el = document.getElementById('statsGrid');
+  if (!el) return;
+  el.innerHTML = data.stats.map((s, i) => `
+    <div class="stat-item animate-in" style="animation-delay:${i*0.1}s">
+      <div class="stat-val" data-target="${s.value}">${s.value}</div>
+      <div class="stat-label">${s.label}</div>
+    </div>
+  `).join('');
+}
+
+function renderStory(data) {
+  const el = document.getElementById('storyTimeline');
+  if (!el) return;
+  el.innerHTML = data.story.map(s => `
+    <div class="story-item animate-in">
+      <div class="story-dot"></div>
+      <div class="story-year">${s.year}</div>
+      <div class="story-item-title">${s.title}</div>
+      <div class="story-item-text">${s.text}</div>
+    </div>
+  `).join('');
+}
+
+function renderProcess(data) {
+  const el = document.getElementById('processGrid');
+  if (!el) return;
+  el.innerHTML = data.process.map((p, i) => `
+    <div class="process-card animate-in" style="animation-delay:${i*0.15}s">
+      <div class="process-num">${p.num}</div>
+      <div class="process-week">${p.week}</div>
+      <div class="process-title">${p.title}</div>
+      <div class="process-text">${p.text}</div>
+    </div>
+  `).join('');
+}
+
+function renderFeatures(data) {
+  const el = document.getElementById('featuresGrid');
+  if (!el) return;
+  el.innerHTML = data.features.map((f, i) => `
+    <div class="feature-card animate-in" style="animation-delay:${i*0.1}s">
+      <div class="feature-highlight"></div>
+      <div class="feature-icon">${f.icon}</div>
+      <div class="feature-title">${f.title}</div>
+      <div class="feature-text">${f.text}</div>
+    </div>
+  `).join('');
+}
+
+function renderTestimonials(data) {
+  const el = document.getElementById('testimonialsGrid');
+  if (!el) return;
+  el.innerHTML = data.testimonials.map((t, i) => `
+    <div class="testimonial-card animate-in" style="animation-delay:${i*0.1}s">
+      <div class="t-header">
+        <div class="t-avatar">${t.emoji}</div>
+        <div>
+          <div class="t-name">${t.name}</div>
+          <div class="t-role">${t.role}</div>
+        </div>
+      </div>
+      <div class="t-stars">${'★'.repeat(t.stars)}</div>
+      <div class="t-quote">"${t.quote}"</div>
+      <div class="t-result">📈 ${t.result}</div>
+    </div>
+  `).join('');
+}
+
+function renderForWho(data) {
+  const el = document.getElementById('forWhoGrid');
+  if (!el) return;
+  el.innerHTML = data.forWho.map((f, i) => `
+    <div class="for-who-card animate-in" style="animation-delay:${i*0.1}s">
+      <div class="for-who-icon">${f.icon}</div>
+      <div class="for-who-title">${f.title}</div>
+      <div class="for-who-text">${f.text}</div>
+    </div>
+  `).join('');
+}
+
+// ─── PRICING PLANS ────────────────────────────────────────────────────────────
+const DEFAULT_PRICING_PLANS = [
+  {
+    id: 1, name: "Free Strategy Call", priceLabel: "FREE", price: 0,
+    period: "No credit card needed",
+    badge: "🎯 No Risk", badgeColor: "#22c55e", badgeBg: "rgba(34,197,94,0.12)",
+    description: "Start with a free 30-min 1-on-1 consultation. Get your personalised AI business roadmap with zero commitment and zero pressure.",
+    cta: "Book My Free Call →", ctaStyle: "outline", highlighted: false,
+    features: ["30-min 1-on-1 strategy session","Custom 60-day AI roadmap","Market opportunity audit","Skill gap analysis","Zero sales pressure","No credit card required"]
+  },
+  {
+    id: 2, name: "AI Starter", priceLabel: "$197", price: 197,
+    period: "One-time · No subscription",
+    badge: "🔥 Most Popular", badgeColor: "#6366f1", badgeBg: "rgba(99,102,241,0.15)",
+    description: "Everything you need to build your first AI product, attract your first clients, and start generating real income.",
+    cta: "Get Started Today", ctaStyle: "primary", highlighted: false,
+    features: ["Full 60-day curriculum access","Weekly group coaching calls","AI tools & automation templates","Private community membership","Client proposal templates","Email & chat support"]
+  },
+  {
+    id: 3, name: "AI Accelerator", priceLabel: "$497", price: 497,
+    period: "One-time · Best value",
+    badge: "⚡ Best Value", badgeColor: "#f59e0b", badgeBg: "rgba(245,158,11,0.12)",
+    description: "The complete done-with-you experience. We personally connect you with clients, co-deliver your first projects, and guarantee results.",
+    cta: "Join AI Accelerator", ctaStyle: "primary", highlighted: true,
+    features: ["Everything in Starter, plus:","2× weekly 1-on-1 mentorship calls","Direct client introductions","Done-with-you project delivery","Priority Slack support channel","Income guarantee or full refund"]
+  }
+];
+
+function loadPricingPlans() {
+  try {
+    const s = localStorage.getItem('chrixlin_pricing');
+    return s ? JSON.parse(s) : DEFAULT_PRICING_PLANS;
+  } catch { return DEFAULT_PRICING_PLANS; }
+}
+
+function renderPricingPlans(overridePlans) {
+  const el = document.getElementById('pricingGrid');
+  if (!el) return;
+  const plans = overridePlans || loadPricingPlans();
+  el.innerHTML = plans.map(p => `
+    <div class="pricing-plan animate-in${p.highlighted ? ' featured' : ''}">
+      ${p.highlighted ? '<div class="plan-popular-tag">⭐ Most Recommended</div>' : ''}
+      <div class="plan-badge" style="background:${p.badgeBg||'rgba(99,102,241,0.15)'};color:${p.badgeColor||'#a78bfa'}">${p.badge}</div>
+      <div class="plan-name">${p.name}</div>
+      <div class="plan-price">${p.priceLabel}</div>
+      <div class="plan-period">${p.period}</div>
+      <div class="plan-desc">${p.description}</div>
+      <div class="plan-features">
+        ${(p.features||[]).map(f=>`
+          <div class="plan-feature">
+            <div class="plan-check${p.price===0?' green':''}">✓</div>
+            <span>${f}</span>
+          </div>`).join('')}
+      </div>
+      <div class="plan-cta">
+        <a href="${p.price===0?'mailto:info@chrixlin.tech':'mailto:info@chrixlin.tech?subject='+encodeURIComponent(p.name+' - Purchase')}" class="cta-${p.ctaStyle||'primary'}">${p.cta}</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderFAQ(data) {
+  const el = document.getElementById('faqWrapper');
+  if (!el) return;
+  el.innerHTML = data.faq.map((f, i) => `
+    <div class="faq-item animate-in" style="animation-delay:${i*0.08}s">
+      <div class="faq-q" onclick="toggleFAQ(this.parentElement)">
+        <span>${f.q}</span>
+        <div class="faq-icon">+</div>
+      </div>
+      <div class="faq-a">${f.a}</div>
+    </div>
+  `).join('');
+}
+
+function toggleFAQ(item) {
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+// ─── INLINE TEXT KEYS FROM localStorage ──────────────────────────────────────
+function applyTextKeys(textKeys) {
+  if (!textKeys) return;
+  Object.entries(textKeys).forEach(([key, val]) => {
+    document.querySelectorAll(`[data-key="${key}"]`).forEach(el => {
+      if (el.tagName === 'INPUT') el.value = val;
+      else el.innerHTML = val;
+    });
+  });
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+const siteData = loadData();
+renderStats(siteData);
+renderStory(siteData);
+renderProcess(siteData);
+renderFeatures(siteData);
+renderTestimonials(siteData);
+renderForWho(siteData);
+renderPricingPlans();
+renderFAQ(siteData);
+
+// Apply any custom text keys
+const storedKeys = localStorage.getItem('agentrise_textkeys');
+if (storedKeys) applyTextKeys(JSON.parse(storedKeys));
+
+// ─── APPLY THEME CSS FROM ADMIN ───────────────────────────────────────────────
+(function applyTheme() {
+  const css = localStorage.getItem('agentrise_theme_css');
+  if (!css) return;
+  const style = document.createElement('style');
+  style.id = 'admin-theme';
+  style.textContent = css;
+  document.head.appendChild(style);
+})();
+
+// ─── APPLY DYNAMIC CTA BUTTON URL ─────────────────────────────────────────────
+(function applyCTAUrl() {
+  try {
+    const keys = JSON.parse(localStorage.getItem('agentrise_textkeys') || '{}');
+    if (keys['cta.btnText'] || keys['cta.btnUrl']) {
+      const ctaBtns = document.querySelectorAll('#cta .btn-primary');
+      ctaBtns.forEach(btn => {
+        if (keys['cta.btnUrl']) btn.href = keys['cta.btnUrl'];
+        if (keys['cta.btnText']) btn.innerHTML = keys['cta.btnText'];
+      });
+    }
+    // Update navbar logo
+    const navLogo = document.querySelector('nav .nav-logo');
+    if (navLogo && keys['nav.logo']) navLogo.textContent = keys['nav.logo'];
+    // Update footer logo (uses footer.logo key, falls back to nav.logo)
+    const footerLogo = document.querySelector('.footer-brand .nav-logo');
+    if (footerLogo) {
+      if (keys['footer.logo']) footerLogo.textContent = keys['footer.logo'];
+      else if (keys['nav.logo']) footerLogo.textContent = keys['nav.logo'];
+    }
+    if (keys['seo.title']) document.title = keys['seo.title'];
+    if (keys['seo.description']) {
+      const meta = document.querySelector('meta[name="description"]');
+      if (meta) meta.content = keys['seo.description'];
+    }
+  } catch(e) {}
+})();
+
+// ─── SCROLL ANIMATIONS ────────────────────────────────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+// Re-observe after rendering
+setTimeout(() => {
+  document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
+}, 100);
+
+// ─── NAVBAR SCROLL ────────────────────────────────────────────────────────────
+const navbar = document.getElementById('navbar');
+const scrollTopBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+  scrollTopBtn.classList.toggle('show', window.scrollY > 500);
+});
+
+// ─── MOBILE MENU ─────────────────────────────────────────────────────────────
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('mobileMenu').classList.add('open');
+});
+document.getElementById('mobileClose').addEventListener('click', closeMobile);
+function closeMobile() {
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="supabase-client.js"></script>
+<script>
+(async function() {
+  try {
+    const plans = await ChrixlinDB.loadAllPricingPlans();
+    if (plans && plans.length) renderPricingPlans(plans);
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

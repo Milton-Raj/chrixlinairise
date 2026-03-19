@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product — Chrixlin AI Rise</title>
+  <meta name="description" content="Full product details, demo video, features, and purchase options." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --c-bg:      #05050c;
+      --c-bg2:     #0a0a16;
+      --c-bg3:     #10101e;
+      --c-card:    #1a1a2e;
+      --c-card-h:  #22223a;
+      --c-border:  rgba(255,255,255,0.12);
+      --c-border-h:rgba(124,58,237,0.6);
+      --c-primary: #7c3aed;
+      --c-cyan:    #06b6d4;
+      --c-gold:    #f59e0b;
+      --c-green:   #22c55e;
+      --c-text:    #f1f5f9;
+      --c-sub:     #94a3b8;
+      --c-muted:   #64748b;
+      --grad:      linear-gradient(135deg, #7c3aed, #06b6d4);
+      --grad-gold: linear-gradient(135deg, #f59e0b, #ef4444);
+      --r-card:    16px;
+      --shadow:    0 20px 50px rgba(0,0,0,0.5);
+      --glow:      0 0 40px rgba(124,58,237,0.25);
+      --transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+      --font-h:    'Plus Jakarta Sans', sans-serif;
+      --font-b:    'Inter', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--c-bg); color: var(--c-text); font-family: var(--font-b); line-height: 1.6; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .text-grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.35); color: #a78bfa; padding: 6px 16px; border-radius: 50px; font-size: 13px; font-weight: 600; font-family: var(--font-h); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 50px; font-family: var(--font-h); font-weight: 700; font-size: 15px; cursor: pointer; border: none; transition: var(--transition); white-space: nowrap; text-decoration: none; }
+    .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 8px 24px rgba(124,58,237,0.35); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(124,58,237,0.55); }
+    .btn-gold { background: var(--grad-gold); color: #fff; box-shadow: 0 8px 24px rgba(245,158,11,0.3); }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(245,158,11,0.5); }
+    .btn-outline { background: transparent; color: var(--c-text); border: 1.5px solid var(--c-border); }
+    .btn-outline:hover { border-color: var(--c-primary); color: #a78bfa; }
+    .section-label { font-family: var(--font-h); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--c-muted); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .section-label::before { content: ''; display: block; width: 24px; height: 2px; background: var(--grad); border-radius: 2px; }
+
+    /* ─── NAVBAR ──────────────────────────────────────────── */
+    #navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 18px 0; transition: var(--transition); }
+    #navbar.scrolled { background: rgba(5,5,12,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--c-border); padding: 12px 0; }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: var(--font-h); font-weight: 800; font-size: 20px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { color: var(--c-sub); font-size: 15px; font-weight: 500; transition: var(--transition); }
+    .nav-links a:hover { color: var(--c-text); }
+    .nav-cta .btn { padding: 10px 22px; font-size: 14px; }
+    .nav-back { display: inline-flex; align-items: center; gap: 8px; color: var(--c-sub); font-size: 14px; font-weight: 500; transition: var(--transition); }
+    .nav-back:hover { color: var(--c-text); }
+    .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--c-text); border-radius: 2px; }
+    .mobile-menu { display: none; position: fixed; inset: 0; background: rgba(5,5,12,0.98); backdrop-filter: blur(20px); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 28px; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-family: var(--font-h); font-size: 22px; font-weight: 700; color: var(--c-sub); }
+    .mobile-close { position: absolute; top: 24px; right: 24px; font-size: 30px; cursor: pointer; color: var(--c-muted); background: none; border: none; }
+
+    /* ─── BREADCRUMB ──────────────────────────────────────── */
+    .breadcrumb { padding: 100px 0 0; }
+    .breadcrumb-inner { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--c-muted); padding-bottom: 20px; border-bottom: 1px solid var(--c-border); }
+    .breadcrumb-inner a { color: var(--c-muted); transition: var(--transition); }
+    .breadcrumb-inner a:hover { color: var(--c-text); }
+    .breadcrumb-inner .sep { color: var(--c-border); }
+    .breadcrumb-cur { color: var(--c-sub); }
+
+    /* ─── PRODUCT HERO ────────────────────────────────────── */
+    #product-hero { padding: 48px 0 60px; }
+    .product-hero-grid { display: grid; grid-template-columns: 1fr 400px; gap: 60px; align-items: start; }
+    .product-hero-left { }
+
+    /* ─── THUMBNAIL HERO ──────────────────────────────────── */
+    .product-hero-thumb {
+      position: relative; border-radius: 20px; overflow: hidden;
+      aspect-ratio: 16/9; margin-bottom: 32px;
+      border: 1px solid var(--c-border);
+    }
+    .product-hero-thumb.cat-thumb-voice-ai  { background: linear-gradient(135deg, rgba(124,58,237,0.5), rgba(6,182,212,0.2)); }
+    .product-hero-thumb.cat-thumb-sales     { background: linear-gradient(135deg, rgba(245,158,11,0.5), rgba(239,68,68,0.2)); }
+    .product-hero-thumb.cat-thumb-content   { background: linear-gradient(135deg, rgba(6,182,212,0.5), rgba(34,197,94,0.2)); }
+    .product-hero-thumb.cat-thumb-lead      { background: linear-gradient(135deg, rgba(34,197,94,0.5), rgba(6,182,212,0.2)); }
+    .product-hero-thumb.cat-thumb-automation{ background: linear-gradient(135deg, rgba(239,68,68,0.45), rgba(124,58,237,0.2)); }
+    .product-hero-thumb-img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+    .product-hero-thumb-emoji { font-size: 96px; position: relative; z-index: 1; filter: drop-shadow(0 12px 40px rgba(0,0,0,0.5)); }
+    .product-hero-thumb-inner { display: flex; align-items: center; justify-content: center; height: 100%; }
+
+    /* ─── PRODUCT META ────────────────────────────────────── */
+    .product-meta-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .product-cat-badge { font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .cat-voice { background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.25); }
+    .cat-content { background: rgba(6,182,212,0.15); color: #22d3ee; border: 1px solid rgba(6,182,212,0.25); }
+    .cat-sales { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
+    .cat-lead { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
+    .cat-automation { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+    .product-special-badge { font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+    .product-name { font-family: var(--font-h); font-size: clamp(28px, 4vw, 44px); font-weight: 900; margin-bottom: 16px; line-height: 1.15; }
+    .product-short-desc { font-size: 17px; color: var(--c-sub); line-height: 1.7; margin-bottom: 28px; }
+
+    /* ─── PURCHASE BOX ────────────────────────────────────── */
+    .purchase-box {
+      background: var(--c-card); border: 1px solid var(--c-border);
+      border-radius: 20px; padding: 32px; position: sticky; top: 90px;
+    }
+    .purchase-price { font-family: var(--font-h); font-size: 48px; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 4px; }
+    .purchase-price-note { font-size: 13px; color: var(--c-muted); margin-bottom: 28px; }
+    .purchase-btns { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .purchase-btns .btn { width: 100%; }
+    .purchase-trust { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+    .purchase-trust-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--c-sub); }
+    .purchase-trust-icon { width: 28px; height: 28px; border-radius: 8px; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.2); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .purchase-divider { border: none; border-top: 1px solid var(--c-border); margin: 16px 0; }
+    .purchase-share { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--c-muted); }
+    .share-btn { padding: 6px 14px; border-radius: 20px; background: var(--c-bg3); border: 1px solid var(--c-border); color: var(--c-sub); font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); font-family: var(--font-b); }
+    .share-btn:hover { border-color: var(--c-border-h); color: var(--c-text); }
+
+    /* ─── CONTENT SECTIONS ────────────────────────────────── */
+    .content-sections { padding: 0 0 80px; }
+    .cs-section { margin-bottom: 60px; }
+    .cs-title { font-family: var(--font-h); font-size: 22px; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+    .cs-title-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.25); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+
+    /* ─── VIDEO SECTION ───────────────────────────────────── */
+    .product-video-wrap { border-radius: 16px; overflow: hidden; aspect-ratio: 16/9; background: var(--c-card); border: 1px solid var(--c-border); position: relative; }
+    .product-video-wrap iframe { width: 100%; height: 100%; border: none; }
+    .product-video-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
+    .product-video-placeholder .big-emoji { font-size: 64px; }
+    .product-video-placeholder p { color: var(--c-muted); font-size: 15px; }
+
+    /* ─── DESCRIPTION ─────────────────────────────────────── */
+    .product-long-desc { font-size: 16px; color: var(--c-sub); line-height: 1.8; }
+
+    /* ─── SCREENSHOTS ─────────────────────────────────────── */
+    .screenshots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .screenshot-card { border-radius: 12px; overflow: hidden; border: 1px solid var(--c-border); background: var(--c-card); aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center; position: relative; }
+    .screenshot-card img { width: 100%; height: 100%; object-fit: cover; }
+    .screenshot-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 20px; text-align: center; }
+    .screenshot-placeholder .sc-emoji { font-size: 36px; }
+    .screenshot-placeholder .sc-label { font-size: 12px; color: var(--c-muted); font-weight: 600; font-family: var(--font-h); }
+
+    /* ─── INCLUDED FEATURES ───────────────────────────────── */
+    .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .feature-item { display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; background: var(--c-card); border: 1px solid var(--c-border); border-radius: 12px; transition: var(--transition); }
+    .feature-item:hover { border-color: rgba(124,58,237,0.3); }
+    .feature-check { width: 24px; height: 24px; border-radius: 50%; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); display: flex; align-items: center; justify-content: center; color: #4ade80; font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+    .feature-text { font-size: 14px; color: var(--c-sub); line-height: 1.5; }
+
+    /* ─── HOW IT WORKS ────────────────────────────────────── */
+    .hiw-steps { display: flex; flex-direction: column; gap: 0; }
+    .hiw-step { display: flex; gap: 24px; position: relative; }
+    .hiw-step:not(:last-child)::before { content: ''; position: absolute; left: 19px; top: 44px; bottom: -16px; width: 2px; background: linear-gradient(to bottom, rgba(124,58,237,0.4), transparent); }
+    .hiw-step-num { width: 40px; height: 40px; border-radius: 50%; background: var(--grad); display: flex; align-items: center; justify-content: center; font-family: var(--font-h); font-weight: 800; font-size: 16px; color: #fff; flex-shrink: 0; position: relative; z-index: 1; box-shadow: 0 4px 16px rgba(124,58,237,0.4); }
+    .hiw-step-content { padding: 8px 0 36px; }
+    .hiw-step-title { font-family: var(--font-h); font-weight: 700; font-size: 17px; margin-bottom: 6px; }
+    .hiw-step-desc { font-size: 14px; color: var(--c-sub); line-height: 1.6; }
+
+    /* ─── REVIEWS ─────────────────────────────────────────── */
+    .reviews-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .review-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: 16px; padding: 24px; transition: var(--transition); }
+    .review-card:hover { border-color: rgba(124,58,237,0.3); transform: translateY(-3px); }
+    .review-stars { display: flex; gap: 3px; margin-bottom: 14px; }
+    .review-stars span { color: var(--c-gold); font-size: 16px; }
+    .review-text { font-size: 15px; color: var(--c-sub); line-height: 1.7; margin-bottom: 18px; font-style: italic; }
+    .review-author { display: flex; align-items: center; gap: 12px; }
+    .review-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--grad); display: flex; align-items: center; justify-content: center; font-family: var(--font-h); font-weight: 800; font-size: 16px; color: #fff; flex-shrink: 0; }
+    .review-name { font-family: var(--font-h); font-weight: 700; font-size: 14px; }
+    .review-role { font-size: 12px; color: var(--c-muted); }
+
+    /* ─── BOTTOM CTA ──────────────────────────────────────── */
+    #bottom-cta { background: var(--c-bg2); border-top: 1px solid var(--c-border); padding: 60px 0; text-align: center; }
+    #bottom-cta h2 { font-family: var(--font-h); font-size: clamp(24px,4vw,38px); font-weight: 900; margin-bottom: 12px; }
+    #bottom-cta p { color: var(--c-sub); font-size: 16px; margin-bottom: 32px; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ─── FOOTER ──────────────────────────────────────────── */
+    footer { background: var(--c-bg2); border-top: 1px solid var(--c-border); padding: 40px 0 20px; }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-logo { font-family: var(--font-h); font-weight: 800; font-size: 18px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .footer-copy { font-size: 13px; color: var(--c-muted); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 13px; color: var(--c-muted); transition: var(--transition); }
+    .footer-links a:hover { color: var(--c-text); }
+
+    /* ─── SCROLL TOP ──────────────────────────────────────── */
+    #scrollTop { position: fixed; bottom: 28px; right: 28px; z-index: 100; width: 44px; height: 44px; border-radius: 50%; background: var(--grad); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; box-shadow: 0 8px 20px rgba(124,58,237,0.4); opacity: 0; transform: translateY(20px); transition: var(--transition); pointer-events: none; }
+    #scrollTop.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+
+    /* ─── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .product-hero-grid { grid-template-columns: 1fr; }
+      .purchase-box { position: static; }
+      .screenshots-grid { grid-template-columns: repeat(2, 1fr); }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-toggle { display: flex; }
+      .screenshots-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo" id="navLogo">Chrixlin AI Rise</a>
+    <div class="nav-links">
+      <a href="index.html#process">How It Works</a>
+      <a href="index.html#features">What You Get</a>
+      <a href="index.html#testimonials">Results</a>
+      <a href="marketplace.html" class="active">Marketplace</a>
+      <a href="index.html#pricing">Pricing</a>
+    </div>
+    <div class="nav-cta">
+      <a href="mailto:info@chrixlin.tech" class="btn btn-primary">Book Free Call</a>
+    </div>
+    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="index.html#process" onclick="closeMobile()">How It Works</a>
+  <a href="marketplace.html" onclick="closeMobile()">Marketplace</a>
+  <a href="index.html#pricing" onclick="closeMobile()">Pricing</a>
+  <a href="mailto:info@chrixlin.tech" class="btn btn-primary" onclick="closeMobile()">Book Free Call</a>
+</div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <div class="container">
+    <div class="breadcrumb-inner">
+      <a href="index.html">Home</a>
+      <span class="sep">›</span>
+      <a href="marketplace.html">Marketplace</a>
+      <span class="sep">›</span>
+      <span class="breadcrumb-cur" id="breadcrumbName">Product</span>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT HERO -->
+<section id="product-hero">
+  <div class="container">
+    <div class="product-hero-grid">
+
+      <!-- LEFT COLUMN -->
+      <div class="product-hero-left">
+        <!-- Thumbnail -->
+        <div class="product-hero-thumb" id="productThumb">
+          <div class="product-hero-thumb-inner">
+            <div class="product-hero-thumb-emoji" id="productHeroEmoji">🤖</div>
+          </div>
+        </div>
+
+        <!-- Meta -->
+        <div class="product-meta-row">
+          <span class="product-cat-badge" id="productCatBadge"></span>
+          <span class="product-special-badge" id="productSpecialBadge" style="display:none"></span>
+        </div>
+        <h1 class="product-name" id="productName">Loading...</h1>
+        <p class="product-short-desc" id="productShortDesc"></p>
+      </div>
+
+      <!-- RIGHT COLUMN — PURCHASE BOX -->
+      <div>
+        <div class="purchase-box">
+          <div class="purchase-price" id="purchasePrice">$999</div>
+          <div class="purchase-price-note">One-time payment · Full setup included · Lifetime access</div>
+          <div class="purchase-btns">
+            <a href="#" class="btn btn-gold" id="btnBuyNow" onclick="goToPayment(event)">💳 Buy Now</a>
+            <a href="mailto:info@chrixlin.tech" class="btn btn-outline">📞 Book a Free Call</a>
+          </div>
+          <div class="purchase-trust">
+            <div class="purchase-trust-item"><div class="purchase-trust-icon">🔒</div><span>Secure &amp; encrypted payment</span></div>
+            <div class="purchase-trust-item"><div class="purchase-trust-icon">📦</div><span>Full setup &amp; onboarding support</span></div>
+            <div class="purchase-trust-item"><div class="purchase-trust-icon">📝</div><span>Complete documentation included</span></div>
+            <div class="purchase-trust-item"><div class="purchase-trust-icon">🔄</div><span>Updates &amp; revisions included</span></div>
+          </div>
+          <hr class="purchase-divider">
+          <div class="purchase-share">
+            <span>Share:</span>
+            <button class="share-btn" onclick="copyLink()">🔗 Copy Link</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTENT SECTIONS -->
+<section class="content-sections">
+  <div class="container">
+
+    <!-- DEMO VIDEO -->
+    <div class="cs-section" id="sectionVideo">
+      <div class="section-label">Demo Video</div>
+      <div class="cs-title"><span class="cs-title-icon">🎬</span> Watch It In Action</div>
+      <div class="product-video-wrap" id="productVideoWrap">
+        <div class="product-video-placeholder" id="videoPlaceholder">
+          <div class="big-emoji" id="videoPlaceholderEmoji">🎬</div>
+          <p>Demo video coming soon — <a href="mailto:info@chrixlin.tech" style="color:#a78bfa">book a live demo call →</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FULL DESCRIPTION -->
+    <div class="cs-section">
+      <div class="section-label">About This Product</div>
+      <div class="cs-title"><span class="cs-title-icon">📄</span> Product Overview</div>
+      <p class="product-long-desc" id="productLongDesc"></p>
+    </div>
+
+    <!-- SCREENSHOTS -->
+    <div class="cs-section" id="sectionScreenshots">
+      <div class="section-label">Screenshots</div>
+      <div class="cs-title"><span class="cs-title-icon">🖼️</span> More Screenshots</div>
+      <div class="screenshots-grid" id="screenshotsGrid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- WHAT'S INCLUDED -->
+    <div class="cs-section">
+      <div class="section-label">What's Included</div>
+      <div class="cs-title"><span class="cs-title-icon">✅</span> Everything You Get</div>
+      <div class="features-grid" id="featuresGrid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="cs-section">
+      <div class="section-label">Process</div>
+      <div class="cs-title"><span class="cs-title-icon">⚡</span> How It Works</div>
+      <div class="hiw-steps" id="hiwSteps">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="cs-section">
+      <div class="section-label">Social Proof</div>
+      <div class="cs-title"><span class="cs-title-icon">⭐</span> Customer Reviews</div>
+      <div class="reviews-grid" id="reviewsGrid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section id="bottom-cta">
+  <div class="container">
+    <h2>Ready to Deploy <span class="text-grad">This AI Solution?</span></h2>
+    <p>Get instant access today with full setup support included. Questions? Book a free call first.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn btn-gold" id="btnBuyNow2" onclick="goToPayment(event)">💳 Buy Now — <span id="ctaPrice">$999</span></a>
+      <a href="mailto:info@chrixlin.tech" class="btn btn-outline">📞 Book a Free Call First</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-bottom">
+      <div class="footer-logo" id="footerLogo">Chrixlin AI Rise</div>
+      <div class="footer-copy" id="footerCopy">© 2025 Chrixlin AI Rise. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="marketplace.html">Marketplace</a>
+        <a href="mailto:info@chrixlin.tech">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ─── DEFAULT PRODUCT DATA ─────────────────────────────────────────────────────
+const DEFAULT_PRODUCTS = [
+  {
+    id: 1, category: "voice-ai", categoryLabel: "Voice AI", categoryClass: "cat-voice", emoji: "📞",
+    title: "Voice AI Appointment Agent", badge: "Bestseller",
+    desc: "AI-powered voice assistant that handles incoming calls, books appointments, and sends follow-up reminders — 24/7 without human intervention.",
+    longDesc: "Deploy a fully autonomous AI voice agent that handles every incoming call for your business. It answers questions, qualifies leads, books appointments directly into your calendar, and sends automated SMS/email reminders — all without any human involvement. Perfect for clinics, service businesses, salons, and any business that relies on phone bookings.",
+    features: ["24/7 automated call handling", "Direct calendar integration", "SMS & email appointment reminders", "CRM pipeline integration", "Custom voice, tone & script", "Multilingual support", "Full setup & onboarding included"],
+    price: "$1,499", ytId: "",
+    howItWorks: [
+      { title: "We Set Up Your AI Voice Agent", desc: "Our team configures the AI with your business name, services, FAQs, and calendar integration within 48 hours." },
+      { title: "Calls Come In — AI Answers", desc: "Every inbound call is answered instantly by your AI. It answers questions, qualifies leads, and books appointments." },
+      { title: "Confirmations Sent Automatically", desc: "Automated SMS and email reminders are sent to clients. No-shows drop dramatically." },
+      { title: "You Just Show Up to Appointments", desc: "Check your calendar, show up, and close. The AI handles everything before you meet the client." }
+    ],
+    reviews: [
+      { name: "Marcus T.", role: "Dental Clinic Owner", text: "Our no-show rate dropped from 30% to 8% in the first month. The AI handles every call perfectly and our staff now focuses on actual patient care.", rating: 5 },
+      { name: "Priya S.", role: "Spa & Wellness Director", text: "We deployed this over a weekend. By Monday morning it had already booked 14 appointments. Absolutely mind-blowing ROI.", rating: 5 },
+      { name: "James R.", role: "Real Estate Agent", text: "I used to miss leads after hours. Now the AI captures every single call and books showings 24/7. Game-changer.", rating: 5 },
+      { name: "Linda K.", role: "Salon Owner", text: "Our front desk used to spend 3 hours a day just answering calls. Now they focus on clients. Best investment I've made.", rating: 5 }
+    ]
+  },
+  {
+    id: 2, category: "sales", categoryLabel: "Sales AI", categoryClass: "cat-sales", emoji: "🔥",
+    title: "Lead Reactivation AI Platform", badge: "Hot",
+    desc: "Autonomous system that identifies dormant contacts in your CRM and turns them into confirmed bookings through personalized AI outreach.",
+    longDesc: "Stop leaving money on the table. This platform automatically scans your CRM for leads that went cold, crafts personalized follow-up messages based on their history, and drives them to take action — whether that's booking a call, signing up for a trial, or making a purchase. 100% automated.",
+    features: ["CRM integration (GoHighLevel, HubSpot, etc.)", "AI-personalized outreach sequences", "Multi-channel: SMS, email, voicemail drops", "Automatic booking on positive replies", "Detailed analytics dashboard", "A/B testing for message optimization"],
+    price: "$499", ytId: "",
+    howItWorks: [
+      { title: "Connect Your CRM", desc: "We integrate directly with GoHighLevel, HubSpot, or any major CRM. Your lead history is imported in minutes." },
+      { title: "AI Identifies Cold Leads", desc: "The system scans for leads that haven't engaged in 30, 60, or 90+ days and segments them for outreach." },
+      { title: "Personalized Outreach Launches", desc: "AI crafts personalized SMS, email, and voicemail sequences based on each lead's history and behavior." },
+      { title: "Hot Leads Get Auto-Booked", desc: "Interested leads are automatically routed to your calendar. You only talk to people who are ready to buy." }
+    ],
+    reviews: [
+      { name: "Alex M.", role: "Digital Agency Owner", text: "We had 2,400 dead leads in our CRM. Within 2 weeks this system reactivated 87 of them. That's $43K in closed deals from 'lost' contacts.", rating: 5 },
+      { name: "Rachel O.", role: "SaaS Founder", text: "The personalization is incredible. Leads think a real person sent the message. Our reply rate is 34% on cold contacts.", rating: 5 },
+      { name: "Tom B.", role: "Insurance Broker", text: "I set it up on a Friday. By Monday I had 12 booked calls. These were people I thought were gone forever.", rating: 5 },
+      { name: "Sarah L.", role: "Coaching Business", text: "The ROI is insane for $499. I made that back in 2 days from reactivated leads.", rating: 5 }
+    ]
+  },
+  {
+    id: 3, category: "voice-ai", categoryLabel: "Voice AI", categoryClass: "cat-voice", emoji: "🏥",
+    title: "Patient Acquisition AI System", badge: "Premium",
+    desc: "Complete patient acquisition pipeline with AI voice agent, marketing funnels, CRM pipeline, and automated appointment scheduling for healthcare.",
+    longDesc: "A turnkey patient acquisition system built specifically for healthcare providers. Includes a custom AI voice agent for inbound calls, automated marketing funnels, HIPAA-compliant CRM pipeline, and seamless appointment scheduling. Delivered as a ready-to-import GoHighLevel snapshot.",
+    features: ["HIPAA-compliant architecture", "AI inbound & outbound calling", "Automated marketing funnels", "GoHighLevel snapshot included", "Patient intake automation", "Review collection system", "White-label ready"],
+    price: "$1,497", ytId: "",
+    howItWorks: [
+      { title: "Import the GoHighLevel Snapshot", desc: "Your complete system — funnels, CRM, automations — is ready to import into your GoHighLevel account in under 10 minutes." },
+      { title: "Configure Your AI Voice Agent", desc: "We customize the AI with your clinic's name, services, insurance info, and doctor availability." },
+      { title: "Launch Your Patient Funnels", desc: "Activate the pre-built ad funnels for your specialty. Leads flow directly into your CRM pipeline." },
+      { title: "Patients Book Themselves", desc: "The AI handles inbound calls, answers questions, and books appointments. Review requests go out automatically post-visit." }
+    ],
+    reviews: [
+      { name: "Dr. Patel", role: "General Practitioner", text: "We went from 12 new patients/month to 47 in 60 days. The system runs itself — my office manager just reviews the filled schedule.", rating: 5 },
+      { name: "Dr. Kim", role: "Dermatology Clinic", text: "HIPAA compliance was our biggest concern. Everything is properly handled. The intake forms alone save us 2 hours a day.", rating: 5 },
+      { name: "Maria G.", role: "Physical Therapy Practice", text: "The marketing funnels brought in 23 new patients in the first month. The ROI paid for the system 10x over.", rating: 5 },
+      { name: "Dr. Ahmed", role: "Dental Practice", text: "The review collection system alone has generated 80+ 5-star Google reviews in 3 months. Phenomenal product.", rating: 5 }
+    ]
+  },
+  {
+    id: 4, category: "content", categoryLabel: "Content AI", categoryClass: "cat-content", emoji: "✍️",
+    title: "AI Content & Marketing Agent", badge: "",
+    desc: "Plug-and-play AI agent that generates and publishes social content, ad copy, email campaigns, and blog posts from a single prompt.",
+    longDesc: "Give this AI agent a topic, product, or goal and it produces a full content calendar: social media posts, email sequences, ad copy, and blog articles — all optimized for your brand voice. Integrates directly with your publishing tools. Save 20+ hours per week on content creation.",
+    features: ["Multi-platform content generation", "Brand voice training", "Auto-publish to social media", "Email sequence writer", "SEO-optimized blog posts", "Ad copy generator", "Content calendar scheduler"],
+    price: "$997", ytId: "",
+    howItWorks: [
+      { title: "Train the AI on Your Brand Voice", desc: "Share sample content, your tone guide, and audience persona. The AI learns your unique voice in minutes." },
+      { title: "Set Your Content Goals", desc: "Tell the AI your weekly goals — posts per platform, email frequency, blog cadence — and it builds your calendar." },
+      { title: "Review & One-Click Publish", desc: "The AI generates all content. You review, approve, and publish with one click across all your platforms." },
+      { title: "Analyze & Optimize", desc: "The agent tracks performance and automatically adjusts content strategy based on what gets the most engagement." }
+    ],
+    reviews: [
+      { name: "Nina H.", role: "E-commerce Brand Owner", text: "We used to spend $4K/month on a content agency. Now we spend $997 once and the AI does more in a week than they did in a month.", rating: 5 },
+      { name: "Chris W.", role: "Marketing Director", text: "The brand voice training is eerily accurate. Our followers can't tell the difference between human and AI content.", rating: 5 },
+      { name: "Amara J.", role: "Life Coach", text: "I went from posting once a week to every day across 4 platforms. My following grew 340% in 3 months.", rating: 5 },
+      { name: "Kevin T.", role: "SaaS Startup Founder", text: "The email sequences this AI writes convert better than anything my human copywriters produced. Unreal.", rating: 5 }
+    ]
+  },
+  {
+    id: 5, category: "lead", categoryLabel: "Lead Gen", categoryClass: "cat-lead", emoji: "🎯",
+    title: "AI Lead Generation System", badge: "",
+    desc: "End-to-end lead generation machine that finds prospects, qualifies them with AI conversations, and books them directly into your sales calendar.",
+    longDesc: "Automate your entire top-of-funnel. This system sources targeted leads from LinkedIn, web scraping, and third-party data, then engages them with personalized AI conversations that qualify interest and intent. Hot leads get automatically booked into your calendar — zero manual effort required.",
+    features: ["Multi-source lead sourcing", "AI qualification conversations", "LinkedIn outreach automation", "Automatic calendar booking", "Lead scoring & prioritization", "Custom ICP targeting", "Full analytics & reporting"],
+    price: "$1,297", ytId: "",
+    howItWorks: [
+      { title: "Define Your Ideal Customer Profile", desc: "We configure the system with your ICP — industry, company size, title, location, and pain points." },
+      { title: "AI Sources & Enriches Leads", desc: "The system finds matching leads from LinkedIn, databases, and web sources. Every lead is enriched with contact info." },
+      { title: "Personalized AI Outreach Begins", desc: "The AI sends hyper-personalized messages that reference the prospect's company, role, and likely pain points." },
+      { title: "Qualified Leads Book Themselves", desc: "Interested prospects self-qualify through AI conversations and book directly into your calendar — no SDR needed." }
+    ],
+    reviews: [
+      { name: "Derek P.", role: "B2B SaaS CEO", text: "We replaced a 3-person SDR team with this system. Same pipeline volume, 90% cost reduction. It's not even close.", rating: 5 },
+      { name: "Yemi A.", role: "Consulting Firm Principal", text: "47 booked demos in the first 30 days. These were completely cold contacts. The AI's personalization is what made the difference.", rating: 5 },
+      { name: "Sandra M.", role: "Recruitment Agency Owner", text: "We used to spend 4 hours a day on LinkedIn. Now the AI does it 24/7 and we get 3x more responses.", rating: 5 },
+      { name: "Ryan C.", role: "Agency Founder", text: "I bought this for my agency and then sold it as a service to 6 clients within 2 months. Paid for itself 15x.", rating: 5 }
+    ]
+  },
+  {
+    id: 6, category: "automation", categoryLabel: "Automation", categoryClass: "cat-automation", emoji: "⚙️",
+    title: "Business Automation Workflow Suite", badge: "New",
+    desc: "A comprehensive suite of AI-powered automation workflows that eliminate repetitive tasks across your entire business operation.",
+    longDesc: "Stop wasting hours on tasks a machine can do. This suite includes pre-built automation workflows for onboarding, invoicing, follow-ups, reporting, and internal communications — all connected via AI. Works with 200+ apps including Slack, Google Workspace, Notion, QuickBooks, and more.",
+    features: ["200+ app integrations", "Automated client onboarding", "Invoice & payment automation", "AI-powered reporting", "Internal workflow automation", "Custom trigger + action builder", "Zapier/Make compatible"],
+    price: "$799", ytId: "",
+    howItWorks: [
+      { title: "Map Your Repetitive Workflows", desc: "We audit your existing processes and identify every manual, repetitive task that can be automated." },
+      { title: "Deploy Pre-Built Automations", desc: "Choose from 50+ pre-built workflow templates and deploy them instantly with a few configuration steps." },
+      { title: "Connect Your Tools", desc: "The suite integrates with 200+ apps. Slack, Gmail, Notion, QuickBooks, CRM — everything talks to each other." },
+      { title: "Watch Hours Disappear", desc: "From day one, hours of manual work vanish. Most clients save 15-20 hours per week within the first week." }
+    ],
+    reviews: [
+      { name: "Fiona C.", role: "Operations Manager", text: "We automated 11 workflows in the first week. Our team reclaimed 60 hours collectively. The client onboarding automation alone is worth 10x the price.", rating: 5 },
+      { name: "David L.", role: "Agency Owner", text: "Invoice automation saved us from 2 hours of weekly admin. The AI-powered report generation is incredible — clients love it.", rating: 5 },
+      { name: "Tara N.", role: "Project Manager", text: "The Notion + Slack + Gmail integrations work flawlessly. Our entire team communication is now automated and organized.", rating: 5 },
+      { name: "Omar S.", role: "E-commerce Operator", text: "The order processing and follow-up automations paid for this suite in the first 3 days. Absolutely recommend.", rating: 5 }
+    ]
+  }
+];
+
+// Screenshot placeholders per product (shows UI mockup descriptions)
+const SCREENSHOT_PLACEHOLDERS = [
+  { emoji: '🖥️', label: 'Dashboard Overview' },
+  { emoji: '📊', label: 'Analytics & Reports' },
+  { emoji: '⚙️', label: 'Configuration Panel' },
+  { emoji: '📱', label: 'Mobile Interface' },
+  { emoji: '🔗', label: 'Integration Setup' },
+  { emoji: '📋', label: 'Workflow Builder' }
+];
+
+// ─── LOAD DATA ────────────────────────────────────────────────────────────────
+function getProductById(id) {
+  try {
+    const s = localStorage.getItem('chrixlin_marketplace');
+    if (s) {
+      const data = JSON.parse(s);
+      if (data.products) {
+        const p = data.products.find(x => x.id === id);
+        if (p) {
+          // Merge with defaults to get howItWorks/reviews if not in saved data
+          const def = DEFAULT_PRODUCTS.find(x => x.id === id);
+          return Object.assign({}, def || {}, p);
+        }
+      }
+    }
+  } catch {}
+  return DEFAULT_PRODUCTS.find(x => x.id === id) || null;
+}
+
+// ─── READ URL PARAM ───────────────────────────────────────────────────────────
+const urlParams = new URLSearchParams(window.location.search);
+const productId = parseInt(urlParams.get('id')) || 1;
+const product = getProductById(productId);
+
+// ─── APPLY BRAND ──────────────────────────────────────────────────────────────
+(function applyBrand() {
+  try {
+    const keys = JSON.parse(localStorage.getItem('agentrise_textkeys') || '{}');
+    const brand = keys['nav.logo'] || 'Chrixlin AI Rise';
+    document.getElementById('navLogo').textContent = brand;
+    document.getElementById('footerLogo').textContent = brand;
+    if (keys['footer.copy']) document.getElementById('footerCopy').textContent = keys['footer.copy'];
+  } catch {}
+})();
+
+// ─── RENDER PRODUCT ───────────────────────────────────────────────────────────
+if (!product) {
+  document.title = 'Product Not Found — Chrixlin AI Rise';
+  document.getElementById('productName').textContent = 'Product not found';
+  document.getElementById('productShortDesc').textContent = 'This product could not be found. Please return to the marketplace.';
+} else {
+  // Page title & breadcrumb
+  document.title = `${product.title} — Chrixlin AI Rise`;
+  document.getElementById('breadcrumbName').textContent = product.title;
+
+  // Thumbnail
+  const thumbEl = document.getElementById('productThumb');
+  const thumbClass = { 'voice-ai':'cat-thumb-voice-ai','sales':'cat-thumb-sales','content':'cat-thumb-content','lead':'cat-thumb-lead','automation':'cat-thumb-automation' };
+  thumbEl.classList.add(thumbClass[product.category] || 'cat-thumb-voice-ai');
+  document.getElementById('productHeroEmoji').textContent = product.emoji || '🤖';
+  if (product.image) {
+    const img = document.createElement('img');
+    img.className = 'product-hero-thumb-img';
+    img.src = product.image;
+    img.alt = product.title;
+    thumbEl.appendChild(img);
+  }
+
+  // Meta
+  const catBadge = document.getElementById('productCatBadge');
+  catBadge.textContent = product.categoryLabel;
+  catBadge.className = `product-cat-badge ${product.categoryClass || 'cat-voice'}`;
+  const specialBadge = document.getElementById('productSpecialBadge');
+  if (product.badge) { specialBadge.textContent = `⚡ ${product.badge}`; specialBadge.style.display = ''; }
+  document.getElementById('productName').textContent = product.title;
+  document.getElementById('productShortDesc').textContent = product.desc;
+
+  // Price
+  document.getElementById('purchasePrice').textContent = product.price;
+  document.getElementById('ctaPrice').textContent = product.price;
+
+  // Long description
+  document.getElementById('productLongDesc').textContent = product.longDesc || product.desc;
+
+  // Video
+  const ytId = (product.ytId || '').trim();
+  const validYtId = /^[A-Za-z0-9_-]{11}$/.test(ytId);
+  if (validYtId) {
+    const vw = document.getElementById('productVideoWrap');
+    vw.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1" allowfullscreen title="${product.title} Demo" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;gap:12px;color:#64748b\\'><div style=\\'font-size:48px\\'>🎬</div><div>Video preview coming soon</div></div>'"></iframe>`;
+  } else {
+    document.getElementById('videoPlaceholderEmoji').textContent = product.emoji || '🎬';
+  }
+
+  // Screenshots
+  const shots = product.screenshots || [];
+  const sgrid = document.getElementById('screenshotsGrid');
+  const PLACEHOLDERS = SCREENSHOT_PLACEHOLDERS;
+  sgrid.innerHTML = (shots.length > 0 ? shots : PLACEHOLDERS).map(s => {
+    if (typeof s === 'string') {
+      return `<div class="screenshot-card"><img src="${s}" alt="Screenshot" /></div>`;
+    }
+    return `<div class="screenshot-card"><div class="screenshot-placeholder" style="background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(6,182,212,0.08))"><div class="sc-emoji">${s.emoji}</div><div class="sc-label">${s.label}</div></div></div>`;
+  }).join('');
+
+  // Features
+  const fgrid = document.getElementById('featuresGrid');
+  fgrid.innerHTML = (product.features || []).map(f =>
+    `<div class="feature-item"><div class="feature-check">✓</div><div class="feature-text">${f}</div></div>`
+  ).join('');
+
+  // How It Works
+  const steps = product.howItWorks || [
+    { title: "Purchase & Onboarding Call", desc: "Book your onboarding call immediately after purchase. We'll walk through your requirements." },
+    { title: "Customization & Setup", desc: "Our team customizes the system for your business and sets everything up within 48 hours." },
+    { title: "Testing & Handoff", desc: "We test the full workflow together and hand off with complete documentation and training." },
+    { title: "You're Live & Earning", desc: "Your AI system is live. We provide ongoing support as you grow." }
+  ];
+  document.getElementById('hiwSteps').innerHTML = steps.map((s, i) =>
+    `<div class="hiw-step">
+      <div class="hiw-step-num">${i + 1}</div>
+      <div class="hiw-step-content">
+        <div class="hiw-step-title">${s.title}</div>
+        <div class="hiw-step-desc">${s.desc}</div>
+      </div>
+    </div>`
+  ).join('');
+
+  // Reviews
+  const reviews = product.reviews || [
+    { name: "Student A.", role: "Program Graduate", text: "This AI solution transformed my client business completely. The ROI in the first month was extraordinary.", rating: 5 },
+    { name: "Client B.", role: "Business Owner", text: "Smooth deployment, great support, and even better results. Couldn't be happier.", rating: 5 }
+  ];
+  document.getElementById('reviewsGrid').innerHTML = reviews.map(r =>
+    `<div class="review-card">
+      <div class="review-stars">${'★'.repeat(r.rating || 5)}${'☆'.repeat(5 - (r.rating || 5))}</div>
+      <p class="review-text">"${r.text}"</p>
+      <div class="review-author">
+        <div class="review-avatar">${r.name.charAt(0)}</div>
+        <div>
+          <div class="review-name">${r.name}</div>
+          <div class="review-role">${r.role}</div>
+        </div>
+      </div>
+    </div>`
+  ).join('');
+}
+
+// ─── BUY NOW ──────────────────────────────────────────────────────────────────
+function goToPayment(e) {
+  e.preventDefault();
+  window.location.href = `payment.html?id=${productId}`;
+}
+
+// ─── SHARE ────────────────────────────────────────────────────────────────────
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const btn = document.querySelector('.share-btn');
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => { btn.textContent = '🔗 Copy Link'; }, 2000);
+  });
+}
+
+// ─── SCROLL BEHAVIOR ──────────────────────────────────────────────────────────
+const navbar = document.getElementById('navbar');
+const scrollTopBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+  scrollTopBtn.classList.toggle('show', window.scrollY > 400);
+});
+
+document.getElementById('navToggle').addEventListener('click', () => document.getElementById('mobileMenu').classList.add('open'));
+document.getElementById('mobileClose').addEventListener('click', closeMobile);
+function closeMobile() { document.getElementById('mobileMenu').classList.remove('open'); }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="supabase-client.js"></script>
+</body>
+</html>
