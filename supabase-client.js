@@ -223,6 +223,65 @@
   async function adminSignOut() { const c = _getClient(); if (c) await c.auth.signOut(); }
   async function getSession() { const c = _getClient(); if (!c) return null; const { data } = await c.auth.getSession(); return data?.session || null; }
 
+  // ─── SECTION CONTENT (landing page tables) ────────────────────────
+  async function loadSectionItems(tableName) {
+    const client = _getClient();
+    if (!client) return null;
+    try {
+      const { data, error } = await client.from(tableName).select('*').order('sort_order', { ascending: true });
+      if (error) throw error;
+      return data || [];
+    } catch (err) {
+      console.warn('[ChrixlinDB] loadSectionItems(' + tableName + ') failed.', err);
+      return null;
+    }
+  }
+
+  async function saveSectionItems(tableName, items) {
+    const client = _getClient();
+    if (!client) return false;
+    try {
+      const { error } = await client.from(tableName).upsert(items, { onConflict: 'id' });
+      if (error) throw error;
+      return true;
+    } catch (err) {
+      console.warn('[ChrixlinDB] saveSectionItems(' + tableName + ') failed.', err);
+      return false;
+    }
+  }
+
+  async function loadHeroSection() {
+    const client = _getClient();
+    if (!client) return null;
+    try {
+      const { data, error } = await client.from('hero_section').select('*').single();
+      if (error) throw error;
+      return data;
+    } catch (err) {
+      console.warn('[ChrixlinDB] loadHeroSection() failed.', err);
+      return null;
+    }
+  }
+
+  async function saveHeroSection(heroObj) {
+    const client = _getClient();
+    if (!client) return false;
+    try {
+      const existing = await loadHeroSection();
+      if (existing) {
+        const { error } = await client.from('hero_section').update(heroObj).eq('id', existing.id);
+        if (error) throw error;
+      } else {
+        const { error } = await client.from('hero_section').insert(heroObj);
+        if (error) throw error;
+      }
+      return true;
+    } catch (err) {
+      console.warn('[ChrixlinDB] saveHeroSection() failed.', err);
+      return false;
+    }
+  }
+
   // ─── MAPPERS ──────────────────────────────────────────────────────
   function _productToRow(p) {
     return { id: p.id, emoji: p.emoji||'🤖', badge: p.badge||'', category: p.category||'voice-ai', category_label: p.categoryLabel||'', category_class: p.categoryClass||'', price: p.price||'$999', title: p.title||'', description: p.desc||'', long_desc: p.longDesc||'', image_url: p.image||'', yt_id: p.ytId||'', buy_url: p.buyUrl||'', features: p.features||[], how_it_works: p.howItWorks||[], reviews: p.reviews||[], screenshots: p.screenshots||[], sort_order: p.sortOrder||0, is_active: p.isActive!==false };
@@ -260,6 +319,7 @@
     loadPaymentSettings, loadPublicPaymentSettings, savePaymentSettings,
     submitOrder, submitContactMessage,
     adminSignIn, adminSignOut, getSession,
+    loadSectionItems, saveSectionItems, loadHeroSection, saveHeroSection,
     _getClient,
   };
 

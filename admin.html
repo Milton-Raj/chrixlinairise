@@ -2121,6 +2121,25 @@ function saveAllAndNotify() {
     ChrixlinDB.saveToSupabase('site_settings', 'agentrise_data', data).catch(() => {});
     const keys = JSON.parse(localStorage.getItem('agentrise_textkeys') || '{}');
     ChrixlinDB.saveToSupabase('site_settings', 'agentrise_textkeys', keys).catch(() => {});
+    // Save each section to its own table
+    if (data.stats) ChrixlinDB.saveSectionItems('stat_items', data.stats.map((s,i) => ({ id: i+1, value: s.value||'', label: s.label||'', sort_order: i+1 }))).catch(() => {});
+    if (data.story) ChrixlinDB.saveSectionItems('story_items', data.story.map((s,i) => ({ id: i+1, year: s.year||'', title: s.title||'', body: s.text||'', sort_order: i+1 }))).catch(() => {});
+    if (data.process) ChrixlinDB.saveSectionItems('process_steps', data.process.map((s,i) => ({ id: i+1, num: s.num||'', week_label: s.week||'', title: s.title||'', body: s.text||'', sort_order: i+1 }))).catch(() => {});
+    if (data.features) ChrixlinDB.saveSectionItems('feature_items', data.features.map((s,i) => ({ id: i+1, icon: s.icon||'', title: s.title||'', body: s.text||'', sort_order: i+1, is_active: true }))).catch(() => {});
+    if (data.testimonials) ChrixlinDB.saveSectionItems('testimonial_items', data.testimonials.map((s,i) => ({ id: i+1, name: s.name||'', role: s.role||'', emoji: s.emoji||'👤', result: s.result||'', quote: s.quote||'', stars: s.stars||5, sort_order: i+1, is_active: true }))).catch(() => {});
+    if (data.forWho) ChrixlinDB.saveSectionItems('for_who_items', data.forWho.map((s,i) => ({ id: i+1, icon: s.icon||'', title: s.title||'', body: s.text||'', sort_order: i+1 }))).catch(() => {});
+    if (data.faq) ChrixlinDB.saveSectionItems('faq_items', data.faq.map((s,i) => ({ id: i+1, question: s.q||'', answer: s.a||'', sort_order: i+1, is_active: true }))).catch(() => {});
+    // Save hero text keys
+    if (keys) {
+      const heroData = {};
+      if (keys['nav.logo']) heroData.brand_name = keys['nav.logo'];
+      if (keys['hero.badge']) heroData.badge_text = keys['hero.badge'];
+      if (keys['hero.title']) heroData.title = keys['hero.title'];
+      if (keys['hero.subtitle']) heroData.subtitle = keys['hero.subtitle'];
+      if (keys['hero.cta1']) heroData.cta_primary_text = keys['hero.cta1'];
+      if (keys['hero.cta2']) heroData.cta_secondary_text = keys['hero.cta2'];
+      if (Object.keys(heroData).length) ChrixlinDB.saveHeroSection(heroData).catch(() => {});
+    }
   }
   showToast('🎉 All changes published successfully!');
   refreshDashboard();

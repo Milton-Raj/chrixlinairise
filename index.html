@@ -1192,14 +1192,98 @@ function closeMobile() {
 <script src="supabase-client.js"></script>
 <script>
 (async function() {
+  if (typeof ChrixlinDB === 'undefined') return;
   try {
+    // Load pricing plans
     const plans = await ChrixlinDB.loadAllPricingPlans();
     if (plans && plans.length) {
-      // Cache to localStorage then re-render with active billing
       localStorage.setItem('chrixlin_pricing', JSON.stringify(plans));
       renderPricingPlans();
     }
   } catch(e) {}
+
+  // Load each content section from its own DB table and re-render
+  var refreshed = {};
+
+  try {
+    var stats = await ChrixlinDB.loadSectionItems('stat_items');
+    if (stats && stats.length) {
+      refreshed.stats = stats.map(function(r) { return { value: r.value, label: r.label }; });
+    }
+  } catch(e) {}
+
+  try {
+    var storyItems = await ChrixlinDB.loadSectionItems('story_items');
+    if (storyItems && storyItems.length) {
+      refreshed.story = storyItems.map(function(r) { return { year: r.year, title: r.title, text: r.body }; });
+    }
+  } catch(e) {}
+
+  try {
+    var processItems = await ChrixlinDB.loadSectionItems('process_steps');
+    if (processItems && processItems.length) {
+      refreshed.process = processItems.map(function(r) { return { num: r.num, week: r.week_label, title: r.title, text: r.body }; });
+    }
+  } catch(e) {}
+
+  try {
+    var featureItems = await ChrixlinDB.loadSectionItems('feature_items');
+    if (featureItems && featureItems.length) {
+      refreshed.features = featureItems.filter(function(r) { return r.is_active; }).map(function(r) { return { icon: r.icon, title: r.title, text: r.body }; });
+    }
+  } catch(e) {}
+
+  try {
+    var testimonialItems = await ChrixlinDB.loadSectionItems('testimonial_items');
+    if (testimonialItems && testimonialItems.length) {
+      refreshed.testimonials = testimonialItems.filter(function(r) { return r.is_active; }).map(function(r) { return { name: r.name, role: r.role, emoji: r.emoji, result: r.result, quote: r.quote, stars: r.stars }; });
+    }
+  } catch(e) {}
+
+  try {
+    var forWhoItems = await ChrixlinDB.loadSectionItems('for_who_items');
+    if (forWhoItems && forWhoItems.length) {
+      refreshed.forWho = forWhoItems.map(function(r) { return { icon: r.icon, title: r.title, text: r.body }; });
+    }
+  } catch(e) {}
+
+  try {
+    var faqItems = await ChrixlinDB.loadSectionItems('faq_items');
+    if (faqItems && faqItems.length) {
+      refreshed.faq = faqItems.filter(function(r) { return r.is_active; }).map(function(r) { return { q: r.question, a: r.answer }; });
+    }
+  } catch(e) {}
+
+  // If we got any DB data, re-render those sections
+  if (Object.keys(refreshed).length > 0) {
+    var merged = Object.assign({}, siteData, refreshed);
+    localStorage.setItem('agentrise_data', JSON.stringify(merged));
+    if (refreshed.stats) renderStats(merged);
+    if (refreshed.story) renderStory(merged);
+    if (refreshed.process) renderProcess(merged);
+    if (refreshed.features) renderFeatures(merged);
+    if (refreshed.testimonials) renderTestimonials(merged);
+    if (refreshed.forWho) renderForWho(merged);
+    if (refreshed.faq) renderFAQ(merged);
+    // Re-run animations for newly rendered elements
+    setTimeout(_runAnimations, 100);
+  }
+
+  // Load hero text keys from DB
+  try {
+    var hero = await ChrixlinDB.loadHeroSection();
+    if (hero) {
+      var heroKeys = {};
+      if (hero.badge_text) heroKeys['hero.badge'] = hero.badge_text;
+      if (hero.title) heroKeys['hero.title'] = hero.title;
+      if (hero.subtitle) heroKeys['hero.subtitle'] = hero.subtitle;
+      if (hero.cta_primary_text) heroKeys['hero.cta1'] = hero.cta_primary_text;
+      if (hero.cta_secondary_text) heroKeys['hero.cta2'] = hero.cta_secondary_text;
+      if (hero.brand_name) { heroKeys['nav.logo'] = hero.brand_name; heroKeys['footer.logo'] = hero.brand_name; }
+      if (Object.keys(heroKeys).length) applyTextKeys(heroKeys);
+    }
+  } catch(e) {}
+
 })();
 </script>
 </body>
