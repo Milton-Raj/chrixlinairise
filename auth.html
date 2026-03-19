@@ -7,6 +7,7 @@
   <meta name="description" content="Sign in or create your Chrixlin AI Rise account to access purchased products and track orders." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -503,6 +504,28 @@ async function handleSignIn() {
   }
 }
 
+// ─── WELCOME EMAIL (EmailJS) ──────────────────────────────────────────────────
+// Configure your EmailJS keys at https://emailjs.com (free account)
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // replace with your EmailJS service ID
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // replace with your EmailJS template ID
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // replace with your EmailJS public key
+
+async function sendWelcomeEmail(name, email) {
+  // Only attempt if EmailJS keys are configured
+  if (EMAILJS_SERVICE_ID === 'YOUR_SERVICE_ID') return;
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_name:  name,
+      to_email: email,
+      from_name: 'Chrixlin AI Rise',
+      subject:  '🎉 Welcome to Chrixlin AI Rise!',
+      message:  `Congratulations ${name}! Your account has been created successfully. You can now access the marketplace, purchase AI solutions, and track your orders from your dashboard. Welcome aboard! — The Chrixlin AI Rise Team`
+    }, EMAILJS_PUBLIC_KEY);
+  } catch(e) {
+    console.log('[Email] Welcome email skipped:', e.message);
+  }
+}
+
 // ─── REGISTER ─────────────────────────────────────────────────────────────────
 async function handleRegister() {
   hideError();
@@ -519,15 +542,12 @@ async function handleRegister() {
   try {
     const result = await ChrixlinDB.customerSignUp(email, password, name);
     if (result.error) throw result.error;
-    // If auto-confirmed, redirect; otherwise show verify email message
-    if (result.session) {
-      window.location.href = nextUrl;
-    } else {
-      setLoading('registerBtn', 'registerSpinner', 'registerBtnText', false, 'Create Account');
-      showSuccess('Account created! Please check your email to verify your address, then sign in.');
-      switchTab('signin');
-      document.getElementById('siEmail').value = email;
-    }
+    // Send welcome email (non-blocking)
+    sendWelcomeEmail(name, email);
+    // Always redirect after successful signup
+    setLoading('registerBtn', 'registerSpinner', 'registerBtnText', false, 'Create Account');
+    showSuccess('🎉 Account created! Redirecting...');
+    setTimeout(() => { window.location.href = nextUrl; }, 1200);
   } catch (err) {
     setLoading('registerBtn', 'registerSpinner', 'registerBtnText', false, 'Create Account');
     let msg = err.message || 'Registration failed.';

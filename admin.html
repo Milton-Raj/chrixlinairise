@@ -1279,14 +1279,60 @@
 
       <!-- ── USERS ───────────────────────────────────────────── -->
       <div id="panel-users" class="panel">
-        <div class="panel-title">👥 Users</div>
-        <div class="panel-desc">Customer and subscriber management. Connect Supabase auth to populate this list.</div>
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:48px;text-align:center">
-          <div style="font-size:48px;margin-bottom:16px">👥</div>
-          <div style="font-size:18px;font-weight:700;margin-bottom:8px">User Management</div>
-          <div style="color:var(--muted);font-size:14px;max-width:400px;margin:0 auto">User accounts will appear here once Supabase auth is connected. Each subscriber and buyer will have a profile with purchase history.</div>
-        </div>
-      </div>
+  <div class="panel-title">👥 Users</div>
+  <div class="panel-desc">All registered customers with purchase history. Updates automatically.</div>
+
+  <!-- Stats row -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px" id="userStatsRow">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:6px">Total Users</div>
+      <div id="statTotalUsers" style="font-size:28px;font-weight:800;color:var(--text)">—</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:6px">Total Orders</div>
+      <div id="statTotalOrders" style="font-size:28px;font-weight:800;color:var(--text)">—</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:6px">Total Revenue</div>
+      <div id="statTotalRevenue" style="font-size:28px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">—</div>
+    </div>
+  </div>
+
+  <!-- Search + Refresh -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+    <input type="text" id="userSearchInput" placeholder="🔍 Search by name or email..."
+      oninput="filterUsersTable()"
+      style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;color:var(--text);font-size:14px;outline:none" />
+    <button class="btn btn-ghost" onclick="loadUsersPanel()" style="white-space:nowrap">↻ Refresh</button>
+  </div>
+
+  <!-- Users Table -->
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden">
+    <table id="usersTable" style="width:100%;border-collapse:collapse;font-size:14px">
+      <thead>
+        <tr style="border-bottom:1px solid var(--border)">
+          <th style="padding:14px 20px;text-align:left;color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:0.5px">User</th>
+          <th style="padding:14px 20px;text-align:left;color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:0.5px">Phone</th>
+          <th style="padding:14px 20px;text-align:left;color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:0.5px">Orders</th>
+          <th style="padding:14px 20px;text-align:left;color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:0.5px">Total Spent</th>
+          <th style="padding:14px 20px;text-align:left;color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:0.5px">Joined</th>
+          <th style="padding:14px 20px;text-align:left;color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:0.5px">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="usersTableBody">
+        <tr><td colspan="6" style="padding:48px;text-align:center;color:var(--muted)">Loading users...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- User Detail Modal -->
+  <div id="userDetailModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:1000;align-items:center;justify-content:center">
+    <div style="background:#1a1a2e;border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:36px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;position:relative">
+      <button onclick="closeUserModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer">✕</button>
+      <div id="userDetailContent"></div>
+    </div>
+  </div>
+</div>
 
       <!-- ── ANALYTICS & REPORTS ────────────────────────────── -->
       <div id="panel-analytics" class="panel">
@@ -2822,6 +2868,142 @@ if (savedTheme.text) document.getElementById('theme_text').value = savedTheme.te
     if (e.key === 'Enter') loginBtn.click();
   });
 })();
+
+// ─── USERS PANEL ──────────────────────────────────────────────────────────────
+var _allUsers = [];
+var _allOrders = [];
+
+async function loadUsersPanel() {
+  if (typeof ChrixlinDB === 'undefined') return;
+  document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="6" style="padding:48px;text-align:center;color:var(--muted)">Loading...</td></tr>';
+  try {
+    [_allUsers, _allOrders] = await Promise.all([
+      ChrixlinDB.adminGetAllProfiles(),
+      ChrixlinDB.adminGetAllOrders()
+    ]);
+    renderUsersTable(_allUsers);
+    // Update stats
+    var totalSpent = _allOrders.reduce(function(s, o) { return s + (parseFloat(o.amount) || 0); }, 0);
+    document.getElementById('statTotalUsers').textContent  = _allUsers.length;
+    document.getElementById('statTotalOrders').textContent = _allOrders.length;
+    document.getElementById('statTotalRevenue').textContent = '$' + totalSpent.toLocaleString('en-US', {minimumFractionDigits:0});
+  } catch(e) {
+    document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="6" style="padding:48px;text-align:center;color:#ef4444">Error loading users. Make sure you are logged in as admin.</td></tr>';
+  }
+}
+
+function renderUsersTable(users) {
+  var tbody = document.getElementById('usersTableBody');
+  if (!users.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="padding:48px;text-align:center;color:var(--muted)">No users registered yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = users.map(function(u) {
+    var initials = (u.full_name || u.email || '?').substring(0,2).toUpperCase();
+    var orders   = _allOrders.filter(function(o) { return o.user_id === u.id; });
+    var spent    = orders.reduce(function(s,o) { return s + (parseFloat(o.amount)||0); }, 0);
+    var joined   = u.created_at ? new Date(u.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
+    return '<tr style="border-bottom:1px solid rgba(255,255,255,0.06);transition:background 0.2s" onmouseover="this.style.background=\'rgba(124,58,237,0.06)\'" onmouseout="this.style.background=\'\'">' +
+      '<td style="padding:14px 20px">' +
+        '<div style="display:flex;align-items:center;gap:12px">' +
+          '<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0">' + initials + '</div>' +
+          '<div>' +
+            '<div style="font-weight:600;color:var(--text)">' + (u.full_name || '—') + '</div>' +
+            '<div style="font-size:12px;color:var(--muted)">' + (u.email || '') + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</td>' +
+      '<td style="padding:14px 20px;color:var(--sub)">' + (u.phone || '—') + '</td>' +
+      '<td style="padding:14px 20px">' +
+        '<span style="background:rgba(124,58,237,0.15);color:#a78bfa;border:1px solid rgba(124,58,237,0.3);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700">' + orders.length + ' order' + (orders.length !== 1 ? 's' : '') + '</span>' +
+      '</td>' +
+      '<td style="padding:14px 20px;font-weight:700;color:#22c55e">$' + spent.toLocaleString('en-US',{minimumFractionDigits:0}) + '</td>' +
+      '<td style="padding:14px 20px;color:var(--muted);font-size:13px">' + joined + '</td>' +
+      '<td style="padding:14px 20px">' +
+        '<button onclick="viewUserDetail(\'' + u.id + '\')" style="background:rgba(124,58,237,0.15);color:#a78bfa;border:1px solid rgba(124,58,237,0.3);padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">View Details</button>' +
+      '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function filterUsersTable() {
+  var q = (document.getElementById('userSearchInput').value || '').toLowerCase();
+  if (!q) { renderUsersTable(_allUsers); return; }
+  renderUsersTable(_allUsers.filter(function(u) {
+    return (u.full_name || '').toLowerCase().includes(q) || (u.email || '').toLowerCase().includes(q);
+  }));
+}
+
+function viewUserDetail(userId) {
+  var user   = _allUsers.find(function(u) { return u.id === userId; });
+  var orders = _allOrders.filter(function(o) { return o.user_id === userId; });
+  if (!user) return;
+  var joined = user.created_at ? new Date(user.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '—';
+  var initials = (user.full_name || user.email || '?').substring(0,2).toUpperCase();
+  var ordersHtml = orders.length ? orders.map(function(o) {
+    var statusColor = o.status === 'completed' ? '#22c55e' : o.status === 'processing' ? '#f59e0b' : '#94a3b8';
+    return '<div style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06)">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center">' +
+        '<div>' +
+          '<div style="font-weight:600;font-size:14px">' + (o.product_title || 'Unknown Product') + '</div>' +
+          '<div style="font-size:12px;color:var(--muted);margin-top:2px">' + (o.order_ref || '') + ' · ' + (o.payment_method || '') + '</div>' +
+        '</div>' +
+        '<div style="text-align:right">' +
+          '<div style="font-weight:700;color:#22c55e">$' + (parseFloat(o.amount)||0).toLocaleString() + '</div>' +
+          '<div style="font-size:11px;font-weight:700;color:' + statusColor + ';margin-top:2px;text-transform:uppercase">' + (o.status||'pending') + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('') : '<div style="color:var(--muted);font-size:14px;padding:16px 0">No orders yet.</div>';
+
+  document.getElementById('userDetailContent').innerHTML =
+    '<div style="display:flex;align-items:center;gap:16px;margin-bottom:28px">' +
+      '<div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;flex-shrink:0">' + initials + '</div>' +
+      '<div>' +
+        '<div style="font-size:22px;font-weight:800">' + (user.full_name || '—') + '</div>' +
+        '<div style="color:var(--muted);font-size:14px">' + (user.email || '') + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px">' +
+      '<div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:14px">' +
+        '<div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px">Phone</div>' +
+        '<div style="font-weight:600">' + (user.phone || '—') + '</div>' +
+      '</div>' +
+      '<div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:14px">' +
+        '<div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px">Joined</div>' +
+        '<div style="font-weight:600">' + joined + '</div>' +
+      '</div>' +
+      '<div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:14px">' +
+        '<div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px">Total Orders</div>' +
+        '<div style="font-size:22px;font-weight:800;color:#a78bfa">' + orders.length + '</div>' +
+      '</div>' +
+      '<div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:14px">' +
+        '<div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px">Total Spent</div>' +
+        '<div style="font-size:22px;font-weight:800;color:#22c55e">$' + orders.reduce(function(s,o){return s+(parseFloat(o.amount)||0);},0).toLocaleString() + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div style="font-size:14px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px">Purchase History</div>' +
+    ordersHtml;
+
+  var modal = document.getElementById('userDetailModal');
+  modal.style.display = 'flex';
+}
+
+function closeUserModal() {
+  document.getElementById('userDetailModal').style.display = 'none';
+}
+
+// Auto-load users when panel is shown
+document.addEventListener('DOMContentLoaded', function() {
+  // Patch showPanel to auto-load users when switching to users panel
+  var origFn = window.showPanel;
+  if (origFn) {
+    window.showPanel = function(panel) {
+      origFn(panel);
+      if (panel === 'users') { loadUsersPanel(); }
+    };
+  }
+});
 </script>
 </body>
 </html>

@@ -322,7 +322,51 @@
     const client = _getClient();
     if (!client) return { error: new Error('No client') };
     const { data, error } = await client.auth.updateUser({ data: profileData });
+    if (!error) await upsertMyProfile(profileData);
     return { user: data?.user || null, error };
+  }
+
+  // ─── PROFILES ────────────────────────────────────────────────────────────────
+  // Upsert the current user's profile (called from dashboard after profile edit)
+  async function upsertMyProfile(data) {
+    // data: { full_name, phone, avatar_url }
+    const client = _getClient();
+    if (!client) return false;
+    try {
+      const { data: userData } = await client.auth.getUser();
+      if (!userData?.user) return false;
+      const { error } = await client.from('profiles').upsert({
+        id: userData.user.id,
+        email: userData.user.email || '',
+        full_name: data.full_name || '',
+        phone: data.phone || '',
+        avatar_url: data.avatar_url || '',
+      }, { onConflict: 'id' });
+      if (error) throw error;
+      return true;
+    } catch (err) { console.warn('[ChrixlinDB] upsertMyProfile() failed.', err); return false; }
+  }
+
+  // Admin: get all profiles with order counts (calls SECURITY DEFINER function)
+  async function adminGetAllProfiles() {
+    const client = _getClient();
+    if (!client) return [];
+    try {
+      const { data, error } = await client.rpc('get_all_profiles');
+      if (error) throw error;
+      return data || [];
+    } catch (err) { console.warn('[ChrixlinDB] adminGetAllProfiles() failed.', err); return []; }
+  }
+
+  // Admin: get all orders with user info (calls SECURITY DEFINER function)
+  async function adminGetAllOrders() {
+    const client = _getClient();
+    if (!client) return [];
+    try {
+      const { data, error } = await client.rpc('get_all_orders');
+      if (error) throw error;
+      return data || [];
+    } catch (err) { console.warn('[ChrixlinDB] adminGetAllOrders() failed.', err); return []; }
   }
 
   // ─── SECTION CONTENT (landing page tables) ────────────────────────
@@ -427,6 +471,7 @@
     customerSignOut, getCustomerSession, getCustomerUser,
     // Customer Orders & Profile
     createCustomerOrder, getMyOrders, getMyProfile, updateMyProfile,
+    upsertMyProfile, adminGetAllProfiles, adminGetAllOrders,
     _getClient,
   };
 

@@ -885,6 +885,8 @@ async function saveProfile() {
   try {
     const result = await ChrixlinDB.updateMyProfile({ full_name: name, phone });
     if (result.error) throw result.error;
+    // Keep profiles table in sync
+    await ChrixlinDB.upsertMyProfile({ full_name: name, phone });
     msg.className = 'form-msg success'; msg.textContent = 'Profile updated successfully!';
     if (currentUser) { currentUser.user_metadata = { ...currentUser.user_metadata, full_name: name, phone }; populateUserUI(currentUser); }
   } catch (err) {
