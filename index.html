@@ -536,10 +536,7 @@
     <div class="hero-grid">
       <div class="hero-content">
         <div class="hero-badge animate-in">
-          <span class="badge">
-            <span>🚀</span>
-            <span data-key="hero.badge">Join 160+ AI Entrepreneurs</span>
-          </span>
+          <span class="badge" data-key="hero.badge">🚀 Join 160+ AI Entrepreneurs</span>
         </div>
         <h1 class="hero-title animate-in" style="animation-delay:0.1s" data-key="hero.title">
           Build a <span class="text-grad">$5K–$50K/Mo</span><br>AI Bot Business
@@ -548,10 +545,7 @@
           Learn to create, sell, and scale AI automation solutions for real businesses. Get your first paying client by Week 4 — or you don't pay a cent.
         </p>
         <div class="hero-btns animate-in" style="animation-delay:0.3s">
-          <a href="mailto:info@chrixlin.tech" class="btn btn-primary">
-            <span data-key="hero.cta1">Book My Free Strategy Call</span>
-            <span>→</span>
-          </a>
+          <a href="mailto:info@chrixlin.tech" class="btn btn-primary" data-key="hero.cta1">Book My Free Strategy Call →</a>
           <a href="#testimonials" class="btn btn-outline" data-key="hero.cta2">See Real Results</a>
         </div>
         <div class="hero-trust animate-in" style="animation-delay:0.4s">
@@ -1160,7 +1154,8 @@ var _scrollObserver = new IntersectionObserver(function(entries) {
 function _runAnimations() {
   document.querySelectorAll('.animate-in').forEach(function(el) {
     var r = el.getBoundingClientRect();
-    if (r.top < window.innerHeight && r.bottom > 0) {
+    if (r.top < window.innerHeight) {
+      // In viewport OR already scrolled past → show immediately
       el.classList.add('visible');
     } else {
       _scrollObserver.observe(el);

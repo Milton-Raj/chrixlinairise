@@ -559,7 +559,7 @@ function renderProducts() {
     const tc = thumbClass[p.category] || 'cat-thumb-voice-ai';
     const imgTag = p.image ? `<img class="product-thumb-img" src="${p.image}" alt="${p.title}" loading="lazy">` : '';
     return `
-    <a class="product-card animate-in" href="product.html?id=${p.id}" data-category="${p.category}" style="animation-delay:${(i%3)*0.1}s">
+    <a class="product-card animate-in visible" href="product.html?id=${p.id}" data-category="${p.category}" style="animation-delay:${(i%3)*0.1}s">
       <div class="product-thumbnail ${tc}">
         ${imgTag}
         <div class="product-thumb-emoji">${p.emoji || '🤖'}</div>
@@ -599,7 +599,7 @@ var _scrollObserver = new IntersectionObserver(function(entries) {
 function _runAnimations() {
   document.querySelectorAll('.animate-in').forEach(function(el) {
     var r = el.getBoundingClientRect();
-    if (r.top < window.innerHeight && r.bottom > 0) { el.classList.add('visible'); }
+    if (r.top < window.innerHeight) { el.classList.add('visible'); }
     else { _scrollObserver.observe(el); }
   });
 }
@@ -627,6 +627,7 @@ function closeMobile() { document.getElementById('mobileMenu').classList.remove(
     if (products && products.length) {
       mp.products = products;
       renderProducts();
+      setTimeout(_runAnimations, 50);
     }
   } catch(e) {}
 })();
