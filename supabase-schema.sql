@@ -451,3 +451,30 @@ INSERT INTO public.faq_items (id, question, answer, sort_order) VALUES
   (8, 'What AI tools and platforms do you teach?',
       'We cover Make.com, Zapier, Voiceflow, Botpress, OpenAI API, Retell AI, Vapi, and more. The curriculum is updated regularly as new tools emerge. You''ll learn whichever tools are most in-demand with paying clients right now.', 8)
 ON CONFLICT (id) DO NOTHING;
+
+-- ── TABLE 16: customer_orders ──────────────────────────────────────
+CREATE TABLE IF NOT EXISTS public.customer_orders (
+  id              UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id         UUID        REFERENCES auth.users(id) ON DELETE CASCADE,
+  order_ref       TEXT        NOT NULL UNIQUE,
+  product_id      BIGINT,
+  product_title   TEXT        NOT NULL DEFAULT '',
+  product_price   TEXT        NOT NULL DEFAULT '',
+  payment_method  TEXT        NOT NULL DEFAULT 'bank_transfer',
+  amount          NUMERIC(10,2) NOT NULL DEFAULT 0,
+  status          TEXT        NOT NULL DEFAULT 'pending',  -- pending | processing | completed | refunded
+  download_url    TEXT        NOT NULL DEFAULT '',
+  invoice_url     TEXT        NOT NULL DEFAULT '',
+  notes           TEXT        NOT NULL DEFAULT '',
+  created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_customer_orders_user_id    ON public.customer_orders (user_id);
+CREATE INDEX IF NOT EXISTS idx_customer_orders_status     ON public.customer_orders (status);
+CREATE INDEX IF NOT EXISTS idx_customer_orders_created_at ON public.customer_orders (created_at DESC);
+CREATE TRIGGER trg_customer_orders_updated_at BEFORE UPDATE ON public.customer_orders FOR EACH ROW EXECUTE FUNCTION trigger_set_updated_at();
+ALTER TABLE public.customer_orders ENABLE ROW LEVEL SECURITY;
+-- Users can only see and create their own orders
+CREATE POLICY "orders_user_select" ON public.customer_orders FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "orders_user_insert" ON public.customer_orders FOR INSERT WITH CHECK (auth.uid() = user_id);
+-- Admin can see all (run via service role key in admin panel)

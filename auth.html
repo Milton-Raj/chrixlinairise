@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In — Chrixlin AI Rise</title>
+  <meta name="description" content="Sign in or create your Chrixlin AI Rise account to access purchased products and track orders." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --c-bg:      #05050c;
+      --c-bg2:     #0a0a16;
+      --c-bg3:     #10101e;
+      --c-card:    #1a1a2e;
+      --c-card-h:  #22223a;
+      --c-border:  rgba(255,255,255,0.12);
+      --c-border-h:rgba(124,58,237,0.6);
+      --c-primary: #7c3aed;
+      --c-cyan:    #06b6d4;
+      --c-gold:    #f59e0b;
+      --c-green:   #22c55e;
+      --c-red:     #ef4444;
+      --c-text:    #f1f5f9;
+      --c-sub:     #94a3b8;
+      --c-muted:   #64748b;
+      --grad:      linear-gradient(135deg, #7c3aed, #06b6d4);
+      --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      --font-h:    'Plus Jakarta Sans', sans-serif;
+      --font-b:    'Inter', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-family: var(--font-b);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ─── BACKGROUND GLOW ─────────────────────────────── */
+    .bg-glow {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,0.12) 0%, transparent 70%),
+                  radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6,182,212,0.07) 0%, transparent 60%);
+    }
+
+    /* ─── CARD ────────────────────────────────────────── */
+    .auth-card {
+      position: relative; z-index: 1;
+      background: var(--c-card);
+      border: 1px solid var(--c-border);
+      border-radius: 24px;
+      width: 100%; max-width: 440px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(124,58,237,0.1);
+      overflow: hidden;
+    }
+
+    /* ─── CARD HEADER ─────────────────────────────────── */
+    .auth-header {
+      background: var(--grad);
+      padding: 32px 36px 28px;
+      text-align: center;
+      position: relative;
+    }
+    .auth-header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    }
+    .auth-logo {
+      font-family: var(--font-h);
+      font-weight: 900;
+      font-size: 22px;
+      color: #fff;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+    .auth-logo-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.75);
+      font-weight: 500;
+    }
+    .auth-logo-icon {
+      font-size: 36px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    /* ─── TABS ────────────────────────────────────────── */
+    .auth-tabs {
+      display: flex;
+      background: var(--c-bg2);
+      border-bottom: 1px solid var(--c-border);
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 14px 20px;
+      border: none;
+      background: transparent;
+      color: var(--c-muted);
+      font-family: var(--font-b);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      letter-spacing: 0.2px;
+    }
+    .auth-tab.active {
+      color: var(--c-text);
+    }
+    .auth-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 20%; right: 20%;
+      height: 2px;
+      background: var(--grad);
+      border-radius: 2px 2px 0 0;
+    }
+    .auth-tab:hover { color: var(--c-sub); }
+    .auth-tab.active:hover { color: var(--c-text); }
+
+    /* ─── BODY ────────────────────────────────────────── */
+    .auth-body { padding: 28px 32px 32px; }
+
+    /* ─── GOOGLE BTN ──────────────────────────────────── */
+    .google-btn {
+      width: 100%;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      padding: 13px 20px;
+      border-radius: 12px;
+      border: 1.5px solid var(--c-border);
+      background: var(--c-bg2);
+      color: var(--c-text);
+      font-family: var(--font-b);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 20px;
+    }
+    .google-btn:hover {
+      border-color: rgba(255,255,255,0.25);
+      background: var(--c-bg3);
+      transform: translateY(-1px);
+    }
+    .google-btn:active { transform: translateY(0); }
+    .google-icon { width: 20px; height: 20px; flex-shrink: 0; }
+
+    /* ─── DIVIDER ─────────────────────────────────────── */
+    .or-divider {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px; color: var(--c-muted); font-size: 13px;
+    }
+    .or-divider::before, .or-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--c-border);
+    }
+
+    /* ─── FORM FIELDS ─────────────────────────────────── */
+    .field-group { margin-bottom: 16px; }
+    .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--c-sub);
+      margin-bottom: 7px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .field-input {
+      width: 100%;
+      padding: 13px 16px;
+      background: var(--c-bg2);
+      border: 1.5px solid var(--c-border);
+      border-radius: 10px;
+      color: var(--c-text);
+      font-family: var(--font-b);
+      font-size: 15px;
+      outline: none;
+      transition: var(--transition);
+    }
+    .field-input:focus {
+      border-color: var(--c-primary);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+    }
+    .field-input::placeholder { color: var(--c-muted); }
+    .field-input.error { border-color: var(--c-red); }
+
+    /* ─── ERROR MSG ───────────────────────────────────── */
+    .error-msg {
+      display: none;
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #fca5a5;
+      margin-bottom: 16px;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .error-msg.show { display: flex; }
+
+    /* ─── SUBMIT BTN ──────────────────────────────────── */
+    .auth-btn {
+      width: 100%;
+      padding: 15px 24px;
+      border-radius: 50px;
+      border: none;
+      background: var(--grad);
+      color: #fff;
+      font-family: var(--font-h);
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 8px 24px rgba(124,58,237,0.35);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      margin-top: 6px;
+    }
+    .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(124,58,237,0.5); }
+    .auth-btn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+    /* ─── SPINNER ─────────────────────────────────────── */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    .spinner.show { display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── FOOTER LINKS ────────────────────────────────── */
+    .auth-footer {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--c-border);
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--c-muted);
+    }
+    .auth-footer a { color: #a78bfa; font-weight: 600; }
+    .auth-footer a:hover { text-decoration: underline; }
+
+    .forgot-link {
+      text-align: right;
+      margin-top: -10px;
+      margin-bottom: 16px;
+    }
+    .forgot-link a { font-size: 12px; color: var(--c-muted); }
+    .forgot-link a:hover { color: #a78bfa; }
+
+    /* ─── FORM PANELS ─────────────────────────────────── */
+    .form-panel { display: none; }
+    .form-panel.active { display: block; }
+
+    /* ─── SUCCESS STATE ───────────────────────────────── */
+    .success-banner {
+      display: none;
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.25);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: #86efac;
+      margin-bottom: 16px;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .success-banner.show { display: flex; }
+
+    /* ─── BACK LINK ───────────────────────────────────── */
+    .back-to-market {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--c-muted);
+      position: relative;
+      z-index: 1;
+    }
+    .back-to-market a { color: var(--c-sub); }
+    .back-to-market a:hover { color: var(--c-text); }
+
+    @media (max-width: 480px) {
+      body { padding: 16px; justify-content: flex-start; padding-top: 32px; }
+      .auth-body { padding: 22px 20px 24px; }
+      .auth-header { padding: 24px 20px 20px; }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<div class="auth-card">
+
+  <!-- HEADER -->
+  <div class="auth-header">
+    <span class="auth-logo-icon">🚀</span>
+    <div class="auth-logo">Chrixlin AI Rise</div>
+    <div class="auth-logo-sub">Your AI business growth partner</div>
+  </div>
+
+  <!-- TABS -->
+  <div class="auth-tabs">
+    <button class="auth-tab active" id="tabSignIn" onclick="switchTab('signin')">Sign In</button>
+    <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Create Account</button>
+  </div>
+
+  <!-- BODY -->
+  <div class="auth-body">
+
+    <!-- ERROR MESSAGE -->
+    <div class="error-msg" id="errorMsg">
+      <span>⚠️</span>
+      <span id="errorText">Something went wrong. Please try again.</span>
+    </div>
+
+    <!-- SUCCESS BANNER -->
+    <div class="success-banner" id="successBanner">
+      <span>✅</span>
+      <span id="successText">Account created! Please check your email to verify your address.</span>
+    </div>
+
+    <!-- GOOGLE BUTTON -->
+    <button class="google-btn" id="googleBtn" onclick="signInWithGoogle()">
+      <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      Continue with Google
+    </button>
+
+    <div class="or-divider">or</div>
+
+    <!-- SIGN IN FORM -->
+    <div class="form-panel active" id="panelSignin">
+      <div class="field-group">
+        <label class="field-label">Email Address</label>
+        <input type="email" class="field-input" id="siEmail" placeholder="you@example.com" autocomplete="email" />
+      </div>
+      <div class="field-group">
+        <label class="field-label">Password</label>
+        <input type="password" class="field-input" id="siPassword" placeholder="Your password" autocomplete="current-password" />
+      </div>
+      <div class="forgot-link">
+        <a href="#" onclick="handleForgotPassword(event)">Forgot password?</a>
+      </div>
+      <button class="auth-btn" id="signinBtn" onclick="handleSignIn()">
+        <div class="spinner" id="signinSpinner"></div>
+        <span id="signinBtnText">Sign In</span>
+      </button>
+      <div class="auth-footer">
+        Don't have an account? <a href="#" onclick="switchTab('register')">Create one free</a>
+      </div>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div class="form-panel" id="panelRegister">
+      <div class="field-group">
+        <label class="field-label">Full Name</label>
+        <input type="text" class="field-input" id="regName" placeholder="John Smith" autocomplete="name" />
+      </div>
+      <div class="field-group">
+        <label class="field-label">Email Address</label>
+        <input type="email" class="field-input" id="regEmail" placeholder="you@example.com" autocomplete="email" />
+      </div>
+      <div class="field-group">
+        <label class="field-label">Password</label>
+        <input type="password" class="field-input" id="regPassword" placeholder="At least 8 characters" autocomplete="new-password" />
+      </div>
+      <button class="auth-btn" id="registerBtn" onclick="handleRegister()">
+        <div class="spinner" id="registerSpinner"></div>
+        <span id="registerBtnText">Create Account</span>
+      </button>
+      <div class="auth-footer">
+        Already have an account? <a href="#" onclick="switchTab('signin')">Sign in</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BACK LINK -->
+<div class="back-to-market">
+  <a href="marketplace.html">← Back to Marketplace</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="supabase-client.js"></script>
+<script>
+// ─── URL PARAMS ──────────────────────────────────────────────────────────────
+const params = new URLSearchParams(window.location.search);
+const nextUrl = params.get('next') || 'dashboard.html';
+
+// ─── CHECK ALREADY LOGGED IN ─────────────────────────────────────────────────
+(async function() {
+  try {
+    const session = await ChrixlinDB.getCustomerSession();
+    if (session) {
+      window.location.href = nextUrl;
+    }
+  } catch (e) {}
+})();
+
+// ─── TAB SWITCHING ────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  const isSignin = tab === 'signin';
+  document.getElementById('tabSignIn').classList.toggle('active', isSignin);
+  document.getElementById('tabRegister').classList.toggle('active', !isSignin);
+  document.getElementById('panelSignin').classList.toggle('active', isSignin);
+  document.getElementById('panelRegister').classList.toggle('active', !isSignin);
+  hideError();
+  hideSuccess();
+}
+
+// ─── ERROR/SUCCESS HELPERS ───────────────────────────────────────────────────
+function showError(msg) {
+  const el = document.getElementById('errorMsg');
+  document.getElementById('errorText').textContent = msg;
+  el.classList.add('show');
+  hideSuccess();
+}
+function hideError() { document.getElementById('errorMsg').classList.remove('show'); }
+function showSuccess(msg) {
+  const el = document.getElementById('successBanner');
+  document.getElementById('successText').textContent = msg;
+  el.classList.add('show');
+  hideError();
+}
+function hideSuccess() { document.getElementById('successBanner').classList.remove('show'); }
+
+function setLoading(btnId, spinnerId, textId, loading, label) {
+  const btn = document.getElementById(btnId);
+  const spinner = document.getElementById(spinnerId);
+  const text = document.getElementById(textId);
+  btn.disabled = loading;
+  spinner.classList.toggle('show', loading);
+  if (label && !loading) text.textContent = label;
+}
+
+// ─── GOOGLE SIGN IN ───────────────────────────────────────────────────────────
+async function signInWithGoogle() {
+  try {
+    document.getElementById('googleBtn').disabled = true;
+    document.getElementById('googleBtn').style.opacity = '0.7';
+    const redirectTo = window.location.origin + '/dashboard.html';
+    const client = ChrixlinDB._getClient();
+    if (!client) { showError('Authentication service not available. Please refresh.'); return; }
+    const { error } = await client.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo }
+    });
+    if (error) throw error;
+  } catch (err) {
+    document.getElementById('googleBtn').disabled = false;
+    document.getElementById('googleBtn').style.opacity = '';
+    showError(err.message || 'Google sign-in failed. Please try again.');
+  }
+}
+
+// ─── SIGN IN ──────────────────────────────────────────────────────────────────
+async function handleSignIn() {
+  hideError();
+  const email = document.getElementById('siEmail').value.trim();
+  const password = document.getElementById('siPassword').value;
+  if (!email || !password) { showError('Please enter your email and password.'); return; }
+  setLoading('signinBtn', 'signinSpinner', 'signinBtnText', true);
+  try {
+    const result = await ChrixlinDB.customerSignIn(email, password);
+    if (result.error) throw result.error;
+    // Redirect
+    window.location.href = nextUrl;
+  } catch (err) {
+    setLoading('signinBtn', 'signinSpinner', 'signinBtnText', false, 'Sign In');
+    let msg = err.message || 'Sign in failed.';
+    if (msg.includes('Invalid login')) msg = 'Invalid email or password. Please try again.';
+    if (msg.includes('Email not confirmed')) msg = 'Please verify your email before signing in.';
+    showError(msg);
+  }
+}
+
+// ─── REGISTER ─────────────────────────────────────────────────────────────────
+async function handleRegister() {
+  hideError();
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const password = document.getElementById('regPassword').value;
+  if (!name) { showError('Please enter your full name.'); return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Please enter a valid email address.'); return; }
+  if (!password || password.length < 8) { showError('Password must be at least 8 characters.'); return; }
+  setLoading('registerBtn', 'registerSpinner', 'registerBtnText', true);
+  try {
+    const result = await ChrixlinDB.customerSignUp(email, password, name);
+    if (result.error) throw result.error;
+    // If auto-confirmed, redirect; otherwise show verify email message
+    if (result.session) {
+      window.location.href = nextUrl;
+    } else {
+      setLoading('registerBtn', 'registerSpinner', 'registerBtnText', false, 'Create Account');
+      showSuccess('Account created! Please check your email to verify your address, then sign in.');
+      switchTab('signin');
+      document.getElementById('siEmail').value = email;
+    }
+  } catch (err) {
+    setLoading('registerBtn', 'registerSpinner', 'registerBtnText', false, 'Create Account');
+    let msg = err.message || 'Registration failed.';
+    if (msg.includes('already registered') || msg.includes('already exists')) msg = 'This email is already registered. Try signing in instead.';
+    showError(msg);
+  }
+}
+
+// ─── FORGOT PASSWORD ──────────────────────────────────────────────────────────
+async function handleForgotPassword(e) {
+  e.preventDefault();
+  const email = document.getElementById('siEmail').value.trim();
+  if (!email) { showError('Enter your email address above first.'); return; }
+  try {
+    const client = ChrixlinDB._getClient();
+    if (!client) return;
+    const { error } = await client.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/dashboard.html'
+    });
+    if (error) throw error;
+    showSuccess('Password reset email sent! Check your inbox.');
+  } catch (err) {
+    showError(err.message || 'Failed to send reset email.');
+  }
+}
+
+// ─── ENTER KEY SUPPORT ────────────────────────────────────────────────────────
+document.getElementById('siPassword').addEventListener('keydown', e => { if (e.key === 'Enter') handleSignIn(); });
+document.getElementById('siEmail').addEventListener('keydown', e => { if (e.key === 'Enter') handleSignIn(); });
+document.getElementById('regPassword').addEventListener('keydown', e => { if (e.key === 'Enter') handleRegister(); });
+</script>
+</body>
+</html>

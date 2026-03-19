@@ -213,7 +213,7 @@
     } catch (err) { console.warn('[ChrixlinDB] submitContactMessage() failed.', err); return false; }
   }
 
-  // ─── AUTH ─────────────────────────────────────────────────────────
+  // ─── ADMIN AUTH ───────────────────────────────────────────────────
   async function adminSignIn(email, password) {
     const client = _getClient();
     if (!client) return { user: null, session: null, error: 'No client' };
@@ -222,6 +222,108 @@
   }
   async function adminSignOut() { const c = _getClient(); if (c) await c.auth.signOut(); }
   async function getSession() { const c = _getClient(); if (!c) return null; const { data } = await c.auth.getSession(); return data?.session || null; }
+
+  // ─── CUSTOMER AUTH ────────────────────────────────────────────────
+  async function customerSignUp(email, password, fullName) {
+    const client = _getClient();
+    if (!client) return { user: null, session: null, error: new Error('No client') };
+    const { data, error } = await client.auth.signUp({
+      email,
+      password,
+      options: { data: { full_name: fullName } },
+    });
+    return { user: data?.user || null, session: data?.session || null, error };
+  }
+
+  async function customerSignIn(email, password) {
+    const client = _getClient();
+    if (!client) return { user: null, session: null, error: new Error('No client') };
+    const { data, error } = await client.auth.signInWithPassword({ email, password });
+    return { user: data?.user || null, session: data?.session || null, error };
+  }
+
+  async function customerSignInWithGoogle() {
+    const client = _getClient();
+    if (!client) return { error: new Error('No client') };
+    const { data, error } = await client.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin + '/dashboard.html' },
+    });
+    return { data, error };
+  }
+
+  async function customerSignOut() {
+    const client = _getClient();
+    if (client) await client.auth.signOut();
+  }
+
+  async function getCustomerSession() {
+    const client = _getClient();
+    if (!client) return null;
+    const { data } = await client.auth.getSession();
+    return data?.session || null;
+  }
+
+  async function getCustomerUser() {
+    const client = _getClient();
+    if (!client) return null;
+    const { data } = await client.auth.getUser();
+    return data?.user || null;
+  }
+
+  // ─── CUSTOMER ORDERS ──────────────────────────────────────────────
+  async function createCustomerOrder(orderData) {
+    const client = _getClient();
+    if (!client) return { success: false, orderId: null };
+    const session = await getCustomerSession();
+    if (!session) return { success: false, orderId: null, error: 'Not authenticated' };
+    try {
+      const orderRef = `CAIR-${orderData.productId || 0}-${Date.now().toString(36).toUpperCase().slice(-6)}`;
+      const numericAmount = parseFloat(String(orderData.amount || orderData.productPrice || '0').replace(/[^0-9.]/g, '')) || 0;
+      const { data, error } = await client.from('customer_orders').insert({
+        user_id:        session.user.id,
+        order_ref:      orderRef,
+        product_id:     orderData.productId   || null,
+        product_title:  orderData.productTitle || '',
+        product_price:  orderData.productPrice || '',
+        payment_method: orderData.paymentMethod || 'bank_transfer',
+        amount:         numericAmount,
+        status:         'pending',
+      }).select('id').single();
+      if (error) throw error;
+      return { success: true, orderId: data.id, orderRef };
+    } catch (err) {
+      console.warn('[ChrixlinDB] createCustomerOrder() failed.', err);
+      return { success: false, orderId: null, error: err };
+    }
+  }
+
+  async function getMyOrders() {
+    const client = _getClient();
+    if (!client) return [];
+    try {
+      const { data, error } = await client.from('customer_orders').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      return data || [];
+    } catch (err) {
+      console.warn('[ChrixlinDB] getMyOrders() failed.', err);
+      return [];
+    }
+  }
+
+  async function getMyProfile() {
+    const client = _getClient();
+    if (!client) return null;
+    const { data } = await client.auth.getUser();
+    return data?.user || null;
+  }
+
+  async function updateMyProfile(profileData) {
+    const client = _getClient();
+    if (!client) return { error: new Error('No client') };
+    const { data, error } = await client.auth.updateUser({ data: profileData });
+    return { user: data?.user || null, error };
+  }
 
   // ─── SECTION CONTENT (landing page tables) ────────────────────────
   async function loadSectionItems(tableName) {
@@ -320,6 +422,11 @@
     submitOrder, submitContactMessage,
     adminSignIn, adminSignOut, getSession,
     loadSectionItems, saveSectionItems, loadHeroSection, saveHeroSection,
+    // Customer Auth
+    customerSignUp, customerSignIn, customerSignInWithGoogle,
+    customerSignOut, getCustomerSession, getCustomerUser,
+    // Customer Orders & Profile
+    createCustomerOrder, getMyOrders, getMyProfile, updateMyProfile,
     _getClient,
   };
 

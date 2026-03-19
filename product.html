@@ -667,10 +667,38 @@ if (!product) {
 }
 
 // ─── BUY NOW ──────────────────────────────────────────────────────────────────
-function goToPayment(e) {
+async function goToPayment(e) {
   e.preventDefault();
-  window.location.href = `payment.html?id=${productId}`;
+  try {
+    const session = await ChrixlinDB.getCustomerSession();
+    if (session) {
+      window.location.href = `payment.html?product=${productId}`;
+    } else {
+      const encoded = encodeURIComponent(`payment.html?product=${productId}`);
+      window.location.href = `auth.html?next=${encoded}`;
+    }
+  } catch (err) {
+    // Fallback: go to payment directly
+    window.location.href = `payment.html?product=${productId}`;
+  }
 }
+
+// ─── NAV AUTH BUTTON ──────────────────────────────────────────────────────────
+(async function initNavAuth() {
+  try {
+    const session = await ChrixlinDB.getCustomerSession();
+    const navCta = document.querySelector('.nav-cta');
+    if (navCta) {
+      if (session) {
+        const meta = session.user.user_metadata || {};
+        const name = meta.full_name || meta.name || 'Dashboard';
+        navCta.innerHTML = `<a href="dashboard.html" class="btn btn-primary">👤 ${name.split(' ')[0]}</a>`;
+      } else {
+        navCta.innerHTML = `<a href="auth.html?next=dashboard.html" class="btn btn-primary">Sign In</a>`;
+      }
+    }
+  } catch {}
+})();
 
 // ─── SHARE ────────────────────────────────────────────────────────────────────
 function copyLink() {

@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Chrixlin AI Rise</title>
+  <meta name="description" content="Manage your purchases, orders, and profile." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --c-bg:      #05050c;
+      --c-bg2:     #0a0a16;
+      --c-bg3:     #10101e;
+      --c-card:    #1a1a2e;
+      --c-card-h:  #22223a;
+      --c-sidebar: #0a0a16;
+      --c-border:  rgba(255,255,255,0.1);
+      --c-border-h:rgba(124,58,237,0.6);
+      --c-primary: #7c3aed;
+      --c-cyan:    #06b6d4;
+      --c-gold:    #f59e0b;
+      --c-green:   #22c55e;
+      --c-red:     #ef4444;
+      --c-text:    #f1f5f9;
+      --c-sub:     #94a3b8;
+      --c-muted:   #64748b;
+      --grad:      linear-gradient(135deg, #7c3aed, #06b6d4);
+      --transition: all 0.25s ease;
+      --font-h:    'Plus Jakarta Sans', sans-serif;
+      --font-b:    'Inter', sans-serif;
+      --sidebar-w: 240px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-family: var(--font-b);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { cursor: pointer; }
+
+    /* ─── SIDEBAR ─────────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--c-sidebar);
+      border-right: 1px solid var(--c-border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 200;
+      transition: transform 0.3s ease;
+    }
+    .sidebar-logo {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid var(--c-border);
+    }
+    .sidebar-logo-text {
+      font-family: var(--font-h);
+      font-weight: 900;
+      font-size: 17px;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+    }
+    .sidebar-logo-sub {
+      font-size: 11px;
+      color: var(--c-muted);
+      margin-top: 2px;
+    }
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 12px;
+      overflow-y: auto;
+    }
+    .sidebar-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--c-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 0 8px;
+      margin-bottom: 6px;
+      margin-top: 16px;
+    }
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--c-muted);
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      margin-bottom: 2px;
+    }
+    .sidebar-item:hover { color: var(--c-sub); background: rgba(255,255,255,0.04); }
+    .sidebar-item.active {
+      background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.1));
+      color: var(--c-text);
+      border: 1px solid rgba(124,58,237,0.2);
+    }
+    .sidebar-item .item-icon { font-size: 16px; flex-shrink: 0; }
+    .sidebar-footer {
+      padding: 16px 12px;
+      border-top: 1px solid var(--c-border);
+    }
+    .sidebar-logout {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--c-muted);
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      background: transparent;
+      width: 100%;
+    }
+    .sidebar-logout:hover { color: #fca5a5; background: rgba(239,68,68,0.08); }
+
+    /* ─── SIDEBAR OVERLAY (mobile) ────────────────────── */
+    .sidebar-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 199;
+    }
+    .sidebar-overlay.show { display: block; }
+
+    /* ─── MAIN AREA ───────────────────────────────────── */
+    .main-area {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── TOPBAR ──────────────────────────────────────── */
+    .topbar {
+      background: var(--c-bg2);
+      border-bottom: 1px solid var(--c-border);
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .hamburger-btn {
+      display: none;
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid var(--c-border);
+      color: var(--c-sub);
+      font-size: 16px;
+      align-items: center; justify-content: center;
+    }
+    .topbar-title { font-family: var(--font-h); font-weight: 700; font-size: 17px; }
+    .topbar-right { display: flex; align-items: center; gap: 14px; }
+    .user-chip {
+      display: flex; align-items: center; gap: 10px;
+      padding: 6px 12px 6px 6px;
+      background: var(--c-card);
+      border: 1px solid var(--c-border);
+      border-radius: 50px;
+    }
+    .user-avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--grad);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: #fff;
+      flex-shrink: 0;
+    }
+    .user-name { font-size: 13px; font-weight: 600; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .logout-btn-top {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid var(--c-border);
+      color: var(--c-muted);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-b);
+      transition: var(--transition);
+    }
+    .logout-btn-top:hover { color: #fca5a5; border-color: rgba(239,68,68,0.3); }
+
+    /* ─── CONTENT ─────────────────────────────────────── */
+    .content { padding: 32px 28px; flex: 1; }
+    .section-panel { display: none; }
+    .section-panel.active { display: block; }
+
+    /* ─── SECTION TITLES ──────────────────────────────── */
+    .section-title { font-family: var(--font-h); font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .section-sub { font-size: 14px; color: var(--c-muted); margin-bottom: 28px; }
+
+    /* ─── STAT CARDS ──────────────────────────────────── */
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .stat-card {
+      background: var(--c-card);
+      border: 1px solid var(--c-border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+    .stat-icon { font-size: 28px; margin-bottom: 10px; }
+    .stat-value { font-family: var(--font-h); font-size: 28px; font-weight: 900; margin-bottom: 2px; }
+    .stat-label { font-size: 13px; color: var(--c-muted); }
+
+    /* ─── WELCOME CARD ────────────────────────────────── */
+    .welcome-card {
+      background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(6,182,212,0.08));
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 20px;
+      padding: 28px 32px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .welcome-greeting { font-family: var(--font-h); font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+    .welcome-sub { font-size: 14px; color: var(--c-sub); }
+    .welcome-emoji { font-size: 56px; line-height: 1; }
+
+    /* ─── ORDER SUCCESS BANNER ────────────────────────── */
+    .order-success-banner {
+      display: none;
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.25);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #86efac;
+      align-items: center;
+      gap: 10px;
+    }
+    .order-success-banner.show { display: flex; }
+
+    /* ─── TABLE ───────────────────────────────────────── */
+    .table-wrap {
+      background: var(--c-card);
+      border: 1px solid var(--c-border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .table-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--c-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .table-title { font-family: var(--font-h); font-weight: 700; font-size: 15px; }
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th {
+      padding: 12px 20px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--c-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--c-border);
+    }
+    .data-table td {
+      padding: 14px 20px;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    /* ─── STATUS BADGES ───────────────────────────────── */
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .badge-pending { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
+    .badge-completed { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.2); }
+    .badge-processing { background: rgba(6,182,212,0.15); color: #22d3ee; border: 1px solid rgba(6,182,212,0.2); }
+    .badge-refunded { background: rgba(239,68,68,0.12); color: #fca5a5; border: 1px solid rgba(239,68,68,0.15); }
+
+    /* ─── EMPTY STATE ─────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--c-muted);
+    }
+    .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-title { font-family: var(--font-h); font-size: 17px; font-weight: 700; margin-bottom: 6px; color: var(--c-sub); }
+    .empty-text { font-size: 14px; margin-bottom: 20px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 50px; font-family: var(--font-h); font-weight: 700; font-size: 14px; cursor: pointer; border: none; transition: var(--transition); text-decoration: none; }
+    .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 6px 20px rgba(124,58,237,0.3); }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--c-text); border: 1.5px solid var(--c-border); }
+    .btn-outline:hover { border-color: var(--c-primary); color: #a78bfa; }
+    .btn-sm { padding: 7px 16px; font-size: 13px; }
+
+    /* ─── PRODUCT CARDS ───────────────────────────────── */
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+    .product-card {
+      background: var(--c-card);
+      border: 1px solid var(--c-border);
+      border-radius: 16px;
+      padding: 22px;
+      transition: var(--transition);
+    }
+    .product-card:hover { border-color: rgba(124,58,237,0.3); }
+    .product-card-icon { font-size: 36px; margin-bottom: 12px; }
+    .product-card-title { font-family: var(--font-h); font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+    .product-card-sub { font-size: 13px; color: var(--c-muted); margin-bottom: 16px; }
+    .product-card-download {
+      display: flex; align-items: center; gap: 7px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      background: rgba(124,58,237,0.12);
+      border: 1px solid rgba(124,58,237,0.25);
+      color: #a78bfa;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-b);
+      cursor: pointer;
+      transition: var(--transition);
+      width: 100%;
+      justify-content: center;
+    }
+    .product-card-download:hover { background: rgba(124,58,237,0.2); }
+
+    /* ─── INVOICE LIST ────────────────────────────────── */
+    .invoice-list { display: flex; flex-direction: column; gap: 10px; }
+    .invoice-item {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--c-card);
+      border: 1px solid var(--c-border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      gap: 12px;
+    }
+    .invoice-left { display: flex; align-items: center; gap: 14px; }
+    .invoice-icon { font-size: 28px; }
+    .invoice-ref { font-family: var(--font-h); font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+    .invoice-date { font-size: 12px; color: var(--c-muted); }
+    .invoice-amount { font-family: var(--font-h); font-weight: 800; font-size: 16px; }
+    .invoice-dl {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid var(--c-border);
+      color: var(--c-muted);
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-b);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .invoice-dl:hover { border-color: var(--c-primary); color: #a78bfa; }
+
+    /* ─── FORM CARD ───────────────────────────────────── */
+    .form-card {
+      background: var(--c-card);
+      border: 1px solid var(--c-border);
+      border-radius: 16px;
+      padding: 28px;
+      max-width: 600px;
+    }
+    .form-card + .form-card { margin-top: 20px; }
+    .form-section-title { font-family: var(--font-h); font-weight: 700; font-size: 16px; margin-bottom: 20px; }
+    .field-group { margin-bottom: 18px; }
+    .field-label { display: block; font-size: 12px; font-weight: 700; color: var(--c-sub); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .field-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--c-bg2);
+      border: 1.5px solid var(--c-border);
+      border-radius: 10px;
+      color: var(--c-text);
+      font-family: var(--font-b);
+      font-size: 15px;
+      outline: none;
+      transition: var(--transition);
+    }
+    .field-input:focus { border-color: var(--c-primary); box-shadow: 0 0 0 3px rgba(124,58,237,0.12); }
+    .field-input::placeholder { color: var(--c-muted); }
+    .field-input:read-only { opacity: 0.6; cursor: not-allowed; }
+    .save-btn {
+      padding: 12px 28px;
+      border-radius: 50px;
+      background: var(--grad);
+      color: #fff;
+      font-family: var(--font-h);
+      font-weight: 700;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 6px 20px rgba(124,58,237,0.3);
+    }
+    .save-btn:hover { transform: translateY(-1px); }
+    .save-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .form-msg { font-size: 13px; margin-top: 12px; padding: 10px 14px; border-radius: 8px; display: none; }
+    .form-msg.success { display: block; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: #86efac; }
+    .form-msg.error { display: block; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; }
+
+    /* ─── DANGER ZONE ─────────────────────────────────── */
+    .danger-zone {
+      background: rgba(239,68,68,0.05);
+      border: 1px solid rgba(239,68,68,0.15);
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 600px;
+      margin-top: 24px;
+    }
+    .danger-title { font-family: var(--font-h); font-weight: 700; font-size: 15px; color: #fca5a5; margin-bottom: 8px; }
+    .danger-text { font-size: 13px; color: var(--c-muted); margin-bottom: 16px; }
+    .danger-btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid rgba(239,68,68,0.4);
+      color: #fca5a5;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-b);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .danger-btn:hover { background: rgba(239,68,68,0.1); }
+
+    /* ─── LOADING ─────────────────────────────────────── */
+    .loading-state { text-align: center; padding: 60px 20px; color: var(--c-muted); }
+    .loading-spinner {
+      width: 36px; height: 36px;
+      border: 3px solid rgba(124,58,237,0.2);
+      border-top-color: var(--c-primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main-area { margin-left: 0; }
+      .hamburger-btn { display: flex; }
+      .content { padding: 20px 16px; }
+      .topbar { padding: 12px 16px; }
+      .welcome-card { padding: 20px; }
+      .welcome-emoji { display: none; }
+      .data-table { font-size: 12px; }
+      .data-table th, .data-table td { padding: 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <a href="index.html" class="sidebar-logo-text">Chrixlin AI Rise</a>
+    <div class="sidebar-logo-sub">Customer Portal</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main</div>
+    <button class="sidebar-item active" data-section="overview" onclick="showSection('overview', this)">
+      <span class="item-icon">🏠</span> Overview
+    </button>
+    <button class="sidebar-item" data-section="orders" onclick="showSection('orders', this)">
+      <span class="item-icon">📋</span> My Orders
+    </button>
+    <button class="sidebar-item" data-section="products" onclick="showSection('products', this)">
+      <span class="item-icon">📦</span> My Products
+    </button>
+    <button class="sidebar-item" data-section="invoices" onclick="showSection('invoices', this)">
+      <span class="item-icon">🧾</span> Invoices
+    </button>
+    <div class="sidebar-section-label">Account</div>
+    <button class="sidebar-item" data-section="profile" onclick="showSection('profile', this)">
+      <span class="item-icon">👤</span> Profile
+    </button>
+    <button class="sidebar-item" data-section="settings" onclick="showSection('settings', this)">
+      <span class="item-icon">⚙️</span> Settings
+    </button>
+    <div class="sidebar-section-label">Browse</div>
+    <a class="sidebar-item" href="marketplace.html">
+      <span class="item-icon">🛍️</span> Marketplace
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <button class="sidebar-logout" onclick="handleLogout()">
+      <span>🚪</span> Sign Out
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN AREA -->
+<div class="main-area">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger-btn" onclick="openSidebar()">☰</button>
+      <div class="topbar-title" id="topbarTitle">Overview</div>
+    </div>
+    <div class="topbar-right">
+      <div class="user-chip">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <div class="user-name" id="userNameChip">Loading...</div>
+      </div>
+      <button class="logout-btn-top" onclick="handleLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ORDER SUCCESS BANNER -->
+    <div class="order-success-banner" id="orderSuccessBanner">
+      <span>🎉</span>
+      <span>Order placed successfully! Your purchase is being processed. You'll receive an email confirmation shortly.</span>
+    </div>
+
+    <!-- ── OVERVIEW ─────────────────────────────────── -->
+    <div class="section-panel active" id="sectionOverview">
+      <div class="welcome-card">
+        <div>
+          <div class="welcome-greeting">Welcome back, <span id="welcomeName">there</span>! 👋</div>
+          <div class="welcome-sub">Here's a summary of your Chrixlin AI Rise account.</div>
+        </div>
+        <div class="welcome-emoji">🚀</div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📋</div>
+          <div class="stat-value" id="statOrders">—</div>
+          <div class="stat-label">Total Orders</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📦</div>
+          <div class="stat-value" id="statProducts">—</div>
+          <div class="stat-label">Products Owned</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-value" id="statCompleted">—</div>
+          <div class="stat-label">Completed Orders</div>
+        </div>
+      </div>
+
+      <!-- Recent Orders -->
+      <div class="table-wrap">
+        <div class="table-header">
+          <div class="table-title">Recent Orders</div>
+          <button class="btn btn-outline btn-sm" onclick="showSection('orders', document.querySelector('[data-section=orders]'))">View All</button>
+        </div>
+        <div id="recentOrdersContainer">
+          <div class="loading-state"><div class="loading-spinner"></div>Loading orders...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MY ORDERS ────────────────────────────────── -->
+    <div class="section-panel" id="sectionOrders">
+      <div class="section-title">My Orders</div>
+      <div class="section-sub">Track the status of all your purchases.</div>
+      <div class="table-wrap">
+        <div class="table-header">
+          <div class="table-title">All Orders</div>
+        </div>
+        <div id="allOrdersContainer">
+          <div class="loading-state"><div class="loading-spinner"></div>Loading orders...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MY PRODUCTS ───────────────────────────────── -->
+    <div class="section-panel" id="sectionProducts">
+      <div class="section-title">My Products</div>
+      <div class="section-sub">Access all your purchased AI solutions.</div>
+      <div id="productsContainer">
+        <div class="loading-state"><div class="loading-spinner"></div>Loading products...</div>
+      </div>
+    </div>
+
+    <!-- ── INVOICES ──────────────────────────────────── -->
+    <div class="section-panel" id="sectionInvoices">
+      <div class="section-title">Invoices</div>
+      <div class="section-sub">Download invoices for your completed purchases.</div>
+      <div id="invoicesContainer">
+        <div class="loading-state"><div class="loading-spinner"></div>Loading invoices...</div>
+      </div>
+    </div>
+
+    <!-- ── PROFILE ───────────────────────────────────── -->
+    <div class="section-panel" id="sectionProfile">
+      <div class="section-title">My Profile</div>
+      <div class="section-sub">Update your personal information.</div>
+      <div class="form-card">
+        <div class="form-section-title">Personal Information</div>
+        <div class="field-group">
+          <label class="field-label">Email Address</label>
+          <input type="email" class="field-input" id="profileEmail" readonly />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Full Name</label>
+          <input type="text" class="field-input" id="profileName" placeholder="Your full name" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Phone Number</label>
+          <input type="tel" class="field-input" id="profilePhone" placeholder="+1 (555) 000-0000" />
+        </div>
+        <button class="save-btn" id="saveProfileBtn" onclick="saveProfile()">Save Changes</button>
+        <div class="form-msg" id="profileMsg"></div>
+      </div>
+    </div>
+
+    <!-- ── SETTINGS ──────────────────────────────────── -->
+    <div class="section-panel" id="sectionSettings">
+      <div class="section-title">Settings</div>
+      <div class="section-sub">Manage your account security and preferences.</div>
+      <div class="form-card">
+        <div class="form-section-title">Change Password</div>
+        <div class="field-group">
+          <label class="field-label">New Password</label>
+          <input type="password" class="field-input" id="newPassword" placeholder="At least 8 characters" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Confirm New Password</label>
+          <input type="password" class="field-input" id="confirmPassword" placeholder="Repeat new password" />
+        </div>
+        <button class="save-btn" id="savePasswordBtn" onclick="savePassword()">Update Password</button>
+        <div class="form-msg" id="passwordMsg"></div>
+      </div>
+      <div class="danger-zone">
+        <div class="danger-title">⚠️ Danger Zone</div>
+        <div class="danger-text">Signing out will clear your local session. You can always sign back in with your credentials.</div>
+        <button class="danger-btn" onclick="handleLogout()">Sign Out of All Devices</button>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main-area -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="supabase-client.js"></script>
+<script>
+// ─── GLOBALS ─────────────────────────────────────────────────────────────────
+let currentUser = null;
+let allOrders   = [];
+
+// ─── AUTH GUARD ───────────────────────────────────────────────────────────────
+(async function init() {
+  try {
+    const session = await ChrixlinDB.getCustomerSession();
+    if (!session) {
+      window.location.href = 'auth.html?next=dashboard.html';
+      return;
+    }
+    currentUser = session.user;
+    populateUserUI(currentUser);
+    loadOrders();
+
+    // Show order success banner if redirected from payment
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('order_success') === '1') {
+      document.getElementById('orderSuccessBanner').classList.add('show');
+      // Clean URL
+      history.replaceState({}, '', 'dashboard.html');
+      // Auto-navigate to orders tab
+      setTimeout(() => showSection('orders', document.querySelector('[data-section=orders]')), 500);
+    }
+  } catch (err) {
+    console.error('[Dashboard] init error', err);
+    window.location.href = 'auth.html?next=dashboard.html';
+  }
+})();
+
+// ─── POPULATE USER UI ─────────────────────────────────────────────────────────
+function populateUserUI(user) {
+  const meta = user.user_metadata || {};
+  const name = meta.full_name || meta.name || user.email.split('@')[0];
+  const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  document.getElementById('userAvatar').textContent = initials;
+  document.getElementById('userNameChip').textContent = name;
+  document.getElementById('welcomeName').textContent = name.split(' ')[0];
+  // Pre-fill profile form
+  document.getElementById('profileEmail').value = user.email || '';
+  document.getElementById('profileName').value = name;
+  document.getElementById('profilePhone').value = meta.phone || '';
+}
+
+// ─── LOAD ORDERS ──────────────────────────────────────────────────────────────
+async function loadOrders() {
+  try {
+    allOrders = await ChrixlinDB.getMyOrders();
+    renderOrders();
+    updateStats();
+  } catch (err) {
+    console.warn('[Dashboard] loadOrders error', err);
+    renderOrdersEmpty('Unable to load orders. Please refresh.');
+  }
+}
+
+function updateStats() {
+  document.getElementById('statOrders').textContent = allOrders.length;
+  const completed = allOrders.filter(o => o.status === 'completed').length;
+  document.getElementById('statCompleted').textContent = completed;
+  document.getElementById('statProducts').textContent = completed;
+}
+
+function formatDate(ts) {
+  if (!ts) return '—';
+  return new Date(ts).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function statusBadge(status) {
+  const map = { pending: 'badge-pending', completed: 'badge-completed', processing: 'badge-processing', refunded: 'badge-refunded' };
+  return `<span class="badge ${map[status] || 'badge-pending'}">${status || 'pending'}</span>`;
+}
+
+function ordersTableHTML(orders) {
+  if (!orders || orders.length === 0) return null;
+  return `<table class="data-table">
+    <thead>
+      <tr>
+        <th>Order Ref</th>
+        <th>Product</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${orders.map(o => `
+        <tr>
+          <td style="font-family:monospace;font-size:12px;color:var(--c-muted)">${o.order_ref || '—'}</td>
+          <td style="font-weight:600">${o.product_title || '—'}</td>
+          <td style="font-family:var(--font-h);font-weight:700">$${Number(o.amount || 0).toFixed(2)}</td>
+          <td>${statusBadge(o.status)}</td>
+          <td style="color:var(--c-muted);font-size:13px">${formatDate(o.created_at)}</td>
+        </tr>
+      `).join('')}
+    </tbody>
+  </table>`;
+}
+
+function renderOrders() {
+  const recentHTML = ordersTableHTML(allOrders.slice(0, 5));
+  const allHTML = ordersTableHTML(allOrders);
+
+  document.getElementById('recentOrdersContainer').innerHTML = recentHTML
+    || `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">No orders yet</div><div class="empty-text">Visit the marketplace to browse AI solutions.</div><a href="marketplace.html" class="btn btn-primary">Browse Marketplace</a></div>`;
+
+  document.getElementById('allOrdersContainer').innerHTML = allHTML
+    || `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">No orders yet</div><div class="empty-text">Your orders will appear here after purchase.</div><a href="marketplace.html" class="btn btn-primary">Browse Marketplace</a></div>`;
+
+  renderProducts();
+  renderInvoices();
+}
+
+function renderOrdersEmpty(msg) {
+  const html = `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">${msg}</div></div>`;
+  document.getElementById('recentOrdersContainer').innerHTML = html;
+  document.getElementById('allOrdersContainer').innerHTML = html;
+  document.getElementById('productsContainer').innerHTML = html;
+  document.getElementById('invoicesContainer').innerHTML = html;
+}
+
+function renderProducts() {
+  const completedOrders = allOrders.filter(o => o.status === 'completed');
+  if (completedOrders.length === 0) {
+    document.getElementById('productsContainer').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📦</div>
+        <div class="empty-title">No products yet</div>
+        <div class="empty-text">Products become available here after your order is completed.</div>
+        <a href="marketplace.html" class="btn btn-primary">Browse Marketplace</a>
+      </div>`;
+    return;
+  }
+  document.getElementById('productsContainer').innerHTML = `<div class="products-grid">
+    ${completedOrders.map(o => `
+      <div class="product-card">
+        <div class="product-card-icon">📦</div>
+        <div class="product-card-title">${o.product_title || 'AI Product'}</div>
+        <div class="product-card-sub">Purchased ${formatDate(o.created_at)} · $${Number(o.amount || 0).toFixed(2)}</div>
+        <button class="product-card-download" onclick="showDownloadInfo()">📥 Download / Access</button>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+function showDownloadInfo() {
+  alert('To access your product files and onboarding materials, please contact us at info@chrixlin.tech with your order reference. Our team will provide your download link within 24 hours.');
+}
+
+function renderInvoices() {
+  if (allOrders.length === 0) {
+    document.getElementById('invoicesContainer').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🧾</div>
+        <div class="empty-title">No invoices yet</div>
+        <div class="empty-text">Invoices will appear here after you place an order.</div>
+      </div>`;
+    return;
+  }
+  document.getElementById('invoicesContainer').innerHTML = `<div class="invoice-list">
+    ${allOrders.map(o => `
+      <div class="invoice-item">
+        <div class="invoice-left">
+          <div class="invoice-icon">🧾</div>
+          <div>
+            <div class="invoice-ref">${o.order_ref || 'Invoice'}</div>
+            <div class="invoice-date">${o.product_title || ''} · ${formatDate(o.created_at)}</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div class="invoice-amount">$${Number(o.amount || 0).toFixed(2)}</div>
+          <button class="invoice-dl" onclick="alert('Invoice download will be available once your order is processed. Contact info@chrixlin.tech for assistance.')">📄 Download</button>
+        </div>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+// ─── SECTION NAVIGATION ───────────────────────────────────────────────────────
+const sectionTitles = {
+  overview: 'Overview', orders: 'My Orders', products: 'My Products',
+  invoices: 'Invoices', profile: 'Profile', settings: 'Settings'
+};
+
+function showSection(name, btnEl) {
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('section' + name.charAt(0).toUpperCase() + name.slice(1)).classList.add('active');
+  if (btnEl) btnEl.classList.add('active');
+  document.getElementById('topbarTitle').textContent = sectionTitles[name] || name;
+  closeSidebar();
+}
+
+// ─── PROFILE SAVE ─────────────────────────────────────────────────────────────
+async function saveProfile() {
+  const name = document.getElementById('profileName').value.trim();
+  const phone = document.getElementById('profilePhone').value.trim();
+  const btn = document.getElementById('saveProfileBtn');
+  const msg = document.getElementById('profileMsg');
+  msg.className = 'form-msg'; msg.textContent = '';
+  btn.disabled = true; btn.textContent = 'Saving...';
+  try {
+    const result = await ChrixlinDB.updateMyProfile({ full_name: name, phone });
+    if (result.error) throw result.error;
+    msg.className = 'form-msg success'; msg.textContent = 'Profile updated successfully!';
+    if (currentUser) { currentUser.user_metadata = { ...currentUser.user_metadata, full_name: name, phone }; populateUserUI(currentUser); }
+  } catch (err) {
+    msg.className = 'form-msg error'; msg.textContent = err.message || 'Failed to update profile.';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Save Changes';
+  }
+}
+
+// ─── PASSWORD SAVE ────────────────────────────────────────────────────────────
+async function savePassword() {
+  const np = document.getElementById('newPassword').value;
+  const cp = document.getElementById('confirmPassword').value;
+  const btn = document.getElementById('savePasswordBtn');
+  const msg = document.getElementById('passwordMsg');
+  msg.className = 'form-msg'; msg.textContent = '';
+  if (!np || np.length < 8) { msg.className = 'form-msg error'; msg.textContent = 'Password must be at least 8 characters.'; return; }
+  if (np !== cp) { msg.className = 'form-msg error'; msg.textContent = 'Passwords do not match.'; return; }
+  btn.disabled = true; btn.textContent = 'Updating...';
+  try {
+    const client = ChrixlinDB._getClient();
+    if (!client) throw new Error('No client');
+    const { error } = await client.auth.updateUser({ password: np });
+    if (error) throw error;
+    msg.className = 'form-msg success'; msg.textContent = 'Password updated successfully!';
+    document.getElementById('newPassword').value = '';
+    document.getElementById('confirmPassword').value = '';
+  } catch (err) {
+    msg.className = 'form-msg error'; msg.textContent = err.message || 'Failed to update password.';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Update Password';
+  }
+}
+
+// ─── LOGOUT ───────────────────────────────────────────────────────────────────
+async function handleLogout() {
+  try { await ChrixlinDB.customerSignOut(); } catch {}
+  window.location.href = 'index.html';
+}
+
+// ─── SIDEBAR (MOBILE) ────────────────────────────────────────────────────────
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+}
+</script>
+</body>
+</html>
