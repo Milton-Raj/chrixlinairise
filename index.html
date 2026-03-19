@@ -1054,10 +1054,10 @@ function renderPricingPlans(overridePlans) {
   // Re-observe new cards; if already in viewport, add visible immediately
   el.querySelectorAll('.animate-in').forEach(card => {
     const rect = card.getBoundingClientRect();
-    if (rect.top < window.innerHeight - 50 && rect.bottom > 0) {
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
       card.classList.add('visible');
-    } else if (typeof observer !== 'undefined') {
-      observer.observe(card);
+    } else if (typeof _scrollObserver !== 'undefined') {
+      _scrollObserver.observe(card);
     }
   });
 }
@@ -1147,19 +1147,29 @@ if (storedKeys) applyTextKeys(JSON.parse(storedKeys));
 })();
 
 // ─── SCROLL ANIMATIONS ────────────────────────────────────────────────────────
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
+var _scrollObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
+      _scrollObserver.unobserve(entry.target);
     }
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+}, { threshold: 0.1 });
 
-// Re-observe after rendering
-setTimeout(() => {
-  document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
-}, 100);
+// Show elements already in viewport immediately; observe the rest for scroll reveal
+function _runAnimations() {
+  document.querySelectorAll('.animate-in').forEach(function(el) {
+    var r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight && r.bottom > 0) {
+      el.classList.add('visible');
+    } else {
+      _scrollObserver.observe(el);
+    }
+  });
+}
+// Run after fonts/images settle — use multiple fallbacks for reliability
+setTimeout(_runAnimations, 200);
+window.addEventListener('load', function() { setTimeout(_runAnimations, 50); });
 
 // ─── NAVBAR SCROLL ────────────────────────────────────────────────────────────
 const navbar = document.getElementById('navbar');
