@@ -1051,9 +1051,14 @@ function renderPricingPlans(overridePlans) {
       </div>
     </div>
   `).join('');
-  // Re-observe new cards so the animation fires (IntersectionObserver only fires once per element)
+  // Re-observe new cards; if already in viewport, add visible immediately
   el.querySelectorAll('.animate-in').forEach(card => {
-    if (typeof observer !== 'undefined') observer.observe(card);
+    const rect = card.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 50 && rect.bottom > 0) {
+      card.classList.add('visible');
+    } else if (typeof observer !== 'undefined') {
+      observer.observe(card);
+    }
   });
 }
 
