@@ -504,7 +504,8 @@
       <a href="#pricing" data-key="nav.link4">Pricing</a>
       <a href="#faq" data-key="nav.link5">FAQ</a>
     </div>
-    <div class="nav-cta">
+    <div class="nav-cta" style="display:flex;align-items:center;gap:10px;">
+      <a href="auth.html" id="navAuthBtn" class="btn btn-outline" style="padding:9px 20px;font-size:14px;">Sign In</a>
       <a href="mailto:info@chrixlin.tech" class="btn btn-primary" data-key="nav.cta">Book Free Call</a>
     </div>
     <div class="nav-toggle" id="navToggle">
@@ -522,6 +523,7 @@
   <a href="marketplace.html" onclick="closeMobile()">Marketplace</a>
   <a href="#pricing" onclick="closeMobile()">Pricing</a>
   <a href="#faq" onclick="closeMobile()">FAQ</a>
+  <a href="auth.html" id="mobileAuthBtn" onclick="closeMobile()" style="color:#a78bfa;">Sign In</a>
   <a href="mailto:info@chrixlin.tech" class="btn btn-primary" onclick="closeMobile()">Book Free Call</a>
 </div>
 
@@ -1279,6 +1281,22 @@ function closeMobile() {
     }
   } catch(e) {}
 
+})();
+
+// ─── AUTH NAV BUTTON ──────────────────────────────────────────────────────────
+(async function() {
+  try {
+    const session = await ChrixlinDB.getCustomerSession();
+    var desktopBtn = document.getElementById('navAuthBtn');
+    var mobileBtn  = document.getElementById('mobileAuthBtn');
+    if (session && session.user) {
+      var name = (session.user.user_metadata && session.user.user_metadata.full_name)
+                   ? session.user.user_metadata.full_name.split(' ')[0]
+                   : 'Dashboard';
+      if (desktopBtn) { desktopBtn.href = 'dashboard.html'; desktopBtn.textContent = '👤 ' + name; desktopBtn.style.borderColor = 'rgba(124,58,237,0.5)'; desktopBtn.style.color = '#a78bfa'; }
+      if (mobileBtn)  { mobileBtn.href  = 'dashboard.html'; mobileBtn.textContent  = '👤 ' + name; }
+    }
+  } catch(e) {}
 })();
 </script>
 </body>
