@@ -494,8 +494,8 @@ function loadMP() {
     const parsed = JSON.parse(s);
     return {
       hero: Object.assign({}, DEFAULT_MP.hero, parsed.hero || {}),
-      videos: parsed.videos || DEFAULT_MP.videos,
-      products: parsed.products || DEFAULT_MP.products,
+      videos: (parsed.videos && parsed.videos.length) ? parsed.videos : DEFAULT_MP.videos,
+      products: (parsed.products && parsed.products.length) ? parsed.products : DEFAULT_MP.products,
       book: Object.assign({}, DEFAULT_MP.book, parsed.book || {})
     };
   } catch { return DEFAULT_MP; }
@@ -592,13 +592,19 @@ function submitBooking(e) {
 }
 
 // ─── SCROLL ANIMATIONS ────────────────────────────────────────────────────────
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+var _scrollObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); _scrollObserver.unobserve(e.target); } });
+}, { threshold: 0.1 });
 
-setTimeout(() => {
-  document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
-}, 100);
+function _runAnimations() {
+  document.querySelectorAll('.animate-in').forEach(function(el) {
+    var r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight && r.bottom > 0) { el.classList.add('visible'); }
+    else { _scrollObserver.observe(el); }
+  });
+}
+setTimeout(_runAnimations, 200);
+window.addEventListener('load', function() { setTimeout(_runAnimations, 50); });
 
 // ─── NAVBAR ───────────────────────────────────────────────────────────────────
 const navbar = document.getElementById('navbar');
