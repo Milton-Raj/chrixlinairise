@@ -504,9 +504,6 @@
     <button class="sidebar-item" data-section="orders" onclick="showSection('orders', this)">
       <span class="item-icon">📋</span> My Orders
     </button>
-    <button class="sidebar-item" data-section="products" onclick="showSection('products', this)">
-      <span class="item-icon">📦</span> My Products
-    </button>
     <button class="sidebar-item" data-section="invoices" onclick="showSection('invoices', this)">
       <span class="item-icon">🧾</span> Invoices
     </button>
@@ -609,15 +606,6 @@
       </div>
     </div>
 
-    <!-- ── MY PRODUCTS ───────────────────────────────── -->
-    <div class="section-panel" id="sectionProducts">
-      <div class="section-title">My Products</div>
-      <div class="section-sub">Access all your purchased AI solutions.</div>
-      <div id="productsContainer">
-        <div class="loading-state"><div class="loading-spinner"></div>Loading products...</div>
-      </div>
-    </div>
-
     <!-- ── INVOICES ──────────────────────────────────── -->
     <div class="section-panel" id="sectionInvoices">
       <div class="section-title">Invoices</div>
@@ -679,6 +667,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="supabase-client.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 // ─── GLOBALS ─────────────────────────────────────────────────────────────────
 let currentUser = null;
@@ -764,6 +753,7 @@ function ordersTableHTML(orders) {
         <th>Amount</th>
         <th>Status</th>
         <th>Date</th>
+        <th>Download</th>
       </tr>
     </thead>
     <tbody>
@@ -774,6 +764,14 @@ function ordersTableHTML(orders) {
           <td style="font-family:var(--font-h);font-weight:700">$${Number(o.amount || 0).toFixed(2)}</td>
           <td>${statusBadge(o.status)}</td>
           <td style="color:var(--c-muted);font-size:13px">${formatDate(o.created_at)}</td>
+          <td style="padding:12px 16px">
+            ${o.status === 'completed' && o.download_url
+              ? `<a href="${o.download_url}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;padding:7px 16px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none">⬇ Download</a>`
+              : o.status === 'completed'
+              ? `<span style="font-size:12px;color:#64748b">Coming soon</span>`
+              : `<span style="font-size:12px;color:#64748b">—</span>`
+            }
+          </td>
         </tr>
       `).join('')}
     </tbody>
@@ -790,7 +788,6 @@ function renderOrders() {
   document.getElementById('allOrdersContainer').innerHTML = allHTML
     || `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">No orders yet</div><div class="empty-text">Your orders will appear here after purchase.</div><a href="marketplace.html" class="btn btn-primary">Browse Marketplace</a></div>`;
 
-  renderProducts();
   renderInvoices();
 }
 
@@ -798,36 +795,7 @@ function renderOrdersEmpty(msg) {
   const html = `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">${msg}</div></div>`;
   document.getElementById('recentOrdersContainer').innerHTML = html;
   document.getElementById('allOrdersContainer').innerHTML = html;
-  document.getElementById('productsContainer').innerHTML = html;
   document.getElementById('invoicesContainer').innerHTML = html;
-}
-
-function renderProducts() {
-  const completedOrders = allOrders.filter(o => o.status === 'completed');
-  if (completedOrders.length === 0) {
-    document.getElementById('productsContainer').innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">📦</div>
-        <div class="empty-title">No products yet</div>
-        <div class="empty-text">Products become available here after your order is completed.</div>
-        <a href="marketplace.html" class="btn btn-primary">Browse Marketplace</a>
-      </div>`;
-    return;
-  }
-  document.getElementById('productsContainer').innerHTML = `<div class="products-grid">
-    ${completedOrders.map(o => `
-      <div class="product-card">
-        <div class="product-card-icon">📦</div>
-        <div class="product-card-title">${o.product_title || 'AI Product'}</div>
-        <div class="product-card-sub">Purchased ${formatDate(o.created_at)} · $${Number(o.amount || 0).toFixed(2)}</div>
-        <button class="product-card-download" onclick="showDownloadInfo()">📥 Download / Access</button>
-      </div>
-    `).join('')}
-  </div>`;
-}
-
-function showDownloadInfo() {
-  alert('To access your product files and onboarding materials, please contact us at info@chrixlin.tech with your order reference. Our team will provide your download link within 24 hours.');
 }
 
 function renderInvoices() {
@@ -841,7 +809,7 @@ function renderInvoices() {
     return;
   }
   document.getElementById('invoicesContainer').innerHTML = `<div class="invoice-list">
-    ${allOrders.map(o => `
+    ${allOrders.map((o, idx) => `
       <div class="invoice-item">
         <div class="invoice-left">
           <div class="invoice-icon">🧾</div>
@@ -852,16 +820,83 @@ function renderInvoices() {
         </div>
         <div style="display:flex;align-items:center;gap:14px">
           <div class="invoice-amount">$${Number(o.amount || 0).toFixed(2)}</div>
-          <button class="invoice-dl" onclick="alert('Invoice download will be available once your order is processed. Contact info@chrixlin.tech for assistance.')">📄 Download</button>
+          <button class="invoice-dl" onclick="downloadInvoicePDF(allOrders[${idx}])">📄 Download</button>
         </div>
       </div>
     `).join('')}
   </div>`;
 }
 
+function downloadInvoicePDF(order) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  // Header
+  doc.setFillColor(124, 58, 237);
+  doc.rect(0, 0, 210, 40, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(22);
+  doc.setFont('helvetica', 'bold');
+  doc.text('INVOICE', 20, 20);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Chrixlin AI Rise', 20, 30);
+  // Order ref top right
+  doc.setFontSize(10);
+  doc.text('Ref: ' + (order.order_ref || '—'), 140, 20);
+  doc.text('Date: ' + new Date(order.created_at || Date.now()).toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'}), 140, 28);
+  // Status
+  doc.setTextColor(34, 197, 94);
+  doc.text('Status: ' + (order.status || 'completed').toUpperCase(), 140, 36);
+  // Body
+  doc.setTextColor(30, 30, 30);
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Bill To:', 20, 60);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(11);
+  // Try to get user info from session
+  const userEl = document.getElementById('userNameChip');
+  const emailEl = document.getElementById('profileEmail');
+  const userName = userEl ? userEl.textContent : 'Customer';
+  const userEmail = emailEl ? emailEl.value : '';
+  doc.text(userName, 20, 70);
+  doc.text(userEmail, 20, 78);
+  // Line
+  doc.setDrawColor(200, 200, 200);
+  doc.line(20, 88, 190, 88);
+  // Table header
+  doc.setFillColor(245, 245, 250);
+  doc.rect(20, 92, 170, 10, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.text('Product', 25, 99);
+  doc.text('Payment Method', 100, 99);
+  doc.text('Amount', 165, 99);
+  // Table row
+  doc.setFont('helvetica', 'normal');
+  doc.text((order.product_title || 'AI Solution').substring(0, 38), 25, 112);
+  doc.text(order.payment_method || 'Bank Transfer', 100, 112);
+  doc.text('$' + (parseFloat(order.amount) || 0).toLocaleString(), 165, 112);
+  // Divider
+  doc.line(20, 120, 190, 120);
+  // Total
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(13);
+  doc.text('Total:', 140, 132);
+  doc.setTextColor(124, 58, 237);
+  doc.text('$' + (parseFloat(order.amount) || 0).toLocaleString(), 168, 132);
+  // Footer
+  doc.setTextColor(150, 150, 150);
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Thank you for your purchase! — Chrixlin AI Rise | info@chrixlin.tech', 20, 270);
+  doc.text('This is a computer-generated invoice.', 20, 277);
+  doc.save('Invoice-' + (order.order_ref || 'chrixlin') + '.pdf');
+}
+
 // ─── SECTION NAVIGATION ───────────────────────────────────────────────────────
 const sectionTitles = {
-  overview: 'Overview', orders: 'My Orders', products: 'My Products',
+  overview: 'Overview', orders: 'My Orders',
   invoices: 'Invoices', profile: 'Profile', settings: 'Settings'
 };
 

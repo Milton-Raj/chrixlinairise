@@ -583,7 +583,11 @@ if (!product) {
     img.className = 'product-hero-thumb-img';
     img.src = product.image;
     img.alt = product.title;
+    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:20px;';
     thumbEl.appendChild(img);
+    // Hide emoji when real image is present
+    const emojiEl = document.getElementById('productHeroEmoji');
+    if (emojiEl) emojiEl.style.display = 'none';
   }
 
   // Meta
@@ -607,7 +611,16 @@ if (!product) {
   const validYtId = /^[A-Za-z0-9_-]{11}$/.test(ytId);
   if (validYtId) {
     const vw = document.getElementById('productVideoWrap');
-    vw.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1" allowfullscreen title="${product.title} Demo" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;gap:12px;color:#64748b\\'><div style=\\'font-size:48px\\'>🎬</div><div>Video preview coming soon</div></div>'"></iframe>`;
+    vw.innerHTML = `
+      <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,0.12);">
+        <iframe
+          src="https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:16px;">
+        </iframe>
+      </div>`;
   } else {
     document.getElementById('videoPlaceholderEmoji').textContent = product.emoji || '🎬';
   }

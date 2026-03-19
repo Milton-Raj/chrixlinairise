@@ -7,6 +7,7 @@
   <meta name="description" data-key="seo.description" content="Learn to build and sell AI automation bots. Join 160+ entrepreneurs who hit $5K–$50K/month — risk-free income share model." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
     /* ─── RESET & TOKENS ───────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -738,12 +739,22 @@
         Your AI Business <span class="text-grad">Starts Today</span>
       </h2>
       <p class="cta-sub" data-key="cta.subtitle">Join 160+ entrepreneurs who took the first step. Book your free 1-on-1 strategy call and get a custom 60-day roadmap — no strings attached.</p>
-      <div class="cta-btns">
-        <a href="mailto:info@chrixlin.tech" class="btn btn-primary" style="font-size:18px;padding:18px 44px" data-key="cta.btnText">
-          Book My Free Strategy Call →
-        </a>
+      <div id="strategyCallForm" style="max-width:480px;margin:32px auto 0;">
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <input type="text" id="scfName" placeholder="Your Full Name *" required
+            style="flex:1;min-width:200px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:14px 18px;color:#f1f5f9;font-size:15px;outline:none;font-family:inherit;" />
+          <input type="email" id="scfEmail" placeholder="Email Address *" required
+            style="flex:1;min-width:200px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:14px 18px;color:#f1f5f9;font-size:15px;outline:none;font-family:inherit;" />
+        </div>
+        <input type="tel" id="scfPhone" placeholder="Phone Number (optional)"
+          style="width:100%;margin-top:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:14px 18px;color:#f1f5f9;font-size:15px;outline:none;font-family:inherit;box-sizing:border-box;" />
+        <button id="scfBtn" onclick="submitStrategyCallForm(event)"
+          style="width:100%;margin-top:12px;background:linear-gradient(135deg,#7c3aed,#06b6d4);color:#fff;border:none;border-radius:50px;padding:16px 32px;font-size:17px;font-weight:700;cursor:pointer;font-family:inherit;">
+          📞 Book My Free Strategy Call →
+        </button>
+        <div id="scfMsg" style="display:none;margin-top:12px;padding:14px 18px;border-radius:12px;font-size:14px;font-weight:600;text-align:center;"></div>
       </div>
-      <p class="cta-note" data-key="cta.note">100% Free · No obligation · Limited spots available each week</p>
+      <p class="cta-note" data-key="cta.note" style="margin-top:16px;">100% Free · No obligation · Limited spots available each week</p>
     </div>
   </div>
 </section>
@@ -1298,6 +1309,42 @@ function closeMobile() {
     }
   } catch(e) {}
 })();
+
+// ─── STRATEGY CALL FORM ───────────────────────────────────────────────────────
+async function submitStrategyCallForm(e) {
+  e.preventDefault();
+  const name  = document.getElementById('scfName').value.trim();
+  const email = document.getElementById('scfEmail').value.trim();
+  const phone = document.getElementById('scfPhone').value.trim();
+  const msg   = document.getElementById('scfMsg');
+  const btn   = document.getElementById('scfBtn');
+  if (!name || !email) {
+    msg.style.display='block'; msg.style.background='rgba(239,68,68,0.15)'; msg.style.color='#f87171';
+    msg.textContent='Please enter your name and email.'; return;
+  }
+  btn.disabled = true; btn.textContent = 'Sending...';
+  try {
+    if (typeof ChrixlinDB !== 'undefined') {
+      await ChrixlinDB.submitStrategyCall({ name, email, phone, message: 'Strategy Call Request from landing page', source: 'landing' });
+    }
+    // Send admin notification email via EmailJS if configured
+    try {
+      if (typeof emailjs !== 'undefined' && typeof EMAILJS_SERVICE_ID !== 'undefined' && EMAILJS_SERVICE_ID !== 'YOUR_SERVICE_ID') {
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_name:'Admin', to_email:'info@chrixlin.tech', from_name: name, subject:'New Strategy Call Request', message:`Name: ${name}\nEmail: ${email}\nPhone: ${phone||'—'}` }, EMAILJS_PUBLIC_KEY);
+      }
+    } catch(e2) {}
+    msg.style.display='block'; msg.style.background='rgba(34,197,94,0.15)'; msg.style.color='#4ade80';
+    msg.textContent='✅ Thank you! We\'ll be in touch within 24 hours.';
+    btn.textContent='✅ Request Sent!'; btn.style.opacity='0.7';
+    document.getElementById('scfName').value='';
+    document.getElementById('scfEmail').value='';
+    document.getElementById('scfPhone').value='';
+  } catch(err) {
+    btn.disabled=false; btn.textContent='📞 Book My Free Strategy Call →';
+    msg.style.display='block'; msg.style.background='rgba(239,68,68,0.15)'; msg.style.color='#f87171';
+    msg.textContent='Something went wrong. Please try again.';
+  }
+}
 </script>
 </body>
 </html>

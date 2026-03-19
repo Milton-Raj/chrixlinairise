@@ -121,7 +121,7 @@
   async function upsertPricingPlan(plan) {
     const existing = _lsGetPlans();
     const isNew = !existing.find(p => p.id === plan.id);
-    if (isNew && existing.length >= 3) { console.warn('[ChrixlinDB] Max 3 plans allowed.'); return false; }
+    if (isNew && existing.length >= 6) { console.warn('[ChrixlinDB] Max 6 plans allowed.'); return false; }
     const idx = existing.findIndex(p => p.id === plan.id);
     if (idx !== -1) existing[idx] = plan; else existing.push(plan);
     localStorage.setItem(LS.PRICING, JSON.stringify(existing));
@@ -143,6 +143,91 @@
       if (error) throw error;
       return true;
     } catch (err) { console.warn('[ChrixlinDB] deletePricingPlan() failed.', err); return false; }
+  }
+
+  // ─── MARKETPLACE CATEGORIES ───────────────────────────────────────────────────
+  async function loadCategories() {
+    const client = _getClient();
+    if (!client) return [];
+    try {
+      const { data, error } = await client.from('marketplace_categories').select('*').eq('is_active', true).order('sort_order', { ascending: true });
+      if (error) throw error;
+      return data || [];
+    } catch (err) { console.warn('[ChrixlinDB] loadCategories() failed.', err); return []; }
+  }
+
+  async function upsertCategory(cat) {
+    const client = _getClient();
+    if (!client) return false;
+    try {
+      const { error } = await client.from('marketplace_categories').upsert(cat, { onConflict: 'id' });
+      if (error) throw error;
+      return true;
+    } catch (err) { console.warn('[ChrixlinDB] upsertCategory() failed.', err); return false; }
+  }
+
+  async function deleteCategory(id) {
+    const client = _getClient();
+    if (!client) return false;
+    try {
+      const { error } = await client.from('marketplace_categories').delete().eq('id', id);
+      if (error) throw error;
+      return true;
+    } catch (err) { console.warn('[ChrixlinDB] deleteCategory() failed.', err); return false; }
+  }
+
+  // ─── STORAGE: PRODUCT IMAGE UPLOAD ───────────────────────────────────────────
+  async function uploadProductImage(file) {
+    const client = _getClient();
+    if (!client) return null;
+    try {
+      const ext = file.name.split('.').pop() || 'jpg';
+      const fileName = 'product-' + Date.now() + '-' + Math.random().toString(36).slice(2) + '.' + ext;
+      const { data, error } = await client.storage.from('product-images').upload(fileName, file, { cacheControl: '3600', upsert: false });
+      if (error) throw error;
+      const { data: urlData } = client.storage.from('product-images').getPublicUrl(fileName);
+      return urlData.publicUrl || null;
+    } catch (err) { console.warn('[ChrixlinDB] uploadProductImage() failed.', err); return null; }
+  }
+
+  // ─── STRATEGY CALL FORM SUBMISSION ───────────────────────────────────────────
+  async function submitStrategyCall(formData) {
+    // formData: { name, email, phone, message, source }
+    const client = _getClient();
+    if (!client) return false;
+    try {
+      const { error } = await client.from('contact_messages').insert({
+        name: formData.name || '',
+        email: formData.email || '',
+        phone: formData.phone || '',
+        subject: 'Free Strategy Call Request',
+        message: formData.message || '',
+        page: 'strategy-call',
+        extra_data: { source: formData.source || 'landing' }
+      });
+      if (error) throw error;
+      return true;
+    } catch (err) { console.warn('[ChrixlinDB] submitStrategyCall() failed.', err); return false; }
+  }
+
+  async function getStrategyCallSubmissions() {
+    const client = _getClient();
+    if (!client) return [];
+    try {
+      const { data, error } = await client.from('contact_messages').select('*').eq('page', 'strategy-call').order('created_at', { ascending: false });
+      if (error) throw error;
+      return data || [];
+    } catch (err) { console.warn('[ChrixlinDB] getStrategyCallSubmissions() failed.', err); return []; }
+  }
+
+  async function deleteStrategyCallSubmission(id) {
+    const client = _getClient();
+    if (!client) return false;
+    try {
+      const { error } = await client.from('contact_messages').delete().eq('id', id);
+      if (error) throw error;
+      return true;
+    } catch (err) { console.warn('[ChrixlinDB] deleteStrategyCallSubmission() failed.', err); return false; }
   }
 
   // ─── PAYMENT SETTINGS ────────────────────────────────────────────
@@ -280,6 +365,12 @@
     try {
       const orderRef = `CAIR-${orderData.productId || 0}-${Date.now().toString(36).toUpperCase().slice(-6)}`;
       const numericAmount = parseFloat(String(orderData.amount || orderData.productPrice || '0').replace(/[^0-9.]/g, '')) || 0;
+      // Fetch product download_url
+      let productDownloadUrl = '';
+      try {
+        const { data: pData } = await client.from('marketplace_products').select('download_url').eq('id', orderData.productId).single();
+        productDownloadUrl = (pData && pData.download_url) ? pData.download_url : '';
+      } catch (e2) { productDownloadUrl = ''; }
       const { data, error } = await client.from('customer_orders').insert({
         user_id:        session.user.id,
         order_ref:      orderRef,
@@ -288,7 +379,8 @@
         product_price:  orderData.productPrice || '',
         payment_method: orderData.paymentMethod || 'bank_transfer',
         amount:         numericAmount,
-        status:         'pending',
+        status:         'completed',
+        download_url:   productDownloadUrl || '',
       }).select('id').single();
       if (error) throw error;
       return { success: true, orderId: data.id, orderRef };
@@ -430,10 +522,10 @@
 
   // ─── MAPPERS ──────────────────────────────────────────────────────
   function _productToRow(p) {
-    return { id: p.id, emoji: p.emoji||'🤖', badge: p.badge||'', category: p.category||'voice-ai', category_label: p.categoryLabel||'', category_class: p.categoryClass||'', price: p.price||'$999', title: p.title||'', description: p.desc||'', long_desc: p.longDesc||'', image_url: p.image||'', yt_id: p.ytId||'', buy_url: p.buyUrl||'', features: p.features||[], how_it_works: p.howItWorks||[], reviews: p.reviews||[], screenshots: p.screenshots||[], sort_order: p.sortOrder||0, is_active: p.isActive!==false };
+    return { id: p.id, emoji: p.emoji||'🤖', badge: p.badge||'', category: p.category||'voice-ai', category_label: p.categoryLabel||'', category_class: p.categoryClass||'', price: p.price||'$999', title: p.title||'', description: p.desc||'', long_desc: p.longDesc||'', image_url: p.image||'', yt_id: p.ytId||'', buy_url: p.buyUrl||'', download_url: p.downloadUrl||'', features: p.features||[], how_it_works: p.howItWorks||[], reviews: p.reviews||[], screenshots: p.screenshots||[], sort_order: p.sortOrder||0, is_active: p.isActive!==false };
   }
   function _rowToProduct(r) {
-    return { id: r.id, emoji: r.emoji, badge: r.badge, category: r.category, categoryLabel: r.category_label, categoryClass: r.category_class, price: r.price, title: r.title, desc: r.description, longDesc: r.long_desc, image: r.image_url, ytId: r.yt_id, buyUrl: r.buy_url, features: r.features||[], howItWorks: r.how_it_works||[], reviews: r.reviews||[], screenshots: r.screenshots||[], sortOrder: r.sort_order, isActive: r.is_active };
+    return { id: r.id, emoji: r.emoji, badge: r.badge, category: r.category, categoryLabel: r.category_label, categoryClass: r.category_class, price: r.price, title: r.title, desc: r.description, longDesc: r.long_desc, image: r.image_url, ytId: r.yt_id, buyUrl: r.buy_url, downloadUrl: r.download_url||'', features: r.features||[], howItWorks: r.how_it_works||[], reviews: r.reviews||[], screenshots: r.screenshots||[], sortOrder: r.sort_order, isActive: r.is_active };
   }
   function _planToRow(p) {
     return { id: p.id, name: p.name||'', price: String(p.price||''), price_label: p.priceLabel||'', period: p.period||'', badge: p.badge||'', badge_color: p.badgeColor||'', description: p.description||'', cta: p.cta||'Get Started', cta_link: p.ctaLink||'', is_highlighted: !!p.highlighted, features: p.features||[], sort_order: p.sortOrder||0, is_active: p.isActive!==false };
@@ -472,6 +564,12 @@
     // Customer Orders & Profile
     createCustomerOrder, getMyOrders, getMyProfile, updateMyProfile,
     upsertMyProfile, adminGetAllProfiles, adminGetAllOrders,
+    // Categories
+    loadCategories, upsertCategory, deleteCategory,
+    // Storage
+    uploadProductImage,
+    // Strategy Call
+    submitStrategyCall, getStrategyCallSubmissions, deleteStrategyCallSubmission,
     _getClient,
   };
 

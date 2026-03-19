@@ -6,6 +6,10 @@
   <title>Chrixlin AI Rise Admin — Control Panel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
   <style>
     /* ─── RESET ─────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -362,8 +366,8 @@
       <button class="sidebar-btn" onclick="showPanel('orders')" data-panel="orders">
         <span class="sb-icon">📦</span> Orders & Transactions
       </button>
-      <button class="sidebar-btn" onclick="showPanel('calls')" data-panel="calls">
-        <span class="sb-icon">📞</span> Free Strategy Calls
+      <button class="sidebar-btn" onclick="showPanel('submissions')" data-panel="submissions">
+        <span class="sb-icon">📋</span> Call Submissions
       </button>
 
       <div class="sidebar-section-label">Insights</div>
@@ -443,45 +447,52 @@
 
         <!-- Revenue KPI Row -->
         <div class="dash-kpi-row">
-          <div class="dash-kpi kpi-purple">
+          <div class="dash-kpi kpi-purple" onclick="showPanel('analytics')" style="cursor:pointer">
             <div class="dash-kpi-icon">💰</div>
             <div class="dash-kpi-val" id="kpi_totalRevenue">$0</div>
             <div class="dash-kpi-label">Total Revenue</div>
             <div class="dash-kpi-sub">All time</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Click for details →</div>
           </div>
-          <div class="dash-kpi kpi-cyan">
+          <div class="dash-kpi kpi-cyan" onclick="showPanel('analytics')" style="cursor:pointer">
             <div class="dash-kpi-icon">📦</div>
             <div class="dash-kpi-val" id="kpi_marketplaceSales">$0</div>
             <div class="dash-kpi-label">Marketplace Sales</div>
             <div class="dash-kpi-sub">Product purchases</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Click for details →</div>
           </div>
-          <div class="dash-kpi kpi-gold">
+          <div class="dash-kpi kpi-gold" onclick="showPanel('analytics')" style="cursor:pointer">
             <div class="dash-kpi-icon">💎</div>
             <div class="dash-kpi-val" id="kpi_subRevenue">$0</div>
             <div class="dash-kpi-label">Subscription Revenue</div>
             <div class="dash-kpi-sub">Plan subscriptions</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Click for details →</div>
           </div>
-          <div class="dash-kpi kpi-green">
-            <div class="dash-kpi-icon">📞</div>
-            <div class="dash-kpi-val" id="kpi_freeCalls">0</div>
-            <div class="dash-kpi-label">Free Calls Booked</div>
-            <div class="dash-kpi-sub">Strategy sessions</div>
+          <div class="dash-kpi kpi-green" onclick="showPanel('users')" style="cursor:pointer">
+            <div class="dash-kpi-icon">👥</div>
+            <div class="dash-kpi-val" id="dashRegisteredUsers">—</div>
+            <div class="dash-kpi-label">Registered Users</div>
+            <div class="dash-kpi-sub">All accounts</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Click for details →</div>
           </div>
         </div>
 
         <!-- Second Row: 3 cards -->
         <div class="kpi-row2">
-          <div class="kpi-card2">
+          <div class="kpi-card2" onclick="showPanel('orders')" style="cursor:pointer">
             <div class="kpi-card2-val" id="kpi_totalPurchases">0</div>
             <div class="kpi-card2-label">Total Purchases</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Click for details →</div>
           </div>
-          <div class="kpi-card2">
-            <div class="kpi-card2-val" id="kpi_conversionRate">0%</div>
-            <div class="kpi-card2-label">Conversion Rate — Free → Paid %</div>
+          <div class="kpi-card2" onclick="showPanel('orders')" style="cursor:pointer">
+            <div class="kpi-card2-val" id="dashPurchasingUsers">—</div>
+            <div class="kpi-card2-label">Purchasing Customers</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Click for details →</div>
           </div>
-          <div class="kpi-card2">
-            <div class="kpi-card2-val" id="kpi_activePlans">0</div>
-            <div class="kpi-card2-label">Active Plans</div>
+          <div class="kpi-card2" onclick="showPanel('orders')" style="cursor:pointer">
+            <div class="kpi-card2-val" id="dashPendingOrders">—</div>
+            <div class="kpi-card2-label">Pending Orders</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Click for details →</div>
           </div>
         </div>
 
@@ -493,9 +504,24 @@
             <div id="dash_trendingProducts"><div style="color:var(--muted);padding:16px 0;font-size:13px">No orders yet</div></div>
           </div>
           <div class="dash-section">
-            <div class="dash-section-title">💎 Top Plans</div>
-            <div class="dash-table-header"><span>Plan</span><span>Type</span><span>Revenue</span></div>
-            <div id="dash_topPlans"><div style="color:var(--muted);padding:16px 0;font-size:13px">No plans yet</div></div>
+            <div class="dash-section-title">📊 Business Overview</div>
+            <div style="display:grid;gap:12px;margin-top:8px">
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px">
+                <span>Registered Users</span><strong id="dashOvRegistered">—</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px">
+                <span>Purchasing Customers</span><strong id="dashOvPurchasers">—</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px">
+                <span>Pending Orders</span><strong id="dashOvPending" style="color:#f59e0b">—</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px">
+                <span>Active Plans</span><strong id="kpi_activePlans">0</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:13px">
+                <span>Conversion Rate</span><strong id="kpi_conversionRate">0%</strong>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -716,7 +742,7 @@
       <!-- ── PRICING ────────────────────────────────────────── -->
       <div id="panel-pricing" class="panel">
         <div class="panel-title">💎 Plans & Pricing</div>
-        <div class="panel-desc">Configure pricing plans for each billing model. Max 3 plans per billing cycle.</div>
+        <div class="panel-desc">Configure pricing plans for each billing model. Up to 6 plans per billing cycle.</div>
 
         <!-- Billing Tabs -->
         <div class="billing-tabs">
@@ -738,7 +764,6 @@
             <button onclick="closePlanModal()" style="width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center">✕</button>
           </div>
           <div style="flex:1;overflow-y:auto;padding:28px">
-            <input type="hidden" id="pp_billingCycle" value="monthly" />
             <div class="form-grid" style="margin-bottom:20px">
               <div class="form-row" style="margin:0"><label>Plan Name *</label><input type="text" id="pp_name" placeholder="e.g. AI Accelerator" /></div>
               <div class="form-row" style="margin:0"><label>Badge Label</label><input type="text" id="pp_badge" placeholder="e.g. ⚡ Best Value" /></div>
@@ -756,14 +781,30 @@
             </div>
             <div class="form-grid" style="margin-bottom:20px">
               <div class="form-row" style="margin:0">
-                <label>Badge Colour</label>
-                <input type="text" id="pp_badgeColor" placeholder="#f59e0b" />
-                <div class="input-hint">Hex colour for the badge text</div>
+                <label>Billing Cycle</label>
+                <select class="field-input" id="pp_billingCycle">
+                  <option value="free">Free</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly</option>
+                  <option value="one-time">One-Time</option>
+                </select>
               </div>
               <div class="form-row" style="margin:0">
                 <label>CTA Button Text</label>
                 <input type="text" id="pp_cta" placeholder="e.g. Get Started Today" />
               </div>
+            </div>
+            <div class="form-row" style="margin-bottom:20px">
+              <label>Badge Color</label>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px" id="planColorPicker">
+                <div onclick="selectPlanColor('#22c55e',this)" data-color="#22c55e" style="width:28px;height:28px;border-radius:50%;background:#22c55e;cursor:pointer;border:3px solid transparent"></div>
+                <div onclick="selectPlanColor('#7c3aed',this)" data-color="#7c3aed" style="width:28px;height:28px;border-radius:50%;background:#7c3aed;cursor:pointer;border:3px solid transparent"></div>
+                <div onclick="selectPlanColor('#f59e0b',this)" data-color="#f59e0b" style="width:28px;height:28px;border-radius:50%;background:#f59e0b;cursor:pointer;border:3px solid transparent"></div>
+                <div onclick="selectPlanColor('#06b6d4',this)" data-color="#06b6d4" style="width:28px;height:28px;border-radius:50%;background:#06b6d4;cursor:pointer;border:3px solid transparent"></div>
+                <div onclick="selectPlanColor('#ef4444',this)" data-color="#ef4444" style="width:28px;height:28px;border-radius:50%;background:#ef4444;cursor:pointer;border:3px solid transparent"></div>
+                <div onclick="selectPlanColor('#ec4899',this)" data-color="#ec4899" style="width:28px;height:28px;border-radius:50%;background:#ec4899;cursor:pointer;border:3px solid transparent"></div>
+              </div>
+              <input type="hidden" id="pp_badgeColor" value="#22c55e" />
             </div>
             <div class="form-row"><label>Short Description</label><textarea id="pp_desc" rows="2" placeholder="One or two sentences explaining this plan…"></textarea></div>
             <div class="form-row">
@@ -1027,6 +1068,50 @@
         <div class="panel-title">🛒 Marketplace Products</div>
         <div class="panel-desc">Create, edit, and manage all AI product listings shown on your marketplace page.</div>
 
+        <!-- Categories Management -->
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:28px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div>
+              <div style="font-size:16px;font-weight:700">🏷️ Product Categories</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:4px">Manage categories — updates marketplace filter tabs automatically</div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openCategoryModal(null)">＋ Add Category</button>
+          </div>
+          <div id="categoriesGrid" style="display:flex;flex-wrap:wrap;gap:10px">
+            <div style="color:var(--muted);font-size:13px">Loading categories...</div>
+          </div>
+        </div>
+
+        <!-- Category Modal -->
+        <div id="catModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:1000;align-items:center;justify-content:center">
+          <div style="background:#1a1a2e;border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:32px;max-width:440px;width:90%;position:relative">
+            <button onclick="closeCategoryModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer">✕</button>
+            <div style="font-size:18px;font-weight:800;margin-bottom:24px" id="catModalTitle">Add Category</div>
+            <input type="hidden" id="cat_id" />
+            <div class="form-row">
+              <label>Category Label *</label>
+              <input type="text" id="cat_label" placeholder="e.g. Voice AI" />
+            </div>
+            <div class="form-row">
+              <label>URL Slug *</label>
+              <input type="text" id="cat_slug" placeholder="e.g. voice-ai" />
+            </div>
+            <div class="form-row">
+              <label>Color</label>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px" id="catColorPicker">
+                <div onclick="selectCatColor('#7c3aed',this)" data-color="#7c3aed" style="width:32px;height:32px;border-radius:50%;background:#7c3aed;cursor:pointer;border:3px solid transparent;transition:0.2s"></div>
+                <div onclick="selectCatColor('#06b6d4',this)" data-color="#06b6d4" style="width:32px;height:32px;border-radius:50%;background:#06b6d4;cursor:pointer;border:3px solid transparent;transition:0.2s"></div>
+                <div onclick="selectCatColor('#f59e0b',this)" data-color="#f59e0b" style="width:32px;height:32px;border-radius:50%;background:#f59e0b;cursor:pointer;border:3px solid transparent;transition:0.2s"></div>
+                <div onclick="selectCatColor('#22c55e',this)" data-color="#22c55e" style="width:32px;height:32px;border-radius:50%;background:#22c55e;cursor:pointer;border:3px solid transparent;transition:0.2s"></div>
+                <div onclick="selectCatColor('#ef4444',this)" data-color="#ef4444" style="width:32px;height:32px;border-radius:50%;background:#ef4444;cursor:pointer;border:3px solid transparent;transition:0.2s"></div>
+                <div onclick="selectCatColor('#ec4899',this)" data-color="#ec4899" style="width:32px;height:32px;border-radius:50%;background:#ec4899;cursor:pointer;border:3px solid transparent;transition:0.2s"></div>
+              </div>
+              <input type="hidden" id="cat_color" value="#7c3aed" />
+            </div>
+            <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="saveCategory()">Save Category</button>
+          </div>
+        </div>
+
         <!-- Product Manager Header -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
           <div style="font-family:var(--font-h);font-weight:700;font-size:15px;color:var(--sub)">
@@ -1097,8 +1182,18 @@
             <div class="form-row"><label>Full Description (shown on product detail page)</label><textarea id="pm_longdesc" rows="3"></textarea></div>
 
             <div class="form-grid">
-              <div class="form-row"><label>Thumbnail Image URL</label><input type="url" id="pm_image" placeholder="https://... (leave blank to use emoji)" /><div class="input-hint">Direct image URL or leave blank for emoji thumbnail</div></div>
+              <div class="form-row">
+                <label>Thumbnail Image</label>
+                <div id="pm_imagePreview" style="width:100%;height:120px;border-radius:12px;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:10px;position:relative;cursor:pointer" onclick="document.getElementById('pm_imageFile').click()">
+                  <span id="pm_imagePreviewText" style="color:var(--muted);font-size:13px">📷 Click to upload image</span>
+                  <img id="pm_imagePreviewImg" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:10px" />
+                </div>
+                <input type="file" id="pm_imageFile" accept="image/*" style="display:none" onchange="handleProductImageUpload(this)" />
+                <input type="hidden" id="pm_image" />
+                <div id="pm_imageUploadStatus" style="font-size:12px;color:var(--muted)"></div>
+              </div>
               <div class="form-row"><label>YouTube Video ID (product page)</label><input type="text" id="pm_ytid" placeholder="e.g. dQw4w9WgXcQ" /><div class="input-hint">The ID after ?v= in the YouTube URL</div></div>
+              <div class="form-row"><label>Download URL <span style="font-weight:400;color:var(--muted)">(link shown to customer after purchase)</span></label><input type="text" id="pm_downloadUrl" placeholder="e.g. https://drive.google.com/file/..." /><div class="input-hint">Google Drive, Dropbox, or any direct download link</div></div>
             </div>
 
             <div class="form-row">
@@ -1224,58 +1319,89 @@
 
       <!-- ── ORDERS & TRANSACTIONS ───────────────────────────── -->
       <div id="panel-orders" class="panel">
-        <div class="panel-title">📦 Orders & Transactions</div>
-        <div class="panel-desc">All customer purchases and payment records.</div>
-        <div id="ordersTableWrap">
-          <div style="color:var(--muted);text-align:center;padding:48px 0">No orders yet. Orders submitted via the checkout form will appear here.</div>
-        </div>
-      </div>
+  <div class="panel-title">📦 Orders & Transactions</div>
+  <div class="panel-desc">All customer purchases and payment records. Updates in real-time.</div>
 
-      <!-- ── FREE STRATEGY CALLS ─────────────────────────────── -->
-      <div id="panel-calls" class="panel">
-        <div class="panel-title">📞 Free Strategy Calls</div>
-        <div class="panel-desc">Track booked strategy calls from the Free Plan offer.</div>
-        <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
-          <button class="btn btn-primary btn-sm" onclick="openCallModal(null)">+ Log Call</button>
-        </div>
-        <div id="callsTableWrap"></div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Total Orders</div>
+      <div id="ordStatTotal" style="font-size:28px;font-weight:800">—</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Completed</div>
+      <div id="ordStatCompleted" style="font-size:28px;font-weight:800;color:#22c55e">—</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Pending</div>
+      <div id="ordStatPending" style="font-size:28px;font-weight:800;color:#f59e0b">—</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Total Revenue</div>
+      <div id="ordStatRevenue" style="font-size:28px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">—</div>
+    </div>
+  </div>
 
-        <!-- Log Call Modal -->
-        <div id="callModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9002;backdrop-filter:blur(8px)" onclick="closeCallModalOnBg(event)">
-          <div id="callModalDrawer" style="position:absolute;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transform:translateX(100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1)">
-            <div style="padding:24px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--bg3)">
-              <div>
-                <div style="font-family:var(--font-h);font-weight:800;font-size:18px" id="callModalTitle">Log Strategy Call</div>
-                <div style="font-size:13px;color:var(--muted);margin-top:2px">Enter call details below</div>
-              </div>
-              <button onclick="closeCallModal()" style="width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center">✕</button>
-            </div>
-            <div style="flex:1;overflow-y:auto;padding:28px">
-              <input type="hidden" id="call_editId" value="" />
-              <div class="form-grid" style="margin-bottom:20px">
-                <div class="form-row" style="margin:0"><label>Full Name *</label><input type="text" id="call_name" placeholder="e.g. John Smith" /></div>
-                <div class="form-row" style="margin:0"><label>Email</label><input type="email" id="call_email" placeholder="e.g. john@email.com" /></div>
-              </div>
-              <div class="form-grid" style="margin-bottom:20px">
-                <div class="form-row" style="margin:0"><label>Phone</label><input type="text" id="call_phone" placeholder="e.g. +44 7700 000000" /></div>
-                <div class="form-row" style="margin:0"><label>Call Date</label><input type="date" id="call_date" /></div>
-              </div>
-              <div class="form-row"><label>Status</label>
-                <select id="call_status">
-                  <option value="booked">Booked</option>
-                  <option value="completed">Completed</option>
-                  <option value="no-show">No-Show</option>
-                </select>
-              </div>
-              <div class="form-row"><label>Notes</label><textarea id="call_notes" rows="4" placeholder="Call notes, outcome, follow-up actions…"></textarea></div>
-            </div>
-            <div style="padding:20px 28px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-shrink:0;background:var(--bg3)">
-              <button class="btn btn-ghost btn-sm" onclick="closeCallModal()">Cancel</button>
-              <button class="btn btn-primary" onclick="saveCall()">💾 Save Call</button>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+    <input type="text" id="ordSearchInput" placeholder="🔍 Search by order ref, product or user..." oninput="filterOrdersTable()"
+      style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;color:var(--text);font-size:14px;outline:none" />
+    <select id="ordStatusFilter" onchange="filterOrdersTable()" style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-size:14px;outline:none">
+      <option value="">All Status</option>
+      <option value="completed">Completed</option>
+      <option value="pending">Pending</option>
+      <option value="processing">Processing</option>
+      <option value="refunded">Refunded</option>
+    </select>
+    <button class="btn btn-ghost" onclick="loadOrdersPanel()" style="white-space:nowrap">↻ Refresh</button>
+  </div>
+
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr style="border-bottom:1px solid var(--border)">
+          <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Order Ref</th>
+          <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Customer</th>
+          <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Product</th>
+          <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Amount</th>
+          <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Method</th>
+          <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Status</th>
+          <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Date</th>
+          <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="ordersTableBody">
+        <tr><td colspan="8" style="padding:48px;text-align:center;color:var(--muted)">Loading orders...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+      <!-- ── STRATEGY CALL SUBMISSIONS ──────────────────────── -->
+      <div id="panel-submissions" class="panel">
+  <div class="panel-title">📋 Strategy Call Submissions</div>
+  <div class="panel-desc">All "Book Free Strategy Call" form submissions from landing page and marketplace.</div>
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+    <input type="text" id="subSearchInput" placeholder="🔍 Search by name or email..." oninput="filterSubmissions()"
+      style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;color:var(--text);font-size:14px;outline:none" />
+    <button class="btn btn-ghost" onclick="loadSubmissions()" style="white-space:nowrap">↻ Refresh</button>
+  </div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr style="border-bottom:1px solid var(--border)">
+          <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Name</th>
+          <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Email</th>
+          <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Phone</th>
+          <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Message</th>
+          <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Date</th>
+          <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Action</th>
+        </tr>
+      </thead>
+      <tbody id="submissionsTableBody">
+        <tr><td colspan="6" style="padding:48px;text-align:center;color:var(--muted)">Loading submissions...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
       <!-- ── USERS ───────────────────────────────────────────── -->
       <div id="panel-users" class="panel">
@@ -1336,14 +1462,49 @@
 
       <!-- ── ANALYTICS & REPORTS ────────────────────────────── -->
       <div id="panel-analytics" class="panel">
-        <div class="panel-title">📈 Analytics & Reports</div>
-        <div class="panel-desc">Deep-dive revenue insights, export reports in PDF or Excel.</div>
-        <div id="analyticsContent"></div>
-        <div style="display:flex;gap:12px;margin-top:24px">
-          <button class="btn btn-primary" onclick="exportPDF()">📄 Export PDF</button>
-          <button class="btn btn-ghost" onclick="exportExcel()">📊 Export Excel</button>
-        </div>
-      </div>
+  <div class="panel-title">📈 Analytics & Reports</div>
+  <div class="panel-desc">Complete business overview — revenue, users, products, monthly trends.</div>
+
+  <!-- Export Buttons -->
+  <div style="display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap">
+    <button class="btn btn-primary" onclick="exportAnalyticsPDF()">📄 Export PDF</button>
+    <button class="btn btn-ghost" onclick="exportAnalyticsExcel()">📊 Export Excel</button>
+    <button class="btn btn-ghost" onclick="loadAnalytics()">↻ Refresh</button>
+  </div>
+
+  <!-- KPI Cards -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px" id="analyticsKPIs">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px"><div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Total Revenue</div><div id="akpRevenue" style="font-size:28px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">—</div></div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px"><div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Total Orders</div><div id="akpOrders" style="font-size:28px;font-weight:800">—</div></div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px"><div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Registered Users</div><div id="akpUsers" style="font-size:28px;font-weight:800">—</div></div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px"><div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Avg Order Value</div><div id="akpAvg" style="font-size:28px;font-weight:800;color:#22c55e">—</div></div>
+  </div>
+
+  <!-- Charts row -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px">
+      <div style="font-size:15px;font-weight:700;margin-bottom:16px">📊 Monthly Revenue</div>
+      <canvas id="chartRevenue" height="200"></canvas>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px">
+      <div style="font-size:15px;font-weight:700;margin-bottom:16px">👥 New Users Per Month</div>
+      <canvas id="chartUsers" height="200"></canvas>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+    <!-- Top Products -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px">
+      <div style="font-size:15px;font-weight:700;margin-bottom:16px">🏆 Top Products by Revenue</div>
+      <div id="analyticsTopProducts"></div>
+    </div>
+    <!-- Order Status Breakdown -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px">
+      <div style="font-size:15px;font-weight:700;margin-bottom:16px">📋 Order Status Breakdown</div>
+      <canvas id="chartStatus" height="180"></canvas>
+    </div>
+  </div>
+</div>
 
       <!-- ── SETTINGS ────────────────────────────────────────── -->
       <div id="panel-settings" class="panel">
@@ -1502,13 +1663,15 @@ function showToast(msg, type = 'success') {
 
 // ─── NAV / PANELS ─────────────────────────────────────────────────────────────
 function showPanel(name) {
+  localStorage.setItem('admin_active_panel', name);
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   const panel = document.getElementById('panel-' + name);
   if (panel) panel.classList.add('active');
   document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.toggle('active', b.dataset.panel === name));
   const titles = {
     dashboard:'CEO Dashboard', users:'Users', pricing:'Plans & Pricing',
-    marketplace:'Marketplace', orders:'Orders & Transactions', calls:'Free Strategy Calls',
+    marketplace:'Marketplace', orders:'Orders & Transactions',
+    submissions:'Call Submissions',
     analytics:'Analytics & Reports', settings:'Settings',
     bankdetails:'Bank Details', theme:'Theme & Colors', seo:'SEO Settings',
     hero:'Hero Section', stats:'Stats Bar', story:'Founder Story', process:'How It Works',
@@ -1516,13 +1679,13 @@ function showPanel(name) {
     faq:'FAQ', cta:'CTA Section', footer:'Footer'
   };
   document.getElementById('panelTitle').textContent = titles[name] || name;
-  if (name === 'marketplace') populateMarketplace();
+  if (name === 'marketplace') { populateMarketplace(); loadCategoriesAdmin(); }
   if (name === 'bankdetails') populateBankDetails();
   if (name === 'pricing') { renderPricingPlanCards(_activePricingCycle); }
   if (name === 'dashboard') refreshDashboard();
-  if (name === 'orders') renderOrdersPanel();
-  if (name === 'calls') renderCallsPanel();
-  if (name === 'analytics') renderAnalyticsPanel();
+  if (name === 'orders') loadOrdersPanel();
+  if (name === 'analytics') loadAnalytics();
+  if (name === 'submissions') loadSubmissions();
 }
 
 function toggleSettingsMenu() {
@@ -1870,7 +2033,7 @@ function renderPricingPlanCards(cycle) {
           </div>
         </div>`).join('') + `</div>`;
 
-    if (plans.length < 3) {
+    if (plans.length < 6) {
       html += `<div style="margin-top:12px"><button class="btn btn-primary" onclick="openPlanModal(null)">＋ Add ${cycleLabel} Plan</button></div>`;
     }
   }
@@ -1881,10 +2044,15 @@ function openPlanModal(id) {
   _ppEditId = id;
   const overlay = document.getElementById('planModalOverlay');
   const drawer  = document.getElementById('planModalDrawer');
-  ['pp_name','pp_badge','pp_priceLabel','pp_period','pp_badgeColor','pp_cta','pp_desc','pp_features'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+  ['pp_name','pp_badge','pp_priceLabel','pp_period','pp_cta','pp_desc','pp_features'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
   document.getElementById('pp_highlighted').checked = false;
   document.getElementById('ppSaveStatus').textContent = '';
   document.getElementById('pp_billingCycle').value = _activePricingCycle || 'monthly';
+  document.getElementById('pp_badgeColor').value = '#22c55e';
+  _selectedPlanColor = '#22c55e';
+  document.querySelectorAll('#planColorPicker div').forEach(d => d.style.border = '3px solid transparent');
+  var firstSwatch = document.querySelector('#planColorPicker div[data-color="#22c55e"]');
+  if (firstSwatch) firstSwatch.style.border = '3px solid white';
   if (id !== null) {
     const p = loadPricingPlans().find(x=>x.id===id);
     if (p) {
@@ -1894,7 +2062,11 @@ function openPlanModal(id) {
       document.getElementById('pp_badge').value       = p.badge||'';
       document.getElementById('pp_priceLabel').value  = p.priceLabel||'';
       document.getElementById('pp_period').value      = p.period||'';
-      document.getElementById('pp_badgeColor').value  = p.badgeColor||'';
+      document.getElementById('pp_badgeColor').value  = p.badgeColor||'#22c55e';
+      _selectedPlanColor = p.badgeColor || '#22c55e';
+      document.querySelectorAll('#planColorPicker div').forEach(d => {
+        d.style.border = d.dataset.color === _selectedPlanColor ? '3px solid white' : '3px solid transparent';
+      });
       document.getElementById('pp_cta').value         = p.cta||'';
       document.getElementById('pp_desc').value        = p.description||'';
       document.getElementById('pp_features').value   = (p.features||[]).join('\n');
@@ -1934,7 +2106,7 @@ function savePricingPlan() {
   const billingCycle = document.getElementById('pp_billingCycle').value || _activePricingCycle || 'monthly';
   const plansForCycle = allPlans.filter(p => (p.billingCycle||'monthly') === billingCycle);
   const priceLabel = document.getElementById('pp_priceLabel').value.trim();
-  const badgeColor = document.getElementById('pp_badgeColor').value.trim() || '#6366f1';
+  const badgeColor = (typeof _selectedPlanColor !== 'undefined' && _selectedPlanColor) ? _selectedPlanColor : (document.getElementById('pp_badgeColor').value.trim() || '#6366f1');
   const plan = {
     id:          _ppEditId!==null ? _ppEditId : (allPlans.reduce((m,p)=>Math.max(m,p.id||0),0)+1),
     name, badge: document.getElementById('pp_badge').value.trim(),
@@ -1952,7 +2124,7 @@ function savePricingPlan() {
     const idx=allPlans.findIndex(p=>p.id===_ppEditId);
     if(idx!==-1) allPlans[idx]=plan; else allPlans.push(plan);
   } else {
-    if (plansForCycle.length>=3) { document.getElementById('ppSaveStatus').textContent='Max 3 plans per billing cycle'; document.getElementById('ppSaveStatus').style.color='var(--red)'; return; }
+    if (plansForCycle.length>=6) { document.getElementById('ppSaveStatus').textContent='Max 6 plans per billing cycle'; document.getElementById('ppSaveStatus').style.color='var(--red)'; return; }
     allPlans.push(plan);
   }
   localStorage.setItem('chrixlin_pricing', JSON.stringify(allPlans));
@@ -2305,11 +2477,18 @@ function openProductModal(id) {
   const status  = document.getElementById('pmSaveStatus');
 
   // Reset form
-  ['pm_emoji','pm_badge','pm_price','pm_title','pm_desc','pm_longdesc','pm_image','pm_ytid','pm_features','pm_hiw','pm_reviews','pm_screenshots'].forEach(id => {
-    const el = document.getElementById(id);
+  ['pm_emoji','pm_badge','pm_price','pm_title','pm_desc','pm_longdesc','pm_image','pm_ytid','pm_features','pm_hiw','pm_reviews','pm_screenshots'].forEach(fid => {
+    const el = document.getElementById(fid);
     if (el) el.value = '';
   });
   status.textContent = '';
+  // Reset image preview
+  var prevImg = document.getElementById('pm_imagePreviewImg');
+  var prevTxt = document.getElementById('pm_imagePreviewText');
+  var upStatus = document.getElementById('pm_imageUploadStatus');
+  if (prevImg) { prevImg.style.display='none'; prevImg.src=''; }
+  if (prevTxt) prevTxt.style.display='block';
+  if (upStatus) upStatus.textContent='';
 
   if (id !== null) {
     const p = (mpData.products || []).find(x => x.id === id);
@@ -2324,7 +2503,13 @@ function openProductModal(id) {
       document.getElementById('pm_desc').value        = p.desc || '';
       document.getElementById('pm_longdesc').value    = p.longDesc || p.desc || '';
       document.getElementById('pm_image').value       = p.image || '';
+      // Show existing image preview
+      if (p.image) {
+        if (prevImg) { prevImg.src = p.image; prevImg.style.display='block'; }
+        if (prevTxt) prevTxt.style.display='none';
+      }
       document.getElementById('pm_ytid').value        = p.ytId || '';
+      document.getElementById('pm_downloadUrl').value = p.downloadUrl || '';
       document.getElementById('pm_features').value   = (p.features || []).join('\n');
       document.getElementById('pm_hiw').value         = (p.howItWorks || []).map(s => `${s.title} | ${s.desc}`).join('\n');
       document.getElementById('pm_reviews').value     = (p.reviews || []).map(r => `${r.name} | ${r.role} | ${r.text} | ${r.rating || 5}`).join('\n');
@@ -2382,6 +2567,7 @@ function saveProduct() {
     longDesc:      document.getElementById('pm_longdesc').value.trim(),
     image:         document.getElementById('pm_image').value.trim(),
     ytId:          document.getElementById('pm_ytid').value.trim(),
+    downloadUrl:   document.getElementById('pm_downloadUrl').value.trim(),
     buyUrl:        'mailto:info@chrixlin.tech',
     features:      document.getElementById('pm_features').value.split('\n').map(f=>f.trim()).filter(Boolean),
     howItWorks:    document.getElementById('pm_hiw').value.split('\n').filter(l=>l.trim()).map(l=>{const[t,...d]=l.split('|');return{title:t.trim(),desc:d.join('|').trim()};}),
@@ -2538,10 +2724,23 @@ function refreshDashboard() {
   document.getElementById('kpi_totalRevenue').textContent      = '$'+totalRev.toLocaleString();
   document.getElementById('kpi_marketplaceSales').textContent  = '$'+mktSales.toLocaleString();
   document.getElementById('kpi_subRevenue').textContent        = '$'+subRev.toLocaleString();
-  document.getElementById('kpi_freeCalls').textContent         = callsFiltered.length;
   document.getElementById('kpi_totalPurchases').textContent    = filtered.length;
   document.getElementById('kpi_conversionRate').textContent    = convRate+'%';
   document.getElementById('kpi_activePlans').textContent       = plans.length;
+  // New dashboard widgets (loaded async from DB — set placeholder from local orders)
+  var purchasers = new Set(filtered.map(function(o){return o.user_id||o.email;})).size;
+  var pendingOrds = filtered.filter(function(o){return o.status==='pending'||o.status==='processing';}).length;
+  if (document.getElementById('dashPurchasingUsers')) document.getElementById('dashPurchasingUsers').textContent = purchasers || filtered.length;
+  if (document.getElementById('dashPendingOrders')) document.getElementById('dashPendingOrders').textContent = pendingOrds;
+  if (document.getElementById('dashOvPurchasers')) document.getElementById('dashOvPurchasers').textContent = purchasers || filtered.length;
+  if (document.getElementById('dashOvPending')) document.getElementById('dashOvPending').textContent = pendingOrds;
+  // Load registered users from DB if available
+  if (typeof ChrixlinDB !== 'undefined') {
+    ChrixlinDB.adminGetAllProfiles().then(function(profiles) {
+      if (document.getElementById('dashRegisteredUsers')) document.getElementById('dashRegisteredUsers').textContent = profiles.length;
+      if (document.getElementById('dashOvRegistered')) document.getElementById('dashOvRegistered').textContent = profiles.length;
+    }).catch(function(){});
+  }
 
   // Trending products
   const prodMap = {};
@@ -2557,11 +2756,7 @@ function refreshDashboard() {
     ? trending.map(([name,d])=>`<div class="dash-table-row"><span>${escHtml(name)}</span><span>${d.purchases}</span><span>$${d.revenue.toLocaleString()}</span></div>`).join('')
     : '<div style="color:var(--muted);padding:16px 0;font-size:13px">No orders yet</div>';
 
-  // Top plans
-  const planEl = document.getElementById('dash_topPlans');
-  planEl.innerHTML = plans.length
-    ? plans.map(p=>`<div class="dash-table-row"><span>${escHtml(p.name)}</span><span style="font-size:11px;color:var(--muted)">${escHtml(p.billingCycle||'one-time')}</span><span>${escHtml(p.priceLabel||p.price||'Free')}</span></div>`).join('')
-    : '<div style="color:var(--muted);padding:16px 0;font-size:13px">No plans yet</div>';
+  // (Top plans section replaced by Business Overview widget)
 
   // Sales distribution
   const monthly = filtered.filter(o=>o.billing_cycle==='monthly').length;
@@ -2874,7 +3069,15 @@ var _allUsers = [];
 var _allOrders = [];
 
 async function loadUsersPanel() {
-  if (typeof ChrixlinDB === 'undefined') return;
+  if (typeof ChrixlinDB === 'undefined') {
+    document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="6" style="padding:48px;text-align:center;color:var(--muted)">Database not initialized. Please refresh the page and log in.</td></tr>';
+    return;
+  }
+  var client = ChrixlinDB._getClient ? ChrixlinDB._getClient() : null;
+  if (!client) {
+    document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="6" style="padding:48px;text-align:center;color:#f59e0b">Please log in as admin to view users.</td></tr>';
+    return;
+  }
   document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="6" style="padding:48px;text-align:center;color:var(--muted)">Loading...</td></tr>';
   try {
     [_allUsers, _allOrders] = await Promise.all([
@@ -2993,16 +3196,329 @@ function closeUserModal() {
   document.getElementById('userDetailModal').style.display = 'none';
 }
 
-// Auto-load users when panel is shown
-document.addEventListener('DOMContentLoaded', function() {
-  // Patch showPanel to auto-load users when switching to users panel
-  var origFn = window.showPanel;
-  if (origFn) {
-    window.showPanel = function(panel) {
-      origFn(panel);
-      if (panel === 'users') { loadUsersPanel(); }
-    };
+// ─── ORDERS PANEL ─────────────────────────────────────────────────────────────
+var _allOrdersAdmin = [];
+async function loadOrdersPanel() {
+  if (typeof ChrixlinDB === 'undefined') return;
+  var client = ChrixlinDB._getClient ? ChrixlinDB._getClient() : null;
+  if (!client) {
+    document.getElementById('ordersTableBody').innerHTML = '<tr><td colspan="8" style="padding:48px;text-align:center;color:#f59e0b">Please log in as admin to view orders.</td></tr>';
+    return;
   }
+  document.getElementById('ordersTableBody').innerHTML = '<tr><td colspan="8" style="padding:48px;text-align:center;color:var(--muted)">Loading...</td></tr>';
+  try {
+    _allOrdersAdmin = await ChrixlinDB.adminGetAllOrders();
+    renderOrdersTable(_allOrdersAdmin);
+    var total = _allOrdersAdmin.length;
+    var completed = _allOrdersAdmin.filter(function(o){return o.status==='completed';}).length;
+    var pending = _allOrdersAdmin.filter(function(o){return o.status==='pending'||o.status==='processing';}).length;
+    var revenue = _allOrdersAdmin.reduce(function(s,o){return s+(parseFloat(o.amount)||0);},0);
+    document.getElementById('ordStatTotal').textContent = total;
+    document.getElementById('ordStatCompleted').textContent = completed;
+    document.getElementById('ordStatPending').textContent = pending;
+    document.getElementById('ordStatRevenue').textContent = '$'+revenue.toLocaleString('en-US',{minimumFractionDigits:0});
+  } catch(e) {
+    document.getElementById('ordersTableBody').innerHTML = '<tr><td colspan="8" style="padding:48px;text-align:center;color:#ef4444">Error loading orders.</td></tr>';
+  }
+}
+function renderOrdersTable(orders) {
+  var tbody = document.getElementById('ordersTableBody');
+  if (!orders.length) { tbody.innerHTML='<tr><td colspan="8" style="padding:48px;text-align:center;color:var(--muted)">No orders yet.</td></tr>'; return; }
+  var statusColors = {completed:'#22c55e',pending:'#f59e0b',processing:'#06b6d4',refunded:'#ef4444'};
+  tbody.innerHTML = orders.map(function(o) {
+    var sc = statusColors[o.status]||'#94a3b8';
+    var date = o.created_at ? new Date(o.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
+    return '<tr style="border-bottom:1px solid rgba(255,255,255,0.05)">' +
+      '<td style="padding:12px 16px;font-family:monospace;font-size:12px;color:#a78bfa">'+(o.order_ref||'—')+'</td>' +
+      '<td style="padding:12px 16px"><div style="font-weight:600;font-size:13px">'+(o.user_name||'Guest')+'</div><div style="font-size:11px;color:var(--muted)">'+(o.user_email||'')+'</div></td>' +
+      '<td style="padding:12px 16px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(o.product_title||'—')+'</td>' +
+      '<td style="padding:12px 16px;font-weight:700;color:#22c55e">$'+(parseFloat(o.amount)||0).toLocaleString()+'</td>' +
+      '<td style="padding:12px 16px;color:var(--muted);font-size:12px">'+(o.payment_method||'—')+'</td>' +
+      '<td style="padding:12px 16px"><span style="background:'+sc+'22;color:'+sc+';border:1px solid '+sc+'44;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase">'+(o.status||'pending')+'</span></td>' +
+      '<td style="padding:12px 16px;font-size:12px;color:var(--muted)">'+date+'</td>' +
+      '<td style="padding:12px 16px"><select onchange="updateOrderStatus(\''+o.id+'\',this.value)" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:5px 8px;color:var(--text);font-size:12px;cursor:pointer"><option value="" disabled selected>Change Status</option><option value="completed">✅ Completed</option><option value="processing">🔄 Processing</option><option value="pending">⏳ Pending</option><option value="refunded">↩ Refunded</option></select></td>' +
+    '</tr>';
+  }).join('');
+}
+function filterOrdersTable() {
+  var q = (document.getElementById('ordSearchInput').value||'').toLowerCase();
+  var sf = document.getElementById('ordStatusFilter').value;
+  renderOrdersTable(_allOrdersAdmin.filter(function(o) {
+    var matchQ = !q || (o.order_ref||'').toLowerCase().includes(q) || (o.product_title||'').toLowerCase().includes(q) || (o.user_name||'').toLowerCase().includes(q) || (o.user_email||'').toLowerCase().includes(q);
+    var matchS = !sf || o.status === sf;
+    return matchQ && matchS;
+  }));
+}
+async function updateOrderStatus(orderId, newStatus) {
+  if (!newStatus || typeof ChrixlinDB === 'undefined') return;
+  try {
+    var client = ChrixlinDB._getClient();
+    if (!client) return;
+    await client.from('customer_orders').update({status: newStatus}).eq('id', orderId);
+    await loadOrdersPanel();
+    showToast('Order status updated to ' + newStatus, 'success');
+  } catch(e) { showToast('Failed to update order status', 'error'); }
+}
+
+// ─── CATEGORIES ──────────────────────────────────────────────────────────────
+var _selectedCatColor = '#7c3aed';
+function selectCatColor(hex, el) {
+  _selectedCatColor = hex;
+  document.getElementById('cat_color').value = hex;
+  document.querySelectorAll('#catColorPicker div').forEach(function(d) { d.style.border = '3px solid transparent'; });
+  el.style.border = '3px solid white';
+}
+function openCategoryModal(cat) {
+  document.getElementById('cat_id').value = cat ? cat.id : '';
+  document.getElementById('cat_label').value = cat ? cat.label : '';
+  document.getElementById('cat_slug').value = cat ? cat.slug : '';
+  document.getElementById('cat_color').value = cat ? cat.color_hex : '#7c3aed';
+  document.getElementById('catModalTitle').textContent = cat ? 'Edit Category' : 'Add Category';
+  _selectedCatColor = cat ? cat.color_hex : '#7c3aed';
+  document.querySelectorAll('#catColorPicker div').forEach(function(d) {
+    d.style.border = d.dataset.color === _selectedCatColor ? '3px solid white' : '3px solid transparent';
+  });
+  document.getElementById('catModalOverlay').style.display = 'flex';
+}
+function closeCategoryModal() { document.getElementById('catModalOverlay').style.display = 'none'; }
+async function saveCategory() {
+  var label = document.getElementById('cat_label').value.trim();
+  var slug  = document.getElementById('cat_slug').value.trim().toLowerCase().replace(/\s+/g,'-');
+  var color = document.getElementById('cat_color').value || '#7c3aed';
+  var id    = document.getElementById('cat_id').value;
+  if (!label || !slug) { showToast('Label and slug are required','error'); return; }
+  var catObj = { label: label, slug: slug, color_hex: color, color_class: 'cat-'+slug.replace(/-/g,'_'), sort_order: 99, is_active: true };
+  if (id) catObj.id = parseInt(id);
+  if (typeof ChrixlinDB !== 'undefined' && ChrixlinDB.upsertCategory) {
+    var ok = await ChrixlinDB.upsertCategory(catObj);
+    if (ok) { closeCategoryModal(); loadCategoriesAdmin(); showToast('Category saved','success'); }
+    else showToast('Failed to save category','error');
+  } else {
+    closeCategoryModal();
+    showToast('Category saved (local only)','success');
+  }
+}
+async function loadCategoriesAdmin() {
+  var grid = document.getElementById('categoriesGrid');
+  if (!grid) return;
+  if (typeof ChrixlinDB === 'undefined' || !ChrixlinDB.loadCategories) {
+    grid.innerHTML='<div style="color:var(--muted);font-size:13px">Categories require DB connection.</div>';
+    return;
+  }
+  var cats = await ChrixlinDB.loadCategories();
+  if (!cats.length) { grid.innerHTML='<div style="color:var(--muted);font-size:13px">No categories yet.</div>'; return; }
+  grid.innerHTML = cats.map(function(c) {
+    var cJson = JSON.stringify(c).replace(/"/g,"'");
+    return '<div style="display:inline-flex;align-items:center;gap:8px;background:'+c.color_hex+'22;border:1px solid '+c.color_hex+'44;border-radius:20px;padding:6px 14px 6px 10px">' +
+      '<span style="color:'+c.color_hex+';font-size:13px;font-weight:700">'+c.label+'</span>' +
+      '<button onclick="openCategoryModal('+cJson+')" style="background:none;border:none;cursor:pointer;color:'+c.color_hex+';font-size:13px;opacity:0.7">✏</button>' +
+      '<button onclick="deleteCategoryAdmin('+c.id+')" style="background:none;border:none;cursor:pointer;color:#ef4444;font-size:13px;opacity:0.7">✕</button>' +
+    '</div>';
+  }).join('');
+}
+async function deleteCategoryAdmin(id) {
+  if (!confirm('Delete this category?')) return;
+  if (typeof ChrixlinDB !== 'undefined' && ChrixlinDB.deleteCategory) await ChrixlinDB.deleteCategory(id);
+  loadCategoriesAdmin();
+  showToast('Category deleted','success');
+}
+
+// ─── PLAN COLOR PICKER ────────────────────────────────────────────────────────
+var _selectedPlanColor = '#22c55e';
+function selectPlanColor(hex, el) {
+  _selectedPlanColor = hex;
+  document.getElementById('pp_badgeColor').value = hex;
+  document.querySelectorAll('#planColorPicker div').forEach(function(d) { d.style.border = '3px solid transparent'; });
+  el.style.border = '3px solid white';
+}
+
+// ─── DELETE PLAN ADMIN ────────────────────────────────────────────────────────
+async function deletePlanAdmin(id) {
+  if (!confirm('Delete this plan?')) return;
+  if (typeof ChrixlinDB !== 'undefined') await ChrixlinDB.deletePricingPlan(id).catch(function(){});
+  deletePricingPlan(id);
+}
+
+// ─── PRODUCT IMAGE UPLOAD ─────────────────────────────────────────────────────
+async function handleProductImageUpload(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var statusEl = document.getElementById('pm_imageUploadStatus');
+  var previewImg = document.getElementById('pm_imagePreviewImg');
+  var previewText = document.getElementById('pm_imagePreviewText');
+  statusEl.textContent = '⏳ Uploading...';
+  statusEl.style.color = '#f59e0b';
+  var reader = new FileReader();
+  reader.onload = function(e) { previewImg.src = e.target.result; previewImg.style.display='block'; previewText.style.display='none'; };
+  reader.readAsDataURL(file);
+  if (typeof ChrixlinDB !== 'undefined' && ChrixlinDB.uploadProductImage) {
+    var url = await ChrixlinDB.uploadProductImage(file);
+    if (url) {
+      document.getElementById('pm_image').value = url;
+      statusEl.textContent = '✅ Uploaded successfully';
+      statusEl.style.color = '#22c55e';
+    } else {
+      statusEl.textContent = '❌ Upload failed. Check Supabase Storage bucket.';
+      statusEl.style.color = '#ef4444';
+    }
+  } else {
+    statusEl.textContent = '⚠ Upload not available (DB not connected)';
+    statusEl.style.color = '#f59e0b';
+  }
+}
+
+// ─── SUBMISSIONS PANEL ────────────────────────────────────────────────────────
+var _allSubmissions = [];
+async function loadSubmissions() {
+  if (typeof ChrixlinDB === 'undefined') return;
+  document.getElementById('submissionsTableBody').innerHTML = '<tr><td colspan="6" style="padding:48px;text-align:center;color:var(--muted)">Loading...</td></tr>';
+  _allSubmissions = (typeof ChrixlinDB.getStrategyCallSubmissions === 'function') ? await ChrixlinDB.getStrategyCallSubmissions() : [];
+  renderSubmissionsTable(_allSubmissions);
+}
+function renderSubmissionsTable(subs) {
+  var tbody = document.getElementById('submissionsTableBody');
+  if (!subs.length) { tbody.innerHTML='<tr><td colspan="6" style="padding:48px;text-align:center;color:var(--muted)">No submissions yet.</td></tr>'; return; }
+  tbody.innerHTML = subs.map(function(s) {
+    var date = s.created_at ? new Date(s.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+    return '<tr style="border-bottom:1px solid rgba(255,255,255,0.05)">' +
+      '<td style="padding:12px 16px;font-weight:600">'+(s.name||'—')+'</td>' +
+      '<td style="padding:12px 16px;color:#a78bfa"><a href="mailto:'+(s.email||'')+'" style="color:#a78bfa">'+(s.email||'—')+'</a></td>' +
+      '<td style="padding:12px 16px;color:var(--muted)">'+(s.phone||'—')+'</td>' +
+      '<td style="padding:12px 16px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(s.message||'—')+'</td>' +
+      '<td style="padding:12px 16px;font-size:12px;color:var(--muted)">'+date+'</td>' +
+      '<td style="padding:12px 16px"><button onclick="deleteSubmission(\''+s.id+'\')" style="background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3);padding:5px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">Delete</button></td>' +
+    '</tr>';
+  }).join('');
+}
+function filterSubmissions() {
+  var q = (document.getElementById('subSearchInput').value||'').toLowerCase();
+  renderSubmissionsTable(!q ? _allSubmissions : _allSubmissions.filter(function(s){return (s.name||'').toLowerCase().includes(q)||(s.email||'').toLowerCase().includes(q);}));
+}
+async function deleteSubmission(id) {
+  if (!confirm('Delete this submission?')) return;
+  if (typeof ChrixlinDB !== 'undefined' && ChrixlinDB.deleteStrategyCallSubmission) await ChrixlinDB.deleteStrategyCallSubmission(id);
+  await loadSubmissions();
+  showToast('Submission deleted','success');
+}
+
+// ─── ANALYTICS ────────────────────────────────────────────────────────────────
+var _chartRevenue = null, _chartUsers = null, _chartStatus = null;
+async function loadAnalytics() {
+  if (typeof ChrixlinDB === 'undefined') return;
+  var client = ChrixlinDB._getClient ? ChrixlinDB._getClient() : null;
+  if (!client) {
+    document.getElementById('analyticsTopProducts').innerHTML = '<div style="color:#f59e0b;font-size:13px">Please log in to view analytics.</div>';
+    return;
+  }
+  try {
+    var results = await Promise.all([ChrixlinDB.adminGetAllOrders(), ChrixlinDB.adminGetAllProfiles()]);
+    var orders = results[0]; var profiles = results[1];
+    // KPIs
+    var totalRev = orders.reduce(function(s,o){return s+(parseFloat(o.amount)||0);},0);
+    var avgOrder = orders.length ? (totalRev/orders.length) : 0;
+    document.getElementById('akpRevenue').textContent = '$'+totalRev.toLocaleString('en-US',{minimumFractionDigits:0});
+    document.getElementById('akpOrders').textContent = orders.length;
+    document.getElementById('akpUsers').textContent = profiles.length;
+    document.getElementById('akpAvg').textContent = '$'+avgOrder.toFixed(0);
+    // Monthly revenue chart
+    var monthlyRev = {};
+    orders.forEach(function(o) {
+      var d = new Date(o.created_at||Date.now());
+      var key = d.getFullYear()+'-'+(d.getMonth()+1).toString().padStart(2,'0');
+      monthlyRev[key] = (monthlyRev[key]||0) + (parseFloat(o.amount)||0);
+    });
+    var revLabels = Object.keys(monthlyRev).sort().slice(-12);
+    var revData   = revLabels.map(function(k){return monthlyRev[k];});
+    if (_chartRevenue) _chartRevenue.destroy();
+    if (typeof Chart !== 'undefined') {
+      _chartRevenue = new Chart(document.getElementById('chartRevenue'), {
+        type:'bar', data:{ labels: revLabels, datasets:[{ label:'Revenue ($)', data: revData, backgroundColor:'rgba(124,58,237,0.7)', borderColor:'#7c3aed', borderWidth:2, borderRadius:6 }] },
+        options:{ responsive:true, plugins:{ legend:{ labels:{ color:'#94a3b8' } } }, scales:{ x:{ ticks:{ color:'#64748b' }, grid:{ color:'rgba(255,255,255,0.05)' } }, y:{ ticks:{ color:'#64748b', callback: function(v){return '$'+v.toLocaleString();} }, grid:{ color:'rgba(255,255,255,0.05)' } } } }
+      });
+    }
+    // Monthly users chart
+    var monthlyUsers = {};
+    profiles.forEach(function(p) {
+      var d = new Date(p.created_at||Date.now());
+      var key = d.getFullYear()+'-'+(d.getMonth()+1).toString().padStart(2,'0');
+      monthlyUsers[key] = (monthlyUsers[key]||0) + 1;
+    });
+    var usrLabels = Object.keys(monthlyUsers).sort().slice(-12);
+    var usrData   = usrLabels.map(function(k){return monthlyUsers[k];});
+    if (_chartUsers) _chartUsers.destroy();
+    if (typeof Chart !== 'undefined') {
+      _chartUsers = new Chart(document.getElementById('chartUsers'), {
+        type:'line', data:{ labels: usrLabels, datasets:[{ label:'New Users', data: usrData, borderColor:'#06b6d4', backgroundColor:'rgba(6,182,212,0.1)', borderWidth:2, fill:true, tension:0.4, pointBackgroundColor:'#06b6d4' }] },
+        options:{ responsive:true, plugins:{ legend:{ labels:{ color:'#94a3b8' } } }, scales:{ x:{ ticks:{ color:'#64748b' }, grid:{ color:'rgba(255,255,255,0.05)' } }, y:{ ticks:{ color:'#64748b' }, grid:{ color:'rgba(255,255,255,0.05)' } } } }
+      });
+    }
+    // Top products
+    var productRevs = {};
+    orders.forEach(function(o) { productRevs[o.product_title||'Unknown'] = (productRevs[o.product_title||'Unknown']||0) + (parseFloat(o.amount)||0); });
+    var topProds = Object.entries(productRevs).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
+    document.getElementById('analyticsTopProducts').innerHTML = topProds.length
+      ? topProds.map(function(p,i) { return '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06)"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:12px;font-weight:700;color:#64748b">#'+(i+1)+'</span><span style="font-size:13px">'+(p[0].length>28?p[0].substring(0,28)+'…':p[0])+'</span></div><span style="font-weight:700;color:#22c55e">$'+p[1].toLocaleString()+'</span></div>'; }).join('')
+      : '<div style="color:var(--muted);font-size:13px">No data yet.</div>';
+    // Order status donut
+    var statusCounts = {completed:0, pending:0, processing:0, refunded:0};
+    orders.forEach(function(o) { if(statusCounts[o.status]!==undefined) statusCounts[o.status]++; });
+    if (_chartStatus) _chartStatus.destroy();
+    if (typeof Chart !== 'undefined') {
+      _chartStatus = new Chart(document.getElementById('chartStatus'), {
+        type:'doughnut', data:{ labels:['Completed','Pending','Processing','Refunded'], datasets:[{ data: Object.values(statusCounts), backgroundColor:['#22c55e','#f59e0b','#06b6d4','#ef4444'], borderColor:'transparent', hoverOffset:8 }] },
+        options:{ responsive:true, plugins:{ legend:{ position:'bottom', labels:{ color:'#94a3b8', padding:16 } } } }
+      });
+    }
+  } catch(e) {
+    console.error('Analytics load error:', e);
+  }
+}
+
+async function exportAnalyticsPDF() {
+  if (typeof window.jspdf === 'undefined') { showToast('PDF library not loaded','error'); return; }
+  var jsPDF = window.jspdf.jsPDF;
+  var doc = new jsPDF();
+  doc.setFillColor(124,58,237);
+  doc.rect(0,0,210,35,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(20); doc.setFont('helvetica','bold');
+  doc.text('Chrixlin AI Rise — Analytics Report', 14, 20);
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.text('Generated: '+new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}), 14, 28);
+  var orders = _allOrdersAdmin || [];
+  var profiles = _allUsers || [];
+  var totalRev = orders.reduce(function(s,o){return s+(parseFloat(o.amount)||0);},0);
+  doc.setTextColor(30,30,30);
+  doc.setFontSize(13); doc.setFont('helvetica','bold');
+  doc.text('Key Metrics', 14, 50);
+  doc.autoTable({ startY:55, head:[['Metric','Value']], body:[['Total Revenue','$'+totalRev.toLocaleString()],['Total Orders',orders.length],['Registered Users',profiles.length],['Avg Order Value','$'+(orders.length?Math.round(totalRev/orders.length):0).toLocaleString()]], theme:'striped', headStyles:{fillColor:[124,58,237]}, styles:{fontSize:11} });
+  if (orders.length) {
+    doc.autoTable({ startY: doc.lastAutoTable.finalY+16, head:[['Order Ref','Product','User','Amount','Status','Date']], body: orders.slice(0,50).map(function(o){return [o.order_ref||'—',o.product_title||'—',o.user_name||'Guest','$'+(parseFloat(o.amount)||0).toLocaleString(),o.status||'pending',o.created_at?new Date(o.created_at).toLocaleDateString():'—'];}), theme:'striped', headStyles:{fillColor:[124,58,237]}, styles:{fontSize:9} });
+  }
+  doc.save('ChrixlinAIRise-Analytics-'+new Date().toISOString().split('T')[0]+'.pdf');
+}
+
+function exportAnalyticsExcel() {
+  if (typeof XLSX === 'undefined') { showToast('Excel library not loaded','error'); return; }
+  var orders = _allOrdersAdmin || [];
+  var profiles = _allUsers || [];
+  var wb = XLSX.utils.book_new();
+  var ordData = [['Order Ref','Product','Customer','Email','Amount','Method','Status','Date']].concat(orders.map(function(o){return [o.order_ref||'',o.product_title||'',o.user_name||'',o.user_email||'',parseFloat(o.amount)||0,o.payment_method||'',o.status||'',o.created_at?new Date(o.created_at).toLocaleDateString():''];}));
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(ordData), 'Orders');
+  var usrData = [['Name','Email','Phone','Joined']].concat(profiles.map(function(p){return [p.full_name||'',p.email||'',p.phone||'',p.created_at?new Date(p.created_at).toLocaleDateString():''];}));
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(usrData), 'Users');
+  XLSX.writeFile(wb, 'ChrixlinAIRise-Analytics-'+new Date().toISOString().split('T')[0]+'.xlsx');
+}
+
+// Auto-load panels on switch
+document.addEventListener('DOMContentLoaded', function() {
+  // Restore last active panel on page load
+  (function() {
+    var lastPanel = localStorage.getItem('admin_active_panel');
+    if (lastPanel && document.getElementById('panel-' + lastPanel)) {
+      showPanel(lastPanel);
+    }
+  })();
 });
 </script>
 </body>

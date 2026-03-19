@@ -72,17 +72,6 @@
     .mobile-menu a { font-family: var(--font-h); font-size: 22px; font-weight: 700; color: var(--c-sub); }
     .mobile-close { position: absolute; top: 24px; right: 24px; font-size: 30px; cursor: pointer; color: var(--c-muted); background: none; border: none; }
 
-    /* ─── PAGE HEADER ─────────────────────────────────────── */
-    .mp-page-header {
-      padding: 110px 0 40px;
-      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(124,58,237,0.18) 0%, transparent 70%), var(--c-bg);
-      border-bottom: 1px solid var(--c-border);
-    }
-    .mp-page-header-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-    .mp-page-title { font-family: var(--font-h); font-size: clamp(32px,4vw,52px); font-weight: 900; line-height: 1.1; margin-bottom: 10px; }
-    .mp-page-sub { font-size: 16px; color: var(--c-sub); max-width: 480px; line-height: 1.6; }
-    .mp-page-actions { flex-shrink: 0; }
-
     /* ─── CATEGORY TABS ───────────────────────────────────── */
     #products { padding: 60px 0 80px; isolation: isolate; background: #070712; }
     .products-header { text-align: center; margin-bottom: 40px; }
@@ -186,7 +175,6 @@
       .nav-links, .nav-cta { display: none; }
       .nav-toggle { display: flex; }
       .products-grid { grid-template-columns: 1fr; }
-      .mp-page-header-inner { flex-direction: column; align-items: flex-start; }
       .footer-grid { grid-template-columns: 1fr; }
       .footer-bottom { flex-direction: column; text-align: center; }
     }
@@ -225,22 +213,6 @@
   <a href="index.html#faq" onclick="closeMobile()">FAQ</a>
   <a href="auth.html" id="mobileAuthBtn" onclick="closeMobile()" style="color:#a78bfa;">Sign In</a>
   <a href="#book-call" class="btn btn-primary" onclick="closeMobile()">Book Free Call</a>
-</div>
-
-<!-- PAGE HEADER -->
-<div class="mp-page-header">
-  <div class="container">
-    <div class="mp-page-header-inner">
-      <div>
-        <div class="badge" style="margin-bottom:12px">🤖 Available Now</div>
-        <h1 class="mp-page-title">AI Bot <span class="text-grad">Marketplace</span></h1>
-        <p class="mp-page-sub">Ready-to-deploy AI systems. Buy and go live in 48 hours — or book a call for a custom build.</p>
-      </div>
-      <div class="mp-page-actions">
-        <a href="mailto:info@chrixlin.tech?subject=Custom%20AI%20Build%20Request" class="btn btn-primary">📞 Book a Custom Build</a>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- PRODUCTS -->
@@ -532,12 +504,12 @@ function buildCategoryTabs() {
   const tabs = document.getElementById('categoryTabs');
   const usedCats = [...new Set(mp.products.map(p => p.category))];
   const catBtns = CATEGORIES.filter(c => usedCats.includes(c.key)).map(c =>
-    `<button class="cat-tab" data-cat="${c.key}" onclick="filterProducts('${c.key}')">${c.label}</button>`
+    `<button class="cat-tab" data-cat="${c.key}" onclick="filterProducts('${c.key}', this)">${c.label}</button>`
   ).join('');
-  tabs.innerHTML = `<button class="cat-tab active" data-cat="all" onclick="filterProducts('all')">All Products</button>${catBtns}`;
+  tabs.innerHTML = `<button class="cat-tab active" data-cat="all" onclick="filterProducts('all', this)">All Products</button>${catBtns}`;
 }
 
-function filterProducts(cat) {
+function filterProducts(cat, btnEl) {
   currentCat = cat;
   document.querySelectorAll('.cat-tab').forEach(t => t.classList.toggle('active', t.dataset.cat === cat));
   document.querySelectorAll('.product-card').forEach(card => {
@@ -625,13 +597,32 @@ function closeMobile() { document.getElementById('mobileMenu').classList.remove(
 <script>
 (async function() {
   try {
+    // Load categories from DB
+    const cats = await ChrixlinDB.loadCategories();
+    if (cats && cats.length) {
+      // Rebuild category tabs with DB categories
+      const tabsEl = document.getElementById('categoryTabs');
+      if (tabsEl) {
+        tabsEl.innerHTML = '<button class="cat-tab active" data-cat="all" onclick="filterProducts(\'all\', this)">All Products</button>' +
+          cats.map(c => `<button class="cat-tab" data-cat="${c.slug}" onclick="filterProducts('${c.slug}', this)">${c.label}</button>`).join('');
+      }
+      // Also add category CSS dynamically for any custom categories
+      cats.forEach(c => {
+        if (!document.querySelector('.cat-' + c.slug.replace(/-/g,'_'))) {
+          const style = document.createElement('style');
+          style.textContent = `.cat-${c.slug.replace(/-/g,'_')} { background: ${c.color_hex}22; color: ${c.color_hex}; border: 1px solid ${c.color_hex}44; }`;
+          document.head.appendChild(style);
+        }
+      });
+    }
+    // Load products from DB
     const products = await ChrixlinDB.loadAllProducts();
     if (products && products.length) {
       mp.products = products;
       renderProducts();
       setTimeout(_runAnimations, 50);
     }
-  } catch(e) {}
+  } catch(e) { console.warn('Marketplace load error:', e); }
 
   // Update auth nav button based on session
   try {
