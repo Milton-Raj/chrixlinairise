@@ -894,10 +894,12 @@ var _ppButtons    = null;
     if (window.location.protocol !== 'https:') return; // skip on HTTP/localhost
     var ppCfg = (JSON.parse(localStorage.getItem('chrixlin_gateways') || '{}').paypal) || {};
     if (!ppCfg.enabled || !ppCfg.g_pp_clientId) return;
-    var cur = (ppCfg.g_pp_currency || 'USD').toUpperCase();
+    var cur      = (ppCfg.g_pp_currency || 'USD').toUpperCase();
+    var isSandbox = (ppCfg.g_pp_mode || '').trim().toLowerCase() === 'sandbox';
+    var sdkBase  = isSandbox ? 'https://www.sandbox.paypal.com/sdk/js' : 'https://www.paypal.com/sdk/js';
     _ppSdkLoading = true;
     var s = document.createElement('script');
-    s.src = 'https://www.paypal.com/sdk/js?client-id=' + encodeURIComponent(ppCfg.g_pp_clientId)
+    s.src = sdkBase + '?client-id=' + encodeURIComponent(ppCfg.g_pp_clientId)
       + '&currency=' + cur
       + '&intent=capture'
       + '&enable-funding=venmo,card,applepay,googlepay,paylater'
@@ -908,10 +910,10 @@ var _ppButtons    = null;
   } catch(e) {}
 })();
 
-function loadPayPalSDK(clientId, currency) {
+function loadPayPalSDK(clientId, currency, sandbox) {
   return new Promise(function(resolve, reject) {
     // PayPal Live SDK requires HTTPS — reject immediately on HTTP
-    if (window.location.protocol !== 'https:') { reject(new Error('HTTPS required')); return; }
+    if (window.location.protocol !== 'https:') { reject(new Error('HTTPS required — PayPal SDK only works on HTTPS')); return; }
     // Already loaded
     if (window.paypal) { _ppSdkLoaded = true; resolve(); return; }
     // Already loading — poll until ready (up to 10s)
@@ -920,7 +922,7 @@ function loadPayPalSDK(clientId, currency) {
       var iv = setInterval(function() {
         waited += 200;
         if (window.paypal) { clearInterval(iv); _ppSdkLoaded = true; _ppSdkLoading = false; resolve(); }
-        else if (waited > 10000) { clearInterval(iv); reject(new Error('PayPal SDK timed out')); }
+        else if (waited > 10000) { clearInterval(iv); reject(new Error('PayPal SDK timed out after 10s')); }
       }, 200);
       return;
     }
@@ -928,26 +930,32 @@ function loadPayPalSDK(clientId, currency) {
     _ppSdkLoading = true;
     var old = document.querySelector('script[src*="paypal.com/sdk/js"]');
     if (old) old.remove();
-    var cur = (currency || 'USD').toUpperCase();
-    var script = document.createElement('script');
-    script.src = 'https://www.paypal.com/sdk/js?client-id=' + encodeURIComponent(clientId)
+    var cur     = (currency || 'USD').toUpperCase();
+    var sdkBase = sandbox ? 'https://www.sandbox.paypal.com/sdk/js' : 'https://www.paypal.com/sdk/js';
+    var script  = document.createElement('script');
+    script.src  = sdkBase + '?client-id=' + encodeURIComponent(clientId)
       + '&currency=' + cur
       + '&intent=capture'
       + '&enable-funding=venmo,card,applepay,googlepay,paylater'
       + '&components=buttons';
     script.onload  = function() { _ppSdkLoaded = true; _ppSdkLoading = false; resolve(); };
-    script.onerror = function() { _ppSdkLoading = false; reject(new Error('PayPal SDK failed to load')); };
+    script.onerror = function() { _ppSdkLoading = false; reject(new Error('PayPal SDK script failed to load — check Client ID and Mode (live vs sandbox)')); };
     document.head.appendChild(script);
   });
 }
 
-function _doRenderPayPalButtons(currency, amount) {
+function _doRenderPayPalButtons(currency, amount, ppGw) {
   var loadEl = document.getElementById('pp-loading-msg');
   var errEl  = document.getElementById('pp-error-msg');
   var btnEl  = document.getElementById('paypal-button-container');
   if (loadEl) loadEl.style.display = 'none';
   if (errEl)  errEl.style.display  = 'none';
   if (btnEl)  btnEl.innerHTML = '';
+
+  if (!window.paypal || !window.paypal.Buttons) {
+    _showPayPalManualFallback(ppGw || getGatewayCfg('paypal'), loadEl, errEl, btnEl);
+    return;
+  }
 
   paypal.Buttons({
     style: { layout:'vertical', color:'gold', shape:'rect', label:'paypal', height:48 },
@@ -961,10 +969,14 @@ function _doRenderPayPalButtons(currency, amount) {
       if (btnEl) btnEl.innerHTML = '';
       return actions.order.capture().then(function(details) { handlePayPalSuccess(details); });
     },
-    onError:  function(err) { console.error('PayPal:', err); if(errEl){errEl.textContent='⚠️ Payment declined. Please try again or use another method.';errEl.style.display='';} },
+    onError: function(err) {
+      console.error('PayPal onError:', err);
+      _showPayPalManualFallback(ppGw || getGatewayCfg('paypal'), loadEl, errEl, btnEl);
+    },
     onCancel: function() {}
-  }).render('#paypal-button-container').catch(function() {
-    if (errEl) { errEl.innerHTML='⚠️ Could not render PayPal buttons. <a href="#" onclick="renderPayPalButtons();return false" style="color:#a78bfa">Retry</a>'; errEl.style.display=''; }
+  }).render('#paypal-button-container').catch(function(err) {
+    console.error('PayPal render failed:', err);
+    _showPayPalManualFallback(ppGw || getGatewayCfg('paypal'), loadEl, errEl, btnEl);
   });
 }
 
@@ -990,18 +1002,21 @@ function renderPayPalButtons() {
   if (errEl)   errEl.style.display  = 'none';
   if (btnEl)   btnEl.innerHTML = '';
 
-  var currency = (ppGw.g_pp_currency || 'USD').toUpperCase();
-  var p        = _pricing;
-  var amount   = (p && p.total > 0 ? p.total : (parseFloat(String(product.price||'0').replace(/[^0-9.]/g,''))||0)).toFixed(2);
+  var currency  = (ppGw.g_pp_currency || 'USD').toUpperCase();
+  var isSandbox = (ppGw.g_pp_mode || '').trim().toLowerCase() === 'sandbox';
+  var p         = _pricing;
+  var amount    = (p && p.total > 0 ? p.total : (parseFloat(String(product.price||'0').replace(/[^0-9.]/g,''))||0)).toFixed(2);
 
   // If SDK already loaded, render immediately
-  if (window.paypal) { _doRenderPayPalButtons(currency, amount); return; }
+  if (window.paypal) { _doRenderPayPalButtons(currency, amount, ppGw); return; }
 
   // Otherwise load SDK then render
-  loadPayPalSDK(clientId, currency).then(function() {
-    _doRenderPayPalButtons(currency, amount);
-  }).catch(function() {
-    // SDK failed (likely HTTP/localhost restriction) — show PayPal.me fallback
+  loadPayPalSDK(clientId, currency, isSandbox).then(function() {
+    _doRenderPayPalButtons(currency, amount, ppGw);
+  }).catch(function(err) {
+    // SDK failed — show manual fallback with error hint
+    var hint = (err && err.message) ? err.message : 'SDK failed to load';
+    if (errEl) { errEl.dataset.ppErr = hint; }
     _showPayPalManualFallback(ppGw, loadEl, errEl, btnEl);
   });
 }
