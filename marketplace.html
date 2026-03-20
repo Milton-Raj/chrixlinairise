@@ -536,7 +536,6 @@ function renderProducts() {
     <a class="product-card animate-in visible" href="product.html?slug=${p.slug || p.id}" data-category="${p.category}" style="animation-delay:${(i%3)*0.1}s">
       <div class="product-thumbnail ${tc}">
         ${imgTag}
-        <div class="product-thumb-emoji">${p.emoji || '🤖'}</div>
         ${p.badge ? `<div class="product-thumb-badge">⚡ ${p.badge}</div>` : ''}
       </div>
       <div class="product-top">

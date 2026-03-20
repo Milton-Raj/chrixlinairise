@@ -631,7 +631,13 @@ if (!product) {
   }
 
   // Screenshots
-  const shots = product.screenshots || [];
+  // Parse screenshots — may be array, JSON string, or newline-separated URLs
+  let shots = product.screenshots || [];
+  if (typeof shots === 'string') {
+    const t = shots.trim();
+    if (t.startsWith('[')) { try { shots = JSON.parse(t); } catch(e) { shots = []; } }
+    else { shots = t.split('\n').map(u => u.trim()).filter(Boolean); }
+  }
   const sgrid = document.getElementById('screenshotsGrid');
   const PLACEHOLDERS = SCREENSHOT_PLACEHOLDERS;
   sgrid.innerHTML = (shots.length > 0 ? shots : PLACEHOLDERS).map(s => {
@@ -687,17 +693,20 @@ if (!product) {
 // ─── BUY NOW ──────────────────────────────────────────────────────────────────
 async function goToPayment(e) {
   e.preventDefault();
+  // Use actual product ID (works for both ?id= and ?slug= based URLs)
+  const actualId = (product && product.id) ? product.id : productId;
+  const actualSlug = (product && product.slug) ? product.slug : productSlug;
+  const payUrl = `payment.html?product=${actualId}&slug=${actualSlug || ''}`;
   try {
     const session = await ChrixlinDB.getCustomerSession();
     if (session) {
-      window.location.href = `payment.html?product=${productId}`;
+      window.location.href = payUrl;
     } else {
-      const encoded = encodeURIComponent(`payment.html?product=${productId}`);
+      const encoded = encodeURIComponent(payUrl);
       window.location.href = `auth.html?next=${encoded}`;
     }
   } catch (err) {
-    // Fallback: go to payment directly
-    window.location.href = `payment.html?product=${productId}`;
+    window.location.href = payUrl;
   }
 }
 

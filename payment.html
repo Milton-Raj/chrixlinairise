@@ -487,23 +487,32 @@ function loadBankDetails() {
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 const params = new URLSearchParams(window.location.search);
-// Support both ?product=X (new auth flow) and ?id=X (legacy)
-const pid = parseInt(params.get('product') || params.get('id')) || 1;
-const product = getProduct(pid);
+const pid = parseInt(params.get('product') || params.get('id')) || null;
+const pslug = params.get('slug') || '';
+const product = pid ? getProduct(pid) : (getProduct(1));
 const bankCfg = loadBankDetails();
 
-// Load product from Supabase if available (non-blocking)
+// Load product from Supabase — match by id OR slug
 (async function loadProductFromDB() {
   if (typeof ChrixlinDB !== 'undefined') {
     try {
       const products = await ChrixlinDB.loadAllProducts();
-      const dbProduct = products.find(p => p.id === pid);
+      const slugify = s => (s||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+      const dbProduct = products.find(p =>
+        (pid && p.id === pid) ||
+        (pslug && (p.slug === pslug || slugify(p.title) === pslug))
+      );
       if (dbProduct) {
-        // Update order summary with fresh DB data
+        // Patch module-level product reference so order submission uses correct product
+        Object.assign(product, dbProduct);
         const thumbClass2 = { 'voice-ai':'cat-thumb-voice-ai','sales':'cat-thumb-sales','content':'cat-thumb-content','lead':'cat-thumb-lead','automation':'cat-thumb-automation' };
         const tc2 = thumbClass2[dbProduct.category] || 'cat-thumb-voice-ai';
         const thumbEl2 = document.getElementById('orderThumb');
-        thumbEl2.textContent = dbProduct.emoji || '🤖';
+        if (dbProduct.image) {
+          thumbEl2.innerHTML = `<img src="${dbProduct.image}" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`;
+        } else {
+          thumbEl2.textContent = dbProduct.emoji || '🤖';
+        }
         thumbEl2.className = `order-product-thumb ${tc2}`;
         document.getElementById('orderName').textContent = dbProduct.title;
         document.getElementById('orderCat').textContent = dbProduct.categoryLabel;
@@ -680,11 +689,21 @@ function handleSubmit() {
       if (session) {
         const numericAmount = parseFloat(String(product.price || '0').replace(/[^0-9.]/g, '')) || 0;
         return ChrixlinDB.createCustomerOrder({
-          productId:     pid,
+          productId:     product.id || pid,
           productTitle:  product.title,
           productPrice:  product.price,
           paymentMethod: activeMethod,
           amount:        numericAmount,
+          billingDetails: {
+            firstName:  document.getElementById('firstName').value.trim(),
+            lastName:   document.getElementById('lastName').value.trim(),
+            email:      document.getElementById('email').value.trim(),
+            phone:      document.getElementById('phone').value.trim(),
+            country:    document.getElementById('country').value.trim(),
+            address:    document.getElementById('address').value.trim(),
+            city:       document.getElementById('city').value.trim(),
+            postcode:   (document.getElementById('postcode')||{}).value || '',
+          }
         });
       }
     }).catch(() => {});

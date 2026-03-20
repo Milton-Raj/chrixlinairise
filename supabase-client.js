@@ -394,6 +394,7 @@
         amount:         numericAmount,
         status:         'completed',
         download_url:   productDownloadUrl || '',
+        billing_details: JSON.stringify(orderData.billingDetails || {}),
       }).select('id').single();
       if (error) throw error;
       return { success: true, orderId: data.id, orderRef };
