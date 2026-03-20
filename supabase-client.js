@@ -317,6 +317,19 @@
       password,
       options: { data: { full_name: fullName } },
     });
+    // Immediately write profile row so admin panel can see the user
+    if (!error && data?.user) {
+      try {
+        await client.from('profiles').upsert({
+          id: data.user.id,
+          email: email || '',
+          full_name: fullName || '',
+          phone: '',
+          avatar_url: '',
+          created_at: new Date().toISOString(),
+        }, { onConflict: 'id' });
+      } catch (e) { console.warn('[ChrixlinDB] Profile upsert after signup failed:', e); }
+    }
     return { user: data?.user || null, session: data?.session || null, error };
   }
 
@@ -439,15 +452,36 @@
     } catch (err) { console.warn('[ChrixlinDB] upsertMyProfile() failed.', err); return false; }
   }
 
-  // Admin: get all profiles with order counts (calls SECURITY DEFINER function)
+  // Admin: get all profiles (tries RPC first, falls back to direct table query)
   async function adminGetAllProfiles() {
     const client = _getClient();
     if (!client) return [];
+    // Try SECURITY DEFINER RPC first
     try {
       const { data, error } = await client.rpc('get_all_profiles');
+      if (!error && data) return data;
+    } catch (e) {}
+    // Fallback: direct profiles table query (works if admin has SELECT access)
+    try {
+      const { data, error } = await client.from('profiles')
+        .select('id, email, full_name, phone, avatar_url, created_at')
+        .order('created_at', { ascending: false });
       if (error) throw error;
-      return data || [];
-    } catch (err) { console.warn('[ChrixlinDB] adminGetAllProfiles() failed.', err); return []; }
+      return (data || []).map(function(p) {
+        return {
+          id: p.id,
+          email: p.email || '',
+          full_name: p.full_name || '',
+          phone: p.phone || '',
+          avatar_url: p.avatar_url || '',
+          created_at: p.created_at || '',
+          order_count: 0,
+        };
+      });
+    } catch (err) {
+      console.warn('[ChrixlinDB] adminGetAllProfiles() failed.', err);
+      return [];
+    }
   }
 
   // Admin: get all orders with user info (calls SECURITY DEFINER function)
