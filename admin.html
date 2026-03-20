@@ -758,7 +758,7 @@
 
       <!-- ── PLAN MODAL ─────────────────────────────────────── -->
       <div id="planModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9001;backdrop-filter:blur(8px)" onclick="closePlanModalOnBg(event)">
-        <div id="planModalDrawer" style="position:absolute;top:0;right:0;bottom:0;width:min(640px,100%);background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transform:translateX(100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1)">
+        <div id="planModalDrawer" style="position:relative;margin:auto;width:min(680px,96%);max-height:92vh;background:var(--bg2);border:1px solid var(--border);border-radius:20px;display:flex;flex-direction:column;overflow:hidden;transform:scale(0.95);opacity:0;transition:transform 0.25s ease,opacity 0.25s ease">
           <div style="padding:24px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--bg3)">
             <div>
               <div style="font-family:var(--font-h);font-weight:800;font-size:18px" id="planModalTitle">Add Pricing Plan</div>
@@ -1141,7 +1141,7 @@
 
       <!-- ── PRODUCT MODAL ─────────────────────────────────── -->
       <div id="productModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9000;backdrop-filter:blur(8px)" onclick="closeProductModalOnBg(event)">
-        <div id="productModalDrawer" style="position:absolute;top:0;right:0;bottom:0;width:min(720px,100%);background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transform:translateX(100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1)">
+        <div id="productModalDrawer" style="position:relative;margin:auto;width:min(820px,96%);max-height:92vh;background:var(--bg2);border:1px solid var(--border);border-radius:20px;display:flex;flex-direction:column;overflow:hidden;transform:scale(0.95);opacity:0;transition:transform 0.25s ease,opacity 0.25s ease">
           <!-- Modal Header -->
           <div style="padding:24px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--bg3)">
             <div>
@@ -1154,12 +1154,8 @@
           <!-- Modal Body (scrollable) -->
           <div style="flex:1;overflow-y:auto;padding:28px">
 
-            <!-- Row: Emoji + Badge + Category + Price -->
-            <div style="display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:14px;margin-bottom:20px;align-items:start">
-              <div class="form-row" style="margin:0">
-                <label>Icon</label>
-                <input type="text" id="pm_emoji" placeholder="🤖" style="text-align:center;font-size:24px" />
-              </div>
+            <!-- Row: Badge + Category + Price -->
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;align-items:start">
               <div class="form-row" style="margin:0">
                 <label>Badge</label>
                 <input type="text" id="pm_badge" placeholder="e.g. Bestseller" />
@@ -1179,6 +1175,7 @@
                 <input type="text" id="pm_price" placeholder="e.g. $1,499" />
               </div>
             </div>
+<input type="hidden" id="pm_emoji" value="🤖" />
 
             <div class="form-row"><label>Product Title *</label><input type="text" id="pm_title" placeholder="e.g. Voice AI Appointment Agent" /></div>
             <div class="form-row"><label>Short Description (shown on product card)</label><textarea id="pm_desc" rows="2"></textarea></div>
@@ -1195,7 +1192,7 @@
                 <input type="hidden" id="pm_image" />
                 <div id="pm_imageUploadStatus" style="font-size:12px;color:var(--muted)"></div>
               </div>
-              <div class="form-row"><label>YouTube Video ID (product page)</label><input type="text" id="pm_ytid" placeholder="e.g. dQw4w9WgXcQ" /><div class="input-hint">The ID after ?v= in the YouTube URL</div></div>
+              <div class="form-row"><label>YouTube Video URL or ID</label><input type="text" id="pm_ytid" placeholder="e.g. https://youtu.be/dQw4w9WgXcQ or dQw4w9WgXcQ" oninput="normalizeYtId(this)" /><div class="input-hint">Paste the full YouTube URL or just the video ID</div></div>
               <div class="form-row"><label>Download URL <span style="font-weight:400;color:var(--muted)">(link shown to customer after purchase)</span></label><input type="text" id="pm_downloadUrl" placeholder="e.g. https://drive.google.com/file/..." /><div class="input-hint">Google Drive, Dropbox, or any direct download link</div></div>
             </div>
 
@@ -1218,8 +1215,20 @@
             </div>
 
             <div class="form-row">
-              <label>Screenshot URLs <span style="font-weight:400;color:var(--muted)">(one URL per line — leave blank to use placeholders)</span></label>
-              <textarea id="pm_screenshots" rows="3" placeholder="https://yoursite.com/screenshot1.jpg&#10;https://yoursite.com/screenshot2.jpg"></textarea>
+              <label>More Screenshots <span style="font-weight:400;color:var(--muted)">(upload multiple images)</span></label>
+              <div id="pm_screenshotDropzone" onclick="document.getElementById('pm_screenshotFiles').click()"
+                style="border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;cursor:pointer;margin-bottom:10px;transition:border-color 0.2s"
+                ondragover="event.preventDefault();this.style.borderColor='#7c3aed'"
+                ondragleave="this.style.borderColor=''"
+                ondrop="handleScreenshotDrop(event)">
+                <div style="font-size:28px;margin-bottom:6px">🖼️</div>
+                <div style="font-size:13px;color:var(--muted)">Click or drag &amp; drop up to 6 screenshots</div>
+                <div style="font-size:11px;color:var(--muted);margin-top:4px">JPG, PNG, WebP · Max 5MB each</div>
+              </div>
+              <input type="file" id="pm_screenshotFiles" accept="image/*" multiple style="display:none" onchange="handleScreenshotUpload(this.files)" />
+              <div id="pm_screenshotPreviews" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px"></div>
+              <div id="pm_screenshotStatus" style="font-size:12px;color:var(--muted)"></div>
+              <textarea id="pm_screenshots" style="display:none"></textarea>
             </div>
 
           </div><!-- /modal body -->
@@ -2073,15 +2082,18 @@ function openPlanModal(id) {
     document.getElementById('planModalTitle').textContent = 'Add Pricing Plan';
     document.getElementById('planModalSub').textContent = 'Configure the plan details below';
   }
-  overlay.style.display = 'block';
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{ drawer.style.transform='translateX(0)'; }));
+  overlay.style.display = 'flex';
+  overlay.style.alignItems = 'center';
+  overlay.style.justifyContent = 'center';
+  setTimeout(() => { drawer.style.transform = 'scale(1)'; drawer.style.opacity = '1'; }, 10);
   document.body.style.overflow = 'hidden';
 }
 
 function closePlanModal() {
   const drawer = document.getElementById('planModalDrawer');
-  drawer.style.transform = 'translateX(100%)';
-  setTimeout(()=>{ document.getElementById('planModalOverlay').style.display='none'; }, 300);
+  drawer.style.transform = 'scale(0.95)';
+  drawer.style.opacity = '0';
+  setTimeout(()=>{ document.getElementById('planModalOverlay').style.display='none'; }, 250);
   document.body.style.overflow = '';
 }
 
@@ -2485,6 +2497,8 @@ function openProductModal(id) {
   if (prevImg) { prevImg.style.display='none'; prevImg.src=''; }
   if (prevTxt) prevTxt.style.display='block';
   if (upStatus) upStatus.textContent='';
+  document.getElementById('pm_screenshotPreviews').innerHTML = '';
+  document.getElementById('pm_screenshotStatus').textContent = '';
 
   if (id !== null) {
     const p = (mpData.products || []).find(x => x.id === id);
@@ -2509,7 +2523,11 @@ function openProductModal(id) {
       document.getElementById('pm_features').value   = (p.features || []).join('\n');
       document.getElementById('pm_hiw').value         = (p.howItWorks || []).map(s => `${s.title} | ${s.desc}`).join('\n');
       document.getElementById('pm_reviews').value     = (p.reviews || []).map(r => `${r.name} | ${r.role} | ${r.text} | ${r.rating || 5}`).join('\n');
-      document.getElementById('pm_screenshots').value = (p.screenshots || []).join('\n');
+      // Render screenshot previews from saved data
+      var shots = p.screenshots || [];
+      if (typeof shots === 'string') { try { shots = JSON.parse(shots); } catch(e) { shots = shots.split('\n').filter(Boolean); } }
+      document.getElementById('pm_screenshots').value = JSON.stringify(shots);
+      renderScreenshotPreviews(shots);
     }
   } else {
     title.textContent = 'Add New Product';
@@ -2519,21 +2537,74 @@ function openProductModal(id) {
     document.getElementById('pm_price').value    = '$999';
   }
 
-  overlay.style.display = 'block';
-  requestAnimationFrame(() => requestAnimationFrame(() => { drawer.style.transform = 'translateX(0)'; }));
+  overlay.style.display = 'flex';
+  overlay.style.alignItems = 'center';
+  overlay.style.justifyContent = 'center';
+  setTimeout(() => { drawer.style.transform = 'scale(1)'; drawer.style.opacity = '1'; }, 10);
   document.body.style.overflow = 'hidden';
 }
 
 function closeProductModal() {
   const overlay = document.getElementById('productModalOverlay');
   const drawer  = document.getElementById('productModalDrawer');
-  drawer.style.transform = 'translateX(100%)';
-  setTimeout(() => { overlay.style.display = 'none'; }, 300);
+  drawer.style.transform = 'scale(0.95)';
+  drawer.style.opacity = '0';
+  setTimeout(() => { overlay.style.display = 'none'; }, 250);
   document.body.style.overflow = '';
 }
 
 function closeProductModalOnBg(event) {
   if (event.target === document.getElementById('productModalOverlay')) closeProductModal();
+}
+
+function normalizeYtId(input) {
+  var v = (input.value || '').trim();
+  // Extract ID from various YouTube URL formats
+  var m = v.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/))([A-Za-z0-9_-]{11})/);
+  if (m) { input.value = m[1]; input.style.borderColor = '#22c55e'; }
+  else if (/^[A-Za-z0-9_-]{11}$/.test(v)) { input.style.borderColor = '#22c55e'; }
+  else { input.style.borderColor = v.length > 0 ? '#ef4444' : ''; }
+}
+
+async function handleScreenshotUpload(files) {
+  if (!files || !files.length) return;
+  var status = document.getElementById('pm_screenshotStatus');
+  var previews = document.getElementById('pm_screenshotPreviews');
+  var existing = JSON.parse(document.getElementById('pm_screenshots').value || '[]');
+  if (!Array.isArray(existing)) existing = typeof existing === 'string' ? existing.split('\n').filter(Boolean) : [];
+  status.textContent = 'Uploading...';
+  var uploaded = [];
+  for (var i = 0; i < Math.min(files.length, 6 - existing.length); i++) {
+    try {
+      var url = await ChrixlinDB.uploadProductImage(files[i]);
+      if (url) uploaded.push(url);
+    } catch(e) { console.warn('Screenshot upload failed', e); }
+  }
+  var all = existing.concat(uploaded);
+  document.getElementById('pm_screenshots').value = JSON.stringify(all);
+  renderScreenshotPreviews(all);
+  status.textContent = uploaded.length ? uploaded.length + ' image(s) uploaded.' : 'Upload failed.';
+}
+function handleScreenshotDrop(e) {
+  e.preventDefault();
+  document.getElementById('pm_screenshotDropzone').style.borderColor = '';
+  if (e.dataTransfer && e.dataTransfer.files.length) handleScreenshotUpload(e.dataTransfer.files);
+}
+function renderScreenshotPreviews(urls) {
+  var el = document.getElementById('pm_screenshotPreviews');
+  el.innerHTML = urls.map(function(u, i) {
+    return '<div style="position:relative;width:100px;height:70px;border-radius:8px;overflow:hidden;border:1px solid var(--border)">' +
+      '<img src="' + u + '" style="width:100%;height:100%;object-fit:cover" />' +
+      '<button onclick="removeScreenshot(' + i + ')" style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;line-height:18px;padding:0">✕</button>' +
+    '</div>';
+  }).join('');
+}
+function removeScreenshot(idx) {
+  var ta = document.getElementById('pm_screenshots');
+  var arr = JSON.parse(ta.value || '[]');
+  arr.splice(idx, 1);
+  ta.value = JSON.stringify(arr);
+  renderScreenshotPreviews(arr);
 }
 
 function saveProduct() {
@@ -3149,15 +3220,22 @@ function viewUserDetail(userId) {
   var initials = (user.full_name || user.email || '?').substring(0,2).toUpperCase();
   var ordersHtml = orders.length ? orders.map(function(o) {
     var statusColor = o.status === 'completed' ? '#22c55e' : o.status === 'processing' ? '#f59e0b' : '#94a3b8';
-    return '<div style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06)">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center">' +
-        '<div>' +
-          '<div style="font-weight:600;font-size:14px">' + (o.product_title || 'Unknown Product') + '</div>' +
-          '<div style="font-size:12px;color:var(--muted);margin-top:2px">' + (o.order_ref || '') + ' · ' + (o.payment_method || '') + '</div>' +
+    var purchaseDate = o.created_at ? new Date(o.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
+    var purchaseTime = o.created_at ? new Date(o.created_at).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : '';
+    return '<div style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.06)">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">' +
+        '<div style="flex:1">' +
+          '<div style="font-weight:600;font-size:14px;margin-bottom:4px">' + (o.product_title || 'Unknown Product') + '</div>' +
+          '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">' +
+            '<span style="font-size:11px;color:var(--muted);background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:10px">📋 ' + (o.order_ref || '—') + '</span>' +
+            '<span style="font-size:11px;color:var(--muted);background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:10px">💳 ' + (o.payment_method || 'card') + '</span>' +
+            '<span style="font-size:11px;color:var(--muted);background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:10px">📅 ' + purchaseDate + '</span>' +
+            '<span style="font-size:11px;color:var(--muted);background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:10px">🕐 ' + purchaseTime + '</span>' +
+          '</div>' +
         '</div>' +
-        '<div style="text-align:right">' +
-          '<div style="font-weight:700;color:#22c55e">$' + (parseFloat(o.amount)||0).toLocaleString() + '</div>' +
-          '<div style="font-size:11px;font-weight:700;color:' + statusColor + ';margin-top:2px;text-transform:uppercase">' + (o.status||'pending') + '</div>' +
+        '<div style="text-align:right;flex-shrink:0">' +
+          '<div style="font-weight:700;font-size:16px;color:#22c55e">$' + (parseFloat(o.amount)||0).toLocaleString() + '</div>' +
+          '<div style="font-size:11px;font-weight:700;color:' + statusColor + ';margin-top:4px;text-transform:uppercase;background:' + statusColor + '22;padding:2px 8px;border-radius:10px;display:inline-block">' + (o.status||'pending') + '</div>' +
         '</div>' +
       '</div>' +
     '</div>';
