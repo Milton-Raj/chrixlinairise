@@ -1373,8 +1373,14 @@ async function renderPayPalButtons() {
 
   try {
     // 1. Fetch client token from PHP backend
-    var tokenResp = await fetch('/api/paypal-client-token.php').then(function(r) { return r.json(); });
-    if (!tokenResp.clientToken) throw new Error(tokenResp.error || 'No client token returned from server');
+    var tokenRaw = await fetch('/api/paypal-client-token.php').catch(function() { return null; });
+    if (!tokenRaw || !tokenRaw.ok) {
+      throw new Error('Could not reach payment server — make sure the site is deployed on Hostinger (PHP required).');
+    }
+    var tokenResp = await tokenRaw.json().catch(function() { return {}; });
+    if (!tokenResp.clientToken) {
+      throw new Error(tokenResp.error || 'No client token returned — check PayPal credentials in .htaccess');
+    }
 
     // 2. Load v6 SDK
     await _ppLoadV6Script();
