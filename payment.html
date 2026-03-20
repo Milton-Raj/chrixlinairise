@@ -132,6 +132,12 @@
     .cvv-wrap .field-input { padding-right: 44px; }
     .cvv-eye { position: absolute; right: 13px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 16px; color: var(--c-muted); background: none; border: none; padding: 0; }
 
+    /* Apple Pay native button */
+    #pp-applepay-btn { -webkit-appearance: -apple-pay-button; -apple-pay-button-type: pay; -apple-pay-button-style: black; width: 100%; max-width: 300px; height: 54px; cursor: pointer; border: none; border-radius: 12px; }
+    /* PayPal v6 hosted card field containers */
+    #pp-card-number, #pp-card-expiry, #pp-card-cvv { padding: 0; min-height: 44px; }
+    #pp-card-number iframe, #pp-card-expiry iframe, #pp-card-cvv iframe { width: 100% !important; height: 44px !important; }
+
     /* ─── SUBMIT ──────────────────────────────────────────── */
     .submit-btn { width: 100%; padding: 17px 32px; border-radius: 50px; font-family: var(--font-h); font-weight: 800; font-size: 17px; background: var(--grad-gold); color: #fff; border: none; cursor: pointer; box-shadow: 0 10px 30px rgba(245,158,11,0.4); transition: var(--transition); margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(245,158,11,0.55); }
@@ -381,33 +387,86 @@
         </div>
       </div>
 
-      <!-- ── PAYPAL FORM ── -->
+      <!-- ── PAYPAL FORM (v6 SDK: Card Fields · Google Pay · Apple Pay · Fastlane) ── -->
       <div id="pf-paypal" style="display:none">
 
-        <!-- ── SDK MODE: PayPal Smart Buttons (when Client ID is configured) ── -->
+        <!-- ── SDK MODE ── -->
         <div id="pp-sdk-wrap" style="display:none">
-          <div style="text-align:center;margin-bottom:18px">
-            <div style="font-family:var(--font-h);font-weight:700;font-size:16px;margin-bottom:6px">Complete Payment via PayPal</div>
-            <div style="font-size:12px;color:var(--c-muted)">Supports PayPal · Debit/Credit Card · Apple Pay · Google Pay · QR Code</div>
+
+          <!-- Sub-method tabs (built dynamically) -->
+          <div id="pp-method-tabs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;justify-content:center"></div>
+
+          <!-- ── FASTLANE PANEL ── -->
+          <div id="pp-panel-fastlane" style="display:none">
+            <div style="text-align:center;margin-bottom:18px">
+              <div style="font-family:var(--font-h);font-weight:700;font-size:16px;margin-bottom:4px">⚡ Fastlane Guest Checkout</div>
+              <div style="font-size:12px;color:var(--c-muted)">Enter your email — returning PayPal customers check out instantly</div>
+            </div>
+            <!-- Fastlane email lookup -->
+            <div id="pp-fastlane-email-wrap" style="margin-bottom:14px">
+              <input id="pp-fastlane-email" type="email" placeholder="Your email address" style="width:100%;padding:12px 15px;background:var(--c-bg3);border:1.5px solid var(--c-border);border-radius:10px;color:var(--c-text);font-size:15px;outline:none" />
+              <button onclick="_ppFastlaneLookup()" style="width:100%;margin-top:10px;padding:14px;border-radius:50px;background:linear-gradient(135deg,#009cde,#003087);color:#fff;font-weight:800;font-size:15px;border:none;cursor:pointer">Continue →</button>
+            </div>
+            <div id="pp-fastlane-watermark" style="margin-bottom:12px"></div>
+            <div id="pp-fastlane-card-wrap" style="display:none"></div>
           </div>
-          <!-- Method icons row -->
-          <div style="display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap">
-            <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" alt="Cards" style="height:22px;border-radius:4px;opacity:0.85" onerror="this.style.display='none'" />
-            <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/apple-pay-logo-white.svg" alt="Apple Pay" style="height:20px;opacity:0.7;filter:invert(1)" onerror="this.style.display='none'" />
-            <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/buy-logo-white.svg" alt="Buy Now" style="height:20px;opacity:0.7;filter:invert(1)" onerror="this.style.display='none'" />
+
+          <!-- ── CARD FIELDS PANEL ── -->
+          <div id="pp-panel-cards" style="display:none">
+            <div style="margin-bottom:16px">
+              <label style="display:block;font-size:11px;font-weight:700;color:var(--c-sub);margin-bottom:7px;text-transform:uppercase;letter-spacing:0.5px">Card Number</label>
+              <div id="pp-card-number" style="padding:12px 15px;background:var(--c-bg3);border:1.5px solid var(--c-border);border-radius:10px;min-height:44px"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+              <div>
+                <label style="display:block;font-size:11px;font-weight:700;color:var(--c-sub);margin-bottom:7px;text-transform:uppercase;letter-spacing:0.5px">Expiry</label>
+                <div id="pp-card-expiry" style="padding:12px 15px;background:var(--c-bg3);border:1.5px solid var(--c-border);border-radius:10px;min-height:44px"></div>
+              </div>
+              <div>
+                <label style="display:block;font-size:11px;font-weight:700;color:var(--c-sub);margin-bottom:7px;text-transform:uppercase;letter-spacing:0.5px">CVV</label>
+                <div id="pp-card-cvv" style="padding:12px 15px;background:var(--c-bg3);border:1.5px solid var(--c-border);border-radius:10px;min-height:44px"></div>
+              </div>
+            </div>
+            <div style="margin-bottom:20px">
+              <label style="display:block;font-size:11px;font-weight:700;color:var(--c-sub);margin-bottom:7px;text-transform:uppercase;letter-spacing:0.5px">Cardholder Name</label>
+              <input id="pp-cardholder-name" type="text" placeholder="Name on card" style="width:100%;padding:12px 15px;background:var(--c-bg3);border:1.5px solid var(--c-border);border-radius:10px;color:var(--c-text);font-size:15px;outline:none" />
+            </div>
+            <button id="pp-card-submit-btn" onclick="_ppCardSubmit()" style="width:100%;padding:15px;border-radius:50px;background:linear-gradient(135deg,#7c3aed,#06b6d4);color:#fff;font-weight:800;font-size:16px;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(124,58,237,0.3)">
+              🔒 Pay Now
+            </button>
           </div>
-          <!-- Loading spinner -->
-          <div id="pp-loading-msg" style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:28px;color:var(--c-muted);font-size:13px">
-            <div style="width:32px;height:32px;border:3px solid rgba(0,156,222,0.2);border-top-color:#009cde;border-radius:50%;animation:spin 0.8s linear infinite"></div>
-            Loading PayPal…
+
+          <!-- ── GOOGLE PAY PANEL ── -->
+          <div id="pp-panel-googlepay" style="display:none">
+            <div style="text-align:center;margin-bottom:16px">
+              <div style="font-size:12px;color:var(--c-muted)">Pay quickly with Google Pay</div>
+            </div>
+            <div id="pp-googlepay-btn" style="display:flex;justify-content:center;min-height:54px"></div>
           </div>
-          <!-- PayPal renders buttons here -->
-          <div id="paypal-button-container" style="min-height:50px"></div>
-          <div style="margin-top:14px;padding:12px;background:rgba(0,156,222,0.06);border:1px solid rgba(0,156,222,0.15);border-radius:10px;font-size:11px;color:var(--c-muted);text-align:center">
-            🔒 Powered by PayPal · 256-bit encryption · By paying you agree to our <a href="#" style="color:#a78bfa">Terms of Service</a>
+
+          <!-- ── APPLE PAY PANEL ── -->
+          <div id="pp-panel-applepay" style="display:none">
+            <div style="text-align:center;margin-bottom:16px">
+              <div style="font-size:12px;color:var(--c-muted)">Pay quickly with Apple Pay</div>
+            </div>
+            <div style="display:flex;justify-content:center">
+              <button id="pp-applepay-btn" onclick="_ppApplePayBegin()" style="display:none;-webkit-appearance:-apple-pay-button;-apple-pay-button-type:pay;-apple-pay-button-style:black;width:100%;max-width:300px;height:54px;cursor:pointer;border:none;border-radius:12px"></button>
+              <div id="pp-applepay-unavail" style="display:none;padding:20px;text-align:center;font-size:13px;color:var(--c-muted)">Apple Pay is only available in Safari on Apple devices.</div>
+            </div>
           </div>
-          <!-- PayPal error state -->
+
+          <!-- ── Loading spinner ── -->
+          <div id="pp-loading-msg" style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:32px;color:var(--c-muted);font-size:13px">
+            <div style="width:36px;height:36px;border:3px solid rgba(0,156,222,0.2);border-top-color:#009cde;border-radius:50%;animation:spin 0.8s linear infinite"></div>
+            Initialising payment methods…
+          </div>
+
+          <!-- ── Error state ── -->
           <div id="pp-error-msg" style="display:none;padding:14px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:10px;font-size:13px;color:#f87171;text-align:center;margin-top:12px"></div>
+
+          <div id="pp-footer-note" style="display:none;margin-top:14px;padding:12px;background:rgba(0,156,222,0.06);border:1px solid rgba(0,156,222,0.15);border-radius:10px;font-size:11px;color:var(--c-muted);text-align:center">
+            🔒 Powered by PayPal · 256-bit SSL encryption · By paying you agree to our <a href="#" style="color:#a78bfa">Terms of Service</a>
+          </div>
         </div>
 
         <!-- ── FALLBACK MODE: Manual email payment (no Client ID) ── -->
@@ -883,103 +942,402 @@ function openRazorpay() {
   new Razorpay(options).open();
 }
 
-// ─── PAYPAL SDK INTEGRATION ───────────────────────────────────────────────────
-var _ppSdkLoaded  = false;
-var _ppSdkLoading = false;
-var _ppButtons    = null;
+// ─── PAYPAL v6 SDK INTEGRATION ────────────────────────────────────────────────
+// Supports: Credit/Debit Card Fields · Google Pay · Apple Pay · Fastlane
+// All live — no sandbox.
 
-// Preload PayPal SDK at page start — only on HTTPS (PayPal Live requires it)
-(function _ppPreload() {
-  try {
-    if (window.location.protocol !== 'https:') return; // skip on HTTP/localhost
-    var ppCfg = (JSON.parse(localStorage.getItem('chrixlin_gateways') || '{}').paypal) || {};
-    if (!ppCfg.enabled || !ppCfg.g_pp_clientId) return;
-    var cur      = (ppCfg.g_pp_currency || 'USD').toUpperCase();
-    var isSandbox = (ppCfg.g_pp_mode || '').trim().toLowerCase() === 'sandbox';
-    var sdkBase  = isSandbox ? 'https://www.sandbox.paypal.com/sdk/js' : 'https://www.paypal.com/sdk/js';
-    _ppSdkLoading = true;
-    var s = document.createElement('script');
-    s.src = sdkBase + '?client-id=' + encodeURIComponent(ppCfg.g_pp_clientId)
-      + '&currency=' + cur
-      + '&intent=capture'
-      + '&components=buttons';
-    s.onload  = function() { _ppSdkLoaded = true; _ppSdkLoading = false; };
-    s.onerror = function() { _ppSdkLoading = false; };
-    document.head.appendChild(s);
-  } catch(e) {}
-})();
+var _ppV6Instance   = null;   // paypal.createInstance result
+var _ppV6CardFields = null;   // card fields component
+var _ppV6Fastlane   = null;   // fastlane component
+var _ppV6GooglePay  = null;   // google pay config
+var _ppV6Currency   = 'USD';
+var _ppV6Amount     = '0.00';
+var _ppV6Gw         = null;
+var _ppV6ActiveTab  = '';     // 'cards' | 'googlepay' | 'applepay' | 'fastlane'
 
-function loadPayPalSDK(clientId, currency, sandbox) {
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+function _ppGetAmount() {
+  var p = _pricing;
+  return (p && p.total > 0 ? p.total
+    : (parseFloat(String(product.price || '0').replace(/[^0-9.]/g, '')) || 0)
+  ).toFixed(2);
+}
+
+function _ppShowLoading(msg) {
+  var el = document.getElementById('pp-loading-msg');
+  if (!el) return;
+  el.innerHTML = '<div style="width:32px;height:32px;border:3px solid rgba(0,156,222,0.2);border-top-color:#009cde;border-radius:50%;animation:spin 0.8s linear infinite"></div>'
+    + '<span>' + (msg || 'Loading…') + '</span>';
+  el.style.display = 'flex';
+}
+
+function _ppHideLoading() {
+  var el = document.getElementById('pp-loading-msg'); if (el) el.style.display = 'none';
+}
+
+function _ppShowError(msg) {
+  _ppHideLoading();
+  var el = document.getElementById('pp-error-msg');
+  if (!el) return;
+  el.innerHTML = '⚠️ ' + msg;
+  el.style.display = '';
+}
+
+function _ppHideError() {
+  var el = document.getElementById('pp-error-msg'); if (el) el.style.display = 'none';
+}
+
+function _ppShowFooter() {
+  var el = document.getElementById('pp-footer-note'); if (el) el.style.display = '';
+}
+
+// ── Create PayPal order via PHP backend ──────────────────────────────────────
+
+function _ppCreateOrder() {
+  return fetch('/api/paypal-create-order.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      amount:      _ppV6Amount,
+      currency:    _ppV6Currency,
+      description: (product.title || 'Chrixlin AI Rise').slice(0, 127)
+    })
+  }).then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (!d.id) throw new Error(d.error || 'Order creation failed');
+      return d.id;
+    });
+}
+
+// ── Capture PayPal order via PHP backend ─────────────────────────────────────
+
+function _ppCaptureOrder(orderId) {
+  return fetch('/api/paypal-capture-order.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ orderId: orderId })
+  }).then(function(r) { return r.json(); });
+}
+
+// ── Load v6 SDK script ────────────────────────────────────────────────────────
+
+function _ppLoadV6Script() {
   return new Promise(function(resolve, reject) {
-    // PayPal Live SDK requires HTTPS — reject immediately on HTTP
-    if (window.location.protocol !== 'https:') { reject(new Error('HTTPS required — PayPal SDK only works on HTTPS')); return; }
-    // Already loaded
-    if (window.paypal) { _ppSdkLoaded = true; resolve(); return; }
-    // Already loading — poll until ready (up to 10s)
-    if (_ppSdkLoading) {
-      var waited = 0;
-      var iv = setInterval(function() {
-        waited += 200;
-        if (window.paypal) { clearInterval(iv); _ppSdkLoaded = true; _ppSdkLoading = false; resolve(); }
-        else if (waited > 10000) { clearInterval(iv); reject(new Error('PayPal SDK timed out after 10s')); }
-      }, 200);
-      return;
-    }
-    // Not yet started — inject script now
-    _ppSdkLoading = true;
-    var old = document.querySelector('script[src*="paypal.com/sdk/js"]');
+    if (window.paypal && window.paypal.createInstance) { resolve(); return; }
+    var old = document.querySelector('script[src*="paypal.com/web-sdk"]');
     if (old) old.remove();
-    var cur     = (currency || 'USD').toUpperCase();
-    var sdkBase = sandbox ? 'https://www.sandbox.paypal.com/sdk/js' : 'https://www.paypal.com/sdk/js';
-    var script  = document.createElement('script');
-    script.src  = sdkBase + '?client-id=' + encodeURIComponent(clientId)
-      + '&currency=' + cur
-      + '&intent=capture'
-      + '&components=buttons';
-    script.onload  = function() { _ppSdkLoaded = true; _ppSdkLoading = false; resolve(); };
-    script.onerror = function() { _ppSdkLoading = false; reject(new Error('PayPal SDK script failed to load — check Client ID and Mode (live vs sandbox)')); };
-    document.head.appendChild(script);
+    var s = document.createElement('script');
+    s.src = 'https://www.paypal.com/web-sdk/v6/core';
+    s.onload  = function() { resolve(); };
+    s.onerror = function() { reject(new Error('PayPal SDK v6 failed to load')); };
+    document.head.appendChild(s);
   });
 }
 
-function _doRenderPayPalButtons(currency, amount, ppGw) {
-  var loadEl = document.getElementById('pp-loading-msg');
-  var errEl  = document.getElementById('pp-error-msg');
-  var btnEl  = document.getElementById('paypal-button-container');
-  if (loadEl) loadEl.style.display = 'none';
-  if (errEl)  errEl.style.display  = 'none';
-  if (btnEl)  btnEl.innerHTML = '';
+// ── Load Google Pay script ────────────────────────────────────────────────────
 
-  if (!window.paypal || !window.paypal.Buttons) {
-    _showPayPalManualFallback(ppGw || getGatewayCfg('paypal'), loadEl, errEl, btnEl);
-    return;
+function _ppLoadGooglePayScript() {
+  return new Promise(function(resolve, reject) {
+    if (window.google && window.google.payments) { resolve(); return; }
+    var s = document.createElement('script');
+    s.src = 'https://pay.google.com/gp/p/js/pay.js';
+    s.onload  = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+// ── Build sub-method tabs ─────────────────────────────────────────────────────
+
+function _ppBuildSubTabs(methods) {
+  var icons = { fastlane: '⚡', cards: '💳', googlepay: 'G', applepay: '' };
+  var labels = { fastlane: 'Fastlane', cards: 'Card', googlepay: 'Google Pay', applepay: 'Apple Pay' };
+  var tabsEl = document.getElementById('pp-method-tabs');
+  if (!tabsEl) return;
+  tabsEl.innerHTML = methods.map(function(m) {
+    return '<button type="button" onclick="_ppSwitchSubTab(\'' + m + '\')" id="pp-tab-' + m + '" style="padding:9px 18px;border-radius:50px;border:1.5px solid var(--c-border);background:transparent;color:var(--c-sub);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px">'
+      + icons[m] + ' ' + labels[m] + '</button>';
+  }).join('');
+  if (methods.length) _ppSwitchSubTab(methods[0]);
+}
+
+function _ppSwitchSubTab(tab) {
+  _ppV6ActiveTab = tab;
+  ['fastlane', 'cards', 'googlepay', 'applepay'].forEach(function(m) {
+    var p = document.getElementById('pp-panel-' + m);
+    var b = document.getElementById('pp-tab-' + m);
+    if (p) p.style.display = (m === tab) ? '' : 'none';
+    if (b) {
+      if (m === tab) {
+        b.style.background = 'linear-gradient(135deg,rgba(124,58,237,0.25),rgba(6,182,212,0.15))';
+        b.style.borderColor = 'var(--c-primary)';
+        b.style.color = 'var(--c-text)';
+      } else {
+        b.style.background = 'transparent';
+        b.style.borderColor = 'var(--c-border)';
+        b.style.color = 'var(--c-sub)';
+      }
+    }
+  });
+}
+
+// ── Render Card Fields ────────────────────────────────────────────────────────
+
+async function _ppRenderCardFields(instance) {
+  try {
+    var fieldStyle = {
+      input: {
+        'color': '#f1f5f9',
+        'font-size': '15px',
+        'font-family': 'Inter, sans-serif',
+        'background': 'transparent',
+      },
+      ':placeholder': { 'color': '#64748b' }
+    };
+
+    _ppV6CardFields = instance.createCardFields({
+      createOrder: _ppCreateOrder,
+      onApprove: async function(data) {
+        _ppShowLoading('Confirming payment…');
+        try {
+          var details = await _ppCaptureOrder(data.orderId);
+          handlePayPalSuccess(details);
+        } catch(e) {
+          _ppShowError('Payment capture failed: ' + e.message);
+        }
+      },
+      onError: function(err) {
+        console.error('PayPal Card Fields error:', err);
+        _ppShowError('Card payment error — please try again.');
+      }
+    });
+
+    await _ppV6CardFields.NumberField({ style: fieldStyle, placeholder: '1234 5678 9012 3456' }).render('#pp-card-number');
+    await _ppV6CardFields.ExpiryField({ style: fieldStyle, placeholder: 'MM / YY' }).render('#pp-card-expiry');
+    await _ppV6CardFields.CVVField({ style: fieldStyle, placeholder: 'CVV' }).render('#pp-card-cvv');
+
+    // Pre-fill cardholder name from step 1
+    var fn = (document.getElementById('firstName') || {}).value || '';
+    var ln = (document.getElementById('lastName')  || {}).value || '';
+    var nameEl = document.getElementById('pp-cardholder-name');
+    if (nameEl && (fn || ln)) nameEl.value = (fn + ' ' + ln).trim();
+
+    return true;
+  } catch(e) {
+    console.warn('Card Fields render failed:', e);
+    return false;
+  }
+}
+
+// ── Card submit handler ───────────────────────────────────────────────────────
+
+window._ppCardSubmit = async function() {
+  if (!_ppV6CardFields) return;
+  var btn = document.getElementById('pp-card-submit-btn');
+  var name = (document.getElementById('pp-cardholder-name') || {}).value || '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Processing…'; }
+  _ppHideError();
+  try {
+    await _ppV6CardFields.submit({
+      cardholderName: name,
+      billingAddress: {
+        addressLine1: (document.getElementById('address') || {}).value || '',
+        adminArea2:   (document.getElementById('city')    || {}).value || '',
+        countryCode:  ((document.getElementById('country') || {}).value || 'US').toUpperCase().slice(0, 2)
+      }
+    });
+  } catch(e) {
+    _ppShowError(e.message || 'Card submission failed — please check your details.');
+    if (btn) { btn.disabled = false; btn.textContent = '🔒 Pay Now'; }
+  }
+};
+
+// ── Render Google Pay ─────────────────────────────────────────────────────────
+
+async function _ppRenderGooglePay(instance) {
+  try {
+    await _ppLoadGooglePayScript();
+    var paymentsClient = new window.google.payments.api.PaymentsClient({ environment: 'PRODUCTION' });
+
+    var googlePayConfig = await instance.createGooglePayRequest({
+      amount: { currencyCode: _ppV6Currency, value: _ppV6Amount }
+    });
+
+    var isReadyToPay = await paymentsClient.isReadyToPay({
+      apiVersion: 2,
+      apiVersionMinor: 0,
+      allowedPaymentMethods: googlePayConfig.allowedPaymentMethods
+    });
+
+    if (!isReadyToPay.result) return false;
+
+    var btn = paymentsClient.createButton({
+      buttonSizeMode: 'fill',
+      buttonType: 'pay',
+      buttonColor: 'black',
+      onClick: async function() {
+        try {
+          // Update amount at click time (in case price recalculated)
+          googlePayConfig.transactionInfo.totalPrice = _ppGetAmount();
+          var paymentData = await paymentsClient.loadPaymentData(googlePayConfig);
+          _ppShowLoading('Processing Google Pay…');
+          // PayPal processes the Google Pay token
+          var orderId = await _ppCreateOrder();
+          var details = await fetch('/api/paypal-capture-order.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ orderId: orderId, googlePayToken: paymentData.paymentMethodData.tokenizationData.token })
+          }).then(function(r) { return r.json(); });
+          handlePayPalSuccess(details);
+        } catch(e) {
+          _ppShowError('Google Pay failed: ' + (e.message || e));
+        }
+      }
+    });
+
+    btn.style.width = '100%';
+    btn.style.maxWidth = '400px';
+    btn.style.height = '54px';
+    btn.style.borderRadius = '12px';
+    document.getElementById('pp-googlepay-btn').appendChild(btn);
+    return true;
+  } catch(e) {
+    console.warn('Google Pay init failed:', e);
+    return false;
+  }
+}
+
+// ── Render Apple Pay ──────────────────────────────────────────────────────────
+
+async function _ppRenderApplePay(instance) {
+  var btnEl    = document.getElementById('pp-applepay-btn');
+  var unavail  = document.getElementById('pp-applepay-unavail');
+
+  var supported = window.ApplePaySession && ApplePaySession.canMakePayments &&
+                  (await ApplePaySession.canMakePayments().catch(function() { return false; }));
+
+  if (!supported) {
+    if (btnEl)   btnEl.style.display   = 'none';
+    if (unavail) unavail.style.display = '';
+    return false;
   }
 
-  paypal.Buttons({
-    style: { layout:'vertical', color:'gold', shape:'rect', label:'paypal', height:48 },
-    createOrder: function(data, actions) {
-      return actions.order.create({
-        purchase_units: [{ amount:{ currency_code:currency, value:amount }, description:(product.title||'Chrixlin AI Rise').slice(0,127) }]
-      });
-    },
-    onApprove: function(data, actions) {
-      if (loadEl) { loadEl.innerHTML = '<div style="width:32px;height:32px;border:3px solid rgba(0,156,222,0.2);border-top-color:#009cde;border-radius:50%;animation:spin 0.8s linear infinite"></div><span>Confirming payment…</span>'; loadEl.style.display = 'flex'; }
-      if (btnEl) btnEl.innerHTML = '';
-      return actions.order.capture().then(function(details) { handlePayPalSuccess(details); });
-    },
-    onError: function(err) {
-      console.error('PayPal onError:', err);
-      _showPayPalManualFallback(ppGw || getGatewayCfg('paypal'), loadEl, errEl, btnEl);
-    },
-    onCancel: function() {}
-  }).render('#paypal-button-container').catch(function(err) {
-    console.error('PayPal render failed:', err);
-    _showPayPalManualFallback(ppGw || getGatewayCfg('paypal'), loadEl, errEl, btnEl);
-  });
+  if (btnEl)   btnEl.style.display   = '';
+  if (unavail) unavail.style.display = 'none';
+  // _ppApplePayBegin() is called onclick
+  window._ppApplePayInstance = instance;
+  return true;
 }
 
-function renderPayPalButtons() {
+window._ppApplePayBegin = async function() {
+  var instance = window._ppApplePayInstance;
+  if (!instance) return;
+  try {
+    var applePayConfig = instance.createApplePayRequest({
+      countryCode:      'US',
+      currencyCode:     _ppV6Currency,
+      supportedNetworks:['visa', 'masterCard', 'amex'],
+      merchantCapabilities:['supports3DS'],
+      total: { label: product.title || 'Chrixlin AI Rise', amount: _ppGetAmount() }
+    });
+
+    var session = new ApplePaySession(3, applePayConfig);
+
+    session.onvalidatemerchant = async function(event) {
+      try {
+        var ms = await instance.validateApplePayMerchant({ validationUrl: event.validationURL });
+        session.completeMerchantValidation(ms);
+      } catch(e) {
+        session.abort();
+        _ppShowError('Apple Pay merchant validation failed.');
+      }
+    };
+
+    session.onpaymentauthorized = async function(event) {
+      try {
+        _ppShowLoading('Processing Apple Pay…');
+        var orderId = await _ppCreateOrder();
+        var details = await fetch('/api/paypal-capture-order.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId: orderId, applePayToken: event.payment.token })
+        }).then(function(r) { return r.json(); });
+        session.completePayment(ApplePaySession.STATUS_SUCCESS);
+        handlePayPalSuccess(details);
+      } catch(e) {
+        session.completePayment(ApplePaySession.STATUS_FAILURE);
+        _ppShowError('Apple Pay failed: ' + (e.message || e));
+      }
+    };
+
+    session.begin();
+  } catch(e) {
+    _ppShowError('Apple Pay could not start: ' + (e.message || e));
+  }
+};
+
+// ── Render Fastlane ───────────────────────────────────────────────────────────
+
+async function _ppRenderFastlane(instance) {
+  try {
+    _ppV6Fastlane = await instance.createFastlaneInstance();
+    var watermark = document.getElementById('pp-fastlane-watermark');
+    if (watermark && _ppV6Fastlane.FastlaneWatermarkComponent) {
+      await _ppV6Fastlane.FastlaneWatermarkComponent({ includeAdditionalInfo: true }).render('#pp-fastlane-watermark');
+    }
+    return true;
+  } catch(e) {
+    console.warn('Fastlane init failed (account may not be approved yet):', e);
+    return false;
+  }
+}
+
+window._ppFastlaneLookup = async function() {
+  if (!_ppV6Fastlane) return;
+  var emailEl = document.getElementById('pp-fastlane-email');
+  var email   = emailEl ? emailEl.value.trim() : '';
+  if (!email) { _ppShowError('Please enter your email.'); return; }
+  _ppHideError();
+  _ppShowLoading('Checking your account…');
+  try {
+    var { customerContextId } = await _ppV6Fastlane.identity.lookupCustomerByEmail({ email: email });
+    _ppHideLoading();
+    if (customerContextId) {
+      var { authenticationState } = await _ppV6Fastlane.identity.triggerAuthenticationFlow(customerContextId);
+      if (authenticationState === 'succeeded') {
+        // Returning user — show Fastlane card component
+        var cardWrap = document.getElementById('pp-fastlane-card-wrap');
+        if (cardWrap) {
+          cardWrap.style.display = '';
+          var card = await _ppV6Fastlane.FastlaneCardComponent({
+            createOrder: _ppCreateOrder,
+            onApprove: async function(data) {
+              _ppShowLoading('Confirming payment…');
+              var details = await _ppCaptureOrder(data.orderId);
+              handlePayPalSuccess(details);
+            }
+          });
+          await card.render('#pp-fastlane-card-wrap');
+        }
+        return;
+      }
+    }
+    // Guest — pre-fill email in step 1 if blank, switch to card tab
+    var emailStep1 = document.getElementById('email');
+    if (emailStep1 && !emailStep1.value) emailStep1.value = email;
+    _ppSwitchSubTab('cards');
+  } catch(e) {
+    _ppHideLoading();
+    _ppShowError('Fastlane error: ' + (e.message || e));
+  }
+};
+
+// ── Main entry: renderPayPalButtons (called by switchPayment) ─────────────────
+
+async function renderPayPalButtons() {
   var ppGw     = getGatewayCfg('paypal');
+  _ppV6Gw      = ppGw;
   var clientId = ppGw.g_pp_clientId;
   var sdkWrap  = document.getElementById('pp-sdk-wrap');
   var fbWrap   = document.getElementById('pp-fallback-wrap');
@@ -987,44 +1345,86 @@ function renderPayPalButtons() {
   if (!clientId) {
     if (sdkWrap) sdkWrap.style.display = 'none';
     if (fbWrap)  fbWrap.style.display  = '';
+    var ppEmailEl = document.getElementById('ppEmail');
+    if (ppEmailEl) ppEmailEl.textContent = ppGw.g_pp_email || contactEmail || '—';
+    var ppLinkEl  = document.getElementById('ppLink');
+    var ppLinkW   = document.getElementById('ppLinkWrap');
+    if (ppGw.g_pp_link && ppLinkEl && ppLinkW) { ppLinkEl.href = ppGw.g_pp_link; ppLinkW.style.display = ''; }
     return;
   }
 
   if (fbWrap)  fbWrap.style.display  = 'none';
   if (sdkWrap) sdkWrap.style.display = '';
 
-  var loadEl   = document.getElementById('pp-loading-msg');
-  var errEl    = document.getElementById('pp-error-msg');
-  var btnEl    = document.getElementById('paypal-button-container');
-  if (loadEl)  loadEl.style.display = 'flex';
-  if (errEl)   errEl.style.display  = 'none';
-  if (btnEl)   btnEl.innerHTML = '';
+  _ppV6Currency = (ppGw.g_pp_currency || 'USD').toUpperCase();
+  _ppV6Amount   = _ppGetAmount();
 
-  var currency  = (ppGw.g_pp_currency || 'USD').toUpperCase();
-  var isSandbox = (ppGw.g_pp_mode || '').trim().toLowerCase() === 'sandbox';
-  var p         = _pricing;
-  var amount    = (p && p.total > 0 ? p.total : (parseFloat(String(product.price||'0').replace(/[^0-9.]/g,''))||0)).toFixed(2);
+  // Don't re-initialise if already done
+  if (_ppV6Instance) { _ppShowFooter(); return; }
 
-  // If SDK already loaded, render immediately
-  if (window.paypal) { _doRenderPayPalButtons(currency, amount, ppGw); return; }
+  _ppShowLoading('Initialising payment methods…');
+  _ppHideError();
 
-  // Otherwise load SDK then render
-  loadPayPalSDK(clientId, currency, isSandbox).then(function() {
-    _doRenderPayPalButtons(currency, amount, ppGw);
-  }).catch(function(err) {
-    // SDK failed — show manual fallback with error hint
-    var hint = (err && err.message) ? err.message : 'SDK failed to load';
-    if (errEl) { errEl.dataset.ppErr = hint; }
-    _showPayPalManualFallback(ppGw, loadEl, errEl, btnEl);
-  });
+  // Require HTTPS
+  if (window.location.protocol !== 'https:') {
+    _ppShowError('PayPal requires HTTPS. Please visit the live site to pay.');
+    return;
+  }
+
+  try {
+    // 1. Fetch client token from PHP backend
+    var tokenResp = await fetch('/api/paypal-client-token.php').then(function(r) { return r.json(); });
+    if (!tokenResp.clientToken) throw new Error(tokenResp.error || 'No client token returned from server');
+
+    // 2. Load v6 SDK
+    await _ppLoadV6Script();
+
+    // 3. Create PayPal instance
+    _ppV6Instance = await window.paypal.createInstance({
+      clientToken: tokenResp.clientToken,
+      components: ['card-fields', 'googlepay', 'applepay', 'fastlane']
+    });
+
+    _ppHideLoading();
+    _ppHideError();
+
+    // 4. Try rendering all components, collect available methods
+    var available = [];
+
+    // Fastlane (may not be available for all accounts)
+    var flOk = await _ppRenderFastlane(_ppV6Instance);
+    if (flOk) available.push('fastlane');
+
+    // Card Fields
+    var cfOk = await _ppRenderCardFields(_ppV6Instance);
+    if (cfOk) available.push('cards');
+
+    // Google Pay
+    var gpOk = await _ppRenderGooglePay(_ppV6Instance);
+    if (gpOk) available.push('googlepay');
+
+    // Apple Pay
+    var apOk = await _ppRenderApplePay(_ppV6Instance);
+    if (apOk) available.push('applepay');
+
+    if (!available.length) {
+      throw new Error('No payment methods are available for this browser/account.');
+    }
+
+    // 5. Build sub-tabs
+    _ppBuildSubTabs(available);
+    _ppShowFooter();
+
+  } catch(e) {
+    console.error('PayPal v6 init error:', e);
+    _ppShowError(e.message || 'Failed to load payment methods — please try again.');
+  }
 }
 
 function _showPayPalManualFallback(ppGw, loadEl, errEl, btnEl) {
   if (loadEl) loadEl.style.display = 'none';
-  if (btnEl)  btnEl.innerHTML = '';
-  // Build a rich manual PayPal fallback
-  var email   = ppGw.g_pp_email || contactEmail;
-  var ppLink  = ppGw.g_pp_link  || '';
+  var email  = (ppGw || {}).g_pp_email || contactEmail;
+  var ppLink = (ppGw || {}).g_pp_link  || '';
   var html = '<div style="background:var(--c-bg3);border:1px solid var(--c-border);border-radius:14px;padding:24px;text-align:center">'
     + '<div style="font-size:40px;margin-bottom:10px">🅿️</div>'
     + '<div style="font-family:var(--font-h);font-weight:700;font-size:15px;margin-bottom:6px">Pay with PayPal</div>'
@@ -1033,7 +1433,7 @@ function _showPayPalManualFallback(ppGw, loadEl, errEl, btnEl) {
   if (ppLink) {
     html += '<a href="' + ppLink + '" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:11px 28px;background:linear-gradient(135deg,#009cde,#003087);color:#fff;border:none;border-radius:50px;font-weight:700;font-size:14px;text-decoration:none;margin-bottom:14px">🔗 Open PayPal.me →</a><br/>';
   }
-  html += '<button onclick="handleSubmit(true)" style="display:inline-flex;align-items:center;gap:8px;padding:11px 28px;background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);border-radius:50px;font-weight:700;font-size:13px;cursor:pointer;margin-top:8px">&#10003; Payment Sent &#8212; Confirm Order</button>'
+  html += '<button onclick="handleSubmit(true)" style="display:inline-flex;align-items:center;gap:8px;padding:11px 28px;background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);border-radius:50px;font-weight:700;font-size:13px;cursor:pointer;margin-top:8px">✓ Payment Sent — Confirm Order</button>'
     + '<div style="font-size:11px;color:var(--c-muted);margin-top:12px">After paying via PayPal, click above to confirm your order.</div>'
     + '</div>';
   if (errEl) { errEl.innerHTML = html; errEl.style.display = ''; }

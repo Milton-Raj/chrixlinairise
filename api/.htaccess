@@ -1,0 +1,8 @@
+# Protect paypal-config.php from direct web access (it's require_once'd only)
+<Files "paypal-config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Allow other PHP files to be called via AJAX
+Options -Indexes

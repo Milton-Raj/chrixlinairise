@@ -1,0 +1,17 @@
+# ── PayPal Live Credentials (never commit real values — set these in Hostinger env) ──
+SetEnv PAYPAL_CLIENT_ID     ATA0r2N8O21eTJI2tz56HCjMrWlHQfpzbe_3q8ZDByvstB2e_bqPmghqGw39RfzHr0RGdkMwAcVgpFZb
+SetEnv PAYPAL_CLIENT_SECRET EN_yrzaE0ekhZ6ELZWuf2xkOJI_SlzzUyBg_G-jKLHILlbGVTAlXiQWk3ptm-VVTF1OcUvz_4zhUz5t7
+
+# ── Protect PHP API files from direct directory listing ──
+Options -Indexes
+
+# ── Protect config file ──
+<Files "paypal-config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# ── Pretty URLs (optional) ──
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
