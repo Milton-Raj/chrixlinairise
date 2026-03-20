@@ -135,7 +135,7 @@
   }
 
   async function deletePricingPlan(id) {
-    localStorage.setItem(LS.PRICING, JSON.stringify(_lsGetPlans().filter(p => p.id !== id)));
+    localStorage.setItem(LS.PRICING, JSON.stringify(_lsGetPlans().filter(p => String(p.id) !== String(id))));
     const client = _getClient();
     if (!client) return false;
     try {
@@ -566,10 +566,10 @@
     return { id: r.id, emoji: r.emoji, badge: r.badge, category: r.category, categoryLabel: r.category_label, categoryClass: r.category_class, price: r.price, title: r.title, slug: r.slug || _slugify(r.title||''), desc: r.description, longDesc: r.long_desc, image: r.image_url, ytId: r.yt_id, buyUrl: r.buy_url, downloadUrl: r.download_url||'', features: r.features||[], howItWorks: r.how_it_works||[], reviews: r.reviews||[], screenshots: r.screenshots||[], sortOrder: r.sort_order, isActive: r.is_active };
   }
   function _planToRow(p) {
-    return { id: p.id, name: p.name||'', price: String(p.price||''), price_label: p.priceLabel||'', period: p.period||'', badge: p.badge||'', badge_color: p.badgeColor||'', description: p.description||'', cta: p.cta||'Get Started', cta_link: p.ctaLink||'', is_highlighted: !!p.highlighted, features: p.features||[], sort_order: p.sortOrder||0, is_active: p.isActive!==false };
+    return { id: p.id, name: p.name||'', price: String(p.price||''), price_label: p.priceLabel||'', period: p.period||'', badge: p.badge||'', badge_color: p.badgeColor||'', badge_bg: p.badgeBg||'', description: p.description||'', cta: p.cta||'Get Started', cta_link: p.ctaLink||'', is_highlighted: !!p.highlighted, features: p.features||[], sort_order: p.sortOrder||0, is_active: p.isActive!==false, billing_cycle: p.billingCycle||'monthly' };
   }
   function _rowToPlan(r) {
-    return { id: r.id, name: r.name, price: r.price, priceLabel: r.price_label, period: r.period, badge: r.badge, badgeColor: r.badge_color, description: r.description, cta: r.cta, ctaLink: r.cta_link, highlighted: r.is_highlighted, features: r.features||[], sortOrder: r.sort_order, isActive: r.is_active };
+    return { id: r.id, name: r.name, price: r.price, priceLabel: r.price_label, period: r.period, badge: r.badge, badgeColor: r.badge_color, badgeBg: r.badge_bg||(r.badge_color ? r.badge_color+'22' : ''), description: r.description, cta: r.cta, ctaLink: r.cta_link, highlighted: r.is_highlighted, features: r.features||[], sortOrder: r.sort_order, isActive: r.is_active, billingCycle: r.billing_cycle||'monthly' };
   }
   function _bankToRow(b) {
     return { profile_key: 'default', account_name: b.accountName||'', bank_name: b.bankName||'', account_number: b.accountNumber||'', sort_code: b.sortCode||'', iban: b.iban||'', swift: b.swift||'', ref_note: b.refNote||'', instructions: b.instructions||'', paypal_email: b.paypalEmail||'', paypal_link: b.paypalLink||'', crypto_type: b.cryptoType||'', crypto_address: b.cryptoAddress||'', contact_email: b.contactEmail||'', currency: b.currency||'$', success_msg: b.successMsg||'', refund_policy: b.refundPolicy||'' };

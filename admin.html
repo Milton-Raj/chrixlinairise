@@ -385,7 +385,7 @@
           <span class="sb-icon">✍️</span> Content Editor
         </button>
         <button class="sidebar-btn" onclick="showPanel('bankdetails')" data-panel="bankdetails" style="font-size:13px">
-          <span class="sb-icon">🏦</span> Bank Details
+          <span class="sb-icon">💳</span> Payment Gateways
         </button>
         <button class="sidebar-btn" onclick="showPanel('theme')" data-panel="theme" style="font-size:13px">
           <span class="sb-icon">🎨</span> Theme & Colors
@@ -492,11 +492,6 @@
             <div class="kpi-card2-label">Purchasing Customers</div>
             <div style="font-size:11px;color:var(--muted);margin-top:4px">Click for details →</div>
           </div>
-          <div class="kpi-card2" onclick="showPanel('orders')" style="cursor:pointer">
-            <div class="kpi-card2-val" id="dashPendingOrders">—</div>
-            <div class="kpi-card2-label">Pending Orders</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:4px">Click for details →</div>
-          </div>
         </div>
 
         <!-- Third Row: Trending + Top Plans -->
@@ -514,9 +509,6 @@
               </div>
               <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px">
                 <span>Purchasing Customers</span><strong id="dashOvPurchasers">—</strong>
-              </div>
-              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px">
-                <span>Pending Orders</span><strong id="dashOvPending" style="color:#f59e0b">—</strong>
               </div>
               <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px">
                 <span>Active Plans</span><strong id="kpi_activePlans">0</strong>
@@ -1244,89 +1236,90 @@
         </div>
       </div>
 
-      <!-- ── BANK DETAILS ──────────────────────────────────── -->
+      <!-- ── PAYMENT GATEWAYS ───────────────────────────────── -->
       <div id="panel-bankdetails" class="panel">
-        <div class="panel-title">🏦 Bank Details</div>
-        <div class="panel-desc">Configure payment methods shown to customers on the checkout page. These details appear in the Bank Transfer and PayPal sections of payment.html.</div>
+        <div class="panel-title">💳 Payment Gateways</div>
+        <div class="panel-desc">Select and configure payment methods for your customers. Enable multiple gateways — customers can choose at checkout.</div>
 
-        <!-- Card / Primary Payment -->
-        <div class="section-box">
-          <div class="section-box-header" onclick="toggleBox(this)">
-            <div class="section-box-title"><span class="section-box-icon">🏦</span> Bank Transfer Details</div>
-            <span class="section-box-toggle">▾</span>
-          </div>
-          <div class="section-box-body">
-            <div class="form-grid">
-              <div class="form-row"><label>Account Holder Name</label><input type="text" id="bank_account_name" placeholder="Chrixlin AI Rise" /></div>
-              <div class="form-row"><label>Bank Name</label><input type="text" id="bank_name" placeholder="e.g. Chase Bank" /></div>
-            </div>
-            <div class="form-grid">
-              <div class="form-row"><label>Account Number</label><input type="text" id="bank_account_number" placeholder="e.g. 1234567890" /></div>
-              <div class="form-row"><label>Sort Code / Routing Number</label><input type="text" id="bank_sort_code" placeholder="e.g. 12-34-56" /></div>
-            </div>
-            <div class="form-grid">
-              <div class="form-row"><label>IBAN (International)</label><input type="text" id="bank_iban" placeholder="e.g. GB29 NWBK 6016 1331 9268 19" /></div>
-              <div class="form-row"><label>SWIFT / BIC Code</label><input type="text" id="bank_swift" placeholder="e.g. CHASUS33" /></div>
-            </div>
-            <div class="form-row"><label>Bank Reference Note (shown to customer)</label><input type="text" id="bank_ref_note" placeholder="e.g. Please include your order number as reference" /></div>
-            <div class="input-hint" style="margin-top:-10px;margin-bottom:16px">This reference message is shown on the checkout page to help identify transfers.</div>
-            <div class="form-row"><label>Additional Bank Instructions</label><textarea id="bank_instructions" placeholder="Any extra instructions for bank transfer customers..."></textarea></div>
-          </div>
+        <!-- Gateway Cards -->
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:32px" id="gatewayCardsGrid">
+          <div style="color:var(--muted);font-size:13px;padding:24px;text-align:center;grid-column:1/-1">Loading gateways...</div>
         </div>
 
-        <!-- PayPal -->
-        <div class="section-box">
-          <div class="section-box-header" onclick="toggleBox(this)">
-            <div class="section-box-title"><span class="section-box-icon">🅿️</span> PayPal Settings</div>
-            <span class="section-box-toggle">▾</span>
-          </div>
-          <div class="section-box-body">
-            <div class="form-row"><label>PayPal Email Address</label><input type="email" id="paypal_email" placeholder="payments@chrixlin.tech" /></div>
-            <div class="form-row"><label>PayPal.me Link (optional)</label><input type="url" id="paypal_link" placeholder="https://paypal.me/yourname" /></div>
-            <div class="input-hint" style="margin-top:-10px">If provided, a direct PayPal link button will appear on the checkout page.</div>
-          </div>
-        </div>
-
-        <!-- Crypto -->
-        <div class="section-box">
-          <div class="section-box-header" onclick="toggleBox(this)">
-            <div class="section-box-title"><span class="section-box-icon">₿</span> Crypto Payments (Optional)</div>
-            <span class="section-box-toggle">▾</span>
-          </div>
-          <div class="section-box-body">
-            <div class="form-grid">
-              <div class="form-row"><label>Accepted Crypto</label>
-                <select id="crypto_type">
-                  <option value="">Disabled</option>
-                  <option value="USDT">USDT (TRC-20)</option>
-                  <option value="USDC">USDC</option>
-                  <option value="BTC">Bitcoin (BTC)</option>
-                  <option value="ETH">Ethereum (ETH)</option>
-                  <option value="OTHER">Other</option>
-                </select>
-              </div>
-              <div class="form-row"><label>Wallet Address</label><input type="text" id="crypto_address" placeholder="0x1234...abcd" style="font-family:monospace;font-size:12px" /></div>
-            </div>
-            <div class="input-hint" style="margin-top:-8px">Leave "Disabled" to hide crypto option from checkout. Address is shown to customers after selecting this method.</div>
-          </div>
-        </div>
-
-        <!-- General Settings -->
+        <!-- Checkout Settings -->
         <div class="section-box">
           <div class="section-box-header" onclick="toggleBox(this)">
             <div class="section-box-title"><span class="section-box-icon">⚙️</span> Checkout Settings</div>
             <span class="section-box-toggle">▾</span>
           </div>
           <div class="section-box-body">
+            <div class="form-row"><label>📞 Strategy Call / Booking Link</label><input type="url" id="strategy_call_url" placeholder="https://calendly.com/yourname or mailto:info@chrixlin.tech" /></div>
+            <div class="input-hint" style="margin-top:-10px;margin-bottom:16px">Used for ALL "Book Free Strategy Call" / "Book Free Call" buttons across the entire website.</div>
             <div class="form-row"><label>Payment Contact Email</label><input type="email" id="payment_contact_email" placeholder="info@chrixlin.tech" /></div>
             <div class="input-hint" style="margin-top:-10px;margin-bottom:16px">Shown on checkout as the contact for payment questions.</div>
             <div class="form-row"><label>Currency Symbol</label><input type="text" id="payment_currency" placeholder="$" style="max-width:80px" /></div>
-            <div class="form-row"><label>Success Page Message</label><textarea id="payment_success_msg" placeholder="Thank you for your purchase! Our team will contact you within 24 hours to schedule your onboarding call."></textarea></div>
-            <div class="form-row"><label>Refund / Money-Back Policy (shown as tooltip on checkout)</label><textarea id="payment_refund_policy" placeholder="e.g. 30-day satisfaction guarantee. Contact us within 30 days for a full refund if you're not satisfied."></textarea></div>
+
+            <div class="form-row"><label>Success Page Message</label><textarea id="payment_success_msg" placeholder="Thank you for your purchase! Our team will contact you within 24 hours."></textarea></div>
+            <div class="form-row"><label>Refund / Money-Back Policy</label><textarea id="payment_refund_policy" placeholder="e.g. 15-day money-back guarantee. Contact us within 15 days for a full refund."></textarea></div>
           </div>
         </div>
 
-        <button class="btn btn-primary" style="margin-top:8px" onclick="saveBankDetails()">💾 Save Payment Settings</button>
+        <!-- Tax / GST Settings -->
+        <div class="section-box" style="margin-top:16px">
+          <div class="section-box-header" onclick="toggleBox(this)">
+            <div class="section-box-title"><span class="section-box-icon">🧾</span> Tax / GST Settings</div>
+            <span class="section-box-toggle">▾</span>
+          </div>
+          <div class="section-box-body">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:20px">Enable each tax individually. When enabled the percentage is added to the product price and shown as a separate line item on the checkout page.</div>
+            <div class="form-grid">
+              <div class="form-row">
+                <label>CGST — Central Goods &amp; Services Tax</label>
+                <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px">
+                  <button type="button" id="tax_cgst_toggle" onclick="toggleTax('cgst')"
+                    style="padding:6px 18px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;background:rgba(100,116,139,0.1);color:#64748b;border:1px solid rgba(100,116,139,0.3);transition:all 0.2s;white-space:nowrap">
+                    ✗ Disabled
+                  </button>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <input type="number" id="tax_cgst" placeholder="9" min="0" max="100" step="0.5"
+                      style="max-width:90px;opacity:0.4;pointer-events:none" disabled />
+                    <span style="font-size:13px;color:var(--muted)">%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label>SGST — State Goods &amp; Services Tax</label>
+                <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px">
+                  <button type="button" id="tax_sgst_toggle" onclick="toggleTax('sgst')"
+                    style="padding:6px 18px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;background:rgba(100,116,139,0.1);color:#64748b;border:1px solid rgba(100,116,139,0.3);transition:all 0.2s;white-space:nowrap">
+                    ✗ Disabled
+                  </button>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <input type="number" id="tax_sgst" placeholder="9" min="0" max="100" step="0.5"
+                      style="max-width:90px;opacity:0.4;pointer-events:none" disabled />
+                    <span style="font-size:13px;color:var(--muted)">%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" style="margin-top:16px" onclick="saveCheckoutSettings()">💾 Save Checkout Settings</button>
+
+        <!-- Gateway Config Modal -->
+        <div id="gatewayModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);z-index:2000;align-items:center;justify-content:center" onclick="if(event.target===this)closeGatewayModal()">
+          <div style="background:#1a1a2e;border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:36px;width:min(580px,96vw);max-height:88vh;overflow-y:auto;position:relative">
+            <button onclick="closeGatewayModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer">✕</button>
+            <div id="gatewayModalTitle" style="font-size:20px;font-weight:800;margin-bottom:4px">Configure Gateway</div>
+            <div id="gatewayModalDesc" style="font-size:13px;color:var(--muted);margin-bottom:24px"></div>
+            <div id="gatewayModalFields"></div>
+            <div style="display:flex;gap:10px;margin-top:24px">
+              <button class="btn btn-ghost" onclick="closeGatewayModal()">Cancel</button>
+              <button class="btn btn-primary" onclick="saveGatewayConfig()">💾 Save Configuration</button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- ── ORDERS & TRANSACTIONS ───────────────────────────── -->
@@ -1334,22 +1327,14 @@
   <div class="panel-title">📦 Orders & Transactions</div>
   <div class="panel-desc">All customer purchases and payment records. Updates in real-time.</div>
 
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px">
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:28px">
     <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
       <div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Total Orders</div>
       <div id="ordStatTotal" style="font-size:28px;font-weight:800">—</div>
     </div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
-      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Completed</div>
-      <div id="ordStatCompleted" style="font-size:28px;font-weight:800;color:#22c55e">—</div>
-    </div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
-      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Pending</div>
-      <div id="ordStatPending" style="font-size:28px;font-weight:800;color:#f59e0b">—</div>
-    </div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
       <div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Total Revenue</div>
-      <div id="ordStatRevenue" style="font-size:28px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">—</div>
+      <div id="ordStatRevenue" style="font-size:28px;font-weight:800;color:#22c55e">—</div>
     </div>
   </div>
 
@@ -1357,6 +1342,7 @@
     <input type="text" id="ordSearchInput" placeholder="🔍 Search by order ref, product or user..." oninput="filterOrdersTable()"
       style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;color:var(--text);font-size:14px;outline:none" />
     <button class="btn btn-ghost" onclick="loadOrdersPanel()" style="white-space:nowrap">↻ Refresh</button>
+    <button class="btn btn-ghost" onclick="exportOrdersExcel()" style="white-space:nowrap;border-color:rgba(34,197,94,0.4);color:#22c55e">⬇ Export Excel</button>
   </div>
 
   <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden">
@@ -1405,6 +1391,14 @@
       </tbody>
     </table>
   </div>
+
+  <!-- Submission Detail Modal -->
+  <div id="subDetailModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);z-index:2000;align-items:center;justify-content:center" onclick="if(event.target===this)closeSubModal()">
+    <div style="background:#1a1a2e;border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:36px;width:min(580px,96vw);max-height:80vh;overflow-y:auto;position:relative">
+      <button onclick="closeSubModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer">✕</button>
+      <div id="subDetailContent"></div>
+    </div>
+  </div>
 </div>
 
       <!-- ── USERS ───────────────────────────────────────────── -->
@@ -1424,16 +1418,17 @@
     </div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
       <div style="font-size:13px;color:var(--muted);margin-bottom:6px">Total Revenue</div>
-      <div id="statTotalRevenue" style="font-size:28px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">—</div>
+      <div id="statTotalRevenue" style="font-size:28px;font-weight:800;color:#22c55e">—</div>
     </div>
   </div>
 
-  <!-- Search + Refresh -->
+  <!-- Search + Refresh + Export -->
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
     <input type="text" id="userSearchInput" placeholder="🔍 Search by name or email..."
       oninput="filterUsersTable()"
       style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;color:var(--text);font-size:14px;outline:none" />
     <button class="btn btn-ghost" onclick="loadUsersPanel()" style="white-space:nowrap">↻ Refresh</button>
+    <button class="btn btn-ghost" onclick="exportUsersExcel()" style="white-space:nowrap;border-color:rgba(34,197,94,0.4);color:#22c55e">⬇ Export Excel</button>
   </div>
 
   <!-- Users Table -->
@@ -1478,7 +1473,7 @@
 
   <!-- KPI Cards -->
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px" id="analyticsKPIs">
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px"><div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Total Revenue</div><div id="akpRevenue" style="font-size:28px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">—</div></div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px"><div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Total Revenue</div><div id="akpRevenue" style="font-size:28px;font-weight:800;color:#22c55e">—</div></div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px"><div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Total Orders</div><div id="akpOrders" style="font-size:28px;font-weight:800">—</div></div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px"><div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Registered Users</div><div id="akpUsers" style="font-size:28px;font-weight:800">—</div></div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px"><div style="font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Avg Order Value</div><div id="akpAvg" style="font-size:28px;font-weight:800;color:#22c55e">—</div></div>
@@ -1516,9 +1511,9 @@
         <div class="panel-desc">Configure your site, payment settings, and appearance.</div>
         <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:8px">
           <div class="settings-card" onclick="showPanel('bankdetails')">
-            <div class="settings-card-icon">🏦</div>
-            <div class="settings-card-title">Bank Details</div>
-            <div class="settings-card-desc">Configure payment methods, bank transfer, PayPal, crypto</div>
+            <div class="settings-card-icon">💳</div>
+            <div class="settings-card-title">Payment Gateways</div>
+            <div class="settings-card-desc">Bank, Razorpay, PayPal, Wise — enable and configure</div>
           </div>
           <div class="settings-card" onclick="showPanel('theme')">
             <div class="settings-card-icon">🎨</div>
@@ -1620,7 +1615,7 @@ const DEFAULT_DATA = {
     { q: "How soon can I expect to land my first paying client?", a: "Students who follow the program consistently typically land their first paid project between weeks 4 and 8. The AI Accelerator plan includes direct client introductions, which dramatically shortens that timeline. Our record is 11 days from enrolment to first payment." },
     { q: "What kind of AI products will I be building and selling?", a: "You'll build AI voice assistants, chatbots, sales automation tools, content AI systems, lead generation bots, and custom AI agents. These solutions solve real business problems and typically sell for $2,000–$15,000 as one-time builds, or $500–$3,000/month as managed services." },
     { q: "How much time do I need to commit each week?", a: "We recommend 8–12 hours per week to follow the program at full pace — roughly 2 hours of live sessions and the rest on projects and client work. Many of our students run this alongside a full-time job. You can also go at your own pace with the self-study materials." },
-    { q: "Is there a refund policy?", a: "Yes. We offer a 30-day satisfaction guarantee on all paid plans. If you complete the first module, attend your onboarding call, and still feel the program isn't right for you, we'll refund 100% of your payment — no questions asked. The AI Accelerator also includes an income guarantee: if you follow the program and don't generate income, we'll work with you for free until you do." },
+    { q: "Is there a refund policy?", a: "Yes. We offer a 15-day money-back guarantee on all paid plans. If you complete the first module, attend your onboarding call, and still feel the program isn't right for you, we'll refund 100% of your payment — no questions asked. The AI Accelerator also includes an income guarantee: if you follow the program and don't generate income, we'll work with you for free until you do." },
     { q: "Can I switch between Monthly and Yearly billing?", a: "Yes. You can start monthly and upgrade to an annual plan at any time to lock in the savings (up to 20% off). Contact us at info@chrixlin.tech and we'll handle the switch immediately." },
     { q: "What AI tools and platforms do you teach?", a: "We cover the most in-demand tools businesses are paying for right now: Make.com, Zapier, Voiceflow, Botpress, OpenAI API, Retell AI, Vapi, and more. We update the curriculum every quarter so you're always learning what's current and sellable." }
   ]
@@ -1684,13 +1679,13 @@ function showPanel(name) {
   };
   document.getElementById('panelTitle').textContent = titles[name] || name;
   if (name === 'marketplace') { populateMarketplace(); loadCategoriesAdmin(); }
-  if (name === 'bankdetails') populateBankDetails();
   if (name === 'pricing') { renderPricingPlanCards(_activePricingCycle); }
   if (name === 'dashboard') refreshDashboard();
   if (name === 'users') loadUsersPanel();
   if (name === 'orders') loadOrdersPanel();
   if (name === 'analytics') loadAnalytics();
   if (name === 'submissions') loadSubmissions();
+  if (name === 'bankdetails') { populateCheckoutSettings(); renderGatewayCards(); }
 }
 
 function toggleSettingsMenu() {
@@ -2033,8 +2028,8 @@ function renderPricingPlanCards(cycle) {
             <div style="font-size:13px;color:var(--muted)">${escHtml(p.priceLabel)} · ${escHtml(p.period||'')} · ${(p.features||[]).length} features · <span style="color:var(--cyan)">${escHtml(p.billingCycle||'monthly')}</span></div>
           </div>
           <div style="display:flex;gap:8px;flex-shrink:0">
-            <button class="btn btn-ghost btn-sm" onclick="openPlanModal(${p.id})" style="padding:7px 14px;font-size:13px">✏️ Edit</button>
-            <button class="btn btn-sm" onclick="deletePricingPlan(${p.id})" style="padding:7px 14px;font-size:13px;background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.25)">🗑 Delete</button>
+            <button class="btn btn-ghost btn-sm" onclick="openPlanModal('${p.id}')" style="padding:7px 14px;font-size:13px">✏️ Edit</button>
+            <button class="btn btn-sm" onclick="deletePricingPlan('${p.id}')" style="padding:7px 14px;font-size:13px;background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.25)">🗑 Delete</button>
           </div>
         </div>`).join('') + `</div>`;
 
@@ -2058,8 +2053,8 @@ function openPlanModal(id) {
   document.querySelectorAll('#planColorPicker div').forEach(d => d.style.border = '3px solid transparent');
   var firstSwatch = document.querySelector('#planColorPicker div[data-color="#22c55e"]');
   if (firstSwatch) firstSwatch.style.border = '3px solid white';
-  if (id !== null) {
-    const p = loadPricingPlans().find(x=>x.id===id);
+  if (id !== null && id !== undefined) {
+    const p = loadPricingPlans().find(x=>String(x.id)===String(id));
     if (p) {
       document.getElementById('planModalTitle').textContent = 'Edit Plan';
       document.getElementById('planModalSub').textContent = 'Update the plan details below';
@@ -2128,8 +2123,8 @@ function savePricingPlan() {
     highlighted: document.getElementById('pp_highlighted').checked,
     features:    document.getElementById('pp_features').value.split('\n').map(f=>f.trim()).filter(Boolean)
   };
-  if (_ppEditId!==null) {
-    const idx=allPlans.findIndex(p=>p.id===_ppEditId);
+  if (_ppEditId!==null && _ppEditId!==undefined) {
+    const idx=allPlans.findIndex(p=>String(p.id)===String(_ppEditId));
     if(idx!==-1) allPlans[idx]=plan; else allPlans.push(plan);
   } else {
     if (plansForCycle.length>=6) { document.getElementById('ppSaveStatus').textContent='Max 6 plans per billing cycle'; document.getElementById('ppSaveStatus').style.color='var(--red)'; return; }
@@ -2144,10 +2139,10 @@ function savePricingPlan() {
 
 function deletePricingPlan(id) {
   const plans = loadPricingPlans();
-  const p = plans.find(x=>x.id===id);
+  const p = plans.find(x=>String(x.id)===String(id));
   if (!p) return;
   if (!confirm(`Delete "${p.name}"?`)) return;
-  localStorage.setItem('chrixlin_pricing', JSON.stringify(plans.filter(x=>x.id!==id)));
+  localStorage.setItem('chrixlin_pricing', JSON.stringify(plans.filter(x=>String(x.id)!==String(id))));
   if (typeof ChrixlinDB !== 'undefined') ChrixlinDB.deletePricingPlan(id).catch(() => {});
   renderPricingPlanCards(_activePricingCycle);
   showToast('🗑 Plan deleted');
@@ -2673,75 +2668,248 @@ function saveMarketplace() {
   showToast('🛒 Marketplace saved!');
 }
 
-// ─── BANK DETAILS ─────────────────────────────────────────────────────────────
-const DEFAULT_BANK = {
-  accountName: 'Chrixlin AI Rise',
-  bankName: '',
-  accountNumber: '',
-  sortCode: '',
-  iban: '',
-  swift: '',
-  refNote: 'Please include your order number as payment reference',
-  instructions: '',
-  paypalEmail: 'info@chrixlin.tech',
-  paypalLink: '',
-  cryptoType: '',
-  cryptoAddress: '',
-  contactEmail: 'info@chrixlin.tech',
-  currency: '$',
-  successMsg: 'Thank you for your purchase! Our team will contact you within 24 hours to schedule your onboarding call.',
-  refundPolicy: '30-day satisfaction guarantee. Contact us within 30 days for a full refund if you\'re not satisfied.'
+// ─── PAYMENT GATEWAYS ─────────────────────────────────────────────────────────
+var GATEWAY_DEFS = {
+  card: {
+    id: 'card', icon: '💳', name: 'Credit / Debit Card', color: '#7c3aed',
+    desc: 'Accept Visa, Mastercard, Amex and other cards from customers.',
+    fields: [
+      { id: 'g_card_processor',    label: 'Payment Processor (optional)', type: 'text',     ph: 'e.g. Stripe, Razorpay, Square' },
+      { id: 'g_card_merchantId',   label: 'Merchant ID / Public Key',     type: 'text',     ph: 'Your public/merchant key', mono: true },
+      { id: 'g_card_acceptedCards',label: 'Accepted Cards',               type: 'text',     ph: 'Visa, Mastercard, Amex, RuPay' },
+      { id: 'g_card_instructions', label: 'Instructions (optional)',       type: 'textarea', ph: 'Any card payment notes for customers...' }
+    ]
+  },
+  bank: {
+    id: 'bank', icon: '🏦', name: 'Bank Transfer', color: '#3b82f6',
+    desc: 'Direct bank / wire transfer. Your account details shown to customers.',
+    fields: [
+      { id: 'g_bank_accountName',   label: 'Account Holder Name *', type: 'text',     ph: 'Chrixlin AI Rise' },
+      { id: 'g_bank_bankName',      label: 'Bank Name *',           type: 'text',     ph: 'e.g. Chase Bank, HDFC Bank' },
+      { id: 'g_bank_accountNumber', label: 'Account Number',        type: 'text',     ph: 'e.g. 1234567890' },
+      { id: 'g_bank_sortCode',      label: 'Sort Code / Routing / IFSC', type: 'text', ph: 'e.g. 12-34-56 or HDFC0001234' },
+      { id: 'g_bank_iban',          label: 'IBAN (International)',  type: 'text',     ph: 'e.g. GB29 NWBK 6016 1331 9268 19' },
+      { id: 'g_bank_swift',         label: 'SWIFT / BIC Code',      type: 'text',     ph: 'e.g. CHASUS33' },
+      { id: 'g_bank_upi',           label: 'UPI ID (India)',        type: 'text',     ph: 'e.g. yourname@upi' },
+      { id: 'g_bank_refNote',       label: 'Reference Note for Customer', type: 'text', ph: 'Please include your order number as reference' },
+      { id: 'g_bank_instructions',  label: 'Additional Instructions', type: 'textarea', ph: 'Any extra transfer instructions...' }
+    ]
+  },
+  razorpay: {
+    id: 'razorpay', icon: '⚡', name: 'Razorpay', color: '#3395ff',
+    desc: 'Accept UPI, cards, net banking & wallets via Razorpay (India).',
+    fields: [
+      { id: 'g_rzp_keyId',        label: 'API Key ID *',                    type: 'text',     ph: 'rzp_live_XXXXXXXXXXXXXXXXXX', mono: true },
+      { id: 'g_rzp_keySecret',    label: 'API Key Secret *',                type: 'password', ph: 'Your Razorpay secret key',   mono: true },
+      { id: 'g_rzp_webhookSecret',label: 'Webhook Secret (optional)',       type: 'text',     ph: 'For payment verification',   mono: true },
+      { id: 'g_rzp_businessName', label: 'Business Name (shown at checkout)', type: 'text',  ph: 'Chrixlin AI Rise' },
+      { id: 'g_rzp_logo',         label: 'Logo URL (shown at checkout)',    type: 'url',      ph: 'https://yourdomain.com/logo.png' }
+    ]
+  },
+  paypal: {
+    id: 'paypal', icon: '🅿️', name: 'PayPal', color: '#009cde',
+    desc: 'Accept payments globally via PayPal email, PayPal.me link or API.',
+    fields: [
+      { id: 'g_pp_email',        label: 'PayPal Email Address *',        type: 'email',    ph: 'payments@chrixlin.tech' },
+      { id: 'g_pp_link',         label: 'PayPal.me Link',               type: 'url',      ph: 'https://paypal.me/yourname' },
+      { id: 'g_pp_clientId',     label: 'Client ID (for SDK checkout)', type: 'text',     ph: 'Your PayPal Client ID',    mono: true },
+      { id: 'g_pp_clientSecret', label: 'Client Secret',                type: 'password', ph: 'Your PayPal Client Secret', mono: true },
+      { id: 'g_pp_currency',     label: 'Default Currency',             type: 'text',     ph: 'USD', style: 'max-width:100px' }
+    ]
+  },
+  wise: {
+    id: 'wise', icon: '🌍', name: 'Wise (TransferWise)', color: '#37d67a',
+    desc: 'Low-cost international transfers via Wise.',
+    fields: [
+      { id: 'g_wise_email',        label: 'Wise Account Email *',        type: 'email',    ph: 'payments@chrixlin.tech' },
+      { id: 'g_wise_link',         label: 'Wise Payment Link',           type: 'url',      ph: 'https://wise.com/pay/r/yourlink' },
+      { id: 'g_wise_apiToken',     label: 'API Token (optional)',        type: 'password', ph: 'Your Wise API token', mono: true },
+      { id: 'g_wise_profileId',    label: 'Profile ID (optional)',       type: 'text',     ph: 'e.g. 123456', mono: true },
+      { id: 'g_wise_instructions', label: 'Transfer Instructions',       type: 'textarea', ph: 'How customers should send via Wise...' }
+    ]
+  }
 };
 
-function loadBankDetails() {
+var _gwConfig = {};
+var _gwEditType = null;
+
+function _loadGwConfig() {
+  try { return JSON.parse(localStorage.getItem('chrixlin_gateways') || '{}'); } catch(e) { return {}; }
+}
+function _saveGwConfig(cfg) {
+  localStorage.setItem('chrixlin_gateways', JSON.stringify(cfg));
+}
+
+function renderGatewayCards() {
+  _gwConfig = _loadGwConfig();
+  var el = document.getElementById('gatewayCardsGrid');
+  if (!el) return;
+  el.innerHTML = Object.values(GATEWAY_DEFS).map(function(gw) {
+    var cfg = _gwConfig[gw.id] || {};
+    var enabled = cfg.enabled === true;
+    var configured = Object.keys(cfg).some(function(k) { return k !== 'enabled' && cfg[k]; });
+    var statusHtml = configured
+      ? '<span style="font-size:11px;background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);padding:2px 10px;border-radius:10px;font-weight:600">✓ Configured</span>'
+      : '<span style="font-size:11px;background:rgba(100,116,139,0.1);color:#94a3b8;border:1px solid rgba(100,116,139,0.25);padding:2px 10px;border-radius:10px">Not configured</span>';
+    var enableBtnStyle = enabled
+      ? 'background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.35)'
+      : 'background:rgba(100,116,139,0.1);color:#64748b;border:1px solid rgba(100,116,139,0.3)';
+    return '<div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:14px">' +
+      '<div style="display:flex;align-items:flex-start;gap:14px">' +
+        '<div style="width:48px;height:48px;border-radius:12px;background:'+gw.color+'1a;border:1px solid '+gw.color+'44;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">'+gw.icon+'</div>' +
+        '<div style="flex:1;min-width:0">' +
+          '<div style="font-weight:700;font-size:15px;margin-bottom:2px">'+gw.name+'</div>' +
+          '<div style="font-size:12px;color:var(--muted);line-height:1.4">'+gw.desc+'</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">' +
+        statusHtml +
+        '<div style="display:flex;gap:8px">' +
+          '<button type="button" onclick="toggleGateway(\''+gw.id+'\')" style="padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;'+enableBtnStyle+'">'+(enabled?'✓ Enabled':'✗ Disabled')+'</button>' +
+          '<button type="button" onclick="openGatewayModal(\''+gw.id+'\')" style="background:rgba(124,58,237,0.15);color:#a78bfa;border:1px solid rgba(124,58,237,0.3);padding:6px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">⚙ Configure</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function toggleGateway(type) {
+  _gwConfig = _loadGwConfig();
+  if (!_gwConfig[type]) _gwConfig[type] = {};
+  _gwConfig[type].enabled = !(_gwConfig[type].enabled === true);
+  _saveGwConfig(_gwConfig);
+  // Debug safeguard: direct write in case _saveGwConfig is shadowed
+  localStorage.setItem('chrixlin_gateways', JSON.stringify(_gwConfig));
+  renderGatewayCards();
+  var gw = GATEWAY_DEFS[type];
+  showToast(_gwConfig[type].enabled ? (gw.name + ' enabled ✓') : (gw.name + ' disabled'));
+}
+
+function openGatewayModal(type) {
+  var gw = GATEWAY_DEFS[type];
+  if (!gw) return;
+  _gwEditType = type;
+  _gwConfig = _loadGwConfig();
+  var cfg = _gwConfig[type] || {};
+  document.getElementById('gatewayModalTitle').textContent = gw.icon + '  Configure ' + gw.name;
+  document.getElementById('gatewayModalDesc').textContent = gw.desc;
+  document.getElementById('gatewayModalFields').innerHTML = gw.fields.map(function(f) {
+    var val = escHtml(cfg[f.id] || '');
+    var style = 'font-size:14px' + (f.mono ? ';font-family:monospace;letter-spacing:0.03em' : '') + (f.style ? ';' + f.style : '');
+    if (f.type === 'textarea') {
+      return '<div class="form-row"><label>' + f.label + '</label><textarea id="' + f.id + '" placeholder="' + f.ph + '" style="' + style + ';min-height:80px">' + val + '</textarea></div>';
+    }
+    return '<div class="form-row"><label>' + f.label + '</label><input type="' + f.type + '" id="' + f.id + '" placeholder="' + f.ph + '" value="' + val + '" style="' + style + '" /></div>';
+  }).join('');
+  document.getElementById('gatewayModalOverlay').style.display = 'flex';
+}
+
+function closeGatewayModal() {
+  document.getElementById('gatewayModalOverlay').style.display = 'none';
+  _gwEditType = null;
+}
+
+function saveGatewayConfig() {
+  if (!_gwEditType) return;
+  var gw = GATEWAY_DEFS[_gwEditType];
+  _gwConfig = _loadGwConfig();
+  if (!_gwConfig[_gwEditType]) _gwConfig[_gwEditType] = {};
+  gw.fields.forEach(function(f) {
+    var el = document.getElementById(f.id);
+    if (el) _gwConfig[_gwEditType][f.id] = el.value.trim();
+  });
+  _saveGwConfig(_gwConfig);
+  renderGatewayCards();
+  closeGatewayModal();
+  showToast(gw.name + ' configuration saved! 💾');
+}
+
+// ─── CHECKOUT SETTINGS ────────────────────────────────────────────────────────
+var DEFAULT_CHECKOUT = {
+  strategyCallUrl: 'mailto:info@chrixlin.tech',
+  contactEmail: 'info@chrixlin.tech',
+  currency: '$',
+  cgst: 0, cgstEnabled: false,
+  sgst: 0, sgstEnabled: false,
+  successMsg: 'Thank you for your purchase! Our team will contact you within 24 hours to schedule your onboarding call.',
+  refundPolicy: '15-day money-back guarantee. Contact us within 15 days for a full refund if you\'re not satisfied.'
+};
+
+function loadCheckoutSettings() {
   try {
-    const s = localStorage.getItem('chrixlin_bank_details');
-    return s ? Object.assign({}, DEFAULT_BANK, JSON.parse(s)) : Object.assign({}, DEFAULT_BANK);
-  } catch { return Object.assign({}, DEFAULT_BANK); }
+    var s = localStorage.getItem('chrixlin_checkout_settings');
+    // Also try old key for backward compat
+    if (!s) s = localStorage.getItem('chrixlin_bank_details');
+    return s ? Object.assign({}, DEFAULT_CHECKOUT, JSON.parse(s)) : Object.assign({}, DEFAULT_CHECKOUT);
+  } catch(e) { return Object.assign({}, DEFAULT_CHECKOUT); }
 }
 
-function populateBankDetails() {
-  const b = loadBankDetails();
-  document.getElementById('bank_account_name').value   = b.accountName || '';
-  document.getElementById('bank_name').value           = b.bankName || '';
-  document.getElementById('bank_account_number').value = b.accountNumber || '';
-  document.getElementById('bank_sort_code').value      = b.sortCode || '';
-  document.getElementById('bank_iban').value           = b.iban || '';
-  document.getElementById('bank_swift').value          = b.swift || '';
-  document.getElementById('bank_ref_note').value       = b.refNote || '';
-  document.getElementById('bank_instructions').value   = b.instructions || '';
-  document.getElementById('paypal_email').value        = b.paypalEmail || '';
-  document.getElementById('paypal_link').value         = b.paypalLink || '';
-  document.getElementById('crypto_type').value         = b.cryptoType || '';
-  document.getElementById('crypto_address').value      = b.cryptoAddress || '';
-  document.getElementById('payment_contact_email').value = b.contactEmail || '';
-  document.getElementById('payment_currency').value    = b.currency || '$';
-  document.getElementById('payment_success_msg').value = b.successMsg || '';
-  document.getElementById('payment_refund_policy').value = b.refundPolicy || '';
+function populateCheckoutSettings() {
+  var b = loadCheckoutSettings();
+  var el;
+  el = document.getElementById('strategy_call_url');     if (el) el.value = b.strategyCallUrl || '';
+  el = document.getElementById('payment_contact_email'); if (el) el.value = b.contactEmail || '';
+  el = document.getElementById('payment_currency');      if (el) el.value = b.currency || '$';
+  el = document.getElementById('tax_cgst'); if (el) el.value = b.cgst != null ? b.cgst : 0;
+  el = document.getElementById('tax_sgst'); if (el) el.value = b.sgst != null ? b.sgst : 0;
+  _applyTaxToggleState('cgst', b.cgstEnabled === true);
+  _applyTaxToggleState('sgst', b.sgstEnabled === true);
+  el = document.getElementById('payment_success_msg');   if (el) el.value = b.successMsg || '';
+  el = document.getElementById('payment_refund_policy'); if (el) el.value = b.refundPolicy || '';
 }
 
-function saveBankDetails() {
-  const b = {
-    accountName:   document.getElementById('bank_account_name').value,
-    bankName:      document.getElementById('bank_name').value,
-    accountNumber: document.getElementById('bank_account_number').value,
-    sortCode:      document.getElementById('bank_sort_code').value,
-    iban:          document.getElementById('bank_iban').value,
-    swift:         document.getElementById('bank_swift').value,
-    refNote:       document.getElementById('bank_ref_note').value,
-    instructions:  document.getElementById('bank_instructions').value,
-    paypalEmail:   document.getElementById('paypal_email').value,
-    paypalLink:    document.getElementById('paypal_link').value,
-    cryptoType:    document.getElementById('crypto_type').value,
-    cryptoAddress: document.getElementById('crypto_address').value,
-    contactEmail:  document.getElementById('payment_contact_email').value,
-    currency:      document.getElementById('payment_currency').value,
-    successMsg:    document.getElementById('payment_success_msg').value,
-    refundPolicy:  document.getElementById('payment_refund_policy').value,
+// Keep old name for backward compat
+function populateBankDetails() { populateCheckoutSettings(); }
+function loadBankDetails() { return loadCheckoutSettings(); }
+
+function saveCheckoutSettings() {
+  var b = {
+    strategyCallUrl: (document.getElementById('strategy_call_url') || {}).value || '',
+    contactEmail:    (document.getElementById('payment_contact_email') || {}).value || '',
+    currency:        (document.getElementById('payment_currency') || {}).value || '$',
+    cgst:            parseFloat((document.getElementById('tax_cgst') || {}).value) || 0,
+    cgstEnabled:     !(document.getElementById('tax_cgst') || {}).disabled,
+    sgst:            parseFloat((document.getElementById('tax_sgst') || {}).value) || 0,
+    sgstEnabled:     !(document.getElementById('tax_sgst') || {}).disabled,
+    successMsg:      (document.getElementById('payment_success_msg') || {}).value || '',
+    refundPolicy:    (document.getElementById('payment_refund_policy') || {}).value || ''
   };
-  localStorage.setItem('chrixlin_bank_details', JSON.stringify(b));
-  if (typeof ChrixlinDB !== 'undefined') ChrixlinDB.savePaymentSettings(b).catch(() => {});
-  showToast('🏦 Payment settings saved!');
+  localStorage.setItem('chrixlin_checkout_settings', JSON.stringify(b));
+  if (typeof ChrixlinDB !== 'undefined') ChrixlinDB.savePaymentSettings(b).catch(function() {});
+  showToast('⚙️ Checkout settings saved!');
+}
+
+// Keep old name for backward compat
+function saveBankDetails() { saveCheckoutSettings(); }
+
+function _applyTaxToggleState(type, enabled) {
+  var btn   = document.getElementById('tax_' + type + '_toggle');
+  var input = document.getElementById('tax_' + type);
+  if (!btn || !input) return;
+  if (enabled) {
+    btn.textContent = '✓ Enabled';
+    btn.style.background = 'rgba(34,197,94,0.15)';
+    btn.style.color = '#22c55e';
+    btn.style.borderColor = 'rgba(34,197,94,0.35)';
+    input.disabled = false;
+    input.style.opacity = '1';
+    input.style.pointerEvents = 'auto';
+  } else {
+    btn.textContent = '✗ Disabled';
+    btn.style.background = 'rgba(100,116,139,0.1)';
+    btn.style.color = '#64748b';
+    btn.style.borderColor = 'rgba(100,116,139,0.3)';
+    input.disabled = true;
+    input.style.opacity = '0.4';
+    input.style.pointerEvents = 'none';
+  }
+}
+
+function toggleTax(type) {
+  var input = document.getElementById('tax_' + type);
+  if (!input) return;
+  var nowEnabled = input.disabled; // if disabled → we're enabling it
+  _applyTaxToggleState(type, nowEnabled);
 }
 
 // ─── ORDERS / CALLS HELPERS ───────────────────────────────────────────────────
@@ -2797,10 +2965,8 @@ async function refreshDashboard() {
   set('kpi_totalPurchases',  filtered.length);
   set('dashRegisteredUsers', profiles.length);
   set('dashPurchasingUsers', purchasers || filtered.length);
-  set('dashPendingOrders',   pendingOrds);
   set('dashOvRegistered',    profiles.length);
   set('dashOvPurchasers',    purchasers || filtered.length);
-  set('dashOvPending',       pendingOrds);
 
   // KPIs that may exist from older markup
   var convEl = document.getElementById('kpi_conversionRate');
@@ -3094,16 +3260,31 @@ if (savedTheme.text) document.getElementById('theme_text').value = savedTheme.te
   const loginBtn = document.getElementById('loginBtn');
   const loginErr = document.getElementById('loginErr');
 
-  // Check existing session
+  // Called once auth is confirmed — initialises the active panel and loads DB data
+  function _initAdminPanels() {
+    var lastPanel = localStorage.getItem('admin_active_panel');
+    if (lastPanel && document.getElementById('panel-' + lastPanel)) {
+      showPanel(lastPanel);
+    } else {
+      refreshDashboard();
+    }
+  }
+
+  // Check existing session on load
   const { data: { session } } = await _sb.auth.getSession();
   if (session) {
     overlay.classList.add('hidden');
+    _initAdminPanels();
   }
 
-  // Listen for auth changes
+  // Listen for auth changes (covers login + token refresh + logout)
   _sb.auth.onAuthStateChange(function(event, session) {
     if (session) {
       overlay.classList.add('hidden');
+      // SIGNED_IN fires both on login and on token refresh; only init panels once
+      if (event === 'SIGNED_IN') {
+        _initAdminPanels();
+      }
     } else {
       overlay.classList.remove('hidden');
     }
@@ -3121,6 +3302,7 @@ if (savedTheme.text) document.getElementById('theme_text').value = savedTheme.te
       loginBtn.textContent = 'Sign In →';
       loginBtn.disabled = false;
     }
+    // On success, onAuthStateChange fires SIGNED_IN and calls _initAdminPanels()
   });
 
   document.getElementById('loginPassword').addEventListener('keydown', function(e) {
@@ -3307,12 +3489,8 @@ async function loadOrdersPanel() {
     _allOrdersAdmin = await ChrixlinDB.adminGetAllOrders();
     renderOrdersTable(_allOrdersAdmin);
     var total = _allOrdersAdmin.length;
-    var completed = _allOrdersAdmin.filter(function(o){return o.status==='completed';}).length;
-    var pending = _allOrdersAdmin.filter(function(o){return o.status==='pending'||o.status==='processing';}).length;
     var revenue = _allOrdersAdmin.reduce(function(s,o){return s+(parseFloat(o.amount)||0);},0);
     document.getElementById('ordStatTotal').textContent = total;
-    document.getElementById('ordStatCompleted').textContent = completed;
-    document.getElementById('ordStatPending').textContent = pending;
     document.getElementById('ordStatRevenue').textContent = '$'+revenue.toLocaleString('en-US',{minimumFractionDigits:0});
   } catch(e) {
     document.getElementById('ordersTableBody').innerHTML = '<tr><td colspan="7" style="padding:48px;text-align:center;color:#ef4444">Error loading orders.</td></tr>';
@@ -3342,6 +3520,59 @@ function filterOrdersTable() {
     return !q || (o.order_ref||'').toLowerCase().includes(q) || (o.product_title||'').toLowerCase().includes(q) || (o.user_name||'').toLowerCase().includes(q) || (o.user_email||'').toLowerCase().includes(q);
   }));
 }
+
+// ─── EXCEL EXPORT ─────────────────────────────────────────────────────────────
+function exportOrdersExcel() {
+  if (!_allOrdersAdmin.length) { alert('No orders to export.'); return; }
+  var rows = [['Order Ref','Customer Name','Customer Email','Product','Amount','Payment Method','Status','Date','Billing Name','Billing Address','Billing City','Billing Country','Billing Phone']];
+  _allOrdersAdmin.forEach(function(o) {
+    var bd = {};
+    try { bd = (typeof o.billing_details === 'string') ? JSON.parse(o.billing_details) : (o.billing_details || {}); } catch(e) {}
+    rows.push([
+      o.order_ref||'',
+      o.user_name||((bd.firstName||'')+' '+(bd.lastName||'')).trim()||'',
+      o.user_email||bd.email||'',
+      o.product_title||'',
+      parseFloat(o.amount)||0,
+      o.payment_method||'',
+      o.status||'',
+      o.created_at ? new Date(o.created_at).toLocaleDateString('en-US') : '',
+      (bd.firstName||'')+' '+(bd.lastName||''),
+      (bd.address||bd.street||''),
+      bd.city||'',
+      bd.country||'',
+      bd.phone||''
+    ]);
+  });
+  var ws = XLSX.utils.aoa_to_sheet(rows);
+  var wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Orders');
+  XLSX.writeFile(wb, 'orders_export_' + new Date().toISOString().slice(0,10) + '.xlsx');
+}
+
+function exportUsersExcel() {
+  if (!_allUsers.length) { alert('No users to export.'); return; }
+  var rows = [['Full Name','Email','Phone','Orders Count','Total Spent ($)','Joined','Order Refs','Products Purchased']];
+  _allUsers.forEach(function(u) {
+    var orders = _allOrders.filter(function(o) { return o.user_id === u.id; });
+    var spent  = orders.reduce(function(s,o) { return s+(parseFloat(o.amount)||0); }, 0);
+    rows.push([
+      u.full_name||'',
+      u.email||'',
+      u.phone||'',
+      orders.length,
+      spent,
+      u.created_at ? new Date(u.created_at).toLocaleDateString('en-US') : '',
+      orders.map(function(o){ return o.order_ref||''; }).join(', '),
+      orders.map(function(o){ return o.product_title||''; }).join(', ')
+    ]);
+  });
+  var ws = XLSX.utils.aoa_to_sheet(rows);
+  var wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Users');
+  XLSX.writeFile(wb, 'users_export_' + new Date().toISOString().slice(0,10) + '.xlsx');
+}
+
 async function updateOrderStatus(orderId, newStatus) {
   if (!newStatus || typeof ChrixlinDB === 'undefined') return;
   try {
@@ -3425,12 +3656,8 @@ function selectPlanColor(hex, el) {
   el.style.border = '3px solid white';
 }
 
-// ─── DELETE PLAN ADMIN ────────────────────────────────────────────────────────
-async function deletePlanAdmin(id) {
-  if (!confirm('Delete this plan?')) return;
-  if (typeof ChrixlinDB !== 'undefined') await ChrixlinDB.deletePricingPlan(id).catch(function(){});
-  deletePricingPlan(id);
-}
+// ─── DELETE PLAN ADMIN (alias — calls main deletePricingPlan) ─────────────────
+function deletePlanAdmin(id) { deletePricingPlan(id); }
 
 // ─── PRODUCT IMAGE UPLOAD ─────────────────────────────────────────────────────
 async function handleProductImageUpload(input) {
@@ -3479,7 +3706,7 @@ function renderSubmissionsTable(subs) {
       '<td style="padding:12px 16px;color:var(--muted)">'+(s.phone||'—')+'</td>' +
       '<td style="padding:12px 16px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(s.message||'—')+'</td>' +
       '<td style="padding:12px 16px;font-size:12px;color:var(--muted)">'+date+'</td>' +
-      '<td style="padding:12px 16px"><button onclick="deleteSubmission(\''+s.id+'\')" style="background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3);padding:5px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">Delete</button></td>' +
+      '<td style="padding:12px 16px;display:flex;gap:6px"><button onclick="viewSubmission(\''+s.id+'\')" style="background:rgba(124,58,237,0.15);color:#a78bfa;border:1px solid rgba(124,58,237,0.3);padding:5px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">👁 View</button><button onclick="deleteSubmission(\''+s.id+'\')" style="background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3);padding:5px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">🗑 Delete</button></td>' +
     '</tr>';
   }).join('');
 }
@@ -3492,6 +3719,29 @@ async function deleteSubmission(id) {
   if (typeof ChrixlinDB !== 'undefined' && ChrixlinDB.deleteStrategyCallSubmission) await ChrixlinDB.deleteStrategyCallSubmission(id);
   await loadSubmissions();
   showToast('Submission deleted','success');
+}
+function viewSubmission(id) {
+  var s = _allSubmissions.find(function(x){return String(x.id)===String(id);});
+  if (!s) return;
+  var date = s.created_at ? new Date(s.created_at).toLocaleString('en-US',{month:'long',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+  var row = function(label,val){ return val ? '<div style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;gap:16px"><div style="font-size:12px;color:var(--muted);min-width:110px;padding-top:2px;text-transform:uppercase;letter-spacing:0.5px">'+label+'</div><div style="font-size:14px;color:var(--text);flex:1;word-break:break-word">'+val+'</div></div>' : ''; };
+  document.getElementById('subDetailContent').innerHTML =
+    '<div style="margin-bottom:24px"><div style="font-size:20px;font-weight:800;margin-bottom:4px">'+(s.name||'—')+'</div><div style="font-size:13px;color:var(--muted)">Submitted on '+date+'</div></div>' +
+    row('Email', s.email ? '<a href="mailto:'+s.email+'" style="color:#a78bfa">'+s.email+'</a>' : '') +
+    row('Phone', s.phone ? '<a href="tel:'+s.phone+'" style="color:#a78bfa">'+s.phone+'</a>' : '') +
+    row('Message', (s.message||'').replace(/\n/g,'<br>')) +
+    row('Business', s.business||s.business_name||'') +
+    row('Goal', s.goal||s.interest||'') +
+    row('Source', s.source||s.referral||'') +
+    '<div style="margin-top:24px;display:flex;gap:10px">' +
+      '<a href="mailto:'+(s.email||'')+'" class="btn btn-primary" style="font-size:13px">📧 Reply by Email</a>' +
+      '<button onclick="deleteSubmission(\''+s.id+'\');closeSubModal();" style="background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3);padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">🗑 Delete</button>' +
+    '</div>';
+  var modal = document.getElementById('subDetailModal');
+  modal.style.display = 'flex';
+}
+function closeSubModal() {
+  document.getElementById('subDetailModal').style.display = 'none';
 }
 
 // ─── ANALYTICS ────────────────────────────────────────────────────────────────
@@ -3603,17 +3853,8 @@ function exportAnalyticsExcel() {
   XLSX.writeFile(wb, 'ChrixlinAIRise-Analytics-'+new Date().toISOString().split('T')[0]+'.xlsx');
 }
 
-// Auto-load panels on switch
-document.addEventListener('DOMContentLoaded', function() {
-  // Restore last active panel on page load
-  var lastPanel = localStorage.getItem('admin_active_panel');
-  if (lastPanel && document.getElementById('panel-' + lastPanel)) {
-    showPanel(lastPanel);
-  } else {
-    // Default: load dashboard panel with live DB data
-    refreshDashboard();
-  }
-});
+// Panel initialisation is triggered by the admin auth overlay after session is confirmed.
+// (Removed DOMContentLoaded handler to prevent data-fetch race condition before auth.)
 </script>
 </body>
 </html>

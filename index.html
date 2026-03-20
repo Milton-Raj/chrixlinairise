@@ -714,7 +714,7 @@
     <div class="pricing-grid" id="pricingGrid">
       <!-- Populated by JS -->
     </div>
-    <p style="text-align:center;color:var(--c-muted);font-size:13px;margin-top:28px">🔒 Secure checkout · 30-day money-back guarantee · Cancel anytime</p>
+    <p style="text-align:center;color:var(--c-muted);font-size:13px;margin-top:28px">🔒 Secure checkout · 15-day money-back guarantee · Cancel anytime</p>
   </div>
 </section>
 
@@ -1345,6 +1345,21 @@ async function submitStrategyCallForm(e) {
     msg.textContent='Something went wrong. Please try again.';
   }
 }
+
+// Apply strategy call booking link from admin settings
+(function() {
+  try {
+    var bd = JSON.parse(localStorage.getItem('chrixlin_bank_details') || '{}');
+    var link = bd.strategyCallUrl;
+    if (!link) return;
+    document.querySelectorAll('a').forEach(function(el) {
+      var h = el.getAttribute('href') || '';
+      if (h === 'mailto:info@chrixlin.tech' && (el.textContent.toLowerCase().includes('book') || el.textContent.toLowerCase().includes('call') || el.classList.contains('btn-primary'))) {
+        el.href = link;
+      }
+    });
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>

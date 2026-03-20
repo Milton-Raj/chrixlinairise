@@ -304,6 +304,10 @@
       .auth-body { padding: 22px 20px 24px; }
       .auth-header { padding: 24px 20px 20px; }
     }
+    @keyframes progressBar {
+      from { width: 48px; }
+      to   { width: 0px; }
+    }
   </style>
 </head>
 <body>
@@ -404,26 +408,76 @@
 
     <!-- RESET PASSWORD FORM -->
     <div class="form-panel" id="panelReset">
-      <div style="text-align:center;margin-bottom:20px">
-        <div style="font-size:36px;margin-bottom:8px">🔐</div>
-        <div style="font-size:15px;font-weight:700;color:var(--c-text)">Set New Password</div>
-        <div style="font-size:13px;color:var(--c-muted);margin-top:4px">Enter your new password below</div>
+      <!-- Input form -->
+      <div id="resetFormInputs">
+        <div style="text-align:center;margin-bottom:20px">
+          <div style="font-size:36px;margin-bottom:8px">🔐</div>
+          <div style="font-size:15px;font-weight:700;color:var(--c-text)">Set New Password</div>
+          <div style="font-size:13px;color:var(--c-muted);margin-top:4px">Enter your new password below</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">New Password</label>
+          <input type="password" class="field-input" id="resetPassword" placeholder="At least 8 characters" autocomplete="new-password" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Confirm New Password</label>
+          <input type="password" class="field-input" id="resetConfirmPassword" placeholder="Re-enter new password" autocomplete="new-password" oninput="checkResetPasswordMatch()" />
+          <div id="resetPasswordHint" style="font-size:12px;margin-top:6px;display:none;"></div>
+        </div>
+        <button class="auth-btn" id="resetBtn" onclick="handlePasswordReset()">
+          <div class="spinner" id="resetSpinner"></div>
+          <span id="resetBtnText">Update Password</span>
+        </button>
       </div>
-      <div class="field-group">
-        <label class="field-label">New Password</label>
-        <input type="password" class="field-input" id="resetPassword" placeholder="At least 8 characters" autocomplete="new-password" />
+      <!-- Success state (shown after password updated) -->
+      <div id="resetSuccessView" style="display:none;text-align:center;padding:16px 0">
+        <div style="font-size:48px;margin-bottom:16px">🎉</div>
+        <div style="font-size:17px;font-weight:700;margin-bottom:10px;color:var(--c-text)">Password Updated!</div>
+        <div style="font-size:13px;color:var(--c-muted);margin-bottom:6px">Your password has been reset successfully.</div>
+        <div style="font-size:13px;color:var(--c-muted);margin-bottom:24px">A confirmation has been sent to your email. Redirecting to sign in…</div>
+        <div style="width:48px;height:4px;background:var(--grad);border-radius:4px;margin:0 auto;animation:progressBar 3s linear forwards"></div>
       </div>
-      <div class="field-group">
-        <label class="field-label">Confirm New Password</label>
-        <input type="password" class="field-input" id="resetConfirmPassword" placeholder="Re-enter new password" autocomplete="new-password" oninput="checkResetPasswordMatch()" />
-        <div id="resetPasswordHint" style="font-size:12px;margin-top:6px;display:none;"></div>
+    </div>
+
+    <!-- FORGOT PASSWORD PANEL -->
+    <div class="form-panel" id="panelForgot">
+      <!-- Step 1: Email input -->
+      <div id="forgotFormView">
+        <div style="text-align:center;margin-bottom:20px">
+          <div style="font-size:36px;margin-bottom:8px">📧</div>
+          <div style="font-size:15px;font-weight:700;color:var(--c-text)">Reset Password</div>
+          <div style="font-size:13px;color:var(--c-muted);margin-top:4px">Enter your registered email and we'll send you a reset link</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Email Address</label>
+          <input type="email" class="field-input" id="forgotEmail" placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <div id="forgotErrMsg" style="display:none;color:var(--c-red);font-size:13px;margin-bottom:12px;padding:10px 14px;background:rgba(239,68,68,0.1);border-radius:8px;border:1px solid rgba(239,68,68,0.25)"></div>
+        <button class="auth-btn" id="forgotBtn" onclick="sendPasswordResetLink()">
+          <div class="spinner" id="forgotSpinner"></div>
+          <span id="forgotBtnText">Send Reset Link</span>
+        </button>
+        <div class="auth-footer" style="margin-top:16px">
+          <a href="#" onclick="switchTab('signin')">← Back to Sign In</a>
+        </div>
       </div>
-      <button class="auth-btn" id="resetBtn" onclick="handlePasswordReset()">
-        <div class="spinner" id="resetSpinner"></div>
-        <span id="resetBtnText">Update Password</span>
-      </button>
-      <div class="auth-footer">
-        <a href="#" onclick="switchTab('signin')">← Back to Sign In</a>
+      <!-- Step 2a: Success — link sent -->
+      <div id="forgotSuccessView" style="display:none;text-align:center;padding:16px 0">
+        <div style="font-size:48px;margin-bottom:16px">✅</div>
+        <div style="font-size:17px;font-weight:700;margin-bottom:10px;color:var(--c-text)">Reset Link Sent!</div>
+        <div style="font-size:13px;color:var(--c-muted);margin-bottom:16px">A password reset link has been shared with your registered email address. Check your inbox and click the link to set a new password.</div>
+        <div id="forgotEmailSentTo" style="font-size:13px;color:var(--c-primary);font-weight:600;margin-bottom:24px;word-break:break-all"></div>
+        <div style="font-size:12px;color:var(--c-muted);margin-bottom:24px">Didn't receive it? Check your spam folder, or <a href="#" onclick="document.getElementById('forgotSuccessView').style.display='none';document.getElementById('forgotFormView').style.display='block'" style="color:var(--c-primary)">try again</a>.</div>
+        <div class="auth-footer"><a href="#" onclick="switchTab('signin')">← Back to Sign In</a></div>
+      </div>
+      <!-- Step 2b: Not found — offer registration -->
+      <div id="forgotNotFoundView" style="display:none;text-align:center;padding:16px 0">
+        <div style="font-size:48px;margin-bottom:16px">🔍</div>
+        <div style="font-size:17px;font-weight:700;margin-bottom:10px;color:var(--c-text)">No Account Found</div>
+        <div style="font-size:13px;color:var(--c-muted);margin-bottom:24px">No account is registered with this email address. Would you like to create a new account?</div>
+        <button class="auth-btn" onclick="switchTab('register')" style="margin-bottom:12px">Create New Account</button>
+        <div style="font-size:12px;color:var(--c-muted);margin-bottom:16px">Already have an account? <a href="#" onclick="document.getElementById('forgotNotFoundView').style.display='none';document.getElementById('forgotFormView').style.display='block'" style="color:var(--c-primary)">Try a different email</a></div>
+        <div class="auth-footer"><a href="#" onclick="switchTab('signin')">← Back to Sign In</a></div>
       </div>
     </div>
 
@@ -445,6 +499,9 @@ const nextUrl = params.get('next') || 'dashboard.html';
 // ─── CHECK ALREADY LOGGED IN ─────────────────────────────────────────────────
 (async function() {
   try {
+    // If this is a password-recovery link, stay on auth page — do NOT redirect to dashboard
+    var hash = window.location.hash || '';
+    if (hash.includes('type=recovery') || hash.includes('type=password_recovery')) return;
     const session = await ChrixlinDB.getCustomerSession();
     if (session) {
       window.location.href = nextUrl;
@@ -457,11 +514,17 @@ function switchTab(tab) {
   document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
   const tabsRow = document.getElementById('authTabsRow');
-  if (tab === 'reset') {
+  const googleBtn = document.getElementById('googleBtn');
+  const orDivider = document.querySelector('.or-divider');
+  if (tab === 'reset' || tab === 'forgot') {
     if (tabsRow) tabsRow.style.display = 'none';
-    document.getElementById('panelReset').classList.add('active');
+    if (googleBtn) googleBtn.style.display = 'none';
+    if (orDivider) orDivider.style.display = 'none';
+    document.getElementById(tab === 'reset' ? 'panelReset' : 'panelForgot').classList.add('active');
   } else {
     if (tabsRow) tabsRow.style.display = '';
+    if (googleBtn) googleBtn.style.display = '';
+    if (orDivider) orDivider.style.display = '';
     if (tab === 'signin') {
       document.getElementById('tabSignIn').classList.add('active');
       document.getElementById('panelSignin').classList.add('active');
@@ -472,8 +535,8 @@ function switchTab(tab) {
   }
   const errMsg = document.getElementById('errorMsg');
   const succBanner = document.getElementById('successBanner');
-  if (errMsg) errMsg.style.display = 'none';
-  if (succBanner) succBanner.style.display = 'none';
+  if (errMsg) errMsg.classList.remove('show');
+  if (succBanner) succBanner.classList.remove('show');
 }
 
 // ─── ERROR/SUCCESS HELPERS ───────────────────────────────────────────────────
@@ -637,43 +700,78 @@ async function handlePasswordReset() {
   const btn = document.getElementById('resetBtn');
   const spinner = document.getElementById('resetSpinner');
   const btnTxt  = document.getElementById('resetBtnText');
-  btn.disabled = true; spinner.style.display = 'block'; btnTxt.textContent = 'Updating...';
+  btn.disabled = true; spinner.classList.add('show'); btnTxt.textContent = 'Updating...';
   try {
     const client = ChrixlinDB._getClient();
     if (!client) throw new Error('Connection error');
-    const { error } = await client.auth.updateUser({ password: pw });
+    const { data, error } = await client.auth.updateUser({ password: pw });
     if (error) throw error;
-    showSuccess('🎉 Password updated successfully! Redirecting to sign in...');
+    // Show success panel inline
+    document.getElementById('resetFormInputs').style.display = 'none';
+    document.getElementById('resetSuccessView').style.display = 'block';
+    // Sign out and redirect to clean login page after 3 seconds
     setTimeout(function() {
-      // Sign out and go back to sign in tab
-      client.auth.signOut().finally(function() { switchTab('signin'); });
-    }, 2000);
+      client.auth.signOut().finally(function() {
+        window.location.href = window.location.origin + window.location.pathname;
+      });
+    }, 3000);
   } catch(err) {
     showError(err.message || 'Failed to update password. Please try again.');
-  } finally {
-    btn.disabled = false; spinner.style.display = 'none'; btnTxt.textContent = 'Update Password';
+    btn.disabled = false; spinner.classList.remove('show'); btnTxt.textContent = 'Update Password';
   }
 }
 
 // ─── FORGOT PASSWORD ──────────────────────────────────────────────────────────
-async function handleForgotPassword(e) {
-  e.preventDefault();
-  const email = document.getElementById('siEmail').value.trim();
-  if (!email) { showError('Enter your email address above first.'); return; }
-  const signinBtn = document.getElementById('signinBtn');
-  signinBtn.disabled = true;
+function handleForgotPassword(e) {
+  if (e) e.preventDefault();
+  // Pre-fill email from sign-in field if available
+  var existingEmail = (document.getElementById('siEmail') || {}).value || '';
+  if (existingEmail) {
+    var fi = document.getElementById('forgotEmail');
+    if (fi && !fi.value) fi.value = existingEmail;
+  }
+  switchTab('forgot');
+}
+
+async function sendPasswordResetLink() {
+  var email = (document.getElementById('forgotEmail').value || '').trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    document.getElementById('forgotErrMsg').textContent = 'Please enter a valid email address.';
+    document.getElementById('forgotErrMsg').style.display = 'block';
+    return;
+  }
+  document.getElementById('forgotErrMsg').style.display = 'none';
+  var btn = document.getElementById('forgotBtn');
+  var spinner = document.getElementById('forgotSpinner');
+  var btnTxt = document.getElementById('forgotBtnText');
+  btn.disabled = true; spinner.classList.add('show'); btnTxt.textContent = 'Sending...';
   try {
     const client = ChrixlinDB._getClient();
-    if (!client) { showError('Connection error. Please refresh.'); return; }
+    if (!client) throw new Error('Connection error. Please refresh.');
     const { error } = await client.auth.resetPasswordForEmail(email, {
       redirectTo: window.location.origin + window.location.pathname
     });
-    if (error) throw error;
-    showSuccess('✅ Password reset email sent! Check your inbox and click the link.');
-  } catch (err) {
-    showError(err.message || 'Failed to send reset email.');
+    if (error) {
+      var msg = error.message || '';
+      // Supabase may say "User not found" or similar for unregistered emails
+      if (msg.toLowerCase().includes('user not found') || msg.toLowerCase().includes('no user') || msg.toLowerCase().includes('not found')) {
+        document.getElementById('forgotFormView').style.display = 'none';
+        document.getElementById('forgotSuccessView').style.display = 'none';
+        document.getElementById('forgotNotFoundView').style.display = 'block';
+        return;
+      }
+      throw error;
+    }
+    // Success — show confirmation screen
+    document.getElementById('forgotFormView').style.display = 'none';
+    document.getElementById('forgotNotFoundView').style.display = 'none';
+    document.getElementById('forgotEmailSentTo').textContent = email;
+    document.getElementById('forgotSuccessView').style.display = 'block';
+  } catch(err) {
+    document.getElementById('forgotErrMsg').textContent = err.message || 'Failed to send reset email. Please try again.';
+    document.getElementById('forgotErrMsg').style.display = 'block';
   } finally {
-    signinBtn.disabled = false;
+    btn.disabled = false; spinner.classList.remove('show'); btnTxt.textContent = 'Send Reset Link';
   }
 }
 
@@ -681,6 +779,41 @@ async function handleForgotPassword(e) {
 document.getElementById('siPassword').addEventListener('keydown', e => { if (e.key === 'Enter') handleSignIn(); });
 document.getElementById('siEmail').addEventListener('keydown', e => { if (e.key === 'Enter') handleSignIn(); });
 document.getElementById('regPassword').addEventListener('keydown', e => { if (e.key === 'Enter') handleRegister(); });
+document.getElementById('forgotEmail').addEventListener('keydown', e => { if (e.key === 'Enter') sendPasswordResetLink(); });
+
+// Reset forgot-panel sub-views whenever the panel opens
+var _origSwitchTab = switchTab;
+switchTab = function(tab) {
+  if (tab === 'forgot') {
+    // Reset to initial form view
+    var fv = document.getElementById('forgotFormView');
+    var sv = document.getElementById('forgotSuccessView');
+    var nv = document.getElementById('forgotNotFoundView');
+    var em = document.getElementById('forgotErrMsg');
+    if (fv) fv.style.display = 'block';
+    if (sv) sv.style.display = 'none';
+    if (nv) nv.style.display = 'none';
+    if (em) em.style.display = 'none';
+  }
+  if (tab === 'reset') {
+    // Reset reset-panel sub-views
+    var ri = document.getElementById('resetFormInputs');
+    var rs = document.getElementById('resetSuccessView');
+    if (ri) ri.style.display = 'block';
+    if (rs) rs.style.display = 'none';
+  }
+  _origSwitchTab(tab);
+};
+
+// Check URL hash on load for password recovery link
+(function() {
+  try {
+    var hash = window.location.hash || '';
+    if (hash.includes('type=recovery') || hash.includes('type=password_recovery')) {
+      switchTab('reset');
+    }
+  } catch(e) {}
+})();
 
 // Listen for Supabase PASSWORD_RECOVERY event
 (function() {

@@ -34,99 +34,138 @@
     body { background: var(--c-bg); color: var(--c-text); font-family: var(--font-b); line-height: 1.6; min-height: 100vh; }
     a { text-decoration: none; color: inherit; }
 
-    /* ─── NAVBAR ──────────────────────────────────────────── */
+    /* ─── TOPBAR ──────────────────────────────────────────── */
     .topbar { background: var(--c-bg2); border-bottom: 1px solid var(--c-border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
     .topbar-logo { font-family: var(--font-h); font-weight: 800; font-size: 20px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .topbar-secure { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--c-muted); }
-    .topbar-secure .lock { font-size: 16px; }
-    .topbar-back { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--c-muted); transition: var(--transition); }
+    .topbar-back { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--c-muted); transition: var(--transition); cursor: pointer; }
     .topbar-back:hover { color: var(--c-text); }
 
-    /* ─── MAIN LAYOUT ─────────────────────────────────────── */
-    .checkout-wrap { max-width: 1000px; margin: 0 auto; padding: 48px 24px 80px; display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: start; }
+    /* ─── STEP INDICATOR ──────────────────────────────────── */
+    .step-bar { display: flex; align-items: center; justify-content: center; gap: 0; padding: 20px 24px 0; }
+    .step-item { display: flex; align-items: center; gap: 10px; }
+    .step-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; transition: var(--transition); }
+    .step-num.active { background: var(--grad); color: #fff; box-shadow: 0 4px 14px rgba(124,58,237,0.4); }
+    .step-num.done { background: rgba(34,197,94,0.2); color: #22c55e; border: 1.5px solid rgba(34,197,94,0.4); }
+    .step-num.pending { background: rgba(255,255,255,0.06); color: var(--c-muted); border: 1.5px solid var(--c-border); }
+    .step-label { font-size: 13px; font-weight: 600; }
+    .step-label.active { color: var(--c-text); }
+    .step-label.done { color: #22c55e; }
+    .step-label.pending { color: var(--c-muted); }
+    .step-connector { width: 60px; height: 2px; background: var(--c-border); margin: 0 8px; border-radius: 2px; transition: var(--transition); }
+    .step-connector.done { background: rgba(34,197,94,0.5); }
 
-    /* ─── FORM CARD ───────────────────────────────────────── */
-    .form-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: 20px; padding: 36px; }
-    .form-card-title { font-family: var(--font-h); font-size: 18px; font-weight: 800; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
-    .form-card-title .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--grad); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; flex-shrink: 0; }
-    .form-card-subtitle { font-size: 13px; color: var(--c-muted); margin-bottom: 28px; }
-    .form-divider { border: none; border-top: 1px solid var(--c-border); margin: 32px 0; }
+    /* ─── STEP 3 STATES ───────────────────────────────────── */
+    .s3-processing { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 24px; }
+    .s3-spinner { width: 72px; height: 72px; border: 5px solid rgba(124,58,237,0.2); border-top-color: #7c3aed; border-radius: 50%; animation: spin 0.9s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .s3-processing-title { font-family: var(--font-h); font-size: 24px; font-weight: 800; }
+    .s3-processing-sub { font-size: 14px; color: var(--c-muted); }
+    .s3-result { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 20px; text-align: center; padding: 40px 24px; }
+    .s3-result.show { display: flex; }
+    .s3-icon { font-size: 80px; animation: bounceIn 0.6s ease; }
+    .s3-title { font-family: var(--font-h); font-size: clamp(26px,5vw,42px); font-weight: 900; margin-bottom: 4px; }
+    .s3-sub { font-size: 16px; color: var(--c-sub); max-width: 500px; line-height: 1.7; }
+    .s3-steps { background: var(--c-card); border: 1px solid var(--c-border); border-radius: 16px; padding: 24px; max-width: 480px; width: 100%; text-align: left; }
+    .s3-step { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; font-size: 14px; color: var(--c-sub); }
+    .s3-step:last-child { margin-bottom: 0; }
+    .s3-step-num { width: 24px; height: 24px; border-radius: 50%; background: rgba(34,197,94,0.2); border: 1px solid rgba(34,197,94,0.3); color: #4ade80; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .s3-countdown { font-size: 13px; color: var(--c-muted); }
+    .s3-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+    /* ─── STEP CONTAINERS ─────────────────────────────────── */
+    .step-wrap { animation: fadeSlide 0.35s ease; }
+    @keyframes fadeSlide { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
     /* ─── FORM ELEMENTS ───────────────────────────────────── */
+    .checkout-step1 { max-width: 680px; margin: 0 auto; padding: 32px 24px 80px; }
+    .form-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: 20px; padding: 32px; margin-bottom: 20px; }
+    .form-card-title { font-family: var(--font-h); font-size: 17px; font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
+    .form-card-title .step-num-sm { width: 26px; height: 26px; border-radius: 50%; background: var(--grad); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; flex-shrink: 0; }
+    .form-card-subtitle { font-size: 13px; color: var(--c-muted); margin-bottom: 24px; }
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .field-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
-    .field-group { margin-bottom: 20px; }
-    .field-label { display: block; font-size: 12px; font-weight: 700; color: var(--c-sub); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .field-input {
-      width: 100%; padding: 13px 16px; background: var(--c-bg3);
-      border: 1.5px solid var(--c-border); border-radius: 10px;
-      color: var(--c-text); font-family: var(--font-b); font-size: 15px;
-      outline: none; transition: var(--transition);
-    }
+    .field-group { margin-bottom: 18px; }
+    .field-label { display: block; font-size: 11px; font-weight: 700; color: var(--c-sub); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .field-input { width: 100%; padding: 12px 15px; background: var(--c-bg3); border: 1.5px solid var(--c-border); border-radius: 10px; color: var(--c-text); font-family: var(--font-b); font-size: 15px; outline: none; transition: var(--transition); }
     .field-input:focus { border-color: var(--c-primary); box-shadow: 0 0 0 3px rgba(124,58,237,0.12); }
     .field-input::placeholder { color: var(--c-muted); }
-    .field-input.error { border-color: var(--c-red); }
+    .field-input.error, .field-group.has-error .field-input { border-color: var(--c-red); }
     select.field-input { cursor: pointer; }
     select.field-input option { background: var(--c-bg3); }
-    .field-hint { font-size: 11px; color: var(--c-muted); margin-top: 6px; }
-    .field-error { font-size: 11px; color: var(--c-red); margin-top: 6px; display: none; }
+    .field-hint { font-size: 11px; color: var(--c-muted); margin-top: 5px; }
+    .field-error { font-size: 11px; color: var(--c-red); margin-top: 5px; display: none; }
     .field-group.has-error .field-error { display: block; }
-    .field-group.has-error .field-input { border-color: var(--c-red); }
 
-    /* ─── CARD INPUT ──────────────────────────────────────── */
-    .card-input-wrap { position: relative; }
-    .card-icons { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); display: flex; gap: 4px; }
-    .card-icon { font-size: 22px; opacity: 0.5; transition: var(--transition); }
-    .card-icon.active { opacity: 1; }
-    .card-input-wrap .field-input { padding-right: 100px; letter-spacing: 2px; font-family: 'Courier New', monospace; }
+    /* ─── CONTINUE BUTTON ─────────────────────────────────── */
+    .continue-btn { width: 100%; padding: 17px 32px; border-radius: 50px; font-family: var(--font-h); font-weight: 800; font-size: 16px; background: var(--grad); color: #fff; border: none; cursor: pointer; box-shadow: 0 10px 30px rgba(124,58,237,0.4); transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 8px; }
+    .continue-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(124,58,237,0.55); }
 
-    /* ─── PAYMENT TABS ────────────────────────────────────── */
-    .payment-tabs { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
-    .payment-tab { flex: 1; min-width: 100px; padding: 12px 16px; border-radius: 10px; border: 1.5px solid var(--c-border); background: transparent; color: var(--c-sub); font-family: var(--font-b); font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 6px; }
-    .payment-tab:hover { border-color: var(--c-border-h); color: var(--c-text); }
-    .payment-tab.active { background: rgba(124,58,237,0.15); border-color: rgba(124,58,237,0.5); color: #a78bfa; }
+    /* ─── STEP 2 LAYOUT ───────────────────────────────────── */
+    .checkout-step2 { max-width: 1020px; margin: 0 auto; padding: 32px 24px 80px; display: grid; grid-template-columns: 1fr 380px; gap: 28px; align-items: start; }
 
-    /* ─── SUBMIT BTN ──────────────────────────────────────── */
-    .submit-btn {
-      width: 100%; padding: 18px 32px; border-radius: 50px;
-      font-family: var(--font-h); font-weight: 800; font-size: 17px;
-      background: var(--grad-gold); color: #fff; border: none; cursor: pointer;
-      box-shadow: 0 10px 30px rgba(245,158,11,0.4);
-      transition: var(--transition); margin-top: 8px;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-    }
+    /* ─── PAYMENT PANEL (LEFT) ────────────────────────────── */
+    .pay-panel { background: var(--c-card); border: 1px solid var(--c-border); border-radius: 20px; padding: 32px; }
+    .pay-panel-title { font-family: var(--font-h); font-size: 20px; font-weight: 800; margin-bottom: 24px; }
+
+    /* Payment method tabs — underline style */
+    .pay-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--c-border); margin-bottom: 28px; flex-wrap: wrap; max-width: 100%; }
+    .pay-tab { padding: 10px 20px; font-size: 14px; font-weight: 600; color: var(--c-muted); background: transparent; border: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; transition: var(--transition); font-family: var(--font-b); }
+    .pay-tab:hover { color: var(--c-text); }
+    .pay-tab.active { color: #a78bfa; border-bottom-color: var(--c-primary); }
+
+    /* Card visual */
+    .card-visual { background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%); border-radius: 18px; padding: 24px 26px; margin-bottom: 24px; position: relative; overflow: hidden; min-height: 120px; }
+    .card-visual::before { content: ''; position: absolute; top: -30px; right: -30px; width: 140px; height: 140px; border-radius: 50%; background: rgba(255,255,255,0.08); }
+    .card-visual::after { content: ''; position: absolute; bottom: -50px; left: -20px; width: 160px; height: 160px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+    .card-visual-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; position: relative; z-index: 1; }
+    .card-visual-label { font-size: 11px; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 0.5px; }
+    .card-visual-balance { font-size: 20px; font-weight: 800; color: #fff; margin-top: 2px; }
+    .card-visual-logo { font-size: 28px; opacity: 0.85; }
+    .card-visual-bottom { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 1; }
+    .card-visual-number { font-family: 'Courier New', monospace; font-size: 14px; letter-spacing: 3px; color: rgba(255,255,255,0.9); }
+    .card-visual-expiry { font-size: 12px; color: rgba(255,255,255,0.75); text-align: right; }
+    .card-visual-expiry-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+
+    /* CVV toggle */
+    .cvv-wrap { position: relative; }
+    .cvv-wrap .field-input { padding-right: 44px; }
+    .cvv-eye { position: absolute; right: 13px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 16px; color: var(--c-muted); background: none; border: none; padding: 0; }
+
+    /* ─── SUBMIT ──────────────────────────────────────────── */
+    .submit-btn { width: 100%; padding: 17px 32px; border-radius: 50px; font-family: var(--font-h); font-weight: 800; font-size: 17px; background: var(--grad-gold); color: #fff; border: none; cursor: pointer; box-shadow: 0 10px 30px rgba(245,158,11,0.4); transition: var(--transition); margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(245,158,11,0.55); }
     .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
-    .submit-note { text-align: center; font-size: 12px; color: var(--c-muted); margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .submit-note { text-align: center; font-size: 12px; color: var(--c-muted); margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; }
 
-    /* ─── ORDER SUMMARY ───────────────────────────────────── */
-    .order-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: 20px; padding: 28px; position: sticky; top: 24px; }
-    .order-card-title { font-family: var(--font-h); font-weight: 800; font-size: 16px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--c-border); }
-    .order-product { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
-    .order-product-thumb { width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; border: 1px solid var(--c-border); }
-    .order-product-thumb.cat-thumb-voice-ai  { background: linear-gradient(135deg, rgba(124,58,237,0.4), rgba(6,182,212,0.15)); }
-    .order-product-thumb.cat-thumb-sales     { background: linear-gradient(135deg, rgba(245,158,11,0.4), rgba(239,68,68,0.15)); }
-    .order-product-thumb.cat-thumb-content   { background: linear-gradient(135deg, rgba(6,182,212,0.4), rgba(34,197,94,0.15)); }
-    .order-product-thumb.cat-thumb-lead      { background: linear-gradient(135deg, rgba(34,197,94,0.4), rgba(6,182,212,0.15)); }
-    .order-product-thumb.cat-thumb-automation{ background: linear-gradient(135deg, rgba(239,68,68,0.35), rgba(124,58,237,0.15)); }
-    .order-product-name { font-family: var(--font-h); font-weight: 700; font-size: 14px; margin-bottom: 4px; line-height: 1.3; }
-    .order-product-cat { font-size: 11px; color: var(--c-muted); }
-    .order-line { display: flex; justify-content: space-between; align-items: center; font-size: 14px; margin-bottom: 10px; }
-    .order-line .label { color: var(--c-sub); }
-    .order-line .val { font-weight: 600; }
-    .order-line .val.free { color: var(--c-green); }
-    .order-total-line { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; margin-top: 4px; border-top: 1px solid var(--c-border); }
-    .order-total-label { font-family: var(--font-h); font-weight: 700; font-size: 15px; }
-    .order-total-val { font-family: var(--font-h); font-weight: 900; font-size: 26px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .order-included { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--c-border); }
-    .order-included-title { font-size: 12px; font-weight: 700; color: var(--c-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
-    .order-inc-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--c-sub); margin-bottom: 8px; }
-    .order-inc-check { color: var(--c-green); font-size: 14px; }
-    .trust-badges { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--c-border); display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
-    .trust-badge { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: var(--c-muted); text-align: center; }
-    .trust-badge-icon { font-size: 22px; }
+    /* ─── ORDER SUMMARY (RIGHT) ───────────────────────────── */
+    .summary-panel { position: sticky; top: 24px; }
+    .summary-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: 20px; overflow: hidden; }
+    .summary-product-img { width: 100%; height: 160px; display: flex; align-items: center; justify-content: center; font-size: 60px; background: linear-gradient(135deg, rgba(124,58,237,0.35), rgba(6,182,212,0.15)); position: relative; overflow: hidden; }
+    .summary-product-img img { width: 100%; height: 100%; object-fit: cover; }
+    .summary-product-img.cat-thumb-voice-ai  { background: linear-gradient(135deg, rgba(124,58,237,0.4), rgba(6,182,212,0.15)); }
+    .summary-product-img.cat-thumb-sales     { background: linear-gradient(135deg, rgba(245,158,11,0.4), rgba(239,68,68,0.15)); }
+    .summary-product-img.cat-thumb-content   { background: linear-gradient(135deg, rgba(6,182,212,0.4), rgba(34,197,94,0.15)); }
+    .summary-product-img.cat-thumb-lead      { background: linear-gradient(135deg, rgba(34,197,94,0.4), rgba(6,182,212,0.15)); }
+    .summary-product-img.cat-thumb-automation{ background: linear-gradient(135deg, rgba(239,68,68,0.35), rgba(124,58,237,0.15)); }
+    .summary-body { padding: 22px; }
+    .summary-cat { font-size: 11px; color: var(--c-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .summary-name { font-family: var(--font-h); font-weight: 800; font-size: 15px; margin-bottom: 6px; line-height: 1.3; }
+    .summary-price-base { font-size: 24px; font-weight: 900; color: var(--c-text); margin-bottom: 20px; }
+    .summary-lines { border-top: 1px solid var(--c-border); padding-top: 16px; display: flex; flex-direction: column; gap: 11px; }
+    .summary-line { display: flex; justify-content: space-between; font-size: 13px; }
+    .summary-line .slabel { color: var(--c-sub); }
+    .summary-line .sval { font-weight: 600; color: var(--c-text); }
+    .summary-line .sval.free { color: var(--c-green); }
+    .summary-divider { height: 1px; background: var(--c-border); }
+    .summary-total { display: flex; justify-content: space-between; align-items: center; }
+    .summary-total-label { font-family: var(--font-h); font-weight: 700; font-size: 14px; }
+    .summary-total-val { font-family: var(--font-h); font-weight: 900; font-size: 24px; color: var(--c-green); }
+    .trust-row { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; padding: 16px 22px; border-top: 1px solid var(--c-border); }
+    .trust-item { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: var(--c-muted); text-align: center; }
+    .trust-item-icon { font-size: 18px; }
 
-    /* ─── SUCCESS OVERLAY ─────────────────────────────────── */
+    /* ─── SUCCESS ──────────────────────────────────────────── */
     .success-overlay { display: none; position: fixed; inset: 0; background: var(--c-bg); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px; }
     .success-overlay.show { display: flex; }
     .success-icon { font-size: 80px; margin-bottom: 24px; animation: bounceIn 0.6s ease; }
@@ -146,12 +185,13 @@
 
     /* ─── RESPONSIVE ──────────────────────────────────────── */
     @media (max-width: 800px) {
-      .checkout-wrap { grid-template-columns: 1fr; }
-      .order-card { position: static; }
+      .checkout-step2 { grid-template-columns: 1fr; }
+      .summary-panel { position: static; order: -1; }
     }
     @media (max-width: 480px) {
       .field-row, .field-row.cols-3 { grid-template-columns: 1fr; }
-      .payment-tabs { flex-direction: column; }
+      .pay-tabs { gap: 0; }
+      .pay-tab { padding: 10px 14px; font-size: 13px; }
     }
   </style>
 </head>
@@ -160,21 +200,36 @@
 <!-- TOPBAR -->
 <div class="topbar">
   <a href="index.html" class="topbar-logo" id="topbarLogo">Chrixlin AI Rise</a>
-  <div class="topbar-secure"><span class="lock">🔒</span> Secure Checkout — SSL Encrypted</div>
-  <a href="javascript:history.back()" class="topbar-back">← Back</a>
+  <div class="topbar-secure"><span>🔒</span> Secure Checkout — SSL Encrypted</div>
+  <span class="topbar-back" onclick="goBack()">← Back</span>
 </div>
 
-<!-- CHECKOUT LAYOUT -->
-<div class="checkout-wrap">
+<!-- STEP INDICATOR -->
+<div class="step-bar" id="stepBar">
+  <div class="step-item">
+    <div class="step-num active" id="stepNum1">1</div>
+    <span class="step-label active" id="stepLbl1">Your Details</span>
+  </div>
+  <div class="step-connector" id="stepConn"></div>
+  <div class="step-item">
+    <div class="step-num pending" id="stepNum2">2</div>
+    <span class="step-label pending" id="stepLbl2">Payment</span>
+  </div>
+  <div class="step-connector" id="stepConn2"></div>
+  <div class="step-item">
+    <div class="step-num pending" id="stepNum3">3</div>
+    <span class="step-label pending" id="stepLbl3">Confirmation</span>
+  </div>
+</div>
 
-  <!-- ─── LEFT: FORM ───────────────────────────────────────── -->
-  <div>
+<!-- ════════════ STEP 1: DETAILS ════════════ -->
+<div id="step1Wrap" class="step-wrap">
+  <div class="checkout-step1">
 
-    <!-- CONTACT INFO -->
-    <div class="form-card" style="margin-bottom:24px">
-      <div class="form-card-title"><span class="step-num">1</span> Contact Information</div>
+    <!-- Contact Info -->
+    <div class="form-card">
+      <div class="form-card-title"><span class="step-num-sm">1</span> Contact Information</div>
       <div class="form-card-subtitle">We'll send your access credentials and onboarding details here.</div>
-
       <div class="field-row">
         <div class="field-group">
           <label class="field-label">First Name *</label>
@@ -191,7 +246,7 @@
         <label class="field-label">Email Address *</label>
         <input class="field-input" type="email" id="email" placeholder="john@company.com" autocomplete="email" />
         <div class="field-error">Valid email address is required</div>
-        <div class="field-hint">Access credentials will be sent to this email within 24 hours</div>
+        <div class="field-hint">Access credentials will be sent here within 24 hours</div>
       </div>
       <div class="field-row">
         <div class="field-group">
@@ -208,38 +263,27 @@
         <label class="field-label">How did you hear about us?</label>
         <select class="field-input" id="referral">
           <option value="">Select an option...</option>
-          <option>YouTube</option>
-          <option>Instagram</option>
-          <option>LinkedIn</option>
-          <option>Google Search</option>
-          <option>Referral from a friend</option>
-          <option>Chrixlin AI Rise Program</option>
-          <option>Other</option>
+          <option>YouTube</option><option>Instagram</option><option>LinkedIn</option>
+          <option>Google Search</option><option>Referral from a friend</option>
+          <option>Chrixlin AI Rise Program</option><option>Other</option>
         </select>
       </div>
     </div>
 
-    <!-- BILLING ADDRESS -->
-    <div class="form-card" style="margin-bottom:24px">
-      <div class="form-card-title"><span class="step-num">2</span> Billing Address</div>
+    <!-- Billing Address -->
+    <div class="form-card">
+      <div class="form-card-title"><span class="step-num-sm">2</span> Billing Address</div>
       <div class="form-card-subtitle">Required for payment processing and invoicing.</div>
-
       <div class="field-group">
         <label class="field-label">Country *</label>
         <select class="field-input" id="country" autocomplete="country">
           <option value="">Select country...</option>
-          <option value="US">United States</option>
-          <option value="GB">United Kingdom</option>
-          <option value="CA">Canada</option>
-          <option value="AU">Australia</option>
-          <option value="IN">India</option>
-          <option value="DE">Germany</option>
-          <option value="FR">France</option>
-          <option value="SG">Singapore</option>
-          <option value="AE">United Arab Emirates</option>
-          <option value="NG">Nigeria</option>
-          <option value="ZA">South Africa</option>
-          <option value="OTHER">Other</option>
+          <option value="US">United States</option><option value="GB">United Kingdom</option>
+          <option value="CA">Canada</option><option value="AU">Australia</option>
+          <option value="IN">India</option><option value="DE">Germany</option>
+          <option value="FR">France</option><option value="SG">Singapore</option>
+          <option value="AE">United Arab Emirates</option><option value="NG">Nigeria</option>
+          <option value="ZA">South Africa</option><option value="OTHER">Other</option>
         </select>
         <div class="field-error">Country is required</div>
       </div>
@@ -265,195 +309,286 @@
       </div>
     </div>
 
-    <!-- PAYMENT METHOD -->
-    <div class="form-card">
-      <div class="form-card-title"><span class="step-num">3</span> Payment Method</div>
-      <div class="form-card-subtitle">All transactions are secured with 256-bit SSL encryption.</div>
+    <!-- Continue button -->
+    <button class="continue-btn" onclick="goToStep2()">
+      Continue to Payment &nbsp;→
+    </button>
+    <div style="text-align:center;font-size:12px;color:var(--c-muted);margin-top:12px">🔒 Your information is 100% secure and encrypted</div>
 
-      <!-- Payment Tabs -->
-      <div class="payment-tabs" id="paymentTabs">
-        <button class="payment-tab active" data-method="card" onclick="switchPayment('card')">💳 Credit / Debit Card</button>
-        <button class="payment-tab" data-method="paypal" onclick="switchPayment('paypal')">🅿️ PayPal</button>
-        <button class="payment-tab" data-method="bank" onclick="switchPayment('bank')">🏦 Bank Transfer</button>
-        <button class="payment-tab" data-method="crypto" id="cryptoTab" style="display:none" onclick="switchPayment('crypto')">₿ Crypto</button>
-      </div>
+  </div>
+</div>
 
-      <!-- Card Form -->
-      <div id="cardForm">
-        <div class="field-group">
-          <label class="field-label">Cardholder Name *</label>
-          <input class="field-input" type="text" id="cardName" placeholder="John Smith" autocomplete="cc-name" />
-          <div class="field-error">Cardholder name is required</div>
-        </div>
-        <div class="field-group">
-          <label class="field-label">Card Number *</label>
-          <div class="card-input-wrap">
-            <input class="field-input" type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number" oninput="formatCard(this)" />
-            <div class="card-icons">
-              <span class="card-icon" id="iconVisa">💳</span>
+<!-- ════════════ STEP 2: PAYMENT ════════════ -->
+<div id="step2Wrap" class="step-wrap" style="display:none">
+  <div class="checkout-step2">
+
+    <!-- LEFT: Payment Panel -->
+    <div class="pay-panel">
+      <div class="pay-panel-title">Select Payment Method</div>
+
+      <!-- Dynamic payment tabs -->
+      <div class="pay-tabs" id="payTabs"></div>
+
+      <!-- ── CARD FORM ── -->
+      <div id="pf-card" style="display:none">
+        <!-- Gradient card visual -->
+        <div class="card-visual">
+          <div class="card-visual-top">
+            <div>
+              <div class="card-visual-label">Card</div>
+              <div class="card-visual-balance" id="cvBalanceName">Cardholder Name</div>
+            </div>
+            <div class="card-visual-logo">💳</div>
+          </div>
+          <div class="card-visual-bottom">
+            <div class="card-visual-number" id="cvNumber">•••• •••• •••• ••••</div>
+            <div class="card-visual-expiry">
+              <div class="card-visual-expiry-label">Expires</div>
+              <div id="cvExpiry">MM/YY</div>
             </div>
           </div>
+        </div>
+        <!-- Card fields -->
+        <div class="field-group">
+          <label class="field-label">Card Number *</label>
+          <input class="field-input" type="text" id="cardNumber" placeholder="2324 5566 6677 7898" maxlength="19" autocomplete="cc-number" oninput="formatCard(this);updateCardPreview()" style="font-family:'Courier New',monospace;letter-spacing:2px" />
           <div class="field-error">Valid card number is required</div>
         </div>
-        <div class="field-row cols-3">
+        <div class="field-group">
+          <label class="field-label">Cardholder Name *</label>
+          <input class="field-input" type="text" id="cardName" placeholder="John Smith" autocomplete="cc-name" oninput="updateCardPreview()" />
+          <div class="field-error">Cardholder name is required</div>
+        </div>
+        <div class="field-row">
           <div class="field-group">
-            <label class="field-label">Expiry Month *</label>
-            <select class="field-input" id="expMonth" autocomplete="cc-exp-month">
-              <option value="">MM</option>
-              <option>01</option><option>02</option><option>03</option><option>04</option>
-              <option>05</option><option>06</option><option>07</option><option>08</option>
-              <option>09</option><option>10</option><option>11</option><option>12</option>
-            </select>
-            <div class="field-error">Required</div>
-          </div>
-          <div class="field-group">
-            <label class="field-label">Expiry Year *</label>
-            <select class="field-input" id="expYear" autocomplete="cc-exp-year">
-              <option value="">YYYY</option>
-              <option>2025</option><option>2026</option><option>2027</option><option>2028</option>
-              <option>2029</option><option>2030</option><option>2031</option><option>2032</option>
-            </select>
-            <div class="field-error">Required</div>
+            <label class="field-label">Expiry Date *</label>
+            <input class="field-input" type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" autocomplete="cc-exp" oninput="formatExpiry(this);updateCardPreview()" />
+            <div class="field-error">Required (MM/YY)</div>
           </div>
           <div class="field-group">
             <label class="field-label">CVV *</label>
-            <input class="field-input" type="text" id="cvv" placeholder="123" maxlength="4" autocomplete="cc-csc" />
+            <div class="cvv-wrap">
+              <input class="field-input" type="password" id="cvv" placeholder="234" maxlength="4" autocomplete="cc-csc" />
+              <button type="button" class="cvv-eye" onclick="toggleCVV()" title="Show/hide CVV">👁</button>
+            </div>
             <div class="field-error">Required</div>
             <div class="field-hint">3–4 digits on back of card</div>
           </div>
         </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <input type="checkbox" id="saveCard" style="width:15px;height:15px;accent-color:var(--c-primary);cursor:pointer" />
+          <label for="saveCard" style="font-size:13px;color:var(--c-sub);cursor:pointer">Save card for future payments</label>
+        </div>
       </div>
 
-      <!-- PayPal Form -->
-      <div id="paypalForm" style="display:none">
-        <div style="background:var(--c-bg3);border:1px solid var(--c-border);border-radius:12px;padding:28px;text-align:center;">
-          <div style="font-size:48px;margin-bottom:12px">🅿️</div>
-          <div style="font-family:var(--font-h);font-weight:700;font-size:16px;margin-bottom:8px">Pay with PayPal</div>
-          <p style="font-size:14px;color:var(--c-muted);margin-bottom:20px">Send payment to the PayPal email below, then email your confirmation to complete your order.</p>
-          <div style="font-size:14px;color:var(--c-sub);margin-bottom:12px">PayPal email: <strong id="ppEmail">info@chrixlin.tech</strong></div>
-          <div id="ppLinkWrap" style="display:none;margin-top:12px">
-            <a id="ppLink" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:10px 24px;background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.3);border-radius:50px;color:#22d3ee;font-weight:700;font-size:14px;text-decoration:none">🔗 Open PayPal.me Link →</a>
+      <!-- ── PAYPAL FORM ── -->
+      <div id="pf-paypal" style="display:none">
+
+        <!-- ── SDK MODE: PayPal Smart Buttons (when Client ID is configured) ── -->
+        <div id="pp-sdk-wrap" style="display:none">
+          <div style="text-align:center;margin-bottom:18px">
+            <div style="font-family:var(--font-h);font-weight:700;font-size:16px;margin-bottom:6px">Complete Payment via PayPal</div>
+            <div style="font-size:12px;color:var(--c-muted)">Supports PayPal · Debit/Credit Card · Apple Pay · Google Pay · QR Code</div>
+          </div>
+          <!-- Method icons row -->
+          <div style="display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap">
+            <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" alt="Cards" style="height:22px;border-radius:4px;opacity:0.85" onerror="this.style.display='none'" />
+            <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/apple-pay-logo-white.svg" alt="Apple Pay" style="height:20px;opacity:0.7;filter:invert(1)" onerror="this.style.display='none'" />
+            <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/buy-logo-white.svg" alt="Buy Now" style="height:20px;opacity:0.7;filter:invert(1)" onerror="this.style.display='none'" />
+          </div>
+          <!-- Loading spinner -->
+          <div id="pp-loading-msg" style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:28px;color:var(--c-muted);font-size:13px">
+            <div style="width:32px;height:32px;border:3px solid rgba(0,156,222,0.2);border-top-color:#009cde;border-radius:50%;animation:spin 0.8s linear infinite"></div>
+            Loading PayPal…
+          </div>
+          <!-- PayPal renders buttons here -->
+          <div id="paypal-button-container" style="min-height:50px"></div>
+          <div style="margin-top:14px;padding:12px;background:rgba(0,156,222,0.06);border:1px solid rgba(0,156,222,0.15);border-radius:10px;font-size:11px;color:var(--c-muted);text-align:center">
+            🔒 Powered by PayPal · 256-bit encryption · By paying you agree to our <a href="#" style="color:#a78bfa">Terms of Service</a>
+          </div>
+          <!-- PayPal error state -->
+          <div id="pp-error-msg" style="display:none;padding:14px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:10px;font-size:13px;color:#f87171;text-align:center;margin-top:12px"></div>
+        </div>
+
+        <!-- ── FALLBACK MODE: Manual email payment (no Client ID) ── -->
+        <div id="pp-fallback-wrap">
+          <div style="background:var(--c-bg3);border:1px solid var(--c-border);border-radius:14px;padding:28px;text-align:center">
+            <div style="font-size:48px;margin-bottom:12px">🅿️</div>
+            <div style="font-family:var(--font-h);font-weight:700;font-size:16px;margin-bottom:8px">Pay with PayPal</div>
+            <p style="font-size:13px;color:var(--c-muted);margin-bottom:16px">Send payment to the PayPal email below, then email us your confirmation to complete your order.</p>
+            <div style="font-size:14px;color:var(--c-sub);margin-bottom:14px">PayPal email: <strong id="ppEmail">—</strong></div>
+            <div id="ppLinkWrap" style="display:none;margin-bottom:8px">
+              <a id="ppLink" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:10px 24px;background:rgba(0,156,222,0.12);border:1px solid rgba(0,156,222,0.3);border-radius:50px;color:#22d3ee;font-weight:700;font-size:14px">🔗 Open PayPal.me →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── BANK FORM ── -->
+      <div id="pf-bank" style="display:none">
+        <div style="background:var(--c-bg3);border:1px solid var(--c-border);border-radius:14px;padding:28px">
+          <div style="font-family:var(--font-h);font-weight:700;font-size:16px;margin-bottom:16px">🏦 Bank Transfer Details</div>
+          <div id="bankDetailsRows" style="display:flex;flex-direction:column;gap:4px;font-size:14px;margin-bottom:12px"></div>
+          <div id="bankInstructions" style="font-size:12px;color:var(--c-muted)"></div>
+        </div>
+      </div>
+
+      <!-- ── WISE FORM ── -->
+      <div id="pf-wise" style="display:none">
+        <div style="background:var(--c-bg3);border:1px solid var(--c-border);border-radius:14px;padding:28px;text-align:center">
+          <div style="font-size:48px;margin-bottom:12px">🌍</div>
+          <div style="font-family:var(--font-h);font-weight:700;font-size:16px;margin-bottom:8px">Pay via Wise</div>
+          <div style="font-size:13px;color:var(--c-muted);margin-bottom:16px" id="wiseInstructions">Send payment via Wise to the details below.</div>
+          <div style="font-size:14px;color:var(--c-sub);margin-bottom:12px">Wise email: <strong id="wiseEmail">—</strong></div>
+          <div id="wiseLinkWrap" style="display:none">
+            <a id="wiseLink" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:10px 24px;background:rgba(55,214,122,0.12);border:1px solid rgba(55,214,122,0.3);border-radius:50px;color:#37d67a;font-weight:700;font-size:14px">🔗 Open Wise Payment Link →</a>
           </div>
         </div>
       </div>
 
-      <!-- Bank Transfer Form -->
-      <div id="bankForm" style="display:none">
-        <div style="background:var(--c-bg3);border:1px solid var(--c-border);border-radius:12px;padding:28px;">
-          <div style="font-family:var(--font-h);font-weight:700;font-size:16px;margin-bottom:16px">🏦 Bank Transfer Details</div>
-          <div id="bankDetailsRows" style="display:flex;flex-direction:column;gap:4px;font-size:14px;margin-bottom:14px;"></div>
-          <div id="bankInstructions" style="font-size:12px;color:var(--c-muted);margin-top:4px"></div>
+      <!-- ── RAZORPAY FORM ── -->
+      <div id="pf-razorpay" style="display:none">
+        <div style="background:var(--c-bg3);border:1px solid var(--c-border);border-radius:14px;padding:28px;text-align:center">
+          <div style="font-size:48px;margin-bottom:12px">⚡</div>
+          <div style="font-family:var(--font-h);font-weight:700;font-size:16px;margin-bottom:8px">Pay via Razorpay</div>
+          <p style="font-size:13px;color:var(--c-muted);margin-bottom:20px">Secure payment via Razorpay — UPI, cards, net banking &amp; wallets accepted.</p>
+          <button onclick="openRazorpay()" style="padding:14px 32px;border-radius:50px;background:linear-gradient(135deg,#3395ff,#0070f3);color:#fff;font-weight:800;font-size:15px;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(51,149,255,0.35)">⚡ Pay with Razorpay</button>
         </div>
       </div>
 
-      <!-- Crypto Form -->
-      <div id="cryptoForm" style="display:none">
-        <div style="background:var(--c-bg3);border:1px solid var(--c-border);border-radius:12px;padding:28px;text-align:center;">
-          <div style="font-size:48px;margin-bottom:12px">₿</div>
-          <div style="font-family:var(--font-h);font-weight:700;font-size:16px;margin-bottom:8px">Pay with <span id="cryptoTypeName">Crypto</span></div>
-          <p style="font-size:13px;color:var(--c-muted);margin-bottom:16px">Send the exact purchase amount to the wallet address below. Email your transaction hash to confirm.</p>
-          <div style="background:var(--c-bg2);border:1px solid var(--c-border);border-radius:10px;padding:14px;word-break:break-all;font-family:monospace;font-size:13px;color:#a78bfa" id="cryptoAddr">—</div>
-          <button onclick="copyCrypto()" style="margin-top:10px;padding:8px 20px;border-radius:20px;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);color:#a78bfa;font-weight:600;font-size:13px;cursor:pointer">📋 Copy Address</button>
-        </div>
-      </div>
+      <hr style="border:none;border-top:1px solid var(--c-border);margin:24px 0" />
 
-      <hr class="form-divider" />
-
-      <!-- Special Requirements -->
+      <!-- Notes -->
       <div class="field-group">
         <label class="field-label">Special Requirements or Notes</label>
-        <textarea class="field-input" id="notes" placeholder="Any specific customizations, integrations, or notes for your onboarding..." style="min-height:90px;resize:vertical;letter-spacing:normal;font-family:var(--font-b)"></textarea>
+        <textarea class="field-input" id="notes" placeholder="Any specific customizations or onboarding notes..." style="min-height:80px;resize:vertical;letter-spacing:normal;font-family:var(--font-b)"></textarea>
       </div>
 
       <!-- Terms -->
-      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:24px">
-        <input type="checkbox" id="terms" style="width:18px;height:18px;margin-top:3px;accent-color:var(--c-primary);flex-shrink:0" />
-        <label for="terms" style="font-size:14px;color:var(--c-sub);cursor:pointer">
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:22px">
+        <input type="checkbox" id="terms" style="width:17px;height:17px;margin-top:3px;accent-color:var(--c-primary);flex-shrink:0;cursor:pointer" />
+        <label for="terms" style="font-size:13px;color:var(--c-sub);cursor:pointer">
           I agree to the <a href="#" style="color:#a78bfa">Terms of Service</a> and <a href="#" style="color:#a78bfa">Privacy Policy</a>. I understand this is a one-time payment for a digital service.
         </label>
       </div>
 
-      <!-- Submit -->
+      <!-- Pay button -->
       <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">
-        <span>🔒</span> Complete Purchase — <span id="submitPrice">$999</span>
+        <span>🔒</span> Complete Purchase — <span id="submitPrice">—</span>
       </button>
-      <div class="submit-note">
-        <span>🔒</span> 256-bit SSL Encrypted · Your data is 100% secure
-      </div>
-
+      <div class="submit-note"><span>🔒</span> 256-bit SSL Encrypted · Your data is 100% secure</div>
     </div>
-  </div>
 
-  <!-- ─── RIGHT: ORDER SUMMARY ─────────────────────────────── -->
-  <div>
-    <div class="order-card">
-      <div class="order-card-title">Order Summary</div>
+    <!-- RIGHT: Order Summary -->
+    <div class="summary-panel">
+      <div style="font-family:var(--font-h);font-size:16px;font-weight:800;margin-bottom:14px">Order Summary</div>
+      <div class="summary-card">
+        <!-- Product image/thumb -->
+        <div class="summary-product-img" id="orderThumb">🤖</div>
+        <div class="summary-body">
+          <div class="summary-cat" id="orderCat"></div>
+          <div class="summary-name" id="orderName">Loading...</div>
+          <div class="summary-price-base" id="orderPrice">—</div>
 
-      <div class="order-product">
-        <div class="order-product-thumb" id="orderThumb">🤖</div>
-        <div>
-          <div class="order-product-name" id="orderName">Loading...</div>
-          <div class="order-product-cat" id="orderCat"></div>
+          <div class="summary-lines">
+            <!-- Tax lines -->
+            <div class="summary-line" id="cgstLine" style="display:none">
+              <span class="slabel" id="cgstLabel">CGST (0%)</span>
+              <span class="sval" id="cgstAmt">—</span>
+            </div>
+            <div class="summary-line" id="sgstLine" style="display:none">
+              <span class="slabel" id="sgstLabel">SGST (0%)</span>
+              <span class="sval" id="sgstAmt">—</span>
+            </div>
+            <!-- Free inclusions -->
+            <div class="summary-line">
+              <span class="slabel">Setup Fee</span>
+              <span class="sval free">FREE</span>
+            </div>
+            <div class="summary-line">
+              <span class="slabel">Onboarding Support</span>
+              <span class="sval free">FREE</span>
+            </div>
+            <div class="summary-divider"></div>
+            <!-- Total -->
+            <div class="summary-total">
+              <span class="summary-total-label">Total Due Today</span>
+              <span class="summary-total-val" id="orderTotal">—</span>
+            </div>
+          </div>
+        </div>
+        <!-- Trust row -->
+        <div class="trust-row">
+          <div class="trust-item"><div class="trust-item-icon">🔒</div>SSL Secure</div>
+          <div class="trust-item"><div class="trust-item-icon">✅</div>Money Back</div>
+          <div class="trust-item"><div class="trust-item-icon">⚡</div>48h Setup</div>
+          <div class="trust-item"><div class="trust-item-icon">🤝</div>Support Inc.</div>
         </div>
       </div>
-
-      <div class="order-line">
-        <span class="label">Product Price</span>
-        <span class="val" id="orderPrice">—</span>
-      </div>
-      <div class="order-line">
-        <span class="label">Setup Fee</span>
-        <span class="val free">FREE</span>
-      </div>
-      <div class="order-line">
-        <span class="label">Documentation</span>
-        <span class="val free">FREE</span>
-      </div>
-      <div class="order-line">
-        <span class="label">Onboarding Support</span>
-        <span class="val free">FREE</span>
-      </div>
-
-      <div class="order-total-line">
-        <div class="order-total-label">Total Due Today</div>
-        <div class="order-total-val" id="orderTotal">—</div>
-      </div>
-
-      <div class="order-included">
-        <div class="order-included-title">What's Included</div>
-        <div class="order-inc-item"><span class="order-inc-check">✓</span> Full AI system deployment</div>
-        <div class="order-inc-item"><span class="order-inc-check">✓</span> Complete documentation & training</div>
-        <div class="order-inc-item"><span class="order-inc-check">✓</span> 1-on-1 onboarding call</div>
-        <div class="order-inc-item"><span class="order-inc-check">✓</span> 30-day post-launch support</div>
-        <div class="order-inc-item"><span class="order-inc-check">✓</span> Lifetime access & updates</div>
-      </div>
-
-      <div class="trust-badges">
-        <div class="trust-badge"><div class="trust-badge-icon">🔒</div><div>SSL Secure</div></div>
-        <div class="trust-badge"><div class="trust-badge-icon">✅</div><div>Money Back</div></div>
-        <div class="trust-badge"><div class="trust-badge-icon">⚡</div><div>48h Setup</div></div>
-        <div class="trust-badge"><div class="trust-badge-icon">🤝</div><div>Support Inc.</div></div>
-      </div>
-
-      <div style="margin-top:20px;padding:14px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:10px;font-size:13px;color:var(--c-sub)">
-        💬 Questions? Email us at <a href="mailto:info@chrixlin.tech" style="color:#a78bfa">info@chrixlin.tech</a> or <a href="marketplace.html#book-call" style="color:#a78bfa">book a free call</a>.
+      <div style="margin-top:14px;padding:12px 16px;background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.18);border-radius:10px;font-size:12px;color:var(--c-sub);text-align:center">
+        💬 Questions? <a href="#" data-contact-email style="color:#a78bfa">info@chrixlin.tech</a>
       </div>
     </div>
-  </div>
 
+  </div>
+</div>
+
+<!-- ════════════ STEP 3: CONFIRMATION ════════════ -->
+<div id="step3Wrap" class="step-wrap" style="display:none">
+  <div style="max-width:680px;margin:0 auto;padding:32px 24px 80px">
+
+    <!-- Processing state -->
+    <div class="s3-processing" id="s3Processing">
+      <div class="s3-spinner"></div>
+      <div class="s3-processing-title">Processing your payment…</div>
+      <div class="s3-processing-sub">Please don't close this page</div>
+    </div>
+
+    <!-- Success state -->
+    <div class="s3-result" id="s3Success">
+      <div class="s3-icon">🎉</div>
+      <h2 class="s3-title">Payment <span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Confirmed!</span></h2>
+      <p class="s3-sub">Your order is confirmed! Check your email for credentials. Our team will contact you within 24 hours.</p>
+      <div class="s3-steps">
+        <div style="font-family:var(--font-h);font-weight:700;font-size:14px;margin-bottom:14px;color:var(--c-text)">What happens next:</div>
+        <div class="s3-step"><div class="s3-step-num">1</div>Confirmation email sent immediately</div>
+        <div class="s3-step"><div class="s3-step-num">2</div>Our team contacts you within 24 hours</div>
+        <div class="s3-step"><div class="s3-step-num">3</div>Onboarding call scheduled at your convenience</div>
+        <div class="s3-step"><div class="s3-step-num">4</div>AI system deployed &amp; live within 48 hours</div>
+      </div>
+      <p class="s3-countdown" id="s3Countdown">Redirecting to dashboard in <strong>5</strong>s…</p>
+      <div class="s3-btns">
+        <a href="dashboard.html" class="btn btn-primary">Go to Dashboard →</a>
+        <a href="marketplace.html" class="btn btn-outline">Browse More</a>
+      </div>
+    </div>
+
+    <!-- Failed state -->
+    <div class="s3-result" id="s3Failed">
+      <div class="s3-icon">❌</div>
+      <h2 class="s3-title" style="color:var(--c-red)">Payment Failed</h2>
+      <p class="s3-sub">Something went wrong. Please try again or contact support.</p>
+      <div class="s3-btns">
+        <button class="btn btn-primary" onclick="retryPayment()">Try Again</button>
+        <a id="s3ContactLink" href="#" class="btn btn-outline">Contact Support</a>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <!-- SUCCESS OVERLAY -->
 <div class="success-overlay" id="successOverlay">
   <div class="success-icon">🎉</div>
   <h1 class="success-title">Order <span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Confirmed!</span></h1>
-  <p class="success-sub">Thank you for your purchase! Check your email for next steps. Our team will contact you within 24 hours to schedule your onboarding call.</p>
+  <p class="success-sub">Thank you for your purchase! Check your email for next steps. Our team will contact you within 24 hours.</p>
   <div class="success-steps">
     <div style="font-family:var(--font-h);font-weight:700;font-size:14px;margin-bottom:14px;color:var(--c-text)">What happens next:</div>
     <div class="success-step"><div class="success-step-num">1</div>Check your email — confirmation sent immediately</div>
     <div class="success-step"><div class="success-step-num">2</div>Our team contacts you within 24 hours</div>
     <div class="success-step"><div class="success-step-num">3</div>Onboarding call scheduled at your convenience</div>
-    <div class="success-step"><div class="success-step-num">4</div>AI system deployed & live within 48 hours</div>
+    <div class="success-step"><div class="success-step-num">4</div>AI system deployed &amp; live within 48 hours</div>
   </div>
   <div class="success-btns">
     <a href="marketplace.html" class="btn btn-primary">Browse More Products</a>
@@ -462,278 +597,604 @@
 </div>
 
 <script>
-// ─── DEFAULT PRODUCTS (same subset needed for order summary) ──────────────────
+// ─── DEFAULT PRODUCTS ──────────────────────────────────────────────────────────
 const DEFAULT_PRODUCTS = [
-  { id:1, category:'voice-ai',    categoryLabel:'Voice AI',    categoryClass:'cat-voice',      emoji:'📞', title:'Voice AI Appointment Agent',       price:'$1,499', badge:'Bestseller' },
-  { id:2, category:'sales',       categoryLabel:'Sales AI',    categoryClass:'cat-sales',      emoji:'🔥', title:'Lead Reactivation AI Platform',    price:'$499',   badge:'Hot' },
-  { id:3, category:'voice-ai',    categoryLabel:'Voice AI',    categoryClass:'cat-voice',      emoji:'🏥', title:'Patient Acquisition AI System',    price:'$1,497', badge:'Premium' },
-  { id:4, category:'content',     categoryLabel:'Content AI',  categoryClass:'cat-content',    emoji:'✍️', title:'AI Content & Marketing Agent',     price:'$997',   badge:'' },
-  { id:5, category:'lead',        categoryLabel:'Lead Gen',    categoryClass:'cat-lead',       emoji:'🎯', title:'AI Lead Generation System',        price:'$1,297', badge:'' },
-  { id:6, category:'automation',  categoryLabel:'Automation',  categoryClass:'cat-automation', emoji:'⚙️', title:'Business Automation Workflow Suite',price:'$799',   badge:'New' }
+  { id:1, category:'voice-ai',    categoryLabel:'Voice AI',    emoji:'📞', title:'Voice AI Appointment Agent',        price:'$1,499', badge:'Bestseller' },
+  { id:2, category:'sales',       categoryLabel:'Sales AI',    emoji:'🔥', title:'Lead Reactivation AI Platform',     price:'$499',   badge:'Hot' },
+  { id:3, category:'voice-ai',    categoryLabel:'Voice AI',    emoji:'🏥', title:'Patient Acquisition AI System',     price:'$1,497', badge:'Premium' },
+  { id:4, category:'content',     categoryLabel:'Content AI',  emoji:'✍️', title:'AI Content & Marketing Agent',      price:'$997',   badge:'' },
+  { id:5, category:'lead',        categoryLabel:'Lead Gen',    emoji:'🎯', title:'AI Lead Generation System',         price:'$1,297', badge:'' },
+  { id:6, category:'automation',  categoryLabel:'Automation',  emoji:'⚙️', title:'Business Automation Workflow Suite',price:'$799',   badge:'New' }
 ];
-
 function getProduct(id) {
-  try {
-    const s = localStorage.getItem('chrixlin_marketplace');
-    if (s) { const d = JSON.parse(s); if (d.products) { const p = d.products.find(x => x.id === id); if (p) return p; } }
-  } catch {}
-  return DEFAULT_PRODUCTS.find(x => x.id === id) || DEFAULT_PRODUCTS[0];
+  try { const s=localStorage.getItem('chrixlin_marketplace'); if(s){const d=JSON.parse(s);if(d.products){const p=d.products.find(x=>x.id===id);if(p)return p;}} } catch{}
+  return DEFAULT_PRODUCTS.find(x=>x.id===id)||DEFAULT_PRODUCTS[0];
 }
 
-// ─── BANK DETAILS ─────────────────────────────────────────────────────────────
+// ─── SETTINGS ─────────────────────────────────────────────────────────────────
 function loadBankDetails() {
-  try { const s = localStorage.getItem('chrixlin_bank_details'); return s ? JSON.parse(s) : {}; } catch { return {}; }
+  try {
+    const newS = localStorage.getItem('chrixlin_checkout_settings');
+    const oldS = localStorage.getItem('chrixlin_bank_details');
+    return Object.assign({}, oldS?JSON.parse(oldS):{}, newS?JSON.parse(newS):{});
+  } catch { return {}; }
+}
+function loadGatewayConfig() {
+  try { return JSON.parse(localStorage.getItem('chrixlin_gateways')||'{}'); } catch { return {}; }
+}
+function isGatewayEnabled(type) {
+  const cfg = loadGatewayConfig();
+  return cfg[type] && cfg[type].enabled === true;
+}
+function getGatewayCfg(type) {
+  const cfg = loadGatewayConfig();
+  return cfg[type] || {};
+}
+
+// ─── TAX / GST CALCULATION ─────────────────────────────────────────────────────
+var _pricing = { base:0, cgstPct:0, sgstPct:0, cgstAmt:0, sgstAmt:0, total:0 };
+function calcPricing(priceStr) {
+  const base = parseFloat(String(priceStr||'0').replace(/[^0-9.]/g,''))||0;
+  const cfg  = loadBankDetails();
+  const cgstPct = (cfg.cgstEnabled===true) ? (parseFloat(cfg.cgst||0)||0) : 0;
+  const sgstPct = (cfg.sgstEnabled===true) ? (parseFloat(cfg.sgst||0)||0) : 0;
+  const cgstAmt = Math.round(base*cgstPct)/100;
+  const sgstAmt = Math.round(base*sgstPct)/100;
+  const total   = base+cgstAmt+sgstAmt;
+  return { base, cgstPct, sgstPct, cgstAmt, sgstAmt, total };
+}
+function fmt(n) {
+  const sym = loadBankDetails().currency||'$';
+  return sym+n.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function updateOrderSummary(priceStr) {
+  _pricing = calcPricing(priceStr);
+  const hasTax = _pricing.cgstPct>0||_pricing.sgstPct>0;
+  document.getElementById('orderPrice').textContent = hasTax ? fmt(_pricing.base) : priceStr;
+  const cgstLine=document.getElementById('cgstLine');
+  if(_pricing.cgstPct>0){
+    document.getElementById('cgstLabel').textContent='CGST ('+_pricing.cgstPct+'%)';
+    document.getElementById('cgstAmt').textContent=fmt(_pricing.cgstAmt);
+    cgstLine.style.display='';
+  } else { cgstLine.style.display='none'; }
+  const sgstLine=document.getElementById('sgstLine');
+  if(_pricing.sgstPct>0){
+    document.getElementById('sgstLabel').textContent='SGST ('+_pricing.sgstPct+'%)';
+    document.getElementById('sgstAmt').textContent=fmt(_pricing.sgstAmt);
+    sgstLine.style.display='';
+  } else { sgstLine.style.display='none'; }
+  const totalStr = hasTax ? fmt(_pricing.total) : priceStr;
+  document.getElementById('orderTotal').textContent  = totalStr;
+  document.getElementById('submitPrice').textContent = totalStr;
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
-const params = new URLSearchParams(window.location.search);
-const pid = parseInt(params.get('product') || params.get('id')) || null;
-const pslug = params.get('slug') || '';
-const product = pid ? getProduct(pid) : (getProduct(1));
+const params  = new URLSearchParams(window.location.search);
+const pid     = parseInt(params.get('product')||params.get('id'))||null;
+const pslug   = params.get('slug')||'';
+const product = pid ? getProduct(pid) : getProduct(1);
 const bankCfg = loadBankDetails();
 
-// Load product from Supabase — match by id OR slug
+// Load product from Supabase
 (async function loadProductFromDB() {
   if (typeof ChrixlinDB !== 'undefined') {
     try {
       const products = await ChrixlinDB.loadAllProducts();
-      const slugify = s => (s||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-      const dbProduct = products.find(p =>
-        (pid && p.id === pid) ||
-        (pslug && (p.slug === pslug || slugify(p.title) === pslug))
-      );
+      const slugify = s=>(s||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+      const dbProduct = products.find(p=>(pid&&p.id===pid)||(pslug&&(p.slug===pslug||slugify(p.title)===pslug)));
       if (dbProduct) {
-        // Patch module-level product reference so order submission uses correct product
         Object.assign(product, dbProduct);
-        const thumbClass2 = { 'voice-ai':'cat-thumb-voice-ai','sales':'cat-thumb-sales','content':'cat-thumb-content','lead':'cat-thumb-lead','automation':'cat-thumb-automation' };
-        const tc2 = thumbClass2[dbProduct.category] || 'cat-thumb-voice-ai';
         const thumbEl2 = document.getElementById('orderThumb');
+        const tc2 = ({  'voice-ai':'cat-thumb-voice-ai','sales':'cat-thumb-sales','content':'cat-thumb-content','lead':'cat-thumb-lead','automation':'cat-thumb-automation'})[dbProduct.category]||'cat-thumb-voice-ai';
         if (dbProduct.image) {
-          thumbEl2.innerHTML = `<img src="${dbProduct.image}" style="width:100%;height:100%;object-fit:cover;border-radius:10px">`;
+          thumbEl2.innerHTML = '<img src="'+dbProduct.image+'" style="width:100%;height:100%;object-fit:cover">';
         } else {
-          thumbEl2.textContent = dbProduct.emoji || '🤖';
+          thumbEl2.textContent = dbProduct.emoji||'🤖';
         }
-        thumbEl2.className = `order-product-thumb ${tc2}`;
+        thumbEl2.className = 'summary-product-img '+tc2;
         document.getElementById('orderName').textContent = dbProduct.title;
-        document.getElementById('orderCat').textContent = dbProduct.categoryLabel;
-        document.getElementById('orderPrice').textContent = dbProduct.price;
-        document.getElementById('orderTotal').textContent = dbProduct.price;
-        document.getElementById('submitPrice').textContent = dbProduct.price;
+        document.getElementById('orderCat').textContent  = dbProduct.categoryLabel;
+        updateOrderSummary(dbProduct.price);
       }
     } catch {}
   }
 })();
 
 // Brand
-(function() {
-  try {
-    const keys = JSON.parse(localStorage.getItem('agentrise_textkeys') || '{}');
-    const brand = keys['nav.logo'] || 'Chrixlin AI Rise';
-    document.getElementById('topbarLogo').textContent = brand;
-  } catch {}
+(function(){ try{ const k=JSON.parse(localStorage.getItem('agentrise_textkeys')||'{}'); document.getElementById('topbarLogo').textContent=k['nav.logo']||'Chrixlin AI Rise'; }catch{} })();
+
+// Initial order summary
+(function(){
+  const tc = ({'voice-ai':'cat-thumb-voice-ai','sales':'cat-thumb-sales','content':'cat-thumb-content','lead':'cat-thumb-lead','automation':'cat-thumb-automation'})[product.category]||'cat-thumb-voice-ai';
+  const el = document.getElementById('orderThumb');
+  el.textContent = product.emoji||'🤖';
+  el.className = 'summary-product-img '+tc;
+  document.getElementById('orderName').textContent = product.title;
+  document.getElementById('orderCat').textContent  = product.categoryLabel;
+  updateOrderSummary(product.price);
 })();
 
-// Order Summary
-const thumbClass = { 'voice-ai':'cat-thumb-voice-ai','sales':'cat-thumb-sales','content':'cat-thumb-content','lead':'cat-thumb-lead','automation':'cat-thumb-automation' };
-const tc = thumbClass[product.category] || 'cat-thumb-voice-ai';
-const thumbEl = document.getElementById('orderThumb');
-thumbEl.textContent = product.emoji || '🤖';
-thumbEl.className = `order-product-thumb ${tc}`;
-document.getElementById('orderName').textContent = product.title;
-document.getElementById('orderCat').textContent = product.categoryLabel;
-const currency = bankCfg.currency || '$';
-document.getElementById('orderPrice').textContent = product.price;
-document.getElementById('orderTotal').textContent = product.price;
-document.getElementById('submitPrice').textContent = product.price;
-
 // Contact email
-const contactEmail = bankCfg.contactEmail || 'info@chrixlin.tech';
-document.querySelectorAll('[data-contact-email]').forEach(el => { el.href = `mailto:${contactEmail}`; el.textContent = contactEmail; });
+const contactEmail = bankCfg.contactEmail||'info@chrixlin.tech';
+document.querySelectorAll('[data-contact-email]').forEach(el=>{ el.href='mailto:'+contactEmail; el.textContent=contactEmail; });
+if (bankCfg.successMsg) { const s=document.querySelector('.success-sub'); if(s) s.textContent=bankCfg.successMsg; }
 
-// Bank Transfer details
-const bankRef = `CAIR-${pid}-${Date.now().toString(36).toUpperCase().slice(-6)}`;
-const bankRows = document.getElementById('bankDetailsRows');
-const bankFields = [
-  ['Account Name',    bankCfg.accountName   || 'Chrixlin AI Rise'],
-  ['Bank Name',       bankCfg.bankName],
-  ['Account Number',  bankCfg.accountNumber],
-  ['Sort Code / Routing', bankCfg.sortCode],
-  ['IBAN',            bankCfg.iban],
-  ['SWIFT / BIC',     bankCfg.swift],
-  ['Payment Reference', bankRef],
-];
-bankRows.innerHTML = bankFields.filter(([,v])=>v).map(([label,val]) =>
-  `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--c-border)">
-    <span style="color:var(--c-muted)">${label}</span>
-    <strong style="text-align:right;max-width:60%;word-break:break-all">${val}</strong>
-  </div>`
-).join('');
-const instrEl = document.getElementById('bankInstructions');
-const instrText = bankCfg.instructions || (bankCfg.refNote || `Please include reference <strong>${bankRef}</strong> with your transfer and email confirmation to <a href="mailto:${contactEmail}" style="color:#a78bfa">${contactEmail}</a>. Access granted within 24 hours.`);
-instrEl.innerHTML = `⚠️ ${instrText}`;
-
-// PayPal details
-document.getElementById('ppEmail').textContent = bankCfg.paypalEmail || 'info@chrixlin.tech';
-if (bankCfg.paypalLink) {
-  const ppWrap = document.getElementById('ppLinkWrap');
-  ppWrap.style.display = '';
-  document.getElementById('ppLink').href = bankCfg.paypalLink;
+// ─── STEP NAVIGATION ──────────────────────────────────────────────────────────
+function goBack() {
+  const s2 = document.getElementById('step2Wrap');
+  if (s2.style.display !== 'none') { goToStep1(); }
+  else { history.back(); }
 }
 
-// Crypto
-if (bankCfg.cryptoType && bankCfg.cryptoAddress) {
-  document.getElementById('cryptoTab').style.display = '';
-  document.getElementById('cryptoTypeName').textContent = bankCfg.cryptoType;
-  document.getElementById('cryptoAddr').textContent = bankCfg.cryptoAddress;
+function goToStep1() {
+  document.getElementById('step1Wrap').style.display = '';
+  document.getElementById('step2Wrap').style.display = 'none';
+  document.getElementById('step1Wrap').classList.remove('step-wrap'); void document.getElementById('step1Wrap').offsetWidth; document.getElementById('step1Wrap').classList.add('step-wrap');
+  // Update indicator
+  document.getElementById('stepNum1').className = 'step-num active';
+  document.getElementById('stepLbl1').className = 'step-label active';
+  document.getElementById('stepNum2').className = 'step-num pending';
+  document.getElementById('stepLbl2').className = 'step-label pending';
+  document.getElementById('stepConn').className = 'step-connector';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Success message
-if (bankCfg.successMsg) {
-  document.querySelector('.success-sub').textContent = bankCfg.successMsg;
-}
-
-// Update contact link in order card
-document.querySelectorAll('a[href="mailto:info@chrixlin.tech"]').forEach(el => {
-  el.href = `mailto:${contactEmail}`;
-  if (el.textContent === 'info@chrixlin.tech') el.textContent = contactEmail;
-});
-
-// ─── PAYMENT TABS ─────────────────────────────────────────────────────────────
-let activeMethod = 'card';
-function switchPayment(method) {
-  activeMethod = method;
-  document.querySelectorAll('.payment-tab').forEach(t => t.classList.toggle('active', t.dataset.method === method));
-  document.getElementById('cardForm').style.display   = method === 'card'   ? '' : 'none';
-  document.getElementById('paypalForm').style.display = method === 'paypal' ? '' : 'none';
-  document.getElementById('bankForm').style.display   = method === 'bank'   ? '' : 'none';
-  document.getElementById('cryptoForm').style.display = method === 'crypto' ? '' : 'none';
-}
-
-function copyCrypto() {
-  const addr = document.getElementById('cryptoAddr').textContent;
-  navigator.clipboard.writeText(addr).then(() => {
-    const btn = event.target;
-    btn.textContent = '✓ Copied!';
-    setTimeout(() => { btn.textContent = '📋 Copy Address'; }, 2000);
-  });
-}
-
-// ─── CARD FORMATTING ──────────────────────────────────────────────────────────
-function formatCard(input) {
-  let v = input.value.replace(/\D/g, '').slice(0, 16);
-  input.value = v.replace(/(.{4})/g, '$1 ').trim();
-}
-
-// ─── VALIDATION ───────────────────────────────────────────────────────────────
-function required(id) {
-  const el = document.getElementById(id);
-  const val = el.value.trim();
-  const group = el.closest('.field-group');
-  if (!val) { group.classList.add('has-error'); return false; }
-  group.classList.remove('has-error');
-  return true;
-}
-function validEmail(id) {
-  const el = document.getElementById(id);
-  const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
-  el.closest('.field-group').classList.toggle('has-error', !ok);
-  return ok;
-}
-function validate() {
+function goToStep2() {
+  // Validate step 1 fields
   const checks = [
     required('firstName'), required('lastName'), validEmail('email'),
     required('phone'), required('country'), required('address'), required('city')
   ];
-  if (activeMethod === 'card') {
-    checks.push(required('cardName'), required('cardNumber'), required('expMonth'), required('expYear'), required('cvv'));
+  if (!checks.every(Boolean)) {
+    document.querySelector('.has-error')?.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
   }
+  document.getElementById('step1Wrap').style.display = 'none';
+  document.getElementById('step2Wrap').style.display = '';
+  document.getElementById('step2Wrap').classList.remove('step-wrap'); void document.getElementById('step2Wrap').offsetWidth; document.getElementById('step2Wrap').classList.add('step-wrap');
+  // Update indicator
+  document.getElementById('stepNum1').className = 'step-num done';
+  document.getElementById('stepNum1').textContent = '✓';
+  document.getElementById('stepLbl1').className = 'step-label done';
+  document.getElementById('stepNum2').className = 'step-num active';
+  document.getElementById('stepLbl2').className = 'step-label active';
+  document.getElementById('stepConn').className = 'step-connector done';
+  buildPaymentTabs();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── PAYMENT TABS (DYNAMIC) ───────────────────────────────────────────────────
+const GATEWAY_META = {
+  razorpay: { label: '⚡ Razorpay',            form: 'pf-razorpay' },
+  paypal:   { label: '🅿️ PayPal',              form: 'pf-paypal' },
+  card:     { label: '💳 Credit / Debit Card', form: 'pf-card' },
+  bank:     { label: '🏦 Bank Transfer',       form: 'pf-bank' },
+  wise:     { label: '🌍 Wise',                form: 'pf-wise' }
+};
+let activeMethod = null;  // null = no default; buildPaymentTabs picks _enabledMethods[0]
+let _enabledMethods = [];
+
+function buildPaymentTabs() {
+  const tabsEl = document.getElementById('payTabs');
+  // Determine enabled gateways
+  _enabledMethods = Object.keys(GATEWAY_META).filter(k => isGatewayEnabled(k));
+  // If none enabled, show all as fallback
+  if (!_enabledMethods.length) _enabledMethods = ['paypal','card','bank'];
+  // Hide all forms
+  Object.values(GATEWAY_META).forEach(m => { const el=document.getElementById(m.form); if(el) el.style.display='none'; });
+  // Activate first method (Razorpay/PayPal first, then card/bank/wise)
+  const first = (activeMethod && _enabledMethods.includes(activeMethod)) ? activeMethod : _enabledMethods[0];
+  // Build tabs — first tab active by default
+  tabsEl.innerHTML = _enabledMethods.map(k =>
+    '<button class="pay-tab'+(k===first?' active':'')+'" data-method="'+k+'" onclick="switchPayment(\''+k+'\')">'+GATEWAY_META[k].label+'</button>'
+  ).join('');
+  switchPayment(first);
+  // Populate gateway-specific details
+  populateGatewayForms();
+}
+
+function switchPayment(method) {
+  activeMethod = method;
+  document.querySelectorAll('.pay-tab').forEach(t => t.classList.toggle('active', t.dataset.method === method));
+  Object.values(GATEWAY_META).forEach(m => { const el=document.getElementById(m.form); if(el) el.style.display='none'; });
+  const target = GATEWAY_META[method];
+  if (target) { const el=document.getElementById(target.form); if(el) el.style.display=''; }
+  // Render PayPal Smart Buttons when switching to PayPal tab
+  if (method === 'paypal') renderPayPalButtons();
+}
+
+function populateGatewayForms() {
+  // Bank Transfer
+  const bankGw = getGatewayCfg('bank');
+  const bankRef = 'CAIR-'+(pid||'0')+'-'+Date.now().toString(36).toUpperCase().slice(-6);
+  const bankRowsEl = document.getElementById('bankDetailsRows');
+  const bankFields2 = [
+    ['Account Name',        bankGw.g_bank_accountName || bankCfg.accountName || 'Chrixlin AI Rise'],
+    ['Bank Name',           bankGw.g_bank_bankName    || bankCfg.bankName],
+    ['Account Number',      bankGw.g_bank_accountNumber || bankCfg.accountNumber],
+    ['Sort Code / Routing / IFSC', bankGw.g_bank_sortCode || bankCfg.sortCode],
+    ['IBAN',                bankGw.g_bank_iban   || bankCfg.iban],
+    ['SWIFT / BIC',         bankGw.g_bank_swift  || bankCfg.swift],
+    ['UPI ID',              bankGw.g_bank_upi],
+    ['Payment Reference',   bankRef],
+  ];
+  if (bankRowsEl) bankRowsEl.innerHTML = bankFields2.filter(([,v])=>v).map(([l,v])=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--c-border)"><span style="color:var(--c-muted)">'+l+'</span><strong style="text-align:right;max-width:55%;word-break:break-all">'+v+'</strong></div>').join('');
+  const instrEl2 = document.getElementById('bankInstructions');
+  if (instrEl2) instrEl2.innerHTML = '⚠️ '+(bankGw.g_bank_instructions || bankCfg.instructions || 'Please include reference <strong>'+bankRef+'</strong> with your transfer and email confirmation to <a href="mailto:'+contactEmail+'" style="color:#a78bfa">'+contactEmail+'</a>.');
+
+  // PayPal
+  const ppGw = getGatewayCfg('paypal');
+  const ppEmail = ppGw.g_pp_email || bankCfg.paypalEmail || contactEmail;
+  const ppEl = document.getElementById('ppEmail'); if(ppEl) ppEl.textContent = ppEmail;
+  const ppLink = ppGw.g_pp_link || bankCfg.paypalLink;
+  if (ppLink) { const wrap=document.getElementById('ppLinkWrap');if(wrap){wrap.style.display='';const a=document.getElementById('ppLink');if(a)a.href=ppLink;} }
+
+  // Wise
+  const wiseGw = getGatewayCfg('wise');
+  const wiseEmailEl = document.getElementById('wiseEmail'); if(wiseEmailEl) wiseEmailEl.textContent = wiseGw.g_wise_email||contactEmail;
+  const wiseInstrEl = document.getElementById('wiseInstructions'); if(wiseInstrEl&&wiseGw.g_wise_instructions) wiseInstrEl.textContent = wiseGw.g_wise_instructions;
+  const wiseLink2 = wiseGw.g_wise_link;
+  if (wiseLink2) { const wrap=document.getElementById('wiseLinkWrap');if(wrap){wrap.style.display='';const a=document.getElementById('wiseLink');if(a)a.href=wiseLink2;} }
+}
+
+// ─── CARD PREVIEW ─────────────────────────────────────────────────────────────
+function updateCardPreview() {
+  const num = (document.getElementById('cardNumber')||{}).value||'';
+  const masked = num.replace(/\d(?=.{4})/g,'•').padEnd(19,'•').replace(/(.{4})/g,'$1 ').trim().slice(0,19)||'•••• •••• •••• ••••';
+  const nameEl = document.getElementById('cvBalanceName');
+  const numEl  = document.getElementById('cvNumber');
+  const expEl  = document.getElementById('cvExpiry');
+  if(nameEl) nameEl.textContent = (document.getElementById('cardName')||{}).value||'Cardholder Name';
+  if(numEl)  numEl.textContent  = masked;
+  if(expEl)  expEl.textContent  = (document.getElementById('cardExpiry')||{}).value||'MM/YY';
+}
+function formatCard(input) {
+  let v = input.value.replace(/\D/g,'').slice(0,16);
+  input.value = v.replace(/(.{4})/g,'$1 ').trim();
+}
+function formatExpiry(input) {
+  let v = input.value.replace(/\D/g,'');
+  if (v.length >= 3) v = v.slice(0,2)+'/'+v.slice(2,4);
+  input.value = v;
+}
+function toggleCVV() {
+  const el = document.getElementById('cvv');
+  if (!el) return;
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+function openRazorpay() {
+  const rzpGw = getGatewayCfg('razorpay');
+  const key = rzpGw.g_rzp_keyId;
+  if (!key) { alert('Razorpay not configured. Please contact support.'); return; }
+  if (typeof Razorpay === 'undefined') { alert('Razorpay SDK not loaded. Please refresh and try again.'); return; }
+  const options = {
+    key: key,
+    amount: Math.round(_pricing.total * 100),
+    currency: 'INR',
+    name: rzpGw.g_rzp_businessName || 'Chrixlin AI Rise',
+    description: product.title,
+    handler: function(resp) { handleSubmit(true); },
+    prefill: {
+      name:  (document.getElementById('firstName')||{}).value+' '+(document.getElementById('lastName')||{}).value,
+      email: (document.getElementById('email')||{}).value,
+      contact: (document.getElementById('phone')||{}).value
+    }
+  };
+  new Razorpay(options).open();
+}
+
+// ─── PAYPAL SDK INTEGRATION ───────────────────────────────────────────────────
+var _ppSdkLoaded  = false;
+var _ppSdkLoading = false;
+var _ppButtons    = null;
+
+// Preload PayPal SDK at page start — only on HTTPS (PayPal Live requires it)
+(function _ppPreload() {
+  try {
+    if (window.location.protocol !== 'https:') return; // skip on HTTP/localhost
+    var ppCfg = (JSON.parse(localStorage.getItem('chrixlin_gateways') || '{}').paypal) || {};
+    if (!ppCfg.enabled || !ppCfg.g_pp_clientId) return;
+    var cur = (ppCfg.g_pp_currency || 'USD').toUpperCase();
+    _ppSdkLoading = true;
+    var s = document.createElement('script');
+    s.src = 'https://www.paypal.com/sdk/js?client-id=' + encodeURIComponent(ppCfg.g_pp_clientId)
+      + '&currency=' + cur
+      + '&intent=capture'
+      + '&enable-funding=venmo,card,applepay,googlepay,paylater'
+      + '&components=buttons';
+    s.onload  = function() { _ppSdkLoaded = true; _ppSdkLoading = false; };
+    s.onerror = function() { _ppSdkLoading = false; };
+    document.head.appendChild(s);
+  } catch(e) {}
+})();
+
+function loadPayPalSDK(clientId, currency) {
+  return new Promise(function(resolve, reject) {
+    // PayPal Live SDK requires HTTPS — reject immediately on HTTP
+    if (window.location.protocol !== 'https:') { reject(new Error('HTTPS required')); return; }
+    // Already loaded
+    if (window.paypal) { _ppSdkLoaded = true; resolve(); return; }
+    // Already loading — poll until ready (up to 10s)
+    if (_ppSdkLoading) {
+      var waited = 0;
+      var iv = setInterval(function() {
+        waited += 200;
+        if (window.paypal) { clearInterval(iv); _ppSdkLoaded = true; _ppSdkLoading = false; resolve(); }
+        else if (waited > 10000) { clearInterval(iv); reject(new Error('PayPal SDK timed out')); }
+      }, 200);
+      return;
+    }
+    // Not yet started — inject script now
+    _ppSdkLoading = true;
+    var old = document.querySelector('script[src*="paypal.com/sdk/js"]');
+    if (old) old.remove();
+    var cur = (currency || 'USD').toUpperCase();
+    var script = document.createElement('script');
+    script.src = 'https://www.paypal.com/sdk/js?client-id=' + encodeURIComponent(clientId)
+      + '&currency=' + cur
+      + '&intent=capture'
+      + '&enable-funding=venmo,card,applepay,googlepay,paylater'
+      + '&components=buttons';
+    script.onload  = function() { _ppSdkLoaded = true; _ppSdkLoading = false; resolve(); };
+    script.onerror = function() { _ppSdkLoading = false; reject(new Error('PayPal SDK failed to load')); };
+    document.head.appendChild(script);
+  });
+}
+
+function _doRenderPayPalButtons(currency, amount) {
+  var loadEl = document.getElementById('pp-loading-msg');
+  var errEl  = document.getElementById('pp-error-msg');
+  var btnEl  = document.getElementById('paypal-button-container');
+  if (loadEl) loadEl.style.display = 'none';
+  if (errEl)  errEl.style.display  = 'none';
+  if (btnEl)  btnEl.innerHTML = '';
+
+  paypal.Buttons({
+    style: { layout:'vertical', color:'gold', shape:'rect', label:'paypal', height:48 },
+    createOrder: function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{ amount:{ currency_code:currency, value:amount }, description:(product.title||'Chrixlin AI Rise').slice(0,127) }]
+      });
+    },
+    onApprove: function(data, actions) {
+      if (loadEl) { loadEl.innerHTML = '<div style="width:32px;height:32px;border:3px solid rgba(0,156,222,0.2);border-top-color:#009cde;border-radius:50%;animation:spin 0.8s linear infinite"></div><span>Confirming payment…</span>'; loadEl.style.display = 'flex'; }
+      if (btnEl) btnEl.innerHTML = '';
+      return actions.order.capture().then(function(details) { handlePayPalSuccess(details); });
+    },
+    onError:  function(err) { console.error('PayPal:', err); if(errEl){errEl.textContent='⚠️ Payment declined. Please try again or use another method.';errEl.style.display='';} },
+    onCancel: function() {}
+  }).render('#paypal-button-container').catch(function() {
+    if (errEl) { errEl.innerHTML='⚠️ Could not render PayPal buttons. <a href="#" onclick="renderPayPalButtons();return false" style="color:#a78bfa">Retry</a>'; errEl.style.display=''; }
+  });
+}
+
+function renderPayPalButtons() {
+  var ppGw     = getGatewayCfg('paypal');
+  var clientId = ppGw.g_pp_clientId;
+  var sdkWrap  = document.getElementById('pp-sdk-wrap');
+  var fbWrap   = document.getElementById('pp-fallback-wrap');
+
+  if (!clientId) {
+    if (sdkWrap) sdkWrap.style.display = 'none';
+    if (fbWrap)  fbWrap.style.display  = '';
+    return;
+  }
+
+  if (fbWrap)  fbWrap.style.display  = 'none';
+  if (sdkWrap) sdkWrap.style.display = '';
+
+  var loadEl   = document.getElementById('pp-loading-msg');
+  var errEl    = document.getElementById('pp-error-msg');
+  var btnEl    = document.getElementById('paypal-button-container');
+  if (loadEl)  loadEl.style.display = 'flex';
+  if (errEl)   errEl.style.display  = 'none';
+  if (btnEl)   btnEl.innerHTML = '';
+
+  var currency = (ppGw.g_pp_currency || 'USD').toUpperCase();
+  var p        = _pricing;
+  var amount   = (p && p.total > 0 ? p.total : (parseFloat(String(product.price||'0').replace(/[^0-9.]/g,''))||0)).toFixed(2);
+
+  // If SDK already loaded, render immediately
+  if (window.paypal) { _doRenderPayPalButtons(currency, amount); return; }
+
+  // Otherwise load SDK then render
+  loadPayPalSDK(clientId, currency).then(function() {
+    _doRenderPayPalButtons(currency, amount);
+  }).catch(function() {
+    // SDK failed (likely HTTP/localhost restriction) — show PayPal.me fallback
+    _showPayPalManualFallback(ppGw, loadEl, errEl, btnEl);
+  });
+}
+
+function _showPayPalManualFallback(ppGw, loadEl, errEl, btnEl) {
+  if (loadEl) loadEl.style.display = 'none';
+  if (btnEl)  btnEl.innerHTML = '';
+  // Build a rich manual PayPal fallback
+  var email   = ppGw.g_pp_email || contactEmail;
+  var ppLink  = ppGw.g_pp_link  || '';
+  var html = '<div style="background:var(--c-bg3);border:1px solid var(--c-border);border-radius:14px;padding:24px;text-align:center">'
+    + '<div style="font-size:40px;margin-bottom:10px">🅿️</div>'
+    + '<div style="font-family:var(--font-h);font-weight:700;font-size:15px;margin-bottom:6px">Pay with PayPal</div>'
+    + '<p style="font-size:12px;color:var(--c-muted);margin-bottom:16px">Send payment to our PayPal email, then click Confirm Order below.</p>'
+    + '<div style="font-size:14px;color:var(--c-sub);margin-bottom:14px">PayPal email: <strong style="color:var(--c-text)">' + email + '</strong></div>';
+  if (ppLink) {
+    html += '<a href="' + ppLink + '" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:11px 28px;background:linear-gradient(135deg,#009cde,#003087);color:#fff;border:none;border-radius:50px;font-weight:700;font-size:14px;text-decoration:none;margin-bottom:14px">🔗 Open PayPal.me →</a><br/>';
+  }
+  html += '<button onclick="handleSubmit(true)" style="display:inline-flex;align-items:center;gap:8px;padding:11px 28px;background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);border-radius:50px;font-weight:700;font-size:13px;cursor:pointer;margin-top:8px">&#10003; Payment Sent &#8212; Confirm Order</button>'
+    + '<div style="font-size:11px;color:var(--c-muted);margin-top:12px">After paying via PayPal, click above to confirm your order.</div>'
+    + '</div>';
+  if (errEl) { errEl.innerHTML = html; errEl.style.display = ''; }
+}
+
+function handlePayPalSuccess(details) {
+  var termsEl = document.getElementById('terms');
+  if (termsEl) termsEl.checked = true;
+  var btn = document.getElementById('submitBtn');
+  if (btn) btn.disabled = true;
+  goToStep3();
+  var orderRef      = 'CAIR-PP-' + (pid || '0') + '-' + Date.now().toString(36).toUpperCase().slice(-6);
+  var finalPricing  = calcPricing(product.price);
+  var finalTotal    = finalPricing.total > 0 ? finalPricing.total : (parseFloat(String(product.price || '0').replace(/[^0-9.]/g, '')) || 0);
+  var finalPriceStr = fmt(finalTotal);
+  if (typeof ChrixlinDB !== 'undefined') {
+    ChrixlinDB.submitOrder({
+      orderRef,
+      productId: pid, productTitle: product.title, productPrice: finalPriceStr,
+      paymentMethod: 'paypal',
+      paypalOrderId: details.id || '',
+      paypalPayerEmail: ((details.payer || {}).email_address) || '',
+      cgst: finalPricing.cgstPct, sgst: finalPricing.sgstPct,
+      cgstAmount: finalPricing.cgstAmt, sgstAmount: finalPricing.sgstAmt, basePrice: finalPricing.base,
+      firstName: (document.getElementById('firstName') || {}).value || '',
+      lastName:  (document.getElementById('lastName')  || {}).value || '',
+      email:     (document.getElementById('email')     || {}).value || '',
+      phone:     (document.getElementById('phone')     || {}).value || '',
+      country:   (document.getElementById('country')   || {}).value || '',
+      address:   (document.getElementById('address')   || {}).value || '',
+      city:      (document.getElementById('city')      || {}).value || '',
+      notes:     (document.getElementById('notes')     || {}).value || ''
+    }).catch(function() {});
+  }
+  // Show success immediately (PayPal already confirmed payment)
+  setTimeout(function() { showStep3Success(); }, 1200);
+}
+
+// ─── STEP 3: CONFIRMATION ─────────────────────────────────────────────────────
+function goToStep3() {
+  document.getElementById('step2Wrap').style.display = 'none';
+  document.getElementById('step3Wrap').style.display = '';
+  document.getElementById('step3Wrap').classList.remove('step-wrap'); void document.getElementById('step3Wrap').offsetWidth; document.getElementById('step3Wrap').classList.add('step-wrap');
+  // Update step indicator
+  document.getElementById('stepNum2').className = 'step-num done';
+  document.getElementById('stepNum2').textContent = '✓';
+  document.getElementById('stepLbl2').className = 'step-label done';
+  document.getElementById('stepConn2').className = 'step-connector done';
+  document.getElementById('stepNum3').className = 'step-num active';
+  document.getElementById('stepLbl3').className = 'step-label active';
+  // Show processing state
+  document.getElementById('s3Processing').style.display = 'flex';
+  document.getElementById('s3Success').classList.remove('show');
+  document.getElementById('s3Failed').classList.remove('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showStep3Success() {
+  document.getElementById('s3Processing').style.display = 'none';
+  document.getElementById('s3Success').classList.add('show');
+  document.getElementById('stepNum3').className = 'step-num done';
+  document.getElementById('stepNum3').textContent = '✓';
+  document.getElementById('stepLbl3').className = 'step-label done';
+  // Countdown redirect
+  var secs = 5;
+  var cdEl = document.getElementById('s3Countdown');
+  var iv = setInterval(function() {
+    secs--;
+    if (cdEl) cdEl.innerHTML = 'Redirecting to dashboard in <strong>'+secs+'</strong>s…';
+    if (secs <= 0) { clearInterval(iv); window.location.href = 'dashboard.html?order_success=1'; }
+  }, 1000);
+}
+
+function showStep3Failed() {
+  document.getElementById('s3Processing').style.display = 'none';
+  document.getElementById('s3Failed').classList.add('show');
+  var contactEmail2 = (loadBankDetails().contactEmail || 'info@chrixlin.tech');
+  var linkEl = document.getElementById('s3ContactLink');
+  if (linkEl) { linkEl.href = 'mailto:' + contactEmail2; linkEl.textContent = '✉ ' + contactEmail2; }
+}
+
+function retryPayment() {
+  // Go back to step 2
+  document.getElementById('step3Wrap').style.display = 'none';
+  document.getElementById('step2Wrap').style.display = '';
+  document.getElementById('step2Wrap').classList.remove('step-wrap'); void document.getElementById('step2Wrap').offsetWidth; document.getElementById('step2Wrap').classList.add('step-wrap');
+  // Reset step indicator
+  document.getElementById('stepNum2').className = 'step-num active';
+  document.getElementById('stepNum2').textContent = '2';
+  document.getElementById('stepLbl2').className = 'step-label active';
+  document.getElementById('stepConn2').className = 'step-connector';
+  document.getElementById('stepNum3').className = 'step-num pending';
+  document.getElementById('stepNum3').textContent = '3';
+  document.getElementById('stepLbl3').className = 'step-label pending';
+  // Re-enable submit button
+  var btn = document.getElementById('submitBtn');
+  if (btn) { btn.disabled = false; btn.innerHTML = '<span>🔒</span> Complete Purchase — <span id="submitPrice">'+document.getElementById('orderTotal').textContent+'</span>'; }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── VALIDATION ───────────────────────────────────────────────────────────────
+function required(id) {
+  const el = document.getElementById(id); if(!el) return true;
+  const val = el.value.trim();
+  const group = el.closest('.field-group');
+  if (!val) { if(group) group.classList.add('has-error'); return false; }
+  if(group) group.classList.remove('has-error');
+  return true;
+}
+function validEmail(id) {
+  const el = document.getElementById(id); if(!el) return true;
+  const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
+  const g = el.closest('.field-group'); if(g) g.classList.toggle('has-error',!ok);
+  return ok;
+}
+function validate() {
+  const checks = [required('cardName'),required('cardNumber'),required('cardExpiry'),required('cvv')];
+  // only validate card fields if card is active method
+  if (activeMethod !== 'card') return true;
   return checks.every(Boolean);
 }
 
 // ─── SUBMIT ───────────────────────────────────────────────────────────────────
-function handleSubmit() {
-  if (!document.getElementById('terms').checked) {
-    alert('Please agree to the Terms of Service to continue.');
-    return;
-  }
-  if (!validate()) {
-    document.querySelector('.has-error')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
-  }
+function handleSubmit(skipValidate) {
+  if (!document.getElementById('terms').checked) { alert('Please agree to the Terms of Service to continue.'); return; }
+  if (!skipValidate && !validate()) { document.querySelector('.has-error')?.scrollIntoView({behavior:'smooth',block:'center'}); return; }
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.innerHTML = '<span>⏳</span> Processing...';
-
-  // Submit order to Supabase (fire-and-forget for anonymous orders table)
-  const orderRef = `CAIR-${pid}-${Date.now().toString(36).toUpperCase().slice(-6)}`;
+  // Move to step 3 processing immediately
+  goToStep3();
+  const orderRef = 'CAIR-'+(pid||'0')+'-'+Date.now().toString(36).toUpperCase().slice(-6);
+  const finalPricing = calcPricing(product.price);
+  const finalTotal   = finalPricing.total > 0 ? finalPricing.total : (parseFloat(String(product.price||'0').replace(/[^0-9.]/g,''))||0);
+  const finalPriceStr = fmt(finalPricing.total > 0 ? finalPricing.total : (parseFloat(String(product.price||'0').replace(/[^0-9.]/g,''))||0));
+  var _orderOk = true;
   if (typeof ChrixlinDB !== 'undefined') {
     ChrixlinDB.submitOrder({
-      orderRef,
-      productId:    pid,
-      productTitle: product.title,
-      productPrice: product.price,
-      paymentMethod: activeMethod,
-      firstName:  document.getElementById('firstName').value.trim(),
-      lastName:   document.getElementById('lastName').value.trim(),
-      email:      document.getElementById('email').value.trim(),
-      phone:      document.getElementById('phone').value.trim(),
-      country:    document.getElementById('country').value.trim(),
-      address:    document.getElementById('address').value.trim(),
-      city:       document.getElementById('city').value.trim(),
-      postcode:   (document.getElementById('postcode')||{}).value || '',
-      notes:      (document.getElementById('notes')||{}).value || '',
-    }).catch(() => {});
-
-    // Also save to customer_orders if logged in
-    ChrixlinDB.getCustomerSession().then(session => {
-      if (session) {
-        const numericAmount = parseFloat(String(product.price || '0').replace(/[^0-9.]/g, '')) || 0;
-        return ChrixlinDB.createCustomerOrder({
-          productId:     product.id || pid,
-          productTitle:  product.title,
-          productPrice:  product.price,
-          paymentMethod: activeMethod,
-          amount:        numericAmount,
-          billingDetails: {
-            firstName:  document.getElementById('firstName').value.trim(),
-            lastName:   document.getElementById('lastName').value.trim(),
-            email:      document.getElementById('email').value.trim(),
-            phone:      document.getElementById('phone').value.trim(),
-            country:    document.getElementById('country').value.trim(),
-            address:    document.getElementById('address').value.trim(),
-            city:       document.getElementById('city').value.trim(),
-            postcode:   (document.getElementById('postcode')||{}).value || '',
-          }
-        });
-      }
-    }).catch(() => {});
-  }
-
-  setTimeout(() => {
-    // If logged in, redirect to dashboard; else show success overlay
-    if (typeof ChrixlinDB !== 'undefined') {
-      ChrixlinDB.getCustomerSession().then(session => {
-        if (session) {
-          window.location.href = 'dashboard.html?order_success=1';
-        } else {
-          document.getElementById('successOverlay').classList.add('show');
-          window.scrollTo({ top: 0 });
+      orderRef, productId:pid, productTitle:product.title, productPrice:finalPriceStr,
+      paymentMethod:activeMethod, cgst:finalPricing.cgstPct, sgst:finalPricing.sgstPct,
+      cgstAmount:finalPricing.cgstAmt, sgstAmount:finalPricing.sgstAmt, basePrice:finalPricing.base,
+      firstName:  (document.getElementById('firstName')||{}).value||'',
+      lastName:   (document.getElementById('lastName')||{}).value||'',
+      email:      (document.getElementById('email')||{}).value||'',
+      phone:      (document.getElementById('phone')||{}).value||'',
+      country:    (document.getElementById('country')||{}).value||'',
+      address:    (document.getElementById('address')||{}).value||'',
+      city:       (document.getElementById('city')||{}).value||'',
+      notes:      (document.getElementById('notes')||{}).value||''
+    }).catch(()=>{});
+    ChrixlinDB.getCustomerSession().then(function(session){
+      if(session) return ChrixlinDB.createCustomerOrder({
+        productId:product.id||pid, productTitle:product.title, productPrice:finalPriceStr,
+        paymentMethod:activeMethod, amount:finalTotal,
+        billingDetails:{
+          firstName:(document.getElementById('firstName')||{}).value||'',
+          lastName: (document.getElementById('lastName')||{}).value||'',
+          email:    (document.getElementById('email')||{}).value||'',
+          phone:    (document.getElementById('phone')||{}).value||'',
+          country:  (document.getElementById('country')||{}).value||'',
+          address:  (document.getElementById('address')||{}).value||'',
+          city:     (document.getElementById('city')||{}).value||''
         }
-      }).catch(() => {
-        document.getElementById('successOverlay').classList.add('show');
-        window.scrollTo({ top: 0 });
       });
-    } else {
-      document.getElementById('successOverlay').classList.add('show');
-      window.scrollTo({ top: 0 });
-    }
-  }, 2200);
+    }).catch(()=>{});
+  }
+  setTimeout(function(){
+    showStep3Success();
+  }, 2500);
 }
 
-// Allow pressing Enter in inputs
-document.querySelectorAll('.field-input').forEach(el => {
-  el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); handleSubmit(); } });
-  el.addEventListener('input', () => { el.closest('.field-group')?.classList.remove('has-error'); });
+// Clear errors on input
+document.querySelectorAll('.field-input').forEach(el=>{
+  el.addEventListener('input',()=>{ el.closest('.field-group')?.classList.remove('has-error'); });
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>

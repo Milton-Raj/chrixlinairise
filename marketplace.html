@@ -635,6 +635,20 @@ function closeMobile() { document.getElementById('mobileMenu').classList.remove(
       if (mobileBtn)  { mobileBtn.href  = 'dashboard.html'; mobileBtn.textContent  = '👤 ' + name; }
     }
   } catch(e) {}
+
+  // Apply strategy call booking link from admin settings
+  try {
+    var bd2 = JSON.parse(localStorage.getItem('chrixlin_bank_details') || '{}');
+    var stratLink = bd2.strategyCallUrl;
+    if (stratLink) {
+      document.querySelectorAll('a').forEach(function(el) {
+        var h = el.getAttribute('href') || '';
+        if (h === 'mailto:info@chrixlin.tech' && (el.textContent.toLowerCase().includes('book') || el.classList.contains('btn-primary'))) {
+          el.href = stratLink;
+        }
+      });
+    }
+  } catch(e) {}
 })();
 </script>
 </body>
