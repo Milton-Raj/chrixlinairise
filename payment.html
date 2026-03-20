@@ -939,17 +939,6 @@ function renderPayPalButtons() {
   var sdkWrap  = document.getElementById('pp-sdk-wrap');
   var fbWrap   = document.getElementById('pp-fallback-wrap');
 
-  // No Client ID — show manual fallback
-  if (!clientId) {
-    if (sdkWrap) sdkWrap.style.display = 'none';
-    if (fbWrap)  fbWrap.style.display  = '';
-    var em = document.getElementById('ppEmail');
-    if (em) em.textContent = ppGw.g_pp_email || contactEmail || '—';
-    var lw = document.getElementById('ppLinkWrap'), lk = document.getElementById('ppLink');
-    if (ppGw.g_pp_link && lk && lw) { lk.href = ppGw.g_pp_link; lw.style.display = ''; }
-    return;
-  }
-
   if (fbWrap)  fbWrap.style.display  = 'none';
   if (sdkWrap) sdkWrap.style.display = '';
 
@@ -961,10 +950,6 @@ function renderPayPalButtons() {
   if (errEl)  errEl.style.display  = 'none';
   if (btnEl)  btnEl.innerHTML = '';
 
-  var currency = (ppGw.g_pp_currency || 'USD').toUpperCase();
-  var p        = _pricing;
-  var amount   = (p && p.total > 0 ? p.total : (parseFloat(String(product.price || '0').replace(/[^0-9.]/g, '')) || 0)).toFixed(2);
-
   // If already rendered, just show footer
   if (window.paypal && btnEl && btnEl.querySelector('iframe')) {
     if (loadEl) loadEl.style.display = 'none';
@@ -972,41 +957,67 @@ function renderPayPalButtons() {
     return;
   }
 
-  _ppLoadSDK(clientId, currency).then(function() {
-    if (loadEl) loadEl.style.display = 'none';
-    if (!window.paypal || !window.paypal.Buttons) {
-      _ppShowManualFallback(ppGw, sdkWrap, fbWrap); return;
-    }
-    window.paypal.Buttons({
-      style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal', height: 50 },
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{
-            amount: { currency_code: currency, value: amount },
-            description: (product.title || 'Chrixlin AI Rise').slice(0, 127)
-          }]
-        });
-      },
-      onApprove: function(data, actions) {
-        if (loadEl) { loadEl.innerHTML = '<div style="width:32px;height:32px;border:3px solid rgba(0,156,222,0.2);border-top-color:#009cde;border-radius:50%;animation:spin 0.8s linear infinite"></div><span>Confirming payment…</span>'; loadEl.style.display = 'flex'; }
-        if (btnEl) btnEl.innerHTML = '';
-        return actions.order.capture().then(function(details) { handlePayPalSuccess(details); });
-      },
-      onError: function(err) {
-        console.error('PayPal error:', err);
+  // Get Client ID — from localStorage (admin config) OR from PHP backend (fallback for all visitors)
+  function _doRender(cid, cur) {
+    var currency = (cur || 'USD').toUpperCase();
+    var p        = _pricing;
+    var amount   = (p && p.total > 0 ? p.total : (parseFloat(String(product.price || '0').replace(/[^0-9.]/g, '')) || 0)).toFixed(2);
+
+    _ppLoadSDK(cid, currency).then(function() {
+      if (loadEl) loadEl.style.display = 'none';
+      if (!window.paypal || !window.paypal.Buttons) {
+        _ppShowManualFallback(ppGw, sdkWrap, fbWrap); return;
+      }
+      window.paypal.Buttons({
+        style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal', height: 50 },
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{
+              amount: { currency_code: currency, value: amount },
+              description: (product.title || 'Chrixlin AI Rise').slice(0, 127)
+            }]
+          });
+        },
+        onApprove: function(data, actions) {
+          if (loadEl) { loadEl.innerHTML = '<div style="width:32px;height:32px;border:3px solid rgba(0,156,222,0.2);border-top-color:#009cde;border-radius:50%;animation:spin 0.8s linear infinite"></div><span>Confirming payment…</span>'; loadEl.style.display = 'flex'; }
+          if (btnEl) btnEl.innerHTML = '';
+          return actions.order.capture().then(function(details) { handlePayPalSuccess(details); });
+        },
+        onError: function(err) {
+          console.error('PayPal error:', err);
+          _ppShowManualFallback(ppGw, sdkWrap, fbWrap);
+        },
+        onCancel: function() {}
+      }).render('#paypal-button-container').then(function() {
+        if (footEl) footEl.style.display = '';
+      }).catch(function(err) {
+        console.error('PayPal render failed:', err);
         _ppShowManualFallback(ppGw, sdkWrap, fbWrap);
-      },
-      onCancel: function() {}
-    }).render('#paypal-button-container').then(function() {
-      if (footEl) footEl.style.display = '';
+      });
     }).catch(function(err) {
-      console.error('PayPal render failed:', err);
+      console.error('PayPal SDK load failed:', err);
       _ppShowManualFallback(ppGw, sdkWrap, fbWrap);
     });
-  }).catch(function(err) {
-    console.error('PayPal SDK load failed:', err);
-    _ppShowManualFallback(ppGw, sdkWrap, fbWrap);
-  });
+  }
+
+  if (clientId) {
+    // Admin has configured PayPal in localStorage — use it directly
+    _doRender(clientId, ppGw.g_pp_currency || 'USD');
+  } else {
+    // No localStorage config (fresh visitor / incognito) — fetch Client ID from PHP backend
+    fetch('/api/paypal-public-config.php')
+      .then(function(r) { return r.json(); })
+      .then(function(cfg) {
+        if (cfg && cfg.clientId) {
+          _doRender(cfg.clientId, cfg.currency || 'USD');
+        } else {
+          _ppShowManualFallback(ppGw, sdkWrap, fbWrap);
+        }
+      })
+      .catch(function() {
+        _ppShowManualFallback(ppGw, sdkWrap, fbWrap);
+      });
+  }
 }
 
 function _ppShowManualFallback(ppGw, sdkWrap, fbWrap) {
