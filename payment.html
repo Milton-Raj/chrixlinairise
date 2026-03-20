@@ -1386,10 +1386,30 @@ async function renderPayPalButtons() {
     await _ppLoadV6Script();
 
     // 3. Create PayPal instance
-    _ppV6Instance = await window.paypal.createInstance({
-      clientToken: tokenResp.clientToken,
-      components: ['card-fields', 'googlepay', 'applepay', 'fastlane']
-    });
+    // Only 'card-fields' and 'fastlane' are valid createInstance components.
+    // Google Pay and Apple Pay are initialised via separate instance methods after creation.
+    var instanceComponents = ['card-fields'];
+
+    // Try adding fastlane — ignore if account not approved
+    var instanceCreated = false;
+    var componentsToTry = [
+      ['card-fields', 'fastlane'],
+      ['card-fields']
+    ];
+    for (var ci = 0; ci < componentsToTry.length; ci++) {
+      try {
+        _ppV6Instance = await window.paypal.createInstance({
+          clientToken: tokenResp.clientToken,
+          components: componentsToTry[ci]
+        });
+        instanceComponents = componentsToTry[ci];
+        instanceCreated = true;
+        break;
+      } catch(instErr) {
+        if (ci === componentsToTry.length - 1) throw instErr;
+        // Retry without fastlane
+      }
+    }
 
     _ppHideLoading();
     _ppHideError();
@@ -1397,19 +1417,21 @@ async function renderPayPalButtons() {
     // 4. Try rendering all components, collect available methods
     var available = [];
 
-    // Fastlane (may not be available for all accounts)
-    var flOk = await _ppRenderFastlane(_ppV6Instance);
-    if (flOk) available.push('fastlane');
+    // Fastlane (only if instance was created with fastlane component)
+    if (instanceComponents.includes('fastlane')) {
+      var flOk = await _ppRenderFastlane(_ppV6Instance);
+      if (flOk) available.push('fastlane');
+    }
 
     // Card Fields
     var cfOk = await _ppRenderCardFields(_ppV6Instance);
     if (cfOk) available.push('cards');
 
-    // Google Pay
+    // Google Pay (separate Google Pay API — no createInstance component needed)
     var gpOk = await _ppRenderGooglePay(_ppV6Instance);
     if (gpOk) available.push('googlepay');
 
-    // Apple Pay
+    // Apple Pay (uses ApplePaySession API — no createInstance component needed)
     var apOk = await _ppRenderApplePay(_ppV6Instance);
     if (apOk) available.push('applepay');
 
