@@ -1085,6 +1085,13 @@ function _ppSwitchSubTab(tab) {
 // ── Render Card Fields ────────────────────────────────────────────────────────
 
 async function _ppRenderCardFields(instance) {
+  // PayPal cannot inject iframes into display:none elements.
+  // Temporarily make the card panel visible (but off-screen) during render.
+  var panel = document.getElementById('pp-panel-cards');
+  var prevDisplay = panel ? panel.style.display : '';
+  var prevVis     = panel ? panel.style.visibility : '';
+  if (panel) { panel.style.display = ''; panel.style.visibility = 'hidden'; }
+
   try {
     var fieldStyle = {
       input: {
@@ -1123,9 +1130,12 @@ async function _ppRenderCardFields(instance) {
     var nameEl = document.getElementById('pp-cardholder-name');
     if (nameEl && (fn || ln)) nameEl.value = (fn + ' ' + ln).trim();
 
+    // Restore panel to hidden (tab switching will show it)
+    if (panel) { panel.style.visibility = prevVis; panel.style.display = 'none'; }
     return true;
   } catch(e) {
-    console.warn('Card Fields render failed:', e);
+    console.error('Card Fields render failed:', e);
+    if (panel) { panel.style.visibility = prevVis; panel.style.display = prevDisplay; }
     return false;
   }
 }
@@ -1420,23 +1430,42 @@ async function renderPayPalButtons() {
     // Fastlane (only if instance was created with fastlane component)
     if (instanceComponents.includes('fastlane')) {
       var flOk = await _ppRenderFastlane(_ppV6Instance);
+      console.log('[PayPal v6] Fastlane:', flOk ? 'OK' : 'unavailable');
       if (flOk) available.push('fastlane');
     }
 
     // Card Fields
     var cfOk = await _ppRenderCardFields(_ppV6Instance);
+    console.log('[PayPal v6] Card Fields:', cfOk ? 'OK' : 'unavailable');
     if (cfOk) available.push('cards');
 
     // Google Pay (separate Google Pay API — no createInstance component needed)
     var gpOk = await _ppRenderGooglePay(_ppV6Instance);
+    console.log('[PayPal v6] Google Pay:', gpOk ? 'OK' : 'unavailable');
     if (gpOk) available.push('googlepay');
 
     // Apple Pay (uses ApplePaySession API — no createInstance component needed)
     var apOk = await _ppRenderApplePay(_ppV6Instance);
+    console.log('[PayPal v6] Apple Pay:', apOk ? 'OK' : 'unavailable');
     if (apOk) available.push('applepay');
 
+    console.log('[PayPal v6] Available methods:', available);
+
     if (!available.length) {
-      throw new Error('No payment methods are available for this browser/account.');
+      // Card fields failed — fall back to manual PayPal payment link
+      console.warn('[PayPal v6] All methods failed — showing manual fallback');
+      _ppHideLoading();
+      var sdkWrap = document.getElementById('pp-sdk-wrap');
+      var fbWrap  = document.getElementById('pp-fallback-wrap');
+      if (sdkWrap) sdkWrap.style.display = 'none';
+      if (fbWrap)  fbWrap.style.display  = '';
+      var ppGw = _ppV6Gw || getGatewayCfg('paypal');
+      var ppEmailEl = document.getElementById('ppEmail');
+      if (ppEmailEl) ppEmailEl.textContent = ppGw.g_pp_email || contactEmail || '—';
+      var ppLinkEl = document.getElementById('ppLink');
+      var ppLinkW  = document.getElementById('ppLinkWrap');
+      if (ppGw.g_pp_link && ppLinkEl && ppLinkW) { ppLinkEl.href = ppGw.g_pp_link; ppLinkW.style.display = ''; }
+      return;
     }
 
     // 5. Build sub-tabs
