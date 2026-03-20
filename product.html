@@ -529,28 +529,33 @@ const SCREENSHOT_PLACEHOLDERS = [
 ];
 
 // ─── LOAD DATA ────────────────────────────────────────────────────────────────
-function getProductById(id) {
+function _slugify(str) {
+  return (str||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+}
+
+function getProductByIdOrSlug(id, slug) {
+  var allLS = [];
   try {
     const s = localStorage.getItem('chrixlin_marketplace');
-    if (s) {
-      const data = JSON.parse(s);
-      if (data.products) {
-        const p = data.products.find(x => x.id === id);
-        if (p) {
-          // Merge with defaults to get howItWorks/reviews if not in saved data
-          const def = DEFAULT_PRODUCTS.find(x => x.id === id);
-          return Object.assign({}, def || {}, p);
-        }
-      }
-    }
+    if (s) { const d = JSON.parse(s); if (d.products) allLS = d.products; }
   } catch {}
-  return DEFAULT_PRODUCTS.find(x => x.id === id) || null;
+  var p = allLS.find(function(x) {
+    return (slug && (x.slug === slug || _slugify(x.title) === slug)) || (id && x.id === id);
+  });
+  if (p) {
+    const def = DEFAULT_PRODUCTS.find(function(x){ return x.id === p.id; });
+    return Object.assign({}, def || {}, p);
+  }
+  return DEFAULT_PRODUCTS.find(function(x) {
+    return (slug && _slugify(x.title) === slug) || (id && x.id === id);
+  }) || null;
 }
 
 // ─── READ URL PARAM ───────────────────────────────────────────────────────────
 const urlParams = new URLSearchParams(window.location.search);
-const productId = parseInt(urlParams.get('id')) || 1;
-const product = getProductById(productId);
+const productId = parseInt(urlParams.get('id')) || null;
+const productSlug = urlParams.get('slug') || null;
+let product = getProductByIdOrSlug(productId, productSlug);
 
 // ─── APPLY BRAND ──────────────────────────────────────────────────────────────
 (function applyBrand() {

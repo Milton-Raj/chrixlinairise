@@ -319,7 +319,7 @@
   </div>
 
   <!-- TABS -->
-  <div class="auth-tabs">
+  <div class="auth-tabs" id="authTabsRow">
     <button class="auth-tab active" id="tabSignIn" onclick="switchTab('signin')">Sign In</button>
     <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Create Account</button>
   </div>
@@ -402,6 +402,31 @@
       </div>
     </div>
 
+    <!-- RESET PASSWORD FORM -->
+    <div class="form-panel" id="panelReset">
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="font-size:36px;margin-bottom:8px">🔐</div>
+        <div style="font-size:15px;font-weight:700;color:var(--c-text)">Set New Password</div>
+        <div style="font-size:13px;color:var(--c-muted);margin-top:4px">Enter your new password below</div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">New Password</label>
+        <input type="password" class="field-input" id="resetPassword" placeholder="At least 8 characters" autocomplete="new-password" />
+      </div>
+      <div class="field-group">
+        <label class="field-label">Confirm New Password</label>
+        <input type="password" class="field-input" id="resetConfirmPassword" placeholder="Re-enter new password" autocomplete="new-password" oninput="checkResetPasswordMatch()" />
+        <div id="resetPasswordHint" style="font-size:12px;margin-top:6px;display:none;"></div>
+      </div>
+      <button class="auth-btn" id="resetBtn" onclick="handlePasswordReset()">
+        <div class="spinner" id="resetSpinner"></div>
+        <span id="resetBtnText">Update Password</span>
+      </button>
+      <div class="auth-footer">
+        <a href="#" onclick="switchTab('signin')">← Back to Sign In</a>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -429,13 +454,26 @@ const nextUrl = params.get('next') || 'dashboard.html';
 
 // ─── TAB SWITCHING ────────────────────────────────────────────────────────────
 function switchTab(tab) {
-  const isSignin = tab === 'signin';
-  document.getElementById('tabSignIn').classList.toggle('active', isSignin);
-  document.getElementById('tabRegister').classList.toggle('active', !isSignin);
-  document.getElementById('panelSignin').classList.toggle('active', isSignin);
-  document.getElementById('panelRegister').classList.toggle('active', !isSignin);
-  hideError();
-  hideSuccess();
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+  const tabsRow = document.getElementById('authTabsRow');
+  if (tab === 'reset') {
+    if (tabsRow) tabsRow.style.display = 'none';
+    document.getElementById('panelReset').classList.add('active');
+  } else {
+    if (tabsRow) tabsRow.style.display = '';
+    if (tab === 'signin') {
+      document.getElementById('tabSignIn').classList.add('active');
+      document.getElementById('panelSignin').classList.add('active');
+    } else {
+      document.getElementById('tabRegister').classList.add('active');
+      document.getElementById('panelRegister').classList.add('active');
+    }
+  }
+  const errMsg = document.getElementById('errorMsg');
+  const succBanner = document.getElementById('successBanner');
+  if (errMsg) errMsg.style.display = 'none';
+  if (succBanner) succBanner.style.display = 'none';
 }
 
 // ─── ERROR/SUCCESS HELPERS ───────────────────────────────────────────────────
@@ -576,21 +614,66 @@ function checkPasswordMatch() {
   }
 }
 
+function checkResetPasswordMatch() {
+  const pw  = document.getElementById('resetPassword').value;
+  const cpw = document.getElementById('resetConfirmPassword').value;
+  const hint = document.getElementById('resetPasswordHint');
+  if (!cpw) { hint.style.display = 'none'; return; }
+  hint.style.display = 'block';
+  if (pw === cpw) {
+    hint.style.color = '#22c55e';
+    hint.textContent = '✓ Passwords match';
+  } else {
+    hint.style.color = '#ef4444';
+    hint.textContent = '✗ Passwords do not match';
+  }
+}
+
+async function handlePasswordReset() {
+  const pw  = document.getElementById('resetPassword').value;
+  const cpw = document.getElementById('resetConfirmPassword').value;
+  if (!pw || pw.length < 8) { showError('Password must be at least 8 characters.'); return; }
+  if (pw !== cpw) { showError('Passwords do not match.'); return; }
+  const btn = document.getElementById('resetBtn');
+  const spinner = document.getElementById('resetSpinner');
+  const btnTxt  = document.getElementById('resetBtnText');
+  btn.disabled = true; spinner.style.display = 'block'; btnTxt.textContent = 'Updating...';
+  try {
+    const client = ChrixlinDB._getClient();
+    if (!client) throw new Error('Connection error');
+    const { error } = await client.auth.updateUser({ password: pw });
+    if (error) throw error;
+    showSuccess('🎉 Password updated successfully! Redirecting to sign in...');
+    setTimeout(function() {
+      // Sign out and go back to sign in tab
+      client.auth.signOut().finally(function() { switchTab('signin'); });
+    }, 2000);
+  } catch(err) {
+    showError(err.message || 'Failed to update password. Please try again.');
+  } finally {
+    btn.disabled = false; spinner.style.display = 'none'; btnTxt.textContent = 'Update Password';
+  }
+}
+
 // ─── FORGOT PASSWORD ──────────────────────────────────────────────────────────
 async function handleForgotPassword(e) {
   e.preventDefault();
   const email = document.getElementById('siEmail').value.trim();
   if (!email) { showError('Enter your email address above first.'); return; }
+  const signinBtn = document.getElementById('signinBtn');
+  signinBtn.disabled = true;
   try {
     const client = ChrixlinDB._getClient();
-    if (!client) return;
+    if (!client) { showError('Connection error. Please refresh.'); return; }
     const { error } = await client.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/dashboard.html'
+      redirectTo: window.location.origin + window.location.pathname
     });
     if (error) throw error;
-    showSuccess('Password reset email sent! Check your inbox.');
+    showSuccess('✅ Password reset email sent! Check your inbox and click the link.');
   } catch (err) {
     showError(err.message || 'Failed to send reset email.');
+  } finally {
+    signinBtn.disabled = false;
   }
 }
 
@@ -598,6 +681,19 @@ async function handleForgotPassword(e) {
 document.getElementById('siPassword').addEventListener('keydown', e => { if (e.key === 'Enter') handleSignIn(); });
 document.getElementById('siEmail').addEventListener('keydown', e => { if (e.key === 'Enter') handleSignIn(); });
 document.getElementById('regPassword').addEventListener('keydown', e => { if (e.key === 'Enter') handleRegister(); });
+
+// Listen for Supabase PASSWORD_RECOVERY event
+(function() {
+  try {
+    var client = ChrixlinDB._getClient();
+    if (!client) return;
+    client.auth.onAuthStateChange(function(event, session) {
+      if (event === 'PASSWORD_RECOVERY') {
+        switchTab('reset');
+      }
+    });
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>

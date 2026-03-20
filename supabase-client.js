@@ -521,11 +521,14 @@
   }
 
   // ─── MAPPERS ──────────────────────────────────────────────────────
+  function _slugify(str) {
+    return (str||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  }
   function _productToRow(p) {
-    return { id: p.id, emoji: p.emoji||'🤖', badge: p.badge||'', category: p.category||'voice-ai', category_label: p.categoryLabel||'', category_class: p.categoryClass||'', price: p.price||'$999', title: p.title||'', description: p.desc||'', long_desc: p.longDesc||'', image_url: p.image||'', yt_id: p.ytId||'', buy_url: p.buyUrl||'', download_url: p.downloadUrl||'', features: p.features||[], how_it_works: p.howItWorks||[], reviews: p.reviews||[], screenshots: p.screenshots||[], sort_order: p.sortOrder||0, is_active: p.isActive!==false };
+    return { id: p.id, emoji: p.emoji||'🤖', badge: p.badge||'', category: p.category||'voice-ai', category_label: p.categoryLabel||'', category_class: p.categoryClass||'', price: p.price||'$999', title: p.title||'', slug: p.slug || _slugify(p.title||''), description: p.desc||'', long_desc: p.longDesc||'', image_url: p.image||'', yt_id: p.ytId||'', buy_url: p.buyUrl||'', download_url: p.downloadUrl||'', features: p.features||[], how_it_works: p.howItWorks||[], reviews: p.reviews||[], screenshots: p.screenshots||[], sort_order: p.sortOrder||0, is_active: p.isActive!==false };
   }
   function _rowToProduct(r) {
-    return { id: r.id, emoji: r.emoji, badge: r.badge, category: r.category, categoryLabel: r.category_label, categoryClass: r.category_class, price: r.price, title: r.title, desc: r.description, longDesc: r.long_desc, image: r.image_url, ytId: r.yt_id, buyUrl: r.buy_url, downloadUrl: r.download_url||'', features: r.features||[], howItWorks: r.how_it_works||[], reviews: r.reviews||[], screenshots: r.screenshots||[], sortOrder: r.sort_order, isActive: r.is_active };
+    return { id: r.id, emoji: r.emoji, badge: r.badge, category: r.category, categoryLabel: r.category_label, categoryClass: r.category_class, price: r.price, title: r.title, slug: r.slug || _slugify(r.title||''), desc: r.description, longDesc: r.long_desc, image: r.image_url, ytId: r.yt_id, buyUrl: r.buy_url, downloadUrl: r.download_url||'', features: r.features||[], howItWorks: r.how_it_works||[], reviews: r.reviews||[], screenshots: r.screenshots||[], sortOrder: r.sort_order, isActive: r.is_active };
   }
   function _planToRow(p) {
     return { id: p.id, name: p.name||'', price: String(p.price||''), price_label: p.priceLabel||'', period: p.period||'', badge: p.badge||'', badge_color: p.badgeColor||'', description: p.description||'', cta: p.cta||'Get Started', cta_link: p.ctaLink||'', is_highlighted: !!p.highlighted, features: p.features||[], sort_order: p.sortOrder||0, is_active: p.isActive!==false };

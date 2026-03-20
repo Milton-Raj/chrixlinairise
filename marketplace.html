@@ -533,7 +533,7 @@ function renderProducts() {
     const tc = thumbClass[p.category] || 'cat-thumb-voice-ai';
     const imgTag = p.image ? `<img class="product-thumb-img" src="${p.image}" alt="${p.title}" loading="lazy">` : '';
     return `
-    <a class="product-card animate-in visible" href="product.html?id=${p.id}" data-category="${p.category}" style="animation-delay:${(i%3)*0.1}s">
+    <a class="product-card animate-in visible" href="product.html?slug=${p.slug || p.id}" data-category="${p.category}" style="animation-delay:${(i%3)*0.1}s">
       <div class="product-thumbnail ${tc}">
         ${imgTag}
         <div class="product-thumb-emoji">${p.emoji || '🤖'}</div>

@@ -406,6 +406,9 @@
       <button class="sidebar-link btn-ghost" onclick="resetToDefaults()" style="width:100%;justify-content:flex-start">
         <span>🔄</span> Reset to Defaults
       </button>
+      <button class="sidebar-link" onclick="adminLogout()" style="width:100%;justify-content:flex-start;background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#f87171;margin-top:4px">
+        <span>🚪</span> Logout
+      </button>
     </div>
   </aside>
 
@@ -1344,13 +1347,6 @@
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
     <input type="text" id="ordSearchInput" placeholder="🔍 Search by order ref, product or user..." oninput="filterOrdersTable()"
       style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;color:var(--text);font-size:14px;outline:none" />
-    <select id="ordStatusFilter" onchange="filterOrdersTable()" style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-size:14px;outline:none">
-      <option value="">All Status</option>
-      <option value="completed">Completed</option>
-      <option value="pending">Pending</option>
-      <option value="processing">Processing</option>
-      <option value="refunded">Refunded</option>
-    </select>
     <button class="btn btn-ghost" onclick="loadOrdersPanel()" style="white-space:nowrap">↻ Refresh</button>
   </div>
 
@@ -1365,11 +1361,10 @@
           <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Method</th>
           <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Status</th>
           <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Date</th>
-          <th style="padding:13px 16px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px">Actions</th>
         </tr>
       </thead>
       <tbody id="ordersTableBody">
-        <tr><td colspan="8" style="padding:48px;text-align:center;color:var(--muted)">Loading orders...</td></tr>
+        <tr><td colspan="7" style="padding:48px;text-align:center;color:var(--muted)">Loading orders...</td></tr>
       </tbody>
     </table>
   </div>
@@ -1683,6 +1678,7 @@ function showPanel(name) {
   if (name === 'bankdetails') populateBankDetails();
   if (name === 'pricing') { renderPricingPlanCards(_activePricingCycle); }
   if (name === 'dashboard') refreshDashboard();
+  if (name === 'users') loadUsersPanel();
   if (name === 'orders') loadOrdersPanel();
   if (name === 'analytics') loadAnalytics();
   if (name === 'submissions') loadSubmissions();
@@ -2695,79 +2691,76 @@ function setDashFilter(f) {
   refreshDashboard();
 }
 
-function refreshDashboard() {
-  const orders = _getOrdersLS();
-  const filter = _dashFilter || 'all';
-  const now = Date.now();
-  const filtered = orders.filter(o => {
-    if (filter === 'weekly')  return now - new Date(o.created_at||o.date||0).getTime() < 7*86400000;
-    if (filter === 'monthly') return now - new Date(o.created_at||o.date||0).getTime() < 30*86400000;
-    if (filter === 'yearly')  return now - new Date(o.created_at||o.date||0).getTime() < 365*86400000;
+async function refreshDashboard() {
+  var set = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; };
+  // Show loading placeholders
+  ['kpi_totalRevenue','kpi_marketplaceSales','kpi_subRevenue','kpi_totalPurchases',
+   'dashRegisteredUsers','dashPurchasingUsers','dashPendingOrders','dashOvRegistered','dashOvPurchasers','dashOvPending']
+    .forEach(function(id) { set(id, '…'); });
+
+  var orders = [], profiles = [];
+  if (typeof ChrixlinDB !== 'undefined') {
+    try { orders   = await ChrixlinDB.adminGetAllOrders();   } catch(e) { orders   = []; }
+    try { profiles = await ChrixlinDB.adminGetAllProfiles(); } catch(e) { profiles = []; }
+  }
+
+  var filter = _dashFilter || 'all';
+  var now = Date.now();
+  var filtered = orders.filter(function(o) {
+    if (filter === 'weekly')  return now - new Date(o.created_at || 0).getTime() < 7*86400000;
+    if (filter === 'monthly') return now - new Date(o.created_at || 0).getTime() < 30*86400000;
+    if (filter === 'yearly')  return now - new Date(o.created_at || 0).getTime() < 365*86400000;
     return true;
   });
 
-  const parsePrice = s => parseFloat((s||'0').replace(/[^0-9.]/g,'')) || 0;
-  const totalRev  = filtered.reduce((s,o)=>s+parsePrice(o.product_price||o.productPrice),0);
-  const mktSales  = filtered.filter(o=>o.payment_method!=='subscription').reduce((s,o)=>s+parsePrice(o.product_price||o.productPrice),0);
-  const subRev    = filtered.filter(o=>o.payment_method==='subscription').reduce((s,o)=>s+parsePrice(o.product_price||o.productPrice),0);
-  const callsAll  = _getCallsLS();
-  const callsFiltered = callsAll.filter(c => {
-    if (filter === 'all') return true;
-    const ms = {weekly:7,monthly:30,yearly:365}[filter]*86400000;
-    return now - new Date(c.date||0).getTime() < ms;
-  });
-  const paidOrders = filtered.filter(o=>parsePrice(o.product_price||o.productPrice)>0);
-  const convRate   = filtered.length > 0 ? Math.round(paidOrders.length/filtered.length*100) : 0;
-  const plans      = loadPricingPlans();
+  var parseAmt = function(o) { return parseFloat(o.amount || o.product_price || '0') || 0; };
+  var totalRev = filtered.reduce(function(s,o){ return s + parseAmt(o); }, 0);
+  var mktSales = filtered.filter(function(o){ return o.payment_method !== 'subscription'; }).reduce(function(s,o){ return s + parseAmt(o); }, 0);
+  var subRev   = filtered.filter(function(o){ return o.payment_method === 'subscription'; }).reduce(function(s,o){ return s + parseAmt(o); }, 0);
+  var purchasers = new Set(filtered.map(function(o){ return o.user_id || o.user_email; })).size;
+  var pendingOrds = filtered.filter(function(o){ return o.status === 'pending' || o.status === 'processing'; }).length;
 
-  // Update KPIs
-  document.getElementById('kpi_totalRevenue').textContent      = '$'+totalRev.toLocaleString();
-  document.getElementById('kpi_marketplaceSales').textContent  = '$'+mktSales.toLocaleString();
-  document.getElementById('kpi_subRevenue').textContent        = '$'+subRev.toLocaleString();
-  document.getElementById('kpi_totalPurchases').textContent    = filtered.length;
-  document.getElementById('kpi_conversionRate').textContent    = convRate+'%';
-  document.getElementById('kpi_activePlans').textContent       = plans.length;
-  // New dashboard widgets (loaded async from DB — set placeholder from local orders)
-  var purchasers = new Set(filtered.map(function(o){return o.user_id||o.email;})).size;
-  var pendingOrds = filtered.filter(function(o){return o.status==='pending'||o.status==='processing';}).length;
-  if (document.getElementById('dashPurchasingUsers')) document.getElementById('dashPurchasingUsers').textContent = purchasers || filtered.length;
-  if (document.getElementById('dashPendingOrders')) document.getElementById('dashPendingOrders').textContent = pendingOrds;
-  if (document.getElementById('dashOvPurchasers')) document.getElementById('dashOvPurchasers').textContent = purchasers || filtered.length;
-  if (document.getElementById('dashOvPending')) document.getElementById('dashOvPending').textContent = pendingOrds;
-  // Load registered users from DB if available
-  if (typeof ChrixlinDB !== 'undefined') {
-    ChrixlinDB.adminGetAllProfiles().then(function(profiles) {
-      if (document.getElementById('dashRegisteredUsers')) document.getElementById('dashRegisteredUsers').textContent = profiles.length;
-      if (document.getElementById('dashOvRegistered')) document.getElementById('dashOvRegistered').textContent = profiles.length;
-    }).catch(function(){});
-  }
+  set('kpi_totalRevenue',    '$' + totalRev.toLocaleString('en-US', {minimumFractionDigits:0}));
+  set('kpi_marketplaceSales','$' + mktSales.toLocaleString('en-US', {minimumFractionDigits:0}));
+  set('kpi_subRevenue',      '$' + subRev.toLocaleString('en-US', {minimumFractionDigits:0}));
+  set('kpi_totalPurchases',  filtered.length);
+  set('dashRegisteredUsers', profiles.length);
+  set('dashPurchasingUsers', purchasers || filtered.length);
+  set('dashPendingOrders',   pendingOrds);
+  set('dashOvRegistered',    profiles.length);
+  set('dashOvPurchasers',    purchasers || filtered.length);
+  set('dashOvPending',       pendingOrds);
+
+  // KPIs that may exist from older markup
+  var convEl = document.getElementById('kpi_conversionRate');
+  if (convEl) convEl.textContent = (filtered.length > 0 ? Math.round(filtered.filter(function(o){ return parseAmt(o)>0; }).length / filtered.length * 100) : 0) + '%';
+  var plansEl = document.getElementById('kpi_activePlans');
+  if (plansEl) plansEl.textContent = loadPricingPlans().length;
 
   // Trending products
-  const prodMap = {};
-  filtered.forEach(o => {
-    const t = o.product_title||o.productTitle||'Unknown';
-    const p = parsePrice(o.product_price||o.productPrice);
-    if (!prodMap[t]) prodMap[t]={purchases:0,revenue:0};
-    prodMap[t].purchases++; prodMap[t].revenue+=p;
+  var prodMap = {};
+  filtered.forEach(function(o) {
+    var t = o.product_title || 'Unknown';
+    if (!prodMap[t]) prodMap[t] = {purchases:0, revenue:0};
+    prodMap[t].purchases++;
+    prodMap[t].revenue += parseAmt(o);
   });
-  const trending = Object.entries(prodMap).sort((a,b)=>b[1].purchases-a[1].purchases).slice(0,5);
-  const trendEl  = document.getElementById('dash_trendingProducts');
-  trendEl.innerHTML = trending.length
-    ? trending.map(([name,d])=>`<div class="dash-table-row"><span>${escHtml(name)}</span><span>${d.purchases}</span><span>$${d.revenue.toLocaleString()}</span></div>`).join('')
+  var trending = Object.entries(prodMap).sort(function(a,b){ return b[1].purchases - a[1].purchases; }).slice(0,5);
+  var trendEl = document.getElementById('dash_trendingProducts');
+  if (trendEl) trendEl.innerHTML = trending.length
+    ? trending.map(function(e){ return '<div class="dash-table-row"><span>'+escHtml(e[0])+'</span><span>'+e[1].purchases+'</span><span>$'+e[1].revenue.toLocaleString()+'</span></div>'; }).join('')
     : '<div style="color:var(--muted);padding:16px 0;font-size:13px">No orders yet</div>';
 
-  // (Top plans section replaced by Business Overview widget)
-
   // Sales distribution
-  const monthly = filtered.filter(o=>o.billing_cycle==='monthly').length;
-  const yearly  = filtered.filter(o=>o.billing_cycle==='yearly').length;
-  const onetime = filtered.filter(o=>!o.billing_cycle||o.billing_cycle==='one-time').length;
-  const total   = monthly+yearly+onetime||1;
-  document.getElementById('dash_salesDistribution').innerHTML = `
-    <div class="dist-bar-wrap"><span>Monthly</span><div class="dist-bar"><div class="dist-fill" style="width:${monthly/total*100}%;background:var(--primary)"></div></div><span>${Math.round(monthly/total*100)}%</span></div>
-    <div class="dist-bar-wrap"><span>Yearly</span><div class="dist-bar"><div class="dist-fill" style="width:${yearly/total*100}%;background:var(--gold)"></div></div><span>${Math.round(yearly/total*100)}%</span></div>
-    <div class="dist-bar-wrap"><span>One-Time</span><div class="dist-bar"><div class="dist-fill" style="width:${onetime/total*100}%;background:var(--cyan)"></div></div><span>${Math.round(onetime/total*100)}%</span></div>
-  `;
+  var monthly = filtered.filter(function(o){ return o.billing_cycle === 'monthly'; }).length;
+  var yearly  = filtered.filter(function(o){ return o.billing_cycle === 'yearly'; }).length;
+  var onetime = filtered.filter(function(o){ return !o.billing_cycle || o.billing_cycle === 'one-time'; }).length;
+  var total   = monthly + yearly + onetime || 1;
+  var distEl  = document.getElementById('dash_salesDistribution');
+  if (distEl) distEl.innerHTML =
+    '<div class="dist-bar-wrap"><span>Monthly</span><div class="dist-bar"><div class="dist-fill" style="width:'+Math.round(monthly/total*100)+'%;background:var(--primary)"></div></div><span>'+Math.round(monthly/total*100)+'%</span></div>' +
+    '<div class="dist-bar-wrap"><span>Yearly</span><div class="dist-bar"><div class="dist-fill" style="width:'+Math.round(yearly/total*100)+'%;background:var(--gold)"></div></div><span>'+Math.round(yearly/total*100)+'%</span></div>' +
+    '<div class="dist-bar-wrap"><span>One-Time</span><div class="dist-bar"><div class="dist-fill" style="width:'+Math.round(onetime/total*100)+'%;background:var(--cyan)"></div></div><span>'+Math.round(onetime/total*100)+'%</span></div>';
 }
 
 // ─── ORDERS PANEL ─────────────────────────────────────────────────────────────
@@ -3064,6 +3057,17 @@ if (savedTheme.text) document.getElementById('theme_text').value = savedTheme.te
   });
 })();
 
+// ─── ADMIN LOGOUT ─────────────────────────────────────────────────────────────
+async function adminLogout() {
+  try {
+    if (typeof ChrixlinDB !== 'undefined') {
+      var client = ChrixlinDB._getClient();
+      if (client) await client.auth.signOut();
+    }
+  } catch(e) {}
+  window.location.reload();
+}
+
 // ─── USERS PANEL ──────────────────────────────────────────────────────────────
 var _allUsers = [];
 var _allOrders = [];
@@ -3202,10 +3206,10 @@ async function loadOrdersPanel() {
   if (typeof ChrixlinDB === 'undefined') return;
   var client = ChrixlinDB._getClient ? ChrixlinDB._getClient() : null;
   if (!client) {
-    document.getElementById('ordersTableBody').innerHTML = '<tr><td colspan="8" style="padding:48px;text-align:center;color:#f59e0b">Please log in as admin to view orders.</td></tr>';
+    document.getElementById('ordersTableBody').innerHTML = '<tr><td colspan="7" style="padding:48px;text-align:center;color:#f59e0b">Please log in as admin to view orders.</td></tr>';
     return;
   }
-  document.getElementById('ordersTableBody').innerHTML = '<tr><td colspan="8" style="padding:48px;text-align:center;color:var(--muted)">Loading...</td></tr>';
+  document.getElementById('ordersTableBody').innerHTML = '<tr><td colspan="7" style="padding:48px;text-align:center;color:var(--muted)">Loading...</td></tr>';
   try {
     _allOrdersAdmin = await ChrixlinDB.adminGetAllOrders();
     renderOrdersTable(_allOrdersAdmin);
@@ -3218,12 +3222,12 @@ async function loadOrdersPanel() {
     document.getElementById('ordStatPending').textContent = pending;
     document.getElementById('ordStatRevenue').textContent = '$'+revenue.toLocaleString('en-US',{minimumFractionDigits:0});
   } catch(e) {
-    document.getElementById('ordersTableBody').innerHTML = '<tr><td colspan="8" style="padding:48px;text-align:center;color:#ef4444">Error loading orders.</td></tr>';
+    document.getElementById('ordersTableBody').innerHTML = '<tr><td colspan="7" style="padding:48px;text-align:center;color:#ef4444">Error loading orders.</td></tr>';
   }
 }
 function renderOrdersTable(orders) {
   var tbody = document.getElementById('ordersTableBody');
-  if (!orders.length) { tbody.innerHTML='<tr><td colspan="8" style="padding:48px;text-align:center;color:var(--muted)">No orders yet.</td></tr>'; return; }
+  if (!orders.length) { tbody.innerHTML='<tr><td colspan="7" style="padding:48px;text-align:center;color:var(--muted)">No orders yet.</td></tr>'; return; }
   var statusColors = {completed:'#22c55e',pending:'#f59e0b',processing:'#06b6d4',refunded:'#ef4444'};
   tbody.innerHTML = orders.map(function(o) {
     var sc = statusColors[o.status]||'#94a3b8';
@@ -3236,17 +3240,13 @@ function renderOrdersTable(orders) {
       '<td style="padding:12px 16px;color:var(--muted);font-size:12px">'+(o.payment_method||'—')+'</td>' +
       '<td style="padding:12px 16px"><span style="background:'+sc+'22;color:'+sc+';border:1px solid '+sc+'44;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase">'+(o.status||'pending')+'</span></td>' +
       '<td style="padding:12px 16px;font-size:12px;color:var(--muted)">'+date+'</td>' +
-      '<td style="padding:12px 16px"><select onchange="updateOrderStatus(\''+o.id+'\',this.value)" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:5px 8px;color:var(--text);font-size:12px;cursor:pointer"><option value="" disabled selected>Change Status</option><option value="completed">✅ Completed</option><option value="processing">🔄 Processing</option><option value="pending">⏳ Pending</option><option value="refunded">↩ Refunded</option></select></td>' +
     '</tr>';
   }).join('');
 }
 function filterOrdersTable() {
   var q = (document.getElementById('ordSearchInput').value||'').toLowerCase();
-  var sf = document.getElementById('ordStatusFilter').value;
   renderOrdersTable(_allOrdersAdmin.filter(function(o) {
-    var matchQ = !q || (o.order_ref||'').toLowerCase().includes(q) || (o.product_title||'').toLowerCase().includes(q) || (o.user_name||'').toLowerCase().includes(q) || (o.user_email||'').toLowerCase().includes(q);
-    var matchS = !sf || o.status === sf;
-    return matchQ && matchS;
+    return !q || (o.order_ref||'').toLowerCase().includes(q) || (o.product_title||'').toLowerCase().includes(q) || (o.user_name||'').toLowerCase().includes(q) || (o.user_email||'').toLowerCase().includes(q);
   }));
 }
 async function updateOrderStatus(orderId, newStatus) {
@@ -3513,12 +3513,13 @@ function exportAnalyticsExcel() {
 // Auto-load panels on switch
 document.addEventListener('DOMContentLoaded', function() {
   // Restore last active panel on page load
-  (function() {
-    var lastPanel = localStorage.getItem('admin_active_panel');
-    if (lastPanel && document.getElementById('panel-' + lastPanel)) {
-      showPanel(lastPanel);
-    }
-  })();
+  var lastPanel = localStorage.getItem('admin_active_panel');
+  if (lastPanel && document.getElementById('panel-' + lastPanel)) {
+    showPanel(lastPanel);
+  } else {
+    // Default: load dashboard panel with live DB data
+    refreshDashboard();
+  }
 });
 </script>
 </body>
