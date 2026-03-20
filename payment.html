@@ -902,7 +902,6 @@ var _ppButtons    = null;
     s.src = sdkBase + '?client-id=' + encodeURIComponent(ppCfg.g_pp_clientId)
       + '&currency=' + cur
       + '&intent=capture'
-      + '&enable-funding=venmo,card,applepay,googlepay,paylater'
       + '&components=buttons';
     s.onload  = function() { _ppSdkLoaded = true; _ppSdkLoading = false; };
     s.onerror = function() { _ppSdkLoading = false; };
@@ -936,7 +935,6 @@ function loadPayPalSDK(clientId, currency, sandbox) {
     script.src  = sdkBase + '?client-id=' + encodeURIComponent(clientId)
       + '&currency=' + cur
       + '&intent=capture'
-      + '&enable-funding=venmo,card,applepay,googlepay,paylater'
       + '&components=buttons';
     script.onload  = function() { _ppSdkLoaded = true; _ppSdkLoading = false; resolve(); };
     script.onerror = function() { _ppSdkLoading = false; reject(new Error('PayPal SDK script failed to load — check Client ID and Mode (live vs sandbox)')); };
