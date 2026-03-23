@@ -338,8 +338,8 @@
       </div>
     </div>
 
-    <!-- Requirements & attachment (shown for plan mode, optional for product mode) -->
-    <div class="form-card" id="requirementsCard">
+    <!-- Requirements & attachment (shown ONLY for plan mode) -->
+    <div class="form-card" id="requirementsCard" style="display:none">
       <div class="form-card-title"><span class="step-num-sm">3</span> Your Requirements</div>
       <div class="form-card-subtitle">Tell us what you're looking for so we can prepare before your onboarding.</div>
       <div class="field-group">
@@ -467,19 +467,21 @@
 
       <hr style="border:none;border-top:1px solid var(--c-border);margin:24px 0" />
 
-      <!-- Terms -->
-      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:22px">
+      <!-- Terms (marketplace only) -->
+      <div id="termsBlock" style="display:flex;align-items:flex-start;gap:10px;margin-bottom:22px">
         <input type="checkbox" id="terms" style="width:17px;height:17px;margin-top:3px;accent-color:var(--c-primary);flex-shrink:0;cursor:pointer" />
         <label for="terms" style="font-size:13px;color:var(--c-sub);cursor:pointer">
           I agree to the <a href="#" style="color:#a78bfa">Terms of Service</a> and <a href="#" style="color:#a78bfa">Privacy Policy</a>. I understand this is a one-time payment for a digital service.
         </label>
       </div>
 
-      <!-- Pay button -->
-      <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">
-        <span>🔒</span> Complete Purchase — <span id="submitPrice">—</span>
-      </button>
-      <div class="submit-note"><span>🔒</span> 256-bit SSL Encrypted · Your data is 100% secure</div>
+      <!-- Pay button (marketplace only) -->
+      <div id="submitBlock">
+        <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">
+          <span>🔒</span> Complete Purchase — <span id="submitPrice">—</span>
+        </button>
+        <div class="submit-note"><span>🔒</span> 256-bit SSL Encrypted · Your data is 100% secure</div>
+      </div>
     </div>
 
     <!-- RIGHT: Order Summary -->
@@ -503,14 +505,16 @@
               <span class="slabel" id="sgstLabel">SGST (0%)</span>
               <span class="sval" id="sgstAmt">—</span>
             </div>
-            <!-- Free inclusions -->
-            <div class="summary-line">
-              <span class="slabel">Setup Fee</span>
-              <span class="sval free">FREE</span>
-            </div>
-            <div class="summary-line">
-              <span class="slabel">Onboarding Support</span>
-              <span class="sval free">FREE</span>
+            <!-- Free inclusions (marketplace only) -->
+            <div id="marketplaceExtras">
+              <div class="summary-line">
+                <span class="slabel">Setup Fee</span>
+                <span class="sval free">FREE</span>
+              </div>
+              <div class="summary-line">
+                <span class="slabel">Onboarding Support</span>
+                <span class="sval free">FREE</span>
+              </div>
             </div>
             <div class="summary-divider"></div>
             <!-- Total -->
@@ -722,9 +726,20 @@ const _isPlanMode    = !!(_planId && _planName && _planPrice > 0);
     el.style.background = 'linear-gradient(135deg,rgba(124,58,237,0.4),rgba(6,182,212,0.2))';
     document.getElementById('orderName').textContent = _planName;
     document.getElementById('orderCat').textContent  = _planCycle.charAt(0).toUpperCase()+_planCycle.slice(1)+' Plan';
-    updateOrderSummary(_planPrice);
+    updateOrderSummary(_planPriceLabel);
     // Override product price globally for calcPricing
     product.price = _planPrice; product.title = _planName;
+    // Show requirements card only for plan mode
+    var rc = document.getElementById('requirementsCard');
+    if (rc) rc.style.display = '';
+    // Hide Setup Fee / Onboarding lines for plan mode (they are custom service extras, not plan features)
+    var mktExtras = document.getElementById('marketplaceExtras');
+    if (mktExtras) mktExtras.style.display = 'none';
+    // Hide terms checkbox + Complete Purchase button (PayPal button handles confirmation)
+    var termsBlock = document.getElementById('termsBlock');
+    if (termsBlock) termsBlock.style.display = 'none';
+    var submitBlock = document.getElementById('submitBlock');
+    if (submitBlock) submitBlock.style.display = 'none';
   } else {
     const tc = ({'voice-ai':'cat-thumb-voice-ai','sales':'cat-thumb-sales','content':'cat-thumb-content','lead':'cat-thumb-lead','automation':'cat-thumb-automation'})[product.category]||'cat-thumb-voice-ai';
     const el = document.getElementById('orderThumb');
@@ -1014,7 +1029,7 @@ function copyUpiId() {
 }
 
 function handleUpiPaid() {
-  if (!document.getElementById('terms').checked) {
+  if (!_isPlanMode && !document.getElementById('terms').checked) {
     alert('Please agree to the Terms of Service before confirming.');
     return;
   }
@@ -1039,7 +1054,7 @@ var _ppSdkLoading = false;
     _ppSdkLoading = true;
     var s = document.createElement('script');
     s.src = 'https://www.paypal.com/sdk/js?client-id=' + encodeURIComponent(cfg.g_pp_clientId)
-          + '&currency=' + cur + '&intent=capture&components=buttons';
+          + '&currency=' + cur + '&intent=capture&components=buttons&disable-funding=paylater,credit';
     s.onload  = function() { _ppSdkLoaded = true; _ppSdkLoading = false; };
     s.onerror = function() { _ppSdkLoading = false; };
     document.head.appendChild(s);
@@ -1064,7 +1079,7 @@ function _ppLoadSDK(clientId, currency) {
     var s = document.createElement('script');
     s.src = 'https://www.paypal.com/sdk/js?client-id=' + encodeURIComponent(clientId)
           + '&currency=' + (currency || 'USD').toUpperCase()
-          + '&intent=capture&components=buttons';
+          + '&intent=capture&components=buttons&disable-funding=paylater,credit';
     s.onload  = function() { _ppSdkLoaded = true; _ppSdkLoading = false; resolve(); };
     s.onerror = function() { _ppSdkLoading = false; reject(new Error('PayPal SDK failed to load — check Client ID')); };
     document.head.appendChild(s);
@@ -1328,10 +1343,11 @@ function validate() {
 
 // ─── SUBMIT ───────────────────────────────────────────────────────────────────
 function handleSubmit(skipValidate) {
-  if (!document.getElementById('terms').checked) { alert('Please agree to the Terms of Service to continue.'); return; }
+  // In plan mode the terms block is hidden — skip terms check; marketplace always requires it
+  if (!_isPlanMode && !document.getElementById('terms').checked) { alert('Please agree to the Terms of Service to continue.'); return; }
   if (!skipValidate && !validate()) { document.querySelector('.has-error')?.scrollIntoView({behavior:'smooth',block:'center'}); return; }
   const btn = document.getElementById('submitBtn');
-  btn.disabled = true;
+  if (btn) btn.disabled = true;
   btn.innerHTML = '<span>⏳</span> Processing...';
   goToStep3();
   _submitOrderAndInvoice(activeMethod || 'upi', {}).catch(function(){});
