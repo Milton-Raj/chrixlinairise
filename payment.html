@@ -78,8 +78,8 @@
     @keyframes fadeSlide { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
     /* ─── FORM ELEMENTS ───────────────────────────────────── */
-    .checkout-step1 { max-width: 680px; margin: 0 auto; padding: 32px 24px 80px; }
-    .form-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: 20px; padding: 32px; margin-bottom: 20px; }
+    .checkout-step1 { max-width: 680px; margin: 0 auto; padding: 32px 24px 80px; box-sizing: border-box; width: 100%; }
+    .form-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: 20px; padding: 32px; margin-bottom: 20px; box-sizing: border-box; }
     .form-card-title { font-family: var(--font-h); font-size: 17px; font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
     .form-card-title .step-num-sm { width: 26px; height: 26px; border-radius: 50%; background: var(--grad); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; flex-shrink: 0; }
     .form-card-subtitle { font-size: 13px; color: var(--c-muted); margin-bottom: 24px; }
@@ -191,13 +191,34 @@
 
     /* ─── RESPONSIVE ──────────────────────────────────────── */
     @media (max-width: 800px) {
-      .checkout-step2 { grid-template-columns: 1fr; }
+      .checkout-step2 { grid-template-columns: 1fr; padding: 20px 16px 60px; gap: 20px; }
       .summary-panel { position: static; order: -1; }
+      .summary-card { max-width: 100%; }
+      .summary-product-img { height: 120px; }
+      .pay-panel { padding: 24px 20px; }
     }
-    @media (max-width: 480px) {
-      .field-row, .field-row.cols-3 { grid-template-columns: 1fr; }
-      .pay-tabs { gap: 0; }
-      .pay-tab { padding: 10px 14px; font-size: 13px; }
+    @media (max-width: 600px) {
+      .topbar { padding: 0 16px; }
+      .topbar-logo { font-size: 16px; }
+      .topbar-secure { font-size: 11px; gap: 4px; }
+      .topbar-back { font-size: 13px; }
+      .steps-bar { padding: 16px 12px; gap: 0; }
+      .step-label { font-size: 11px; }
+      .step-connector { min-width: 24px; }
+      .checkout-step2 { padding: 16px 12px 60px; }
+      .pay-panel { padding: 20px 16px; border-radius: 14px; }
+      .pay-panel-title { font-size: 17px; margin-bottom: 18px; }
+      .pay-tab { padding: 8px 12px; font-size: 12px; }
+      .field-row, .field-row.cols-3 { grid-template-columns: 1fr; gap: 12px; }
+      .continue-btn { font-size: 15px; padding: 15px 24px; }
+      .summary-body { padding: 16px; }
+      .summary-price-base { font-size: 20px; }
+      .summary-total-val { font-size: 20px; }
+    }
+    @media (max-width: 400px) {
+      .step-label { display: none; }
+      .steps-bar { gap: 4px; }
+      .topbar-secure span:not(:first-child) { display: none; }
     }
   </style>
   <!-- QR Code library (browser-native) -->

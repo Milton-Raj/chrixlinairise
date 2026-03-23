@@ -467,27 +467,56 @@
     @media (max-width: 1024px) {
       .hero-grid { grid-template-columns: 1fr; }
       .hero-visual { display: none; }
-      .story-grid { grid-template-columns: 1fr; gap: 50px; }
+      .story-grid { grid-template-columns: 1fr; gap: 40px; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
       .for-who-grid { grid-template-columns: repeat(2,1fr); }
+      .pricing-grid { grid-template-columns: repeat(2,1fr); }
     }
     @media (max-width: 768px) {
-      .section-pad { padding: 70px 0; }
+      .section-pad { padding: 60px 0; }
+      .container { padding: 0 18px; }
       .nav-links, .nav-cta { display: none; }
       .nav-toggle { display: flex; }
-      .stats-grid { grid-template-columns: repeat(2,1fr); gap: 24px; }
+      #navbar { padding: 14px 0; }
+      .hero-section { padding-top: 100px; padding-bottom: 60px; }
+      .hero-title { font-size: clamp(30px,8vw,48px); }
+      .hero-sub { font-size: 15px; }
+      .hero-btns { flex-direction: column; gap: 12px; }
+      .hero-btns .btn { width: 100%; text-align: center; }
+      .hero-trust { gap: 12px; }
+      .hero-trust-item { font-size: 12px; }
+      .stats-grid { grid-template-columns: repeat(2,1fr); gap: 16px; }
+      .stat-val { font-size: 36px; }
       .process-grid { grid-template-columns: 1fr; }
-      .features-grid { grid-template-columns: 1fr 1fr; }
+      .features-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
       .testimonials-grid { grid-template-columns: 1fr; }
-      .pricing-grid { grid-template-columns: 1fr; max-width: 480px; }
-      .footer-grid { grid-template-columns: 1fr; }
-      .footer-bottom { flex-direction: column; gap: 16px; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; }
+      .pricing-plan { padding: 28px 20px; }
+      .plan-price { font-size: 38px; }
+      .billing-toggle { flex-wrap: wrap; justify-content: center; gap: 8px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .section-title { font-size: clamp(26px,6vw,40px); }
+      .section-sub { font-size: 14px; }
+      .for-who-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .for-who-item { padding: 20px 14px; }
+      .story-grid { grid-template-columns: 1fr; gap: 40px; }
+      .cta-section { padding: 60px 0; }
+      .cta-title { font-size: clamp(24px,6vw,40px); }
+      .cta-btns { flex-direction: column; align-items: center; gap: 12px; }
+      .cta-btns .btn { width: 100%; max-width: 340px; text-align: center; }
     }
     @media (max-width: 480px) {
+      .container { padding: 0 14px; }
       .features-grid { grid-template-columns: 1fr; }
-      .for-who-grid { grid-template-columns: 1fr 1fr; }
-      .hero-btns { flex-direction: column; }
-      .hero-btns .btn { width: 100%; }
+      .for-who-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .hero-badge { font-size: 12px; padding: 6px 14px; }
+      .process-step { padding: 24px 18px; }
+      .testimonial-card { padding: 24px 18px; }
+      .faq-q { font-size: 14px; }
+      .footer-grid { gap: 24px; }
+      .mobile-menu a { font-size: 20px; }
     }
   </style>
 </head>
@@ -1027,7 +1056,7 @@ function toggleBilling() {
 function loadPricingPlans(cycle) {
   try {
     const s = localStorage.getItem('chrixlin_pricing');
-    const all = s ? JSON.parse(s) : DEFAULT_PRICING_PLANS;
+    const all = (s ? JSON.parse(s) : DEFAULT_PRICING_PLANS).filter(p => p.visible !== false);
     if (!cycle) return all;
     const filtered = all.filter(p => (p.billingCycle || 'monthly') === cycle);
     return filtered.length ? filtered : DEFAULT_PRICING_PLANS.filter(p => (p.billingCycle || 'monthly') === cycle);
