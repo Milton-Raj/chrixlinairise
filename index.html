@@ -1346,19 +1346,41 @@ async function submitStrategyCallForm(e) {
   }
 }
 
-// Apply strategy call booking link from admin settings
-(function() {
+// Apply booking link to all "Book Free Strategy Call" buttons
+function applyBookingLink(link) {
+  if (!link) return;
+  document.querySelectorAll('a').forEach(function(el) {
+    var txt = el.textContent.toLowerCase();
+    if (txt.includes('book') || txt.includes('free call') || txt.includes('strategy call') || txt.includes('free strategy')) {
+      el.href = link;
+      el.target = '_blank';
+      el.rel = 'noopener';
+    }
+  });
+}
+
+(async function() {
+  // 1. Apply from localStorage immediately (fast, no delay)
   try {
-    var bd = JSON.parse(localStorage.getItem('chrixlin_bank_details') || '{}');
-    var link = bd.strategyCallUrl;
-    if (!link) return;
-    document.querySelectorAll('a').forEach(function(el) {
-      var h = el.getAttribute('href') || '';
-      if (h === 'mailto:info@chrixlin.tech' && (el.textContent.toLowerCase().includes('book') || el.textContent.toLowerCase().includes('call') || el.classList.contains('btn-primary'))) {
-        el.href = link;
-      }
-    });
+    var bl = JSON.parse(localStorage.getItem('chrixlin_booking_link') || '{}');
+    if (bl.url) applyBookingLink(bl.url);
+    // Also check old storage key for backwards compat
+    else {
+      var bd = JSON.parse(localStorage.getItem('chrixlin_bank_details') || '{}');
+      if (bd.strategyCallUrl) applyBookingLink(bd.strategyCallUrl);
+    }
   } catch(e) {}
+
+  // 2. Fetch from Supabase and re-apply (always fresh)
+  if (typeof ChrixlinDB !== 'undefined') {
+    try {
+      var dbVal = await ChrixlinDB.loadFromSupabase('site_settings', 'booking_link');
+      if (dbVal && dbVal.url) {
+        localStorage.setItem('chrixlin_booking_link', JSON.stringify(dbVal));
+        applyBookingLink(dbVal.url);
+      }
+    } catch(e) {}
+  }
 })();
 </script>
 </body>
