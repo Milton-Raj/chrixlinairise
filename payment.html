@@ -200,8 +200,8 @@
       .pay-tab { padding: 10px 14px; font-size: 13px; }
     }
   </style>
-  <!-- QR Code library -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <!-- QR Code library (browser-native) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
@@ -352,7 +352,7 @@
           <!-- QR Code canvas -->
           <div style="display:flex;justify-content:center;margin-bottom:16px">
             <div style="background:#fff;padding:14px;border-radius:16px;display:inline-block;box-shadow:0 4px 20px rgba(0,0,0,0.3)">
-              <canvas id="upiQrCanvas" width="180" height="180"></canvas>
+              <div id="upiQrContainer" style="width:180px;height:180px"></div>
             </div>
           </div>
           <!-- UPI ID copy row -->
@@ -732,8 +732,17 @@ let _enabledMethods = [];
 function buildPaymentTabs() {
   const tabsEl = document.getElementById('payTabs');
   _enabledMethods = Object.keys(GATEWAY_META).filter(k => isGatewayEnabled(k));
-  if (!_enabledMethods.length) _enabledMethods = ['paypal', 'upi'];
+  // Only use fallback if admin has never configured anything at all (fresh setup)
+  if (!_enabledMethods.length) {
+    const gwCfg = loadGatewayConfig();
+    const hasAnyConfig = Object.keys(GATEWAY_META).some(k => gwCfg[k]);
+    if (!hasAnyConfig) _enabledMethods = ['paypal', 'upi']; // first-time default
+  }
   Object.values(GATEWAY_META).forEach(m => { const el=document.getElementById(m.form); if(el) el.style.display='none'; });
+  if (!_enabledMethods.length) {
+    tabsEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--c-muted);font-size:13px">No payment methods enabled. Please contact support.</div>';
+    return;
+  }
   const first = (activeMethod && _enabledMethods.includes(activeMethod)) ? activeMethod : _enabledMethods[0];
   tabsEl.innerHTML = _enabledMethods.map(k =>
     '<button class="pay-tab'+(k===first?' active':'')+'" data-method="'+k+'" onclick="switchPayment(\''+k+'\')">'+GATEWAY_META[k].label+'</button>'
@@ -763,6 +772,7 @@ function populateGatewayForms() {
 
 // ─── CARD PREVIEW ─────────────────────────────────────────────────────────────
 // ─── UPI / QR CODE ────────────────────────────────────────────────────────────
+var _upiQrInstance = null;
 function renderUpiQr() {
   const upiGw = getGatewayCfg('upi');
   const upiId = upiGw.g_upi_id || '';
@@ -770,7 +780,6 @@ function renderUpiQr() {
   const amount = (_pricing && _pricing.total) ? String(_pricing.total) : '';
   const note  = (product && product.title) ? product.title.slice(0,50) : 'Chrixlin Payment';
 
-  // Update display
   const idEl  = document.getElementById('upiIdDisplay');
   const amtEl = document.getElementById('upiAmountDisplay');
   if (idEl)  idEl.textContent  = upiId || 'Not configured';
@@ -778,30 +787,35 @@ function renderUpiQr() {
 
   if (!upiId) return;
 
-  // Build UPI URI
   const upiUri = 'upi://pay?pa=' + encodeURIComponent(upiId)
     + '&pn=' + encodeURIComponent(name)
     + (amount ? '&am=' + encodeURIComponent(amount) : '')
     + '&cu=INR'
     + '&tn=' + encodeURIComponent(note);
 
-  // Update deep link button
   const dlEl = document.getElementById('upiDeepLink');
   if (dlEl) dlEl.href = upiUri;
 
-  // Generate QR code
-  const canvas = document.getElementById('upiQrCanvas');
-  if (!canvas) return;
+  // Generate QR using qrcodejs (browser-native)
+  const container = document.getElementById('upiQrContainer');
+  if (!container) return;
+  container.innerHTML = ''; // clear previous QR
+  _upiQrInstance = null;
   if (typeof QRCode !== 'undefined') {
-    QRCode.toCanvas(canvas, upiUri, { width: 180, margin: 1, color: { dark: '#000000', light: '#ffffff' } }, function(err) {
-      if (err) console.warn('QR error:', err);
+    _upiQrInstance = new QRCode(container, {
+      text: upiUri,
+      width: 180,
+      height: 180,
+      colorDark: '#000000',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
     });
   } else {
-    // Fallback: use Google Charts QR API as img
+    // Fallback: inline SVG-based QR via free API
     var img = document.createElement('img');
-    img.src = 'https://chart.googleapis.com/chart?cht=qr&chs=180x180&chl=' + encodeURIComponent(upiUri) + '&choe=UTF-8';
-    img.width = 180; img.height = 180;
-    canvas.parentNode.replaceChild(img, canvas);
+    img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(upiUri);
+    img.width = 180; img.height = 180; img.alt = 'UPI QR Code';
+    container.appendChild(img);
   }
 }
 
