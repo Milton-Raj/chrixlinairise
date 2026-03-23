@@ -2670,63 +2670,23 @@ function saveMarketplace() {
 
 // ─── PAYMENT GATEWAYS ─────────────────────────────────────────────────────────
 var GATEWAY_DEFS = {
-  card: {
-    id: 'card', icon: '💳', name: 'Credit / Debit Card', color: '#7c3aed',
-    desc: 'Accept Visa, Mastercard, Amex and other cards from customers.',
-    fields: [
-      { id: 'g_card_processor',    label: 'Payment Processor (optional)', type: 'text',     ph: 'e.g. Stripe, Razorpay, Square' },
-      { id: 'g_card_merchantId',   label: 'Merchant ID / Public Key',     type: 'text',     ph: 'Your public/merchant key', mono: true },
-      { id: 'g_card_acceptedCards',label: 'Accepted Cards',               type: 'text',     ph: 'Visa, Mastercard, Amex, RuPay' },
-      { id: 'g_card_instructions', label: 'Instructions (optional)',       type: 'textarea', ph: 'Any card payment notes for customers...' }
-    ]
-  },
-  bank: {
-    id: 'bank', icon: '🏦', name: 'Bank Transfer', color: '#3b82f6',
-    desc: 'Direct bank / wire transfer. Your account details shown to customers.',
-    fields: [
-      { id: 'g_bank_accountName',   label: 'Account Holder Name *', type: 'text',     ph: 'Chrixlin AI Rise' },
-      { id: 'g_bank_bankName',      label: 'Bank Name *',           type: 'text',     ph: 'e.g. Chase Bank, HDFC Bank' },
-      { id: 'g_bank_accountNumber', label: 'Account Number',        type: 'text',     ph: 'e.g. 1234567890' },
-      { id: 'g_bank_sortCode',      label: 'Sort Code / Routing / IFSC', type: 'text', ph: 'e.g. 12-34-56 or HDFC0001234' },
-      { id: 'g_bank_iban',          label: 'IBAN (International)',  type: 'text',     ph: 'e.g. GB29 NWBK 6016 1331 9268 19' },
-      { id: 'g_bank_swift',         label: 'SWIFT / BIC Code',      type: 'text',     ph: 'e.g. CHASUS33' },
-      { id: 'g_bank_upi',           label: 'UPI ID (India)',        type: 'text',     ph: 'e.g. yourname@upi' },
-      { id: 'g_bank_refNote',       label: 'Reference Note for Customer', type: 'text', ph: 'Please include your order number as reference' },
-      { id: 'g_bank_instructions',  label: 'Additional Instructions', type: 'textarea', ph: 'Any extra transfer instructions...' }
-    ]
-  },
-  razorpay: {
-    id: 'razorpay', icon: '⚡', name: 'Razorpay', color: '#3395ff',
-    desc: 'Accept UPI, cards, net banking & wallets via Razorpay (India).',
-    fields: [
-      { id: 'g_rzp_keyId',        label: 'API Key ID *',                    type: 'text',     ph: 'rzp_live_XXXXXXXXXXXXXXXXXX', mono: true },
-      { id: 'g_rzp_keySecret',    label: 'API Key Secret *',                type: 'password', ph: 'Your Razorpay secret key',   mono: true },
-      { id: 'g_rzp_webhookSecret',label: 'Webhook Secret (optional)',       type: 'text',     ph: 'For payment verification',   mono: true },
-      { id: 'g_rzp_businessName', label: 'Business Name (shown at checkout)', type: 'text',  ph: 'Chrixlin AI Rise' },
-      { id: 'g_rzp_logo',         label: 'Logo URL (shown at checkout)',    type: 'url',      ph: 'https://yourdomain.com/logo.png' }
-    ]
-  },
   paypal: {
     id: 'paypal', icon: '🅿️', name: 'PayPal', color: '#009cde',
-    desc: 'Accept payments globally via PayPal email, PayPal.me link or API.',
+    desc: 'Accept payments globally via PayPal Smart Buttons — card, PayPal wallet, Google Pay, Apple Pay.',
     fields: [
-      { id: 'g_pp_email',        label: 'PayPal Email Address *',        type: 'email',    ph: 'payments@chrixlin.tech' },
-      { id: 'g_pp_link',         label: 'PayPal.me Link',               type: 'url',      ph: 'https://paypal.me/yourname' },
-      { id: 'g_pp_clientId',     label: 'Client ID (for SDK checkout)', type: 'text',     ph: 'Your PayPal Client ID',    mono: true },
-      { id: 'g_pp_clientSecret', label: 'Client Secret',                type: 'password', ph: 'Your PayPal Client Secret', mono: true },
-      { id: 'g_pp_currency',     label: 'Default Currency',             type: 'text',     ph: 'USD', style: 'max-width:100px' },
-      { id: 'g_pp_mode',         label: 'Mode — type "sandbox" for test, leave blank or "live" for production', type: 'text', ph: 'live' }
+      { id: 'g_pp_email',        label: 'PayPal Email Address *',        type: 'email',    ph: 'payments@yourdomain.com' },
+      { id: 'g_pp_link',         label: 'PayPal.me Link (optional)',     type: 'url',      ph: 'https://paypal.me/yourname' },
+      { id: 'g_pp_clientId',     label: 'Client ID (for Smart Buttons)', type: 'text',    ph: 'Your PayPal Live Client ID', mono: true },
+      { id: 'g_pp_clientSecret', label: 'Client Secret',                type: 'password', ph: 'Your PayPal Client Secret',  mono: true },
+      { id: 'g_pp_currency',     label: 'Currency',                     type: 'text',     ph: 'USD', style: 'max-width:100px' }
     ]
   },
-  wise: {
-    id: 'wise', icon: '🌍', name: 'Wise (TransferWise)', color: '#37d67a',
-    desc: 'Low-cost international transfers via Wise.',
+  upi: {
+    id: 'upi', icon: '📱', name: 'UPI / QR Code', color: '#f59e0b',
+    desc: 'Accept payments via UPI QR code — works with GPay, PhonePe, Paytm, BHIM and any UPI app.',
     fields: [
-      { id: 'g_wise_email',        label: 'Wise Account Email *',        type: 'email',    ph: 'payments@chrixlin.tech' },
-      { id: 'g_wise_link',         label: 'Wise Payment Link',           type: 'url',      ph: 'https://wise.com/pay/r/yourlink' },
-      { id: 'g_wise_apiToken',     label: 'API Token (optional)',        type: 'password', ph: 'Your Wise API token', mono: true },
-      { id: 'g_wise_profileId',    label: 'Profile ID (optional)',       type: 'text',     ph: 'e.g. 123456', mono: true },
-      { id: 'g_wise_instructions', label: 'Transfer Instructions',       type: 'textarea', ph: 'How customers should send via Wise...' }
+      { id: 'g_upi_id',   label: 'UPI ID *',            type: 'text', ph: 'yourname@upi  or  mobile@paytm', mono: true },
+      { id: 'g_upi_name', label: 'Display Name',        type: 'text', ph: 'Chrixlin AI Rise' }
     ]
   }
 };
