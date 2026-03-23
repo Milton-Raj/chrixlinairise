@@ -773,65 +773,118 @@ function populateGatewayForms() {
 }
 
 // ─── CURRENCY CONVERSION ──────────────────────────────────────────────────────
-var _usdToInrRate = null; // cached rate for this session
-async function getUsdToInrRate() {
-  if (_usdToInrRate) return _usdToInrRate;
+// Daily-cached exchange rates stored in localStorage keyed by date
+// UPI always needs INR. Customer's local currency shown for reference.
+
+var _fxRateCache = {}; // in-memory cache for current page session
+
+async function getExchangeRate(from, to) {
+  if (from === to) return 1;
+  const key = from + '_' + to;
+  if (_fxRateCache[key]) return _fxRateCache[key];
+
+  // Check localStorage daily cache
+  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  const lsKey = 'chrixlin_fx_' + key + '_' + today;
+  const cached = localStorage.getItem(lsKey);
+  if (cached) { _fxRateCache[key] = parseFloat(cached); return _fxRateCache[key]; }
+
+  // Fetch fresh rate
   try {
-    const res = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR');
+    const res = await fetch('https://api.frankfurter.app/latest?from=' + from + '&to=' + to);
     const data = await res.json();
-    _usdToInrRate = data.rates && data.rates.INR ? data.rates.INR : 84;
+    const rate = (data.rates && data.rates[to]) ? data.rates[to] : null;
+    if (rate) {
+      _fxRateCache[key] = rate;
+      localStorage.setItem(lsKey, rate);
+      // Clean stale cached rates (older than today)
+      Object.keys(localStorage).forEach(function(k) {
+        if (k.startsWith('chrixlin_fx_') && !k.endsWith('_' + today)) localStorage.removeItem(k);
+      });
+      return rate;
+    }
+  } catch(e) {}
+
+  // Hardcoded fallbacks if API fails
+  const fallbacks = { USD_INR: 84, USD_EUR: 0.92, USD_GBP: 0.79, USD_AUD: 1.53, USD_CAD: 1.36, USD_SGD: 1.34, USD_AED: 3.67 };
+  _fxRateCache[key] = fallbacks[key] || 1;
+  return _fxRateCache[key];
+}
+
+// Detect customer's local currency from their IP (cached per session)
+var _customerCurrency = null;
+async function detectCustomerCurrency() {
+  if (_customerCurrency) return _customerCurrency;
+  // Use sessionStorage for within-tab cache
+  const sc = sessionStorage.getItem('chrixlin_customer_currency');
+  if (sc) { _customerCurrency = JSON.parse(sc); return _customerCurrency; }
+  try {
+    const res = await fetch('https://ipapi.co/json/');
+    const d   = await res.json();
+    _customerCurrency = {
+      currency: d.currency || 'USD',
+      country:  d.country_name || '',
+      symbol:   d.currency_symbol || d.currency || '$'
+    };
   } catch(e) {
-    _usdToInrRate = 84; // fallback rate if API is unreachable
+    _customerCurrency = { currency: 'USD', country: '', symbol: '$' };
   }
-  return _usdToInrRate;
+  sessionStorage.setItem('chrixlin_customer_currency', JSON.stringify(_customerCurrency));
+  return _customerCurrency;
 }
 
 // ─── UPI / QR CODE ────────────────────────────────────────────────────────────
 var _upiQrInstance = null;
 async function renderUpiQr() {
-  const upiGw = getGatewayCfg('upi');
-  const upiId = upiGw.g_upi_id || '';
-  const name  = upiGw.g_upi_name || 'Chrixlin AI Rise';
-  const usdAmount = (_pricing && _pricing.total) ? _pricing.total : 0;
-  const note  = (product && product.title) ? product.title.slice(0,50) : 'Chrixlin Payment';
+  const upiGw   = getGatewayCfg('upi');
+  const upiId   = upiGw.g_upi_id || '';
+  const name    = upiGw.g_upi_name || 'Chrixlin AI Rise';
+  const usdAmt  = (_pricing && _pricing.total) ? _pricing.total : 0;
+  const note    = (product && product.title) ? product.title.slice(0, 50) : 'Chrixlin Payment';
 
   const idEl  = document.getElementById('upiIdDisplay');
   const amtEl = document.getElementById('upiAmountDisplay');
   if (idEl) idEl.textContent = upiId || 'Not configured';
-  if (amtEl) amtEl.innerHTML = '<span style="color:var(--c-muted);font-size:12px">Fetching rate…</span>';
-
+  if (amtEl) amtEl.innerHTML = '<span style="color:var(--c-muted);font-size:12px">Fetching live rate…</span>';
   if (!upiId) { if (amtEl) amtEl.textContent = '—'; return; }
 
-  // Fetch live USD → INR rate
-  const rate = await getUsdToInrRate();
-  const inrAmount = Math.round(usdAmount * rate); // exact INR equivalent of USD price
+  // Always convert to INR for UPI (UPI only supports INR)
+  const inrRate  = await getExchangeRate('USD', 'INR');
+  const inrAmt   = Math.round(usdAmt * inrRate);
 
-  // Update amount display: show both INR and USD
-  if (amtEl) amtEl.innerHTML =
-    '<strong style="font-size:16px">₹' + inrAmount.toLocaleString('en-IN') + '</strong>' +
-    '<span style="font-size:11px;color:var(--c-muted);display:block;margin-top:2px">≈ $' + usdAmount + ' USD · Rate: 1 USD = ₹' + rate.toFixed(2) + '</span>';
+  // Also get customer's local currency for display reference
+  const cust     = await detectCustomerCurrency();
+  const custRate = await getExchangeRate('USD', cust.currency);
+  const custAmt  = (cust.currency !== 'INR' && cust.currency !== 'USD')
+    ? (usdAmt * custRate).toFixed(2) : null;
 
+  // Build amount display
+  let amtHtml = '<strong style="font-size:17px;color:var(--c-green)">₹' + inrAmt.toLocaleString('en-IN') + '</strong>';
+  amtHtml += '<span style="font-size:11px;color:var(--c-muted);display:block;margin-top:3px">= $' + usdAmt + ' USD · 1 USD = ₹' + inrRate.toFixed(2) + ' (today\'s rate)</span>';
+  if (custAmt) {
+    amtHtml += '<span style="font-size:11px;color:var(--c-muted);display:block;margin-top:1px">≈ ' + cust.symbol + custAmt + ' ' + cust.currency + ' for ' + cust.country + ' customers</span>';
+  }
+  if (amtEl) amtEl.innerHTML = amtHtml;
+
+  // Build UPI URI with INR amount (UPI standard)
   const upiUri = 'upi://pay?pa=' + encodeURIComponent(upiId)
     + '&pn=' + encodeURIComponent(name)
-    + '&am=' + inrAmount
+    + '&am=' + inrAmt
     + '&cu=INR'
     + '&tn=' + encodeURIComponent(note);
 
   const dlEl = document.getElementById('upiDeepLink');
   if (dlEl) dlEl.href = upiUri;
 
-  // Generate QR using qrcodejs (browser-native)
+  // Generate QR
   const container = document.getElementById('upiQrContainer');
   if (!container) return;
   container.innerHTML = '';
   _upiQrInstance = null;
   if (typeof QRCode !== 'undefined') {
     _upiQrInstance = new QRCode(container, {
-      text: upiUri,
-      width: 180,
-      height: 180,
-      colorDark: '#000000',
-      colorLight: '#ffffff',
+      text: upiUri, width: 180, height: 180,
+      colorDark: '#000000', colorLight: '#ffffff',
       correctLevel: QRCode.CorrectLevel.M
     });
   } else {
