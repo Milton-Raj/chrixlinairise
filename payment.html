@@ -883,6 +883,12 @@ function switchPayment(method) {
   if (target) { const el=document.getElementById(target.form); if(el) el.style.display=''; }
   if (method === 'paypal') renderPayPalButtons();
   if (method === 'upi') renderUpiQr();
+  // Hide Terms + Complete Purchase when PayPal is active (PayPal has its own button)
+  var isPayPal = (method === 'paypal');
+  var termsBlock = document.getElementById('termsBlock');
+  var submitBlock = document.getElementById('submitBlock');
+  if (termsBlock) termsBlock.style.display = isPayPal ? 'none' : '';
+  if (submitBlock) submitBlock.style.display = isPayPal ? 'none' : '';
 }
 
 function populateGatewayForms() {

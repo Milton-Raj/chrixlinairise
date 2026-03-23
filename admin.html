@@ -838,10 +838,6 @@
         <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center">
           <button class="btn btn-primary btn-sm" onclick="loadPlanOrdersPanel()">🔄 Refresh</button>
           <input type="text" id="planOrderSearch" placeholder="Search by name, email, plan..." oninput="filterPlanOrders()" style="flex:1;min-width:200px;padding:9px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px" />
-          <select id="planOrderStatus" onchange="filterPlanOrders()" style="padding:9px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px">
-            <option value="pending">Pending</option>
-            <option value="completed">Completed</option>
-          </select>
         </div>
         <div id="planOrdersContainer">
           <div style="text-align:center;padding:60px 20px;color:var(--muted)">
@@ -2347,11 +2343,8 @@ async function loadPlanOrdersPanel() {
 
 function filterPlanOrders() {
   var q = (document.getElementById('planOrderSearch').value || '').toLowerCase();
-  var s = document.getElementById('planOrderStatus').value;
   var filtered = _allPlanOrders.filter(function(o) {
-    var matchQ = !q || (o.first_name+' '+o.last_name+' '+o.email+' '+(o.extra_data&&o.extra_data.plan_name||'')).toLowerCase().includes(q);
-    var matchS = !s || o.status === s;
-    return matchQ && matchS;
+    return !q || (o.first_name+' '+o.last_name+' '+o.email+' '+(o.extra_data&&o.extra_data.plan_name||'')).toLowerCase().includes(q);
   });
   renderPlanOrders(filtered);
 }
