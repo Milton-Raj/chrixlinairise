@@ -362,7 +362,9 @@
             <button onclick="copyUpiId()" style="padding:4px 12px;border-radius:20px;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);color:#a78bfa;font-size:12px;font-weight:600;cursor:pointer">Copy</button>
           </div>
           <!-- Amount -->
-          <div style="font-size:13px;color:var(--c-muted);margin-bottom:20px">Amount: <strong id="upiAmountDisplay" style="color:var(--c-green)">—</strong></div>
+          <div style="font-size:13px;color:var(--c-muted);margin-bottom:20px;text-align:center">
+            Pay Amount: <span id="upiAmountDisplay" style="color:var(--c-green)">—</span>
+          </div>
           <!-- UPI deep link (mobile) -->
           <a id="upiDeepLink" href="#" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;background:linear-gradient(135deg,#7c3aed,#06b6d4);color:#fff;border-radius:50px;font-weight:700;font-size:14px;text-decoration:none;margin-bottom:16px">
             📱 Open UPI App
@@ -770,26 +772,48 @@ function populateGatewayForms() {
   if (ppLink) { const wrap=document.getElementById('ppLinkWrap');if(wrap){wrap.style.display='';const a=document.getElementById('ppLink');if(a)a.href=ppLink;} }
 }
 
-// ─── CARD PREVIEW ─────────────────────────────────────────────────────────────
+// ─── CURRENCY CONVERSION ──────────────────────────────────────────────────────
+var _usdToInrRate = null; // cached rate for this session
+async function getUsdToInrRate() {
+  if (_usdToInrRate) return _usdToInrRate;
+  try {
+    const res = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR');
+    const data = await res.json();
+    _usdToInrRate = data.rates && data.rates.INR ? data.rates.INR : 84;
+  } catch(e) {
+    _usdToInrRate = 84; // fallback rate if API is unreachable
+  }
+  return _usdToInrRate;
+}
+
 // ─── UPI / QR CODE ────────────────────────────────────────────────────────────
 var _upiQrInstance = null;
-function renderUpiQr() {
+async function renderUpiQr() {
   const upiGw = getGatewayCfg('upi');
   const upiId = upiGw.g_upi_id || '';
   const name  = upiGw.g_upi_name || 'Chrixlin AI Rise';
-  const amount = (_pricing && _pricing.total) ? String(_pricing.total) : '';
+  const usdAmount = (_pricing && _pricing.total) ? _pricing.total : 0;
   const note  = (product && product.title) ? product.title.slice(0,50) : 'Chrixlin Payment';
 
   const idEl  = document.getElementById('upiIdDisplay');
   const amtEl = document.getElementById('upiAmountDisplay');
-  if (idEl)  idEl.textContent  = upiId || 'Not configured';
-  if (amtEl) amtEl.textContent = amount ? '₹' + amount : '—';
+  if (idEl) idEl.textContent = upiId || 'Not configured';
+  if (amtEl) amtEl.innerHTML = '<span style="color:var(--c-muted);font-size:12px">Fetching rate…</span>';
 
-  if (!upiId) return;
+  if (!upiId) { if (amtEl) amtEl.textContent = '—'; return; }
+
+  // Fetch live USD → INR rate
+  const rate = await getUsdToInrRate();
+  const inrAmount = Math.round(usdAmount * rate); // exact INR equivalent of USD price
+
+  // Update amount display: show both INR and USD
+  if (amtEl) amtEl.innerHTML =
+    '<strong style="font-size:16px">₹' + inrAmount.toLocaleString('en-IN') + '</strong>' +
+    '<span style="font-size:11px;color:var(--c-muted);display:block;margin-top:2px">≈ $' + usdAmount + ' USD · Rate: 1 USD = ₹' + rate.toFixed(2) + '</span>';
 
   const upiUri = 'upi://pay?pa=' + encodeURIComponent(upiId)
     + '&pn=' + encodeURIComponent(name)
-    + (amount ? '&am=' + encodeURIComponent(amount) : '')
+    + '&am=' + inrAmount
     + '&cu=INR'
     + '&tn=' + encodeURIComponent(note);
 
@@ -799,7 +823,7 @@ function renderUpiQr() {
   // Generate QR using qrcodejs (browser-native)
   const container = document.getElementById('upiQrContainer');
   if (!container) return;
-  container.innerHTML = ''; // clear previous QR
+  container.innerHTML = '';
   _upiQrInstance = null;
   if (typeof QRCode !== 'undefined') {
     _upiQrInstance = new QRCode(container, {
@@ -811,7 +835,6 @@ function renderUpiQr() {
       correctLevel: QRCode.CorrectLevel.M
     });
   } else {
-    // Fallback: inline SVG-based QR via free API
     var img = document.createElement('img');
     img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(upiUri);
     img.width = 180; img.height = 180; img.alt = 'UPI QR Code';
