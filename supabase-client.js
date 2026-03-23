@@ -496,6 +496,20 @@
     } catch (err) { console.warn('[ChrixlinDB] adminGetAllOrders() failed.', err); return []; }
   }
 
+  async function loadPricingOrders() {
+    const client = _getClient();
+    if (!client) return [];
+    try {
+      const { data, error } = await client
+        .from('orders')
+        .select('*')
+        .filter('extra_data->>source', 'eq', 'pricing_plan')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return data || [];
+    } catch (err) { console.warn('[ChrixlinDB] loadPricingOrders() failed.', err); return []; }
+  }
+
   // ─── SECTION CONTENT (landing page tables) ────────────────────────
   async function loadSectionItems(tableName) {
     const client = _getClient();
@@ -601,7 +615,7 @@
     customerSignOut, getCustomerSession, getCustomerUser,
     // Customer Orders & Profile
     createCustomerOrder, getMyOrders, getMyProfile, updateMyProfile,
-    upsertMyProfile, adminGetAllProfiles, adminGetAllOrders,
+    upsertMyProfile, adminGetAllProfiles, adminGetAllOrders, loadPricingOrders,
     // Categories
     loadCategories, upsertCategory, deleteCategory,
     // Storage

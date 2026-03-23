@@ -1083,7 +1083,10 @@ function renderPricingPlans(overridePlans) {
           </div>`).join('')}
       </div>
       <div class="plan-cta">
-        <a href="${p.price===0?'mailto:info@chrixlin.tech':'mailto:info@chrixlin.tech?subject='+encodeURIComponent(p.name+' - Purchase')}" class="cta-${p.ctaStyle||'primary'}">${p.cta}</a>
+        ${p.price===0
+          ? `<a href="#" class="cta-${p.ctaStyle||'outline'} plan-book-btn" data-booking="1">${p.cta}</a>`
+          : `<a href="payment.html?planId=${encodeURIComponent(p.id)}&planName=${encodeURIComponent(p.name)}&price=${encodeURIComponent(p.price)}&priceLabel=${encodeURIComponent(p.priceLabel)}&cycle=${encodeURIComponent(p.billingCycle||'monthly')}" class="cta-${p.ctaStyle||'primary'}">${p.cta}</a>`
+        }
       </div>
     </div>
   `).join('');
@@ -1380,7 +1383,7 @@ function applyBookingLink(link) {
   if (!link) return;
   document.querySelectorAll('a').forEach(function(el) {
     var txt = el.textContent.toLowerCase();
-    if (txt.includes('book') || txt.includes('free call') || txt.includes('strategy call') || txt.includes('free strategy')) {
+    if (el.dataset.booking === '1' || txt.includes('book') || txt.includes('free call') || txt.includes('strategy call') || txt.includes('free strategy')) {
       el.href = link;
       el.target = '_blank';
       el.rel = 'noopener';

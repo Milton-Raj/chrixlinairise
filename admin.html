@@ -396,6 +396,9 @@
       <button class="sidebar-btn" onclick="showPanel('booking')" data-panel="booking">
         <span class="sb-icon">📅</span> Book Free Calls
       </button>
+      <button class="sidebar-btn" onclick="showPanel('planorders')" data-panel="planorders">
+        <span class="sb-icon">🧾</span> Plan Orders
+      </button>
       <button class="sidebar-btn" onclick="showPanel('marketplace')" data-panel="marketplace">
         <span class="sb-icon">🛒</span> Marketplace
       </button>
@@ -825,6 +828,27 @@
             💾 Save Booking Link
           </button>
           <span id="bookingSaveStatus" style="margin-left:14px;font-size:13px;color:var(--green)"></span>
+        </div>
+      </div>
+
+      <!-- ── PLAN ORDERS ─────────────────────────────────────── -->
+      <div id="panel-planorders" class="panel">
+        <div class="panel-title">🧾 Plan Orders</div>
+        <div class="panel-desc">All customers who purchased a pricing plan — with their details, requirements, and payment info.</div>
+        <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center">
+          <button class="btn btn-primary btn-sm" onclick="loadPlanOrdersPanel()">🔄 Refresh</button>
+          <input type="text" id="planOrderSearch" placeholder="Search by name, email, plan..." oninput="filterPlanOrders()" style="flex:1;min-width:200px;padding:9px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px" />
+          <select id="planOrderStatus" onchange="filterPlanOrders()" style="padding:9px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+        <div id="planOrdersContainer">
+          <div style="text-align:center;padding:60px 20px;color:var(--muted)">
+            <div style="font-size:40px;margin-bottom:12px">🧾</div>
+            <div style="font-size:15px;font-weight:600">Loading plan orders...</div>
+          </div>
         </div>
       </div>
 
@@ -1750,7 +1774,7 @@ function showPanel(name) {
   document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.toggle('active', b.dataset.panel === name));
   const titles = {
     dashboard:'CEO Dashboard', users:'Users', pricing:'Plans & Pricing',
-    booking:'Book Free Calls',
+    booking:'Book Free Calls', planorders:'Plan Orders',
     marketplace:'Marketplace', orders:'Orders & Transactions',
     submissions:'Call Submissions',
     analytics:'Analytics & Reports', settings:'Settings',
@@ -1763,6 +1787,7 @@ function showPanel(name) {
   if (name === 'marketplace') { populateMarketplace(); loadCategoriesAdmin(); }
   if (name === 'pricing') { renderPricingPlanCards(_activePricingCycle); }
   if (name === 'booking') { populateBooking(); }
+  if (name === 'planorders') { loadPlanOrdersPanel(); }
   if (name === 'dashboard') refreshDashboard();
   if (name === 'users') loadUsersPanel();
   if (name === 'orders') loadOrdersPanel();
@@ -2300,6 +2325,94 @@ function saveBookingLink() {
   statusEl.textContent = '✓ Saved!';
   setTimeout(function() { statusEl.textContent = ''; }, 3000);
   showToast('📅 Booking link saved!');
+}
+
+// ─── PLAN ORDERS ──────────────────────────────────────────────────────────────
+var _allPlanOrders = [];
+
+async function loadPlanOrdersPanel() {
+  var cont = document.getElementById('planOrdersContainer');
+  if (!cont) return;
+  cont.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)"><div style="width:32px;height:32px;border:3px solid rgba(124,58,237,0.2);border-top-color:#7c3aed;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px"></div>Loading orders...</div>';
+  if (typeof ChrixlinDB === 'undefined') {
+    cont.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Supabase not connected. Orders saved when customers purchase plans on chrixlin.tech.</div>';
+    return;
+  }
+  try {
+    _allPlanOrders = await ChrixlinDB.loadPricingOrders();
+    renderPlanOrders(_allPlanOrders);
+  } catch(e) {
+    cont.innerHTML = '<div style="text-align:center;padding:40px;color:#f87171">Failed to load orders. Check Supabase connection.</div>';
+  }
+}
+
+function filterPlanOrders() {
+  var q = (document.getElementById('planOrderSearch').value || '').toLowerCase();
+  var s = document.getElementById('planOrderStatus').value;
+  var filtered = _allPlanOrders.filter(function(o) {
+    var matchQ = !q || (o.first_name+' '+o.last_name+' '+o.email+' '+(o.extra_data&&o.extra_data.plan_name||'')).toLowerCase().includes(q);
+    var matchS = !s || o.status === s;
+    return matchQ && matchS;
+  });
+  renderPlanOrders(filtered);
+}
+
+function renderPlanOrders(orders) {
+  var cont = document.getElementById('planOrdersContainer');
+  if (!cont) return;
+  if (!orders.length) {
+    cont.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--muted)"><div style="font-size:48px;margin-bottom:12px">🧾</div><div style="font-size:15px;font-weight:600">No plan orders yet</div><div style="font-size:13px;margin-top:8px">Orders will appear here once customers purchase a pricing plan.</div></div>';
+    return;
+  }
+  var html = '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">'
+    + '<thead><tr style="background:var(--bg3);border-bottom:2px solid var(--border)">'
+    + ['Date','Customer','Email','Phone','Plan','Amount','Method','Status','Requirements','PDF'].map(function(h){
+        return '<th style="padding:12px 14px;text-align:left;font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">'+h+'</th>';
+      }).join('') + '</tr></thead><tbody>';
+
+  orders.forEach(function(o, i) {
+    var ed = o.extra_data || {};
+    var date = o.created_at ? new Date(o.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+    var name = ((o.first_name||'')+' '+(o.last_name||'')).trim() || '—';
+    var plan = ed.plan_name || o.product_title || '—';
+    var cycle = ed.plan_cycle ? ' ('+ed.plan_cycle+')' : '';
+    var req = ed.requirements || '';
+    var pdfUrl = ed.pdf_url || '';
+    var statusColor = o.status === 'completed' ? '#22c55e' : o.status === 'pending' ? '#f59e0b' : '#9ca3af';
+    var bg = i%2===0 ? '' : 'background:var(--bg3)';
+    html += '<tr style="border-bottom:1px solid var(--border);'+bg+'" onmouseover="this.style.background=\'var(--border)\'" onmouseout="this.style.background=\''+( i%2===0?'':'var(--bg3)')+'\'">'+
+      '<td style="padding:12px 14px;white-space:nowrap;color:var(--muted)">'+date+'</td>'+
+      '<td style="padding:12px 14px;font-weight:600;color:var(--text)">'+escHtml(name)+'</td>'+
+      '<td style="padding:12px 14px"><a href="mailto:'+escHtml(o.email||'')+'" style="color:#a78bfa">'+escHtml(o.email||'—')+'</a></td>'+
+      '<td style="padding:12px 14px;color:var(--sub)">'+escHtml(o.phone||'—')+'</td>'+
+      '<td style="padding:12px 14px"><span style="font-weight:700;color:#a78bfa">'+escHtml(plan)+'</span><span style="color:var(--muted)">'+escHtml(cycle)+'</span></td>'+
+      '<td style="padding:12px 14px;font-weight:800;color:#22c55e">'+escHtml(o.product_price||'—')+'</td>'+
+      '<td style="padding:12px 14px;color:var(--sub)">'+escHtml(o.payment_method||'—')+'</td>'+
+      '<td style="padding:12px 14px"><span style="background:'+statusColor+'22;color:'+statusColor+';padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">'+escHtml(o.status||'pending')+'</span>'+
+        '<br><button onclick="markPlanOrderComplete(\''+o.id+'\')" style="margin-top:4px;font-size:11px;padding:2px 8px;border-radius:4px;background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.25);cursor:pointer">Mark Done</button></td>'+
+      '<td style="padding:12px 14px;max-width:200px">'+
+        (req ? '<div title="'+escHtml(req)+'" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px;color:var(--sub);cursor:help">'+escHtml(req.slice(0,60))+(req.length>60?'…':'')+'</div>' : '<span style="color:var(--muted)">—</span>')+
+      '</td>'+
+      '<td style="padding:12px 14px">'+
+        (pdfUrl ? '<a href="'+escHtml(pdfUrl)+'" target="_blank" style="color:#a78bfa;font-size:12px">📎 View</a>' : '<span style="color:var(--muted)">—</span>')+
+      '</td>'+
+    '</tr>';
+  });
+  html += '</tbody></table></div>';
+  html += '<div style="margin-top:14px;font-size:12px;color:var(--muted)">Showing '+orders.length+' order'+(orders.length!==1?'s':'')+'</div>';
+  cont.innerHTML = html;
+}
+
+async function markPlanOrderComplete(id) {
+  if (!id || typeof ChrixlinDB === 'undefined') return;
+  try {
+    const client = ChrixlinDB._getClient();
+    if (!client) { showToast('Supabase not connected','error'); return; }
+    const { error } = await client.from('orders').update({ status: 'completed' }).eq('id', id);
+    if (error) throw error;
+    showToast('✅ Order marked as completed');
+    loadPlanOrdersPanel();
+  } catch(e) { showToast('Failed to update order','error'); }
 }
 
 // ─── FAQ EDITOR ───────────────────────────────────────────────────────────────

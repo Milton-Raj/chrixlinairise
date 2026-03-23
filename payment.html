@@ -338,6 +338,33 @@
       </div>
     </div>
 
+    <!-- Requirements & attachment (shown for plan mode, optional for product mode) -->
+    <div class="form-card" id="requirementsCard">
+      <div class="form-card-title"><span class="step-num-sm">3</span> Your Requirements</div>
+      <div class="form-card-subtitle">Tell us what you're looking for so we can prepare before your onboarding.</div>
+      <div class="field-group">
+        <label class="field-label">What are you looking for? <span id="reqRequired" style="color:var(--c-red)">*</span></label>
+        <textarea class="field-input" id="requirements" rows="5" placeholder="Describe your business goals, current challenges, what you hope to achieve, and any specific requirements..." style="resize:vertical;min-height:110px;font-family:var(--font-b)"></textarea>
+        <div class="field-error" id="reqError">Please describe what you are looking for</div>
+      </div>
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label">Attach a Document <span style="color:var(--c-muted);font-weight:400;text-transform:none">(optional — PDF only, max 5MB)</span></label>
+        <label for="pdfAttachment" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--c-bg3);border:1.5px dashed var(--c-border);border-radius:10px;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--c-primary)'" onmouseout="this.style.borderColor='var(--c-border)'">
+          <span style="font-size:24px">📎</span>
+          <div>
+            <div style="font-size:14px;color:var(--c-text);font-weight:600" id="pdfLabel">Click to upload PDF</div>
+            <div style="font-size:11px;color:var(--c-muted)">Business brief, proposal, or any relevant document</div>
+          </div>
+        </label>
+        <input type="file" id="pdfAttachment" accept=".pdf,application/pdf" style="display:none" onchange="handlePdfSelect(this)" />
+        <div id="pdfPreview" style="display:none;margin-top:8px;padding:10px 14px;background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:8px;font-size:13px;display:flex;align-items:center;gap:10px">
+          <span>📄</span>
+          <span id="pdfFileName" style="flex:1;color:var(--c-text)"></span>
+          <button type="button" onclick="removePdf()" style="background:none;border:none;color:var(--c-muted);cursor:pointer;font-size:16px">✕</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Continue button -->
     <button class="continue-btn" onclick="goToStep2()">
       Continue to Payment &nbsp;→
@@ -644,11 +671,19 @@ function updateOrderSummary(priceStr) {
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
-const params  = new URLSearchParams(window.location.search);
-const pid     = parseInt(params.get('product')||params.get('id'))||null;
-const pslug   = params.get('slug')||'';
-const product = pid ? getProduct(pid) : getProduct(1);
-const bankCfg = loadBankDetails();
+const params    = new URLSearchParams(window.location.search);
+const pid       = parseInt(params.get('product')||params.get('id'))||null;
+const pslug     = params.get('slug')||'';
+const product   = pid ? getProduct(pid) : getProduct(1);
+const bankCfg   = loadBankDetails();
+
+// ─── PLAN MODE (from pricing section) ──────────────────────────────────────
+const _planId        = params.get('planId')||'';
+const _planName      = params.get('planName')||'';
+const _planPrice     = parseFloat(params.get('price'))||0;
+const _planPriceLabel= params.get('priceLabel')||('$'+_planPrice);
+const _planCycle     = params.get('cycle')||'monthly';
+const _isPlanMode    = !!(_planId && _planName && _planPrice > 0);
 
 // Load product from Supabase
 (async function loadProductFromDB() {
@@ -680,13 +715,25 @@ const bankCfg = loadBankDetails();
 
 // Initial order summary
 (function(){
-  const tc = ({'voice-ai':'cat-thumb-voice-ai','sales':'cat-thumb-sales','content':'cat-thumb-content','lead':'cat-thumb-lead','automation':'cat-thumb-automation'})[product.category]||'cat-thumb-voice-ai';
-  const el = document.getElementById('orderThumb');
-  el.textContent = product.emoji||'🤖';
-  el.className = 'summary-product-img '+tc;
-  document.getElementById('orderName').textContent = product.title;
-  document.getElementById('orderCat').textContent  = product.categoryLabel;
-  updateOrderSummary(product.price);
+  if (_isPlanMode) {
+    // Plan mode: show pricing plan details
+    const el = document.getElementById('orderThumb');
+    el.textContent = '💎'; el.className = 'summary-product-img';
+    el.style.background = 'linear-gradient(135deg,rgba(124,58,237,0.4),rgba(6,182,212,0.2))';
+    document.getElementById('orderName').textContent = _planName;
+    document.getElementById('orderCat').textContent  = _planCycle.charAt(0).toUpperCase()+_planCycle.slice(1)+' Plan';
+    updateOrderSummary(_planPrice);
+    // Override product price globally for calcPricing
+    product.price = _planPrice; product.title = _planName;
+  } else {
+    const tc = ({'voice-ai':'cat-thumb-voice-ai','sales':'cat-thumb-sales','content':'cat-thumb-content','lead':'cat-thumb-lead','automation':'cat-thumb-automation'})[product.category]||'cat-thumb-voice-ai';
+    const el = document.getElementById('orderThumb');
+    el.textContent = product.emoji||'🤖';
+    el.className = 'summary-product-img '+tc;
+    document.getElementById('orderName').textContent = product.title;
+    document.getElementById('orderCat').textContent  = product.categoryLabel;
+    updateOrderSummary(product.price);
+  }
 })();
 
 // Contact email
@@ -714,8 +761,53 @@ function goToStep1() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// ─── PDF ATTACHMENT HELPERS ───────────────────────────────────────────────────
+var _pdfFile = null;
+function handlePdfSelect(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+    alert('Please select a PDF file only.'); input.value = ''; return;
+  }
+  if (file.size > 5 * 1024 * 1024) { alert('PDF must be under 5MB.'); input.value = ''; return; }
+  _pdfFile = file;
+  document.getElementById('pdfLabel').textContent = 'PDF selected ✓';
+  document.getElementById('pdfFileName').textContent = file.name + ' (' + (file.size/1024).toFixed(0) + ' KB)';
+  var prev = document.getElementById('pdfPreview'); prev.style.display = 'flex';
+}
+function removePdf() {
+  _pdfFile = null;
+  document.getElementById('pdfAttachment').value = '';
+  document.getElementById('pdfLabel').textContent = 'Click to upload PDF';
+  document.getElementById('pdfPreview').style.display = 'none';
+}
+async function uploadPdfToSupabase(file) {
+  if (!file || typeof ChrixlinDB === 'undefined') return null;
+  try {
+    const client = ChrixlinDB._client && ChrixlinDB._client();
+    if (!client) return null;
+    const fname = 'customer-docs/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+    const { data, error } = await client.storage.from('product-images').upload(fname, file, { upsert: false, contentType: 'application/pdf' });
+    if (error) return null;
+    const { data: urlData } = client.storage.from('product-images').getPublicUrl(fname);
+    return urlData.publicUrl || null;
+  } catch(e) { return null; }
+}
+
 function goToStep2() {
   // Validate step 1 fields
+  const reqEl = document.getElementById('requirements');
+  const reqVal = (reqEl ? reqEl.value : '').trim();
+  if (_isPlanMode && !reqVal) {
+    const errEl = document.getElementById('reqError');
+    if (reqEl) { reqEl.style.borderColor = 'var(--c-red)'; }
+    if (errEl) errEl.style.display = 'block';
+    reqEl && reqEl.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+  if (reqEl) { reqEl.style.borderColor = ''; }
+  const errElReq = document.getElementById('reqError'); if (errElReq) errElReq.style.display = 'none';
+
   const checks = [
     required('firstName'), required('lastName'), validEmail('email'),
     required('phone'), required('country'), required('address'), required('city')
@@ -1075,36 +1167,78 @@ function _ppShowManualFallback(ppGw, sdkWrap, fbWrap) {
   if (ppGw.g_pp_link && lk && lw) { lk.href = ppGw.g_pp_link; lw.style.display = ''; }
 }
 
+// ─── SHARED ORDER SUBMIT + INVOICE ────────────────────────────────────────────
+async function _submitOrderAndInvoice(paymentMethod, extraPaymentData) {
+  var orderRef     = 'CAIR-' + paymentMethod.toUpperCase().slice(0,3) + '-' + Date.now().toString(36).toUpperCase().slice(-6);
+  var finalPricing = calcPricing(product.price);
+  var finalTotal   = finalPricing.total > 0 ? finalPricing.total : (parseFloat(String(product.price||'0').replace(/[^0-9.]/g,''))||0);
+  var finalPriceStr= fmt(finalTotal);
+  var firstName    = (document.getElementById('firstName')||{}).value||'';
+  var lastName     = (document.getElementById('lastName') ||{}).value||'';
+  var email        = (document.getElementById('email')    ||{}).value||'';
+  var phone        = (document.getElementById('phone')    ||{}).value||'';
+  var country      = (document.getElementById('country')  ||{}).value||'';
+  var address      = (document.getElementById('address')  ||{}).value||'';
+  var city         = (document.getElementById('city')     ||{}).value||'';
+  var requirements = (document.getElementById('requirements')||{}).value||'';
+  var notes        = (document.getElementById('notes')    ||{}).value||'';
+
+  // Upload PDF if attached
+  var pdfUrl = null;
+  if (_pdfFile) { try { pdfUrl = await uploadPdfToSupabase(_pdfFile); } catch(e) {} }
+
+  // Build extra_data for plan mode
+  var extraData = Object.assign({}, extraPaymentData || {});
+  if (_isPlanMode) {
+    extraData.source         = 'pricing_plan';
+    extraData.plan_id        = _planId;
+    extraData.plan_name      = _planName;
+    extraData.plan_cycle     = _planCycle;
+    extraData.plan_price_label = _planPriceLabel;
+    extraData.requirements   = requirements;
+    if (pdfUrl) extraData.pdf_url = pdfUrl;
+  }
+
+  // Submit to Supabase
+  if (typeof ChrixlinDB !== 'undefined') {
+    ChrixlinDB.submitOrder({
+      orderRef, productId: _isPlanMode ? null : pid,
+      productTitle: product.title, productPrice: finalPriceStr,
+      paymentMethod, firstName, lastName, email, phone,
+      country, address, city, notes, extraData
+    }).catch(function(){});
+  }
+
+  // Send invoice email via PHP backend
+  try {
+    await fetch('/api/send-invoice.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        orderRef, firstName, lastName, email, phone,
+        planName: _isPlanMode ? _planName : product.title,
+        planCycle: _isPlanMode ? _planCycle : '',
+        amount: finalPriceStr, currency: 'USD',
+        paymentMethod, requirements,
+        pdfUrl: pdfUrl || '',
+        adminEmail: contactEmail || 'info@chrixlin.tech'
+      })
+    });
+  } catch(e) {}
+
+  return orderRef;
+}
+
 function handlePayPalSuccess(details) {
   var termsEl = document.getElementById('terms');
   if (termsEl) termsEl.checked = true;
   var btn = document.getElementById('submitBtn');
   if (btn) btn.disabled = true;
   goToStep3();
-  var orderRef      = 'CAIR-PP-' + (pid || '0') + '-' + Date.now().toString(36).toUpperCase().slice(-6);
-  var finalPricing  = calcPricing(product.price);
-  var finalTotal    = finalPricing.total > 0 ? finalPricing.total : (parseFloat(String(product.price || '0').replace(/[^0-9.]/g, '')) || 0);
-  var finalPriceStr = fmt(finalTotal);
-  if (typeof ChrixlinDB !== 'undefined') {
-    ChrixlinDB.submitOrder({
-      orderRef,
-      productId: pid, productTitle: product.title, productPrice: finalPriceStr,
-      paymentMethod: 'paypal',
-      paypalOrderId: details.id || '',
-      paypalPayerEmail: ((details.payer || {}).email_address) || '',
-      cgst: finalPricing.cgstPct, sgst: finalPricing.sgstPct,
-      cgstAmount: finalPricing.cgstAmt, sgstAmount: finalPricing.sgstAmt, basePrice: finalPricing.base,
-      firstName: (document.getElementById('firstName') || {}).value || '',
-      lastName:  (document.getElementById('lastName')  || {}).value || '',
-      email:     (document.getElementById('email')     || {}).value || '',
-      phone:     (document.getElementById('phone')     || {}).value || '',
-      country:   (document.getElementById('country')   || {}).value || '',
-      address:   (document.getElementById('address')   || {}).value || '',
-      city:      (document.getElementById('city')      || {}).value || '',
-      notes:     (document.getElementById('notes')     || {}).value || ''
-    }).catch(function() {});
-  }
-  // Show success immediately (PayPal already confirmed payment)
+  _submitOrderAndInvoice('paypal', {
+    paypal_order_id:    details.id || '',
+    paypal_payer_email: ((details.payer||{}).email_address)||''
+  }).catch(function(){});
   setTimeout(function() { showStep3Success(); }, 1200);
 }
 
@@ -1199,46 +1333,9 @@ function handleSubmit(skipValidate) {
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.innerHTML = '<span>⏳</span> Processing...';
-  // Move to step 3 processing immediately
   goToStep3();
-  const orderRef = 'CAIR-'+(pid||'0')+'-'+Date.now().toString(36).toUpperCase().slice(-6);
-  const finalPricing = calcPricing(product.price);
-  const finalTotal   = finalPricing.total > 0 ? finalPricing.total : (parseFloat(String(product.price||'0').replace(/[^0-9.]/g,''))||0);
-  const finalPriceStr = fmt(finalPricing.total > 0 ? finalPricing.total : (parseFloat(String(product.price||'0').replace(/[^0-9.]/g,''))||0));
-  var _orderOk = true;
-  if (typeof ChrixlinDB !== 'undefined') {
-    ChrixlinDB.submitOrder({
-      orderRef, productId:pid, productTitle:product.title, productPrice:finalPriceStr,
-      paymentMethod:activeMethod, cgst:finalPricing.cgstPct, sgst:finalPricing.sgstPct,
-      cgstAmount:finalPricing.cgstAmt, sgstAmount:finalPricing.sgstAmt, basePrice:finalPricing.base,
-      firstName:  (document.getElementById('firstName')||{}).value||'',
-      lastName:   (document.getElementById('lastName')||{}).value||'',
-      email:      (document.getElementById('email')||{}).value||'',
-      phone:      (document.getElementById('phone')||{}).value||'',
-      country:    (document.getElementById('country')||{}).value||'',
-      address:    (document.getElementById('address')||{}).value||'',
-      city:       (document.getElementById('city')||{}).value||'',
-      notes:      (document.getElementById('notes')||{}).value||''
-    }).catch(()=>{});
-    ChrixlinDB.getCustomerSession().then(function(session){
-      if(session) return ChrixlinDB.createCustomerOrder({
-        productId:product.id||pid, productTitle:product.title, productPrice:finalPriceStr,
-        paymentMethod:activeMethod, amount:finalTotal,
-        billingDetails:{
-          firstName:(document.getElementById('firstName')||{}).value||'',
-          lastName: (document.getElementById('lastName')||{}).value||'',
-          email:    (document.getElementById('email')||{}).value||'',
-          phone:    (document.getElementById('phone')||{}).value||'',
-          country:  (document.getElementById('country')||{}).value||'',
-          address:  (document.getElementById('address')||{}).value||'',
-          city:     (document.getElementById('city')||{}).value||''
-        }
-      });
-    }).catch(()=>{});
-  }
-  setTimeout(function(){
-    showStep3Success();
-  }, 2500);
+  _submitOrderAndInvoice(activeMethod || 'upi', {}).catch(function(){});
+  setTimeout(function(){ showStep3Success(); }, 2500);
 }
 
 // Clear errors on input
