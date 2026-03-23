@@ -3006,6 +3006,10 @@ function toggleGateway(type) {
   _saveGwConfig(_gwConfig);
   // Debug safeguard: direct write in case _saveGwConfig is shadowed
   localStorage.setItem('chrixlin_gateways', JSON.stringify(_gwConfig));
+  // Sync to Supabase so all visitors see live state
+  if (typeof ChrixlinDB !== 'undefined') {
+    ChrixlinDB.saveToSupabase('site_settings', 'gateway_config', _gwConfig).catch(function(){});
+  }
   renderGatewayCards();
   var gw = GATEWAY_DEFS[type];
   showToast(_gwConfig[type].enabled ? (gw.name + ' enabled ✓') : (gw.name + ' disabled'));
@@ -3045,6 +3049,10 @@ function saveGatewayConfig() {
     if (el) _gwConfig[_gwEditType][f.id] = el.value.trim();
   });
   _saveGwConfig(_gwConfig);
+  // Sync to Supabase so all visitors see live config
+  if (typeof ChrixlinDB !== 'undefined') {
+    ChrixlinDB.saveToSupabase('site_settings', 'gateway_config', _gwConfig).catch(function(){});
+  }
   renderGatewayCards();
   closeGatewayModal();
   showToast(gw.name + ' configuration saved! 💾');

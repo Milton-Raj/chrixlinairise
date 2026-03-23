@@ -1367,5 +1367,21 @@ document.querySelectorAll('.field-input').forEach(el=>{
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="supabase-client.js"></script>
+<script>
+// ─── SYNC GATEWAY CONFIG FROM SUPABASE ────────────────────────────────────────
+// Runs once on page load. Overwrites localStorage with live Supabase config so
+// incognito / new visitors always see the admin's current enabled/disabled state.
+(async function syncGatewayConfig() {
+  try {
+    if (typeof ChrixlinDB === 'undefined') return;
+    var remote = await ChrixlinDB.loadFromSupabase('site_settings', 'gateway_config');
+    if (remote && typeof remote === 'object' && Object.keys(remote).length > 0) {
+      localStorage.setItem('chrixlin_gateways', JSON.stringify(remote));
+    }
+  } catch (e) {
+    console.warn('[Payment] Could not sync gateway config from Supabase:', e);
+  }
+})();
+</script>
 </body>
 </html>
