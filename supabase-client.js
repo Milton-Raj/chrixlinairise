@@ -134,6 +134,18 @@
     } catch (err) { console.warn('[ChrixlinDB] upsertPricingPlan() failed.', err); return false; }
   }
 
+  async function loadAllPricingPlansAdmin() {
+    const client = _getClient();
+    if (!client) return _lsGetPlans();
+    try {
+      const { data, error } = await client.from('pricing_plans').select('*').order('sort_order', { ascending: true });
+      if (error) throw error;
+      const plans = (data || []).map(_rowToPlan);
+      localStorage.setItem(LS.PRICING, JSON.stringify(plans));
+      return plans;
+    } catch (err) { console.warn('[ChrixlinDB] loadAllPricingPlansAdmin() failed.', err); return _lsGetPlans(); }
+  }
+
   async function deletePricingPlan(id) {
     localStorage.setItem(LS.PRICING, JSON.stringify(_lsGetPlans().filter(p => String(p.id) !== String(id))));
     const client = _getClient();
@@ -605,7 +617,7 @@
   global.ChrixlinDB = {
     loadFromSupabase, saveToSupabase,
     loadAllProducts, upsertProduct, deleteProduct,
-    loadAllPricingPlans, upsertPricingPlan, deletePricingPlan,
+    loadAllPricingPlans, loadAllPricingPlansAdmin, upsertPricingPlan, deletePricingPlan,
     loadPaymentSettings, loadPublicPaymentSettings, savePaymentSettings,
     submitOrder, submitContactMessage,
     adminSignIn, adminSignOut, getSession,

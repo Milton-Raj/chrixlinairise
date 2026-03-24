@@ -1855,7 +1855,20 @@ function showPanel(name) {
   };
   document.getElementById('panelTitle').textContent = titles[name] || name;
   if (name === 'marketplace') { populateMarketplace(); loadCategoriesAdmin(); }
-  if (name === 'pricing') { renderPricingPlanCards(_activePricingCycle); }
+  if (name === 'pricing') {
+    // Show loading spinner while we fetch from Supabase
+    var pricingCont = document.getElementById('pricingTabContent');
+    if (pricingCont) pricingCont.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--muted)"><div style="font-size:32px;margin-bottom:12px">⏳</div><div style="font-size:14px">Loading plans from database…</div></div>';
+    if (window.ChrixlinDB && ChrixlinDB.loadAllPricingPlansAdmin) {
+      ChrixlinDB.loadAllPricingPlansAdmin().then(function() {
+        renderPricingPlanCards(_activePricingCycle);
+      }).catch(function() {
+        renderPricingPlanCards(_activePricingCycle);
+      });
+    } else {
+      renderPricingPlanCards(_activePricingCycle);
+    }
+  }
   if (name === 'booking') { populateBooking(); }
   if (name === 'planorders') { loadPlanOrdersPanel(); }
   if (name === 'dashboard') refreshDashboard();
