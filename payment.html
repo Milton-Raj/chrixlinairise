@@ -467,20 +467,14 @@
 
       <hr style="border:none;border-top:1px solid var(--c-border);margin:24px 0" />
 
-      <!-- Terms (marketplace only) -->
-      <div id="termsBlock" style="display:flex;align-items:flex-start;gap:10px;margin-bottom:22px">
-        <input type="checkbox" id="terms" style="width:17px;height:17px;margin-top:3px;accent-color:var(--c-primary);flex-shrink:0;cursor:pointer" />
-        <label for="terms" style="font-size:13px;color:var(--c-sub);cursor:pointer">
-          I agree to the <a href="#" style="color:#a78bfa">Terms of Service</a> and <a href="#" style="color:#a78bfa">Privacy Policy</a>. I understand this is a one-time payment for a digital service.
-        </label>
+      <!-- Terms + submit hidden — PayPal and UPI have their own confirm buttons -->
+      <div id="termsBlock" style="display:none">
+        <input type="checkbox" id="terms" checked />
       </div>
-
-      <!-- Pay button (marketplace only) -->
-      <div id="submitBlock">
+      <div id="submitBlock" style="display:none">
         <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">
           <span>🔒</span> Complete Purchase — <span id="submitPrice">—</span>
         </button>
-        <div class="submit-note"><span>🔒</span> 256-bit SSL Encrypted · Your data is 100% secure</div>
       </div>
     </div>
 
@@ -809,7 +803,7 @@ async function uploadPdfToSupabase(file) {
   } catch(e) { return null; }
 }
 
-function goToStep2() {
+async function goToStep2() {
   // Validate step 1 fields
   const reqEl = document.getElementById('requirements');
   const reqVal = (reqEl ? reqEl.value : '').trim();
@@ -831,6 +825,9 @@ function goToStep2() {
     document.querySelector('.has-error')?.scrollIntoView({ behavior:'smooth', block:'center' });
     return;
   }
+  // Wait for gateway config to sync from Supabase so incognito visitors see correct payment methods
+  if (window._gwSyncPromise) { try { await window._gwSyncPromise; } catch(e) {} }
+
   document.getElementById('step1Wrap').style.display = 'none';
   document.getElementById('step2Wrap').style.display = '';
   document.getElementById('step2Wrap').classList.remove('step-wrap'); void document.getElementById('step2Wrap').offsetWidth; document.getElementById('step2Wrap').classList.add('step-wrap');
@@ -1349,8 +1346,6 @@ function validate() {
 
 // ─── SUBMIT ───────────────────────────────────────────────────────────────────
 function handleSubmit(skipValidate) {
-  // In plan mode the terms block is hidden — skip terms check; marketplace always requires it
-  if (!_isPlanMode && !document.getElementById('terms').checked) { alert('Please agree to the Terms of Service to continue.'); return; }
   if (!skipValidate && !validate()) { document.querySelector('.has-error')?.scrollIntoView({behavior:'smooth',block:'center'}); return; }
   const btn = document.getElementById('submitBtn');
   if (btn) btn.disabled = true;
@@ -1371,7 +1366,8 @@ document.querySelectorAll('.field-input').forEach(el=>{
 // ─── SYNC GATEWAY CONFIG FROM SUPABASE ────────────────────────────────────────
 // Runs once on page load. Overwrites localStorage with live Supabase config so
 // incognito / new visitors always see the admin's current enabled/disabled state.
-(async function syncGatewayConfig() {
+// Store the sync promise so goToStep2 can await it before building payment tabs
+window._gwSyncPromise = (async function syncGatewayConfig() {
   try {
     if (typeof ChrixlinDB === 'undefined') return;
     var remote = await ChrixlinDB.loadFromSupabase('site_settings', 'gateway_config');
