@@ -466,6 +466,7 @@ CREATE POLICY "faq_anon_delete" ON public.faq_items FOR DELETE USING (true);
 -- Admin panel calls this to list all registered users
 -- SECURITY DEFINER = bypasses RLS, runs as table owner
 -- ═══════════════════════════════════════════════════════════════════
+DROP FUNCTION IF EXISTS public.get_all_profiles();
 CREATE OR REPLACE FUNCTION public.get_all_profiles()
 RETURNS TABLE (
   id          UUID,
@@ -501,6 +502,7 @@ GRANT EXECUTE ON FUNCTION public.get_all_profiles() TO anon, authenticated;
 -- RPC FUNCTION 2: get_all_orders  ← NEW (was missing)
 -- Admin panel calls this to list all customer orders with user info
 -- ═══════════════════════════════════════════════════════════════════
+DROP FUNCTION IF EXISTS public.get_all_orders();
 CREATE OR REPLACE FUNCTION public.get_all_orders()
 RETURNS TABLE (
   id              UUID,
