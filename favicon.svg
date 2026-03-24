@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <!-- Background: deep indigo to vivid purple -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#130326"/>
+      <stop offset="100%" stop-color="#5b21b6"/>
+    </linearGradient>
+
+    <!-- C arc: near-white at top, glowing violet at bottom -->
+    <linearGradient id="arcGrad" x1="71" y1="29" x2="71" y2="71" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="45%"  stop-color="#e0d7ff"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+
+    <!-- Star inner fill -->
+    <linearGradient id="starGrad" x1="36" y1="44" x2="48" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#c4b5fd"/>
+    </linearGradient>
+
+    <!-- Soft glow for the arc -->
+    <filter id="arcGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- Tight glow for nodes + star -->
+    <filter id="nodeGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="1.8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- ── Background rounded square ── -->
+  <rect width="100" height="100" rx="22" fill="url(#bgGrad)"/>
+
+  <!-- Subtle inner radial highlight (top-left glow) -->
+  <ellipse cx="38" cy="28" rx="38" ry="24" fill="#7c3aed" opacity="0.18"/>
+
+  <!-- ── C arc ──
+       Circle center (50,50), radius 30.
+       270° arc opening to the RIGHT.
+       Top tip  : (50 + 30·cos 45°,  50 − 30·sin 45°) = (71.21, 28.79)
+       Bottom tip: (50 + 30·cos−45°, 50 − 30·sin−45°) = (71.21, 71.21)
+       SVG arc flags: large-arc=1, sweep=0 (counterclockwise on screen)
+  ── -->
+  <path d="M 71.21 28.79 A 30 30 0 1 0 71.21 71.21"
+        stroke="url(#arcGrad)"
+        stroke-width="9.5"
+        fill="none"
+        stroke-linecap="round"
+        filter="url(#arcGlow)"/>
+
+  <!-- ── Top arc node (white · start of journey) ── -->
+  <circle cx="71.21" cy="28.79" r="5.8" fill="white"    filter="url(#nodeGlow)"/>
+
+  <!-- ── Bottom arc node (violet · growth/AI) ── -->
+  <circle cx="71.21" cy="71.21" r="5.2" fill="#c4b5fd"  filter="url(#nodeGlow)"/>
+
+  <!-- ── Central 4-pointed star (AI nexus) ──
+       Centered at (42, 50).  Outer pts ±6 on axes.  Inner corners r≈2.5 at 45°.
+       outer: top(42,44) right(48,50) bottom(42,56) left(36,50)
+       inner: (43.77,48.23) (43.77,51.77) (40.23,51.77) (40.23,48.23)
+  ── -->
+  <path d="M 42 44
+           L 43.77 48.23
+           L 48 50
+           L 43.77 51.77
+           L 42 56
+           L 40.23 51.77
+           L 36 50
+           L 40.23 48.23 Z"
+        fill="url(#starGrad)"
+        opacity="0.95"
+        filter="url(#nodeGlow)"/>
+
+  <!-- Tiny bright centre dot anchoring the star -->
+  <circle cx="42" cy="50" r="1.6" fill="white" opacity="0.9"/>
+</svg>
