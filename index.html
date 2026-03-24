@@ -334,15 +334,12 @@
 
     /* ─── PRICING ───────────────────────────────────────── */
     #pricing { background: var(--c-bg2); }
-    .pricing-toggle-wrap { display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:32px; }
-    .pricing-toggle-label { font-size:15px; font-weight:600; color:var(--c-muted); transition:color 0.2s; }
-    .pricing-toggle-label.active-label { color:var(--c-text); }
-    .pricing-toggle { width:52px; height:28px; border-radius:14px; background:rgba(99,102,241,0.3); border:2px solid rgba(99,102,241,0.4); cursor:pointer; position:relative; transition:all 0.3s ease; padding:0; flex-shrink:0; }
-    .pricing-toggle.yearly { background:rgba(99,102,241,0.8); border-color:var(--c-primary); }
-    .pricing-toggle-thumb { display:block; width:20px; height:20px; border-radius:50%; background:#fff; position:absolute; top:2px; left:2px; transition:transform 0.3s ease; }
-    .pricing-toggle.yearly .pricing-toggle-thumb { transform:translateX(24px); }
-    .pricing-save-badge { background:rgba(34,197,94,0.15); color:#4ade80; border:1px solid rgba(34,197,94,0.3); border-radius:20px; font-size:12px; font-weight:700; padding:4px 10px; }
-    .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; max-width: 1080px; margin: 0 auto; }
+    .pricing-tabs-wrap { display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom:36px; background:rgba(255,255,255,0.05); border:1px solid var(--c-border); border-radius:50px; padding:5px; width:fit-content; margin-inline:auto; }
+    .pricing-tab { background:transparent; border:none; color:var(--c-muted); padding:9px 22px; border-radius:50px; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; font-family:var(--font); white-space:nowrap; }
+    .pricing-tab.active { background:var(--c-primary); color:#fff; }
+    .pricing-tab:hover:not(.active) { color:var(--c-text); }
+    .tab-save-badge { background:rgba(34,197,94,0.18); color:#4ade80; font-size:11px; font-weight:700; padding:2px 7px; border-radius:50px; margin-left:5px; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 360px)); justify-content:center; gap: 24px; max-width: 1120px; margin: 0 auto; }
     .pricing-plan {
       background: var(--c-card); border: 1.5px solid var(--c-border); border-radius: 20px;
       padding: 36px 28px; display: flex; flex-direction: column; transition: var(--transition); position: relative;
@@ -732,13 +729,10 @@
     <div class="section-label"><span class="badge">💎 Pricing</span></div>
     <h2 class="section-title">Simple, Transparent <span class="text-grad">Pricing For Everyone</span></h2>
     <p class="section-sub">Start free. Upgrade when you're ready. No hidden fees, no contracts, no risk.</p>
-    <div class="pricing-toggle-wrap">
-      <span class="pricing-toggle-label active-label" id="lblMonthly">Monthly</span>
-      <button class="pricing-toggle" id="billingToggle" onclick="toggleBilling()" aria-label="Toggle billing cycle">
-        <span class="pricing-toggle-thumb"></span>
-      </button>
-      <span class="pricing-toggle-label" id="lblYearly">Yearly</span>
-      <span class="pricing-save-badge">Save up to 20%</span>
+    <div class="pricing-tabs-wrap">
+      <button class="pricing-tab active" id="tabMonthly" onclick="setBilling('monthly')">Monthly</button>
+      <button class="pricing-tab" id="tabYearly" onclick="setBilling('yearly')">Yearly <span class="tab-save-badge">Save 20%</span></button>
+      <button class="pricing-tab" id="tabOneTime" onclick="setBilling('one-time')">One-Time Project</button>
     </div>
     <div class="pricing-grid" id="pricingGrid">
       <!-- Populated by JS -->
@@ -995,9 +989,9 @@ const DEFAULT_PRICING_PLANS = [
     id: 1, billingCycle: 'monthly', name: "Free Strategy Call", priceLabel: "FREE", price: 0,
     period: "No credit card needed",
     badge: "🎯 No Risk", badgeColor: "#22c55e", badgeBg: "rgba(34,197,94,0.12)",
-    description: "Start with a free 30-min 1-on-1 consultation. Get your personalised AI business roadmap with zero commitment.",
+    description: "Come with your business idea — we'll help you validate it, spot the opportunity, and map a clear path forward. No sales pitch, just honest strategy.",
     cta: "Book My Free Call →", ctaStyle: "outline", highlighted: false,
-    features: ["30-min 1-on-1 strategy session","Custom 60-day AI roadmap","Market opportunity audit","Skill gap analysis","Zero sales pressure","No credit card required"]
+    features: ["1-hour 1-on-1 strategy session","Market opportunity audit","Skill gap analysis","Income potential assessment","Competitor landscape overview","Zero sales pressure · No credit card required"]
   },
   {
     id: 2, billingCycle: 'monthly', name: "AI Starter", priceLabel: "$197", price: 197,
@@ -1009,20 +1003,20 @@ const DEFAULT_PRICING_PLANS = [
   },
   {
     id: 3, billingCycle: 'monthly', name: "AI Accelerator", priceLabel: "$497", price: 497,
-    period: "/month · Best value",
+    period: "/month · Cancel anytime",
     badge: "⚡ Best Value", badgeColor: "#f59e0b", badgeBg: "rgba(245,158,11,0.12)",
-    description: "The complete done-with-you experience. We personally connect you with clients, co-deliver your first projects, and guarantee results.",
+    description: "Hands-on monthly support from first client to final delivery. We guide you through every project, help manage client expectations, and stay by your side every step of the way.",
     cta: "Join AI Accelerator", ctaStyle: "primary", highlighted: true,
-    features: ["Everything in Starter, plus:","2× weekly 1-on-1 mentorship calls","Direct client introductions","Done-with-you project delivery","Priority Slack support channel","Income guarantee or full refund"]
+    features: ["2× weekly 1-on-1 mentorship calls","New client onboarding support","Post-sale client relationship guidance","Project delivery coaching","Ongoing partial support between milestones","Priority support channel","Income guarantee or full refund"]
   },
   // Yearly plans
   {
     id: 4, billingCycle: 'yearly', name: "Free Strategy Call", priceLabel: "FREE", price: 0,
     period: "No credit card needed",
     badge: "🎯 No Risk", badgeColor: "#22c55e", badgeBg: "rgba(34,197,94,0.12)",
-    description: "Start with a free 30-min 1-on-1 consultation. Get your personalised AI business roadmap with zero commitment.",
+    description: "Come with your business idea — we'll help you validate it, spot the opportunity, and map a clear path forward. No sales pitch, just honest strategy.",
     cta: "Book My Free Call →", ctaStyle: "outline", highlighted: false,
-    features: ["30-min 1-on-1 strategy session","Custom 60-day AI roadmap","Market opportunity audit","Skill gap analysis","Zero sales pressure","No credit card required"]
+    features: ["1-hour 1-on-1 strategy session","Market opportunity audit","Skill gap analysis","Income potential assessment","Competitor landscape overview","Zero sales pressure · No credit card required"]
   },
   {
     id: 5, billingCycle: 'yearly', name: "AI Starter", priceLabel: "$1,497", price: 1497,
@@ -1039,19 +1033,38 @@ const DEFAULT_PRICING_PLANS = [
     description: "The complete done-with-you experience. We personally connect you with clients, co-deliver your first projects, and guarantee results.",
     cta: "Join AI Accelerator", ctaStyle: "primary", highlighted: true,
     features: ["Everything in Starter, plus:","2× weekly 1-on-1 mentorship calls","Direct client introductions","Done-with-you project delivery","Priority Slack support channel","Income guarantee or full refund"]
+  },
+  // One-time project plans
+  {
+    id: 7, billingCycle: 'one-time', name: "Free Strategy Call", priceLabel: "FREE", price: 0,
+    period: "No credit card needed",
+    badge: "🎯 No Risk", badgeColor: "#22c55e", badgeBg: "rgba(34,197,94,0.12)",
+    description: "Come with your business idea — we'll help you validate it, spot the opportunity, and map a clear path forward. No sales pitch, just honest strategy.",
+    cta: "Book My Free Call →", ctaStyle: "outline", highlighted: false,
+    features: ["1-hour 1-on-1 strategy session","Market opportunity audit","Skill gap analysis","Income potential assessment","Competitor landscape overview","Zero sales pressure · No credit card required"]
+  },
+  {
+    id: 8, billingCycle: 'one-time', name: "Full Project Delivery", priceLabel: "$1,497", price: 1497,
+    period: "One-time · Base project price",
+    badge: "🚀 Done For You", badgeColor: "#7c3aed", badgeBg: "rgba(124,58,237,0.15)",
+    description: "You bring the vision — we handle everything from scoping to final delivery. Complete end-to-end AI project support at a single flat rate. Complex scope discussed transparently before any extra charge.",
+    cta: "Start My Project →", ctaStyle: "primary", highlighted: true,
+    features: ["End-to-end project scoping & planning","Full AI solution design & build","Testing, QA & quality assurance","Deployment & integration setup","Client handover documentation","Team training session included","30-day post-launch support","Transparent pricing — no surprise fees"]
   }
 ];
 
 let _activeBilling = 'monthly';
 
-function toggleBilling() {
-  _activeBilling = _activeBilling === 'monthly' ? 'yearly' : 'monthly';
-  const toggle = document.getElementById('billingToggle');
-  toggle.classList.toggle('yearly', _activeBilling === 'yearly');
-  document.getElementById('lblMonthly').classList.toggle('active-label', _activeBilling === 'monthly');
-  document.getElementById('lblYearly').classList.toggle('active-label', _activeBilling === 'yearly');
+function setBilling(cycle) {
+  _activeBilling = cycle;
+  const tabMap = { monthly: 'tabMonthly', yearly: 'tabYearly', 'one-time': 'tabOneTime' };
+  Object.values(tabMap).forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active'); });
+  const active = document.getElementById(tabMap[cycle]);
+  if (active) active.classList.add('active');
   renderPricingPlans();
 }
+
+function toggleBilling() { setBilling(_activeBilling === 'monthly' ? 'yearly' : 'monthly'); }
 
 function loadPricingPlans(cycle) {
   try {
