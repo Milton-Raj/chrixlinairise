@@ -435,6 +435,9 @@
         <button class="sidebar-btn" onclick="showPanel('terms')" data-panel="terms" style="font-size:13px">
           <span class="sb-icon">📄</span> Terms &amp; Conditions
         </button>
+        <button class="sidebar-btn" onclick="showPanel('privacy')" data-panel="privacy" style="font-size:13px">
+          <span class="sb-icon">🔒</span> Privacy Policy
+        </button>
       </div>
     </nav>
 
@@ -1156,6 +1159,38 @@
         </div>
       </div>
 
+      <!-- ── PRIVACY POLICY ───────────────────────────────── -->
+      <div id="panel-privacy" class="panel">
+        <div class="panel-title">🔒 Privacy Policy</div>
+        <div class="panel-desc">Edit the Privacy Policy shown at <a href="/privacy.html" target="_blank" style="color:#a78bfa">chrixlin.tech/privacy.html</a>. Supports HTML formatting.</div>
+
+        <div style="margin-top:24px">
+          <!-- Toolbar -->
+          <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+            <button onclick="privacyInsert('<h2>New Section</h2>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">H2</button>
+            <button onclick="privacyInsert('<h3>Sub-heading</h3>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">H3</button>
+            <button onclick="privacyInsert('<p>Paragraph text here.</p>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">¶ Para</button>
+            <button onclick="privacyInsert('<ul>\n  <li>Item 1</li>\n  <li>Item 2</li>\n</ul>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">• List</button>
+            <button onclick="privacyInsert('<strong>bold text</strong>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer"><b>B</b></button>
+            <button onclick="privacyInsert('<a href=\"mailto:info@chrixlin.tech\">info@chrixlin.tech</a>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">Link</button>
+            <a href="privacy.html" target="_blank" style="margin-left:auto;padding:5px 14px;font-size:12px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);border-radius:6px;color:#a78bfa;text-decoration:none">👁 Preview Page</a>
+          </div>
+
+          <textarea id="privacyEditor"
+            placeholder="Enter your Privacy Policy HTML here..."
+            style="width:100%;min-height:520px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:monospace;font-size:13px;line-height:1.6;padding:16px;resize:vertical;outline:none;transition:border-color 0.2s"
+            onfocus="this.style.borderColor='var(--primary)'"
+            onblur="this.style.borderColor='var(--border)'"
+          ></textarea>
+
+          <div style="display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap">
+            <button onclick="savePrivacy()" style="padding:12px 28px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity 0.2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">💾 Save Privacy Policy</button>
+            <button onclick="loadPrivacyDefault()" style="padding:12px 20px;background:var(--bg3);color:var(--sub);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer">↺ Reset to Default</button>
+            <span id="privacySaveStatus" style="font-size:13px;color:#22c55e"></span>
+          </div>
+        </div>
+      </div>
+
       <!-- ── SEO ───────────────────────────────────────────── -->
       <div id="panel-seo" class="panel">
         <div class="panel-title">🔍 SEO Settings</div>
@@ -1813,7 +1848,7 @@ function showPanel(name) {
     submissions:'Call Submissions',
     analytics:'Analytics & Reports', settings:'Settings',
     bankdetails:'Bank Details', theme:'Theme & Colors', seo:'SEO Settings',
-    terms:'Terms & Conditions',
+    terms:'Terms & Conditions', privacy:'Privacy Policy',
     hero:'Hero Section', stats:'Stats Bar', story:'Founder Story', process:'How It Works',
     features:'Features', testimonials:'Testimonials', forwho:"Who It's For",
     faq:'FAQ', cta:'CTA Section', footer:'Footer'
@@ -1830,6 +1865,7 @@ function showPanel(name) {
   if (name === 'submissions') loadSubmissions();
   if (name === 'bankdetails') { populateCheckoutSettings(); renderGatewayCards(); }
   if (name === 'terms') { loadTermsPanel(); }
+  if (name === 'privacy') { loadPrivacyPanel(); }
 }
 
 function toggleSettingsMenu() {
@@ -2375,8 +2411,69 @@ function termsInsert(snippet) {
   ta.focus();
 }
 
-// Auto-load when panel is shown (hook into showPanel)
-var _origShowPanel = window.showPanel;
+// ─── PRIVACY POLICY ───────────────────────────────────────────────────────────
+async function loadPrivacyPanel() {
+  var ta = document.getElementById('privacyEditor');
+  if (!ta) return;
+  try {
+    if (typeof ChrixlinDB !== 'undefined') {
+      var saved = await ChrixlinDB.loadFromSupabase('site_settings', 'privacy_policy');
+      if (saved && saved.html) { ta.value = saved.html; return; }
+    }
+  } catch(e) {}
+  try {
+    var r = await fetch('privacy.html');
+    var txt = await r.text();
+    var m = txt.match(/var DEFAULT_PRIVACY\s*=\s*`([\s\S]*?)`;/);
+    if (m) { ta.value = m[1].trim(); return; }
+  } catch(e) {}
+  ta.value = '<h2>1. Introduction</h2>\n<p>Enter your Privacy Policy here.</p>';
+}
+
+async function savePrivacy() {
+  var ta = document.getElementById('privacyEditor');
+  var statusEl = document.getElementById('privacySaveStatus');
+  if (!ta) return;
+  var html = ta.value.trim();
+  if (!html) { showToast('Privacy Policy content cannot be empty', 'error'); return; }
+  statusEl.textContent = 'Saving…';
+  statusEl.style.color = 'var(--muted)';
+  try {
+    if (typeof ChrixlinDB !== 'undefined') {
+      await ChrixlinDB.saveToSupabase('site_settings', 'privacy_policy', { html: html, updatedAt: new Date().toISOString() });
+    }
+    statusEl.textContent = '✓ Saved!';
+    statusEl.style.color = '#22c55e';
+    showToast('🔒 Privacy Policy saved!');
+    setTimeout(function(){ statusEl.textContent = ''; }, 3000);
+  } catch(e) {
+    statusEl.textContent = 'Save failed';
+    statusEl.style.color = '#f87171';
+    showToast('Failed to save privacy policy', 'error');
+  }
+}
+
+async function loadPrivacyDefault() {
+  var ta = document.getElementById('privacyEditor');
+  if (!ta) return;
+  if (!confirm('Reset to default Privacy Policy? Current edits will be lost.')) return;
+  try {
+    var r = await fetch('privacy.html');
+    var txt = await r.text();
+    var m = txt.match(/var DEFAULT_PRIVACY\s*=\s*`([\s\S]*?)`;/);
+    if (m) { ta.value = m[1].trim(); showToast('↺ Reset to default'); return; }
+  } catch(e) {}
+  showToast('Could not load default', 'error');
+}
+
+function privacyInsert(snippet) {
+  var ta = document.getElementById('privacyEditor');
+  if (!ta) return;
+  var start = ta.selectionStart, end = ta.selectionEnd;
+  ta.value = ta.value.substring(0, start) + '\n' + snippet + '\n' + ta.value.substring(end);
+  ta.selectionStart = ta.selectionEnd = start + snippet.length + 2;
+  ta.focus();
+}
 
 // ─── BOOK FREE CALLS ──────────────────────────────────────────────────────────
 function populateBooking() {
