@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms &amp; Conditions — Chrixlin AI Rise</title>
+  <meta name="description" content="Terms and Conditions for Chrixlin AI Rise — AI business mentorship program." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabase-client.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #0f0f1a;
+      --bg2:     #14141f;
+      --border:  rgba(255,255,255,0.08);
+      --text:    #f1f5f9;
+      --sub:     #94a3b8;
+      --muted:   #64748b;
+      --primary: #7c3aed;
+      --font:    'Inter', sans-serif;
+      --font-h:  'Syne', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.7; }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15,15,26,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-family: var(--font-h); font-size: 20px; font-weight: 800; color: var(--text); text-decoration: none; }
+    .nav-logo span { color: var(--primary); }
+    .nav-back { font-size: 14px; color: var(--sub); padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px; transition: all 0.2s; }
+    .nav-back:hover { color: var(--text); border-color: var(--primary); text-decoration: none; }
+
+    /* PAGE */
+    .page-wrap { max-width: 860px; margin: 0 auto; padding: 60px 24px 100px; }
+    .page-header { margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+    .page-header h1 { font-family: var(--font-h); font-size: clamp(28px,5vw,44px); font-weight: 800; margin-bottom: 12px; }
+    .page-header .meta { font-size: 13px; color: var(--muted); }
+
+    /* CONTENT STYLES */
+    #termsContent h2 {
+      font-family: var(--font-h); font-size: 20px; font-weight: 700;
+      color: var(--text); margin: 40px 0 14px;
+      padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    }
+    #termsContent h3 { font-size: 16px; font-weight: 600; color: var(--text); margin: 24px 0 10px; }
+    #termsContent p { color: var(--sub); margin-bottom: 14px; font-size: 15px; }
+    #termsContent ul, #termsContent ol { color: var(--sub); margin: 0 0 16px 20px; font-size: 15px; }
+    #termsContent li { margin-bottom: 8px; }
+    #termsContent strong { color: var(--text); }
+    #termsContent a { color: var(--primary); }
+
+    /* FOOTER */
+    footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 28px 24px; text-align: center; }
+    footer p { font-size: 13px; color: var(--muted); }
+    footer a { color: var(--sub); margin: 0 10px; }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 600px) {
+      .page-wrap { padding: 36px 16px 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Chrixlin <span>AI Rise</span></a>
+  <a href="index.html" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <h1>Terms &amp; Conditions</h1>
+    <div class="meta" id="termsLastUpdated">Last updated: January 2025</div>
+  </div>
+  <div id="termsContent">
+    <!-- Content loaded from Supabase or default below -->
+  </div>
+</div>
+
+<footer>
+  <p>
+    <a href="index.html">Home</a>
+    <a href="terms.html">Terms &amp; Conditions</a>
+    <a href="mailto:info@chrixlin.tech">Contact</a>
+  </p>
+  <p style="margin-top:10px">© 2025 Chrixlin AI Rise. All rights reserved.</p>
+</footer>
+
+<script>
+// ── DEFAULT TERMS CONTENT ──────────────────────────────────────────────────
+var DEFAULT_TERMS = `
+<h2>1. Acceptance of Terms</h2>
+<p>By accessing or using the Chrixlin AI Rise website, enrolling in any program, or purchasing any product or service offered by Chrixlin AI Rise ("Company", "we", "us", or "our"), you ("User", "you") agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use our services.</p>
+
+<h2>2. Services Overview</h2>
+<p>Chrixlin AI Rise provides AI business mentorship programs, training resources, coaching sessions, and related digital products designed to help entrepreneurs build AI-powered businesses. Our services include but are not limited to:</p>
+<ul>
+  <li>One-on-one and group mentorship sessions</li>
+  <li>Online training modules and curriculum</li>
+  <li>AI automation tools, templates, and resources</li>
+  <li>Community access and networking opportunities</li>
+  <li>Done-with-you project delivery support</li>
+</ul>
+
+<h2>3. Eligibility</h2>
+<p>You must be at least 18 years of age to enroll in any paid program or purchase any service. By registering, you represent and warrant that you meet this requirement and have the legal capacity to enter into a binding agreement.</p>
+
+<h2>4. Payment Terms</h2>
+<p>All prices are listed in USD unless otherwise stated. By completing a purchase, you authorise Chrixlin AI Rise to charge the specified amount via your selected payment method.</p>
+<ul>
+  <li><strong>Monthly plans</strong> are billed on a recurring basis. You may cancel at any time before the next billing cycle.</li>
+  <li><strong>One-time purchases</strong> are charged immediately at the time of purchase.</li>
+  <li>All sales of digital services are final unless covered by our Refund Policy (Section 5).</li>
+</ul>
+
+<h2>5. Refund Policy</h2>
+<p>We offer a <strong>30-day satisfaction guarantee</strong> on our paid mentorship plans. To qualify for a refund, you must:</p>
+<ul>
+  <li>Submit a refund request within 30 days of your initial payment</li>
+  <li>Have attended at least 2 coaching sessions</li>
+  <li>Provide a brief explanation of why the program did not meet your expectations</li>
+</ul>
+<p>Refunds will be processed within 5–10 business days to your original payment method. Refund requests received after the 30-day window will not be considered. Marketplace digital products (AI systems, automation tools) are non-refundable once delivered.</p>
+
+<h2>6. Intellectual Property</h2>
+<p>All content, materials, training modules, templates, and resources provided by Chrixlin AI Rise are the exclusive intellectual property of the Company. You are granted a limited, non-exclusive, non-transferable licence to access and use the materials for personal, non-commercial purposes only.</p>
+<p>You may not:</p>
+<ul>
+  <li>Copy, reproduce, or redistribute our content without written permission</li>
+  <li>Use our materials to create competing products or services</li>
+  <li>Share login credentials or program access with third parties</li>
+</ul>
+
+<h2>7. Income Disclaimer</h2>
+<p>Results described on this website, including testimonials and income figures, are not typical and are not a guarantee of future earnings. Building an AI business requires significant time, effort, and skill. Individual results will vary based on experience, dedication, and market conditions. Chrixlin AI Rise does not guarantee any specific level of income or business success.</p>
+
+<h2>8. Code of Conduct</h2>
+<p>As a member of the Chrixlin AI Rise community, you agree to:</p>
+<ul>
+  <li>Treat mentors, coaches, and fellow members with respect</li>
+  <li>Not engage in spam, harassment, or discriminatory behaviour</li>
+  <li>Keep confidential any proprietary information shared within the program</li>
+  <li>Not use our resources or community for unlawful purposes</li>
+</ul>
+<p>Violation of this code may result in immediate termination of access without refund.</p>
+
+<h2>9. Limitation of Liability</h2>
+<p>To the fullest extent permitted by law, Chrixlin AI Rise shall not be liable for any indirect, incidental, consequential, or special damages arising from your use of our services or inability to use them. Our total liability for any claim shall not exceed the amount you paid to us in the 3 months preceding the claim.</p>
+
+<h2>10. Third-Party Services</h2>
+<p>Our services integrate with or reference third-party platforms such as PayPal, GoHighLevel, Make.com, and others. Use of these platforms is governed by their respective terms of service. We are not responsible for the actions, content, or practices of third-party services.</p>
+
+<h2>11. Privacy</h2>
+<p>Your use of our services is also governed by our Privacy Policy. By using our services, you consent to the collection and use of your data as described therein. We do not sell your personal information to third parties.</p>
+
+<h2>12. Modifications to Terms</h2>
+<p>We reserve the right to update these Terms & Conditions at any time. Changes will be effective immediately upon posting to this page. Continued use of our services after changes constitutes acceptance of the revised terms. We encourage you to review this page periodically.</p>
+
+<h2>13. Termination</h2>
+<p>We reserve the right to suspend or terminate your access to our services at any time if you breach these Terms & Conditions, engage in fraudulent activity, or act in a manner harmful to the Company or its members. Upon termination, your licence to use our materials is revoked immediately.</p>
+
+<h2>14. Governing Law</h2>
+<p>These Terms & Conditions shall be governed by and construed in accordance with applicable law. Any disputes arising from these terms shall first be attempted to be resolved through good-faith negotiation. If unresolved, disputes shall be submitted to binding arbitration.</p>
+
+<h2>15. Contact Us</h2>
+<p>If you have any questions about these Terms & Conditions, please contact us:</p>
+<ul>
+  <li><strong>Email:</strong> <a href="mailto:info@chrixlin.tech">info@chrixlin.tech</a></li>
+  <li><strong>Website:</strong> <a href="https://chrixlin.tech">chrixlin.tech</a></li>
+</ul>
+`;
+
+// ── LOAD CONTENT (Supabase → fallback to default) ─────────────────────────
+(async function loadTerms() {
+  var content = null;
+  try {
+    if (typeof ChrixlinDB !== 'undefined') {
+      content = await ChrixlinDB.loadFromSupabase('site_settings', 'terms_and_conditions');
+    }
+  } catch(e) {}
+  var el = document.getElementById('termsContent');
+  if (content && content.html) {
+    el.innerHTML = content.html;
+    if (content.updatedAt) {
+      document.getElementById('termsLastUpdated').textContent =
+        'Last updated: ' + new Date(content.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+  } else {
+    el.innerHTML = DEFAULT_TERMS;
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -432,6 +432,9 @@
         <button class="sidebar-btn" onclick="showPanel('seo')" data-panel="seo" style="font-size:13px">
           <span class="sb-icon">🔍</span> SEO Settings
         </button>
+        <button class="sidebar-btn" onclick="showPanel('terms')" data-panel="terms" style="font-size:13px">
+          <span class="sb-icon">📄</span> Terms &amp; Conditions
+        </button>
       </div>
     </nav>
 
@@ -1121,6 +1124,38 @@
         <button class="btn btn-primary" onclick="saveTheme()">Save Theme Settings</button>
       </div>
 
+      <!-- ── TERMS & CONDITIONS ────────────────────────────── -->
+      <div id="panel-terms" class="panel">
+        <div class="panel-title">📄 Terms &amp; Conditions</div>
+        <div class="panel-desc">Edit the Terms &amp; Conditions shown at <a href="/terms.html" target="_blank" style="color:#a78bfa">chrixlin.tech/terms.html</a>. Supports HTML formatting.</div>
+
+        <div style="margin-top:24px">
+          <!-- Toolbar -->
+          <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+            <button onclick="termsInsert('<h2>New Section</h2>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">H2</button>
+            <button onclick="termsInsert('<h3>Sub-heading</h3>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">H3</button>
+            <button onclick="termsInsert('<p>Paragraph text here.</p>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">¶ Para</button>
+            <button onclick="termsInsert('<ul>\n  <li>Item 1</li>\n  <li>Item 2</li>\n</ul>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">• List</button>
+            <button onclick="termsInsert('<strong>bold text</strong>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer"><b>B</b></button>
+            <button onclick="termsInsert('<a href=\"mailto:info@chrixlin.tech\">info@chrixlin.tech</a>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">Link</button>
+            <a href="terms.html" target="_blank" style="margin-left:auto;padding:5px 14px;font-size:12px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);border-radius:6px;color:#a78bfa;text-decoration:none">👁 Preview Page</a>
+          </div>
+
+          <textarea id="termsEditor"
+            placeholder="Enter your Terms &amp; Conditions HTML here..."
+            style="width:100%;min-height:520px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:monospace;font-size:13px;line-height:1.6;padding:16px;resize:vertical;outline:none;transition:border-color 0.2s"
+            onfocus="this.style.borderColor='var(--primary)'"
+            onblur="this.style.borderColor='var(--border)'"
+          ></textarea>
+
+          <div style="display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap">
+            <button onclick="saveTerms()" style="padding:12px 28px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity 0.2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">💾 Save Terms</button>
+            <button onclick="loadTermsDefault()" style="padding:12px 20px;background:var(--bg3);color:var(--sub);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer">↺ Reset to Default</button>
+            <span id="termsSaveStatus" style="font-size:13px;color:#22c55e"></span>
+          </div>
+        </div>
+      </div>
+
       <!-- ── SEO ───────────────────────────────────────────── -->
       <div id="panel-seo" class="panel">
         <div class="panel-title">🔍 SEO Settings</div>
@@ -1778,6 +1813,7 @@ function showPanel(name) {
     submissions:'Call Submissions',
     analytics:'Analytics & Reports', settings:'Settings',
     bankdetails:'Bank Details', theme:'Theme & Colors', seo:'SEO Settings',
+    terms:'Terms & Conditions',
     hero:'Hero Section', stats:'Stats Bar', story:'Founder Story', process:'How It Works',
     features:'Features', testimonials:'Testimonials', forwho:"Who It's For",
     faq:'FAQ', cta:'CTA Section', footer:'Footer'
@@ -1793,6 +1829,7 @@ function showPanel(name) {
   if (name === 'analytics') loadAnalytics();
   if (name === 'submissions') loadSubmissions();
   if (name === 'bankdetails') { populateCheckoutSettings(); renderGatewayCards(); }
+  if (name === 'terms') { loadTermsPanel(); }
 }
 
 function toggleSettingsMenu() {
@@ -2270,6 +2307,76 @@ function togglePlanVisibility(id) {
 
 // Keep old savePricing for backwards compatibility (no-op now)
 function savePricing() { showToast('💎 Plans auto-saved!'); }
+
+// ─── TERMS & CONDITIONS ───────────────────────────────────────────────────────
+var _termsDefault = null; // loaded lazily from terms.html script
+
+async function loadTermsPanel() {
+  var ta = document.getElementById('termsEditor');
+  if (!ta) return;
+  try {
+    if (typeof ChrixlinDB !== 'undefined') {
+      var saved = await ChrixlinDB.loadFromSupabase('site_settings', 'terms_and_conditions');
+      if (saved && saved.html) { ta.value = saved.html; return; }
+    }
+  } catch(e) {}
+  // Fallback: load default from terms.html via fetch
+  try {
+    var r = await fetch('terms.html');
+    var txt = await r.text();
+    var m = txt.match(/var DEFAULT_TERMS\s*=\s*`([\s\S]*?)`;/);
+    if (m) { ta.value = m[1].trim(); _termsDefault = m[1].trim(); return; }
+  } catch(e) {}
+  ta.value = '<h2>1. Acceptance of Terms</h2>\n<p>Enter your Terms & Conditions here.</p>';
+}
+
+async function saveTerms() {
+  var ta = document.getElementById('termsEditor');
+  var statusEl = document.getElementById('termsSaveStatus');
+  if (!ta) return;
+  var html = ta.value.trim();
+  if (!html) { showToast('Terms content cannot be empty', 'error'); return; }
+  statusEl.textContent = 'Saving…';
+  statusEl.style.color = 'var(--muted)';
+  try {
+    if (typeof ChrixlinDB !== 'undefined') {
+      await ChrixlinDB.saveToSupabase('site_settings', 'terms_and_conditions', { html: html, updatedAt: new Date().toISOString() });
+    }
+    statusEl.textContent = '✓ Saved!';
+    statusEl.style.color = '#22c55e';
+    showToast('📄 Terms & Conditions saved!');
+    setTimeout(function(){ statusEl.textContent = ''; }, 3000);
+  } catch(e) {
+    statusEl.textContent = 'Save failed';
+    statusEl.style.color = '#f87171';
+    showToast('Failed to save terms', 'error');
+  }
+}
+
+async function loadTermsDefault() {
+  var ta = document.getElementById('termsEditor');
+  if (!ta) return;
+  if (!confirm('Reset to default Terms & Conditions? Current edits will be lost.')) return;
+  try {
+    var r = await fetch('terms.html');
+    var txt = await r.text();
+    var m = txt.match(/var DEFAULT_TERMS\s*=\s*`([\s\S]*?)`;/);
+    if (m) { ta.value = m[1].trim(); showToast('↺ Reset to default'); return; }
+  } catch(e) {}
+  showToast('Could not load default', 'error');
+}
+
+function termsInsert(snippet) {
+  var ta = document.getElementById('termsEditor');
+  if (!ta) return;
+  var start = ta.selectionStart, end = ta.selectionEnd;
+  ta.value = ta.value.substring(0, start) + '\n' + snippet + '\n' + ta.value.substring(end);
+  ta.selectionStart = ta.selectionEnd = start + snippet.length + 2;
+  ta.focus();
+}
+
+// Auto-load when panel is shown (hook into showPanel)
+var _origShowPanel = window.showPanel;
 
 // ─── BOOK FREE CALLS ──────────────────────────────────────────────────────────
 function populateBooking() {
