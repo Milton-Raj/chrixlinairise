@@ -1317,26 +1317,6 @@ async function openRazorpayCheckout() {
     prefill:     { name: (firstName + ' ' + lastName).trim(), email: email, contact: phone },
     theme:       { color: '#7c3aed' },
     modal:       { ondismiss: function() {} },
-    config: {
-      display: {
-        blocks: {
-          upi_block: {
-            name: 'UPI / QR Code',
-            instruments: [
-              { method: 'upi', flow: 'collect' },
-              { method: 'upi', flow: 'intent'  },
-              { method: 'upi', flow: 'qr'      }
-            ]
-          },
-          card_block: {
-            name: 'Cards',
-            instruments: [{ method: 'card' }]
-          }
-        },
-        sequence: ['block.upi_block', 'block.card_block'],
-        preferences: { show_default_blocks: true }
-      }
-    },
     handler: function(response) { handleRazorpaySuccess(response); }
   };
 
