@@ -467,6 +467,39 @@
       </div>
 
 
+      <!-- ── CARD / RAZORPAY FORM ── -->
+      <div id="pf-card" style="display:none">
+        <div style="background:var(--c-bg3);border:1px solid var(--c-border);border-radius:16px;padding:28px">
+
+          <!-- Card network logos -->
+          <div style="display:flex;justify-content:center;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/150px-Visa_Inc._logo.svg.png" alt="Visa" style="height:20px;object-fit:contain;opacity:0.85" onerror="this.style.display='none'" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/100px-Mastercard-logo.svg.png" alt="Mastercard" style="height:26px;object-fit:contain;opacity:0.85" onerror="this.style.display='none'" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/RuPay.svg/150px-RuPay.svg.png" alt="RuPay" style="height:20px;object-fit:contain;opacity:0.85" onerror="this.style.display='none'" />
+            <span style="font-size:12px;color:var(--c-muted)">+ Net Banking · Wallets</span>
+          </div>
+
+          <div style="font-family:var(--font-h);font-weight:800;font-size:17px;margin-bottom:4px;text-align:center">Pay with Card</div>
+          <div style="font-size:12px;color:var(--c-muted);margin-bottom:24px;text-align:center">Secured by Razorpay · 256-bit TLS Encryption</div>
+
+          <!-- Pay button (shown when configured) -->
+          <button id="rzpPayBtn" onclick="openRazorpayCheckout()"
+            style="width:100%;padding:16px;border-radius:50px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;font-weight:800;font-size:16px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px">
+            <span>🔒</span>
+            <span>Pay <span id="rzpAmtDisplay">—</span> Securely</span>
+          </button>
+
+          <!-- Not configured fallback -->
+          <div id="rzpNotConfigured" style="display:none;text-align:center;padding:20px;color:var(--c-muted);font-size:13px">
+            Card payment is not configured yet. Please contact support or choose another payment method.
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;font-size:11px;color:var(--c-muted)">
+            🔒 Your card details are never stored on our servers
+          </div>
+        </div>
+      </div>
+
       <hr style="border:none;border-top:1px solid var(--c-border);margin:24px 0" />
 
       <!-- Terms + submit hidden — PayPal and UPI have their own confirm buttons -->
@@ -846,8 +879,9 @@ async function goToStep2() {
 
 // ─── PAYMENT TABS (DYNAMIC) ───────────────────────────────────────────────────
 const GATEWAY_META = {
-  paypal: { label: '🅿️ PayPal',   form: 'pf-paypal' },
-  upi:    { label: '📱 UPI / QR', form: 'pf-upi'    }
+  paypal: { label: '🅿️ PayPal',           form: 'pf-paypal' },
+  upi:    { label: '📱 UPI / QR',         form: 'pf-upi'    },
+  card:   { label: '💳 Card / Net Banking', form: 'pf-card'   }
 };
 let activeMethod = null;
 let _enabledMethods = [];
@@ -881,13 +915,14 @@ function switchPayment(method) {
   const target = GATEWAY_META[method];
   if (target) { const el=document.getElementById(target.form); if(el) el.style.display=''; }
   if (method === 'paypal') renderPayPalButtons();
-  if (method === 'upi') renderUpiQr();
-  // Hide Terms + Complete Purchase when PayPal is active (PayPal has its own button)
-  var isPayPal = (method === 'paypal');
+  if (method === 'upi')    renderUpiQr();
+  if (method === 'card')   renderRazorpayForm();
+  // Hide Terms + Complete Purchase for methods that have their own confirm button
+  var noSubmit = (method === 'paypal' || method === 'card');
   var termsBlock = document.getElementById('termsBlock');
   var submitBlock = document.getElementById('submitBlock');
-  if (termsBlock) termsBlock.style.display = isPayPal ? 'none' : '';
-  if (submitBlock) submitBlock.style.display = isPayPal ? 'none' : '';
+  if (termsBlock) termsBlock.style.display = noSubmit ? 'none' : '';
+  if (submitBlock) submitBlock.style.display = noSubmit ? 'none' : '';
 }
 
 function populateGatewayForms() {
@@ -1185,6 +1220,124 @@ function _ppShowManualFallback(ppGw, sdkWrap, fbWrap) {
   if (em) em.textContent = ppGw.g_pp_email || contactEmail || '—';
   var lw = document.getElementById('ppLinkWrap'), lk = document.getElementById('ppLink');
   if (ppGw.g_pp_link && lk && lw) { lk.href = ppGw.g_pp_link; lw.style.display = ''; }
+}
+
+// ─── RAZORPAY CARD PAYMENT ────────────────────────────────────────────────────
+
+var _rzpLoaded  = false;
+var _rzpLoading = false;
+
+// Preload Razorpay.js on page start if card gateway is enabled
+(function() {
+  try {
+    var cfg = (JSON.parse(localStorage.getItem('chrixlin_gateways') || '{}').card) || {};
+    if (!cfg.enabled || !cfg.g_rzp_key) return;
+    _rzpLoading = true;
+    var s = document.createElement('script');
+    s.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    s.onload  = function() { _rzpLoaded = true; _rzpLoading = false; };
+    s.onerror = function() { _rzpLoading = false; };
+    document.head.appendChild(s);
+  } catch(e) {}
+})();
+
+function _loadRazorpaySdk() {
+  return new Promise(function(resolve, reject) {
+    if (window.Razorpay) { resolve(); return; }
+    if (_rzpLoading) {
+      var waited = 0, iv = setInterval(function() {
+        waited += 200;
+        if (window.Razorpay) { clearInterval(iv); resolve(); }
+        else if (waited > 12000) { clearInterval(iv); reject(new Error('Razorpay SDK timed out')); }
+      }, 200);
+      return;
+    }
+    _rzpLoading = true;
+    var s = document.createElement('script');
+    s.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    s.onload  = function() { _rzpLoaded = true; _rzpLoading = false; resolve(); };
+    s.onerror = function() { _rzpLoading = false; reject(new Error('Failed to load Razorpay — check your connection')); };
+    document.head.appendChild(s);
+  });
+}
+
+function renderRazorpayForm() {
+  var rzpGw  = getGatewayCfg('card');
+  var btn    = document.getElementById('rzpPayBtn');
+  var notCfg = document.getElementById('rzpNotConfigured');
+  var amtEl  = document.getElementById('rzpAmtDisplay');
+
+  if (!rzpGw.g_rzp_key) {
+    if (btn)    btn.style.display    = 'none';
+    if (notCfg) notCfg.style.display = '';
+    return;
+  }
+  if (btn)    btn.style.display    = 'flex';
+  if (notCfg) notCfg.style.display = 'none';
+
+  var total = _pricing && _pricing.total > 0
+    ? _pricing.total
+    : (parseFloat(String((product||{}).price||'0').replace(/[^0-9.]/g,''))||0);
+  if (amtEl) amtEl.textContent = fmt(total);
+}
+
+async function openRazorpayCheckout() {
+  var rzpGw = getGatewayCfg('card');
+  if (!rzpGw.g_rzp_key) { showToast('Card payment not configured.'); return; }
+
+  var btn = document.getElementById('rzpPayBtn');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<div style="width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite"></div>';
+  }
+
+  try { await _loadRazorpaySdk(); }
+  catch(e) {
+    if (btn) { btn.disabled = false; btn.innerHTML = '<span>🔒</span><span>Pay ' + fmt(_pricing.total||0) + ' Securely</span>'; }
+    showToast('Could not load payment SDK. Please try again.');
+    return;
+  }
+
+  if (btn) { btn.disabled = false; btn.innerHTML = '<span>🔒</span><span>Pay <span id="rzpAmtDisplay">' + fmt(_pricing.total||0) + '</span> Securely</span>'; }
+
+  var total    = _pricing && _pricing.total > 0 ? _pricing.total : (parseFloat(String((product||{}).price||'0').replace(/[^0-9.]/g,''))||0);
+  var currency = (rzpGw.g_rzp_currency || 'INR').toUpperCase();
+  var firstName= (document.getElementById('firstName')||{}).value||'';
+  var lastName = (document.getElementById('lastName') ||{}).value||'';
+  var email    = (document.getElementById('email')    ||{}).value||'';
+  var phone    = (document.getElementById('phone')    ||{}).value||'';
+
+  var options = {
+    key:         rzpGw.g_rzp_key,
+    amount:      Math.round(total * 100),   // smallest currency unit (paise for INR)
+    currency:    currency,
+    name:        rzpGw.g_rzp_name || 'Chrixlin AI Rise',
+    description: _isPlanMode ? (_planName + ' — ' + _planCycle) : ((product||{}).title || 'AI Business Plan'),
+    image:       window.location.origin + '/favicon.svg',
+    prefill:     { name: (firstName + ' ' + lastName).trim(), email: email, contact: phone },
+    theme:       { color: '#7c3aed' },
+    modal:       { ondismiss: function() {} },
+    handler: function(response) { handleRazorpaySuccess(response); }
+  };
+
+  try {
+    var rzp = new Razorpay(options);
+    rzp.on('payment.failed', function(r) {
+      showToast('Payment failed: ' + ((r.error && r.error.description) || 'Please try again.'));
+    });
+    rzp.open();
+  } catch(e) {
+    showToast('Payment error. Please try again.');
+  }
+}
+
+function handleRazorpaySuccess(response) {
+  goToStep3();
+  _submitOrderAndInvoice('card', {
+    razorpay_payment_id: response.razorpay_payment_id || '',
+    razorpay_order_id:   response.razorpay_order_id   || '',
+    razorpay_signature:  response.razorpay_signature  || ''
+  });
 }
 
 // ─── SHARED ORDER SUBMIT + INVOICE ────────────────────────────────────────────

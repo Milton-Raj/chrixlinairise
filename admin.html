@@ -3179,6 +3179,15 @@ var GATEWAY_DEFS = {
       { id: 'g_upi_id',   label: 'UPI ID *',            type: 'text', ph: 'yourname@upi  or  mobile@paytm', mono: true },
       { id: 'g_upi_name', label: 'Display Name',        type: 'text', ph: 'Chrixlin AI Rise' }
     ]
+  },
+  card: {
+    id: 'card', icon: '💳', name: 'Card / Net Banking', color: '#2563eb',
+    desc: 'Accept credit cards, debit cards and net banking via Razorpay — PCI-DSS compliant, no backend needed.',
+    fields: [
+      { id: 'g_rzp_key',      label: 'Razorpay Key ID *',  type: 'text',     ph: 'rzp_live_xxxxxxxxxxxxxxxxxxxx', mono: true },
+      { id: 'g_rzp_currency', label: 'Currency Code',      type: 'text',     ph: 'INR', style: 'max-width:110px' },
+      { id: 'g_rzp_name',     label: 'Business Name',      type: 'text',     ph: 'Chrixlin AI Rise' }
+    ]
   }
 };
 
