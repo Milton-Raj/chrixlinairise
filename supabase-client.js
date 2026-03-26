@@ -365,6 +365,7 @@
   async function customerSignOut() {
     const client = _getClient();
     if (client) await client.auth.signOut();
+    _sb = null; // destroy singleton — next call gets a fresh, unauthenticated client
   }
 
   async function getCustomerSession() {
@@ -422,13 +423,15 @@
     try {
       const session = await getCustomerSession();
       if (!session) return [];
+      const uid = session.user.id;
       const { data, error } = await client
         .from('customer_orders')
         .select('*')
-        .eq('user_id', session.user.id)
+        .eq('user_id', uid)
         .order('created_at', { ascending: false });
       if (error) throw error;
-      return data || [];
+      // Client-side safety filter — never expose another user's rows
+      return (data || []).filter(function(row) { return row.user_id === uid; });
     } catch (err) {
       console.warn('[ChrixlinDB] getMyOrders() failed.', err);
       return [];

@@ -716,6 +716,8 @@ function populateUserUI(user) {
 
 // ─── LOAD ORDERS ──────────────────────────────────────────────────────────────
 async function loadOrders() {
+  allOrders = []; // always reset first — never show stale data from a previous session
+  updateStats();
   try {
     allOrders = await ChrixlinDB.getMyOrders();
     renderOrders();
