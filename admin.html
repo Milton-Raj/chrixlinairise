@@ -1858,11 +1858,19 @@ function showPanel(name) {
   document.getElementById('panelTitle').textContent = titles[name] || name;
   if (name === 'marketplace') { populateMarketplace(); loadCategoriesAdmin(); }
   if (name === 'pricing') {
-    // Show loading spinner while we fetch from Supabase
     var pricingCont = document.getElementById('pricingTabContent');
     if (pricingCont) pricingCont.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--muted)"><div style="font-size:32px;margin-bottom:12px">⏳</div><div style="font-size:14px">Loading plans from database…</div></div>';
     if (window.ChrixlinDB && ChrixlinDB.loadAllPricingPlansAdmin) {
-      ChrixlinDB.loadAllPricingPlansAdmin().then(function() {
+      ChrixlinDB.loadAllPricingPlansAdmin().then(function(plans) {
+        if (!plans || plans.length === 0) {
+          // Supabase table is empty — seed it with the defaults so edits persist going forward
+          var defaults = JSON.parse(JSON.stringify(DEFAULT_PRICING_PLANS_ADMIN));
+          localStorage.setItem('chrixlin_pricing', JSON.stringify(defaults));
+          defaults.forEach(function(p, i) {
+            var planWithOrder = Object.assign({}, p, { sort_order: i + 1 });
+            ChrixlinDB.upsertPricingPlan(planWithOrder).catch(function() {});
+          });
+        }
         renderPricingPlanCards(_activePricingCycle);
       }).catch(function() {
         renderPricingPlanCards(_activePricingCycle);
@@ -2174,7 +2182,9 @@ const DEFAULT_PRICING_PLANS_ADMIN = [
 function loadPricingPlans(cycle) {
   try {
     const s = localStorage.getItem('chrixlin_pricing');
-    const all = s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT_PRICING_PLANS_ADMIN));
+    const parsed = s ? JSON.parse(s) : [];
+    // Always fall back to defaults if localStorage is empty
+    const all = (parsed && parsed.length) ? parsed : JSON.parse(JSON.stringify(DEFAULT_PRICING_PLANS_ADMIN));
     if (!cycle) return all;
     const filtered = all.filter(p => (p.billingCycle||'monthly') === cycle);
     return filtered.length ? filtered : JSON.parse(JSON.stringify(DEFAULT_PRICING_PLANS_ADMIN)).filter(p => (p.billingCycle||'monthly') === cycle);

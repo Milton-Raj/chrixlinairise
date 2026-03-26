@@ -141,7 +141,8 @@
       const { data, error } = await client.from('pricing_plans').select('*').order('sort_order', { ascending: true });
       if (error) throw error;
       const plans = (data || []).map(_rowToPlan);
-      localStorage.setItem(LS.PRICING, JSON.stringify(plans));
+      // Only overwrite localStorage when Supabase actually has rows — never wipe with empty
+      if (plans.length > 0) localStorage.setItem(LS.PRICING, JSON.stringify(plans));
       return plans;
     } catch (err) { console.warn('[ChrixlinDB] loadAllPricingPlansAdmin() failed.', err); return _lsGetPlans(); }
   }
