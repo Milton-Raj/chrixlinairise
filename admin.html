@@ -915,7 +915,7 @@
             <div class="form-row"><label>Short Description</label><textarea id="pp_desc" rows="2" placeholder="One or two sentences explaining this plan…"></textarea></div>
             <div class="form-row">
               <label>Features (one per line)</label>
-              <textarea id="pp_features" rows="7" placeholder="Full 60-day curriculum access&#10;Weekly group coaching calls&#10;AI tools & automation templates&#10;Private community membership"></textarea>
+              <textarea id="pp_features" rows="7" placeholder="Full curriculum access&#10;Weekly group coaching calls&#10;AI tools & automation templates&#10;Private community membership"></textarea>
               <div class="input-hint">One feature per line — shown as ✓ checkmarks on the card</div>
             </div>
             <div class="form-row" style="display:flex;align-items:center;gap:12px;margin-bottom:0">
@@ -1766,7 +1766,7 @@ const DEFAULT_DATA = {
     { name: "Shubham S.", role: "Software Engineer @ Big Tech", emoji: "👨‍💻", result: "$0 → $120,000+ in profits", quote: "I was skeptical — I already had a good job. But within 8 weeks I was earning an extra $12,000 a month. The mentorship showed me exactly how to package my existing skills for premium AI clients.", stars: 5 },
     { name: "Ilya P.", role: "Former Food Delivery Driver", emoji: "🚗", result: "$0 → $100,000+ in profits", quote: "I had zero tech background. The program walked me through everything step by step. I made $1,000 in my very first day selling an AI QR generator. It changed my entire life trajectory.", stars: 5 },
     { name: "Ron M.", role: "College Student", emoji: "🎓", result: "$0 → $30,000+ secured", quote: "While my classmates were applying for $15/hr internships, I closed my first $25,000 AI development project. This is the best investment I've made in my college career, bar none.", stars: 5 },
-    { name: "Sarah C.", role: "Former Marketing Manager", emoji: "💼", result: "$0 → $30K+/month agency", quote: "I quit my corporate job after 3 months in the program. I was terrified at first, but the risk-free model made it easy to start. Now I run a full AI agency making $30K+ a month on my own terms.", stars: 5 }
+    { name: "Sarah C.", role: "Former Marketing Manager", emoji: "💼", result: "$0 → $30K+/month agency", quote: "I quit my corporate job after 3 months in the program. I was terrified at first, but the structured program made it easy to start. Now I run a full AI agency making $30K+ a month on my own terms.", stars: 5 }
   ],
   forWho: [
     { icon: "🏢", title: "9-5 Employees", text: "Tired of trading time for money. Ready to build a business that generates income while you sleep." },
@@ -1775,7 +1775,7 @@ const DEFAULT_DATA = {
     { icon: "⚙️", title: "Tech Professionals", text: "Monetize your existing skills in the fastest-growing market before your role gets automated." }
   ],
   pricingFeatures: [
-    "Full 60-day mentorship program",
+    "Full mentorship program",
     "Weekly live coaching sessions",
     "Direct client introductions",
     "All AI tools & templates",
@@ -1786,11 +1786,11 @@ const DEFAULT_DATA = {
   ],
   faq: [
     { q: "Do I need any coding or technical experience to start?", a: "None at all. Our program is designed for complete beginners. We use no-code and low-code AI tools that anyone can learn in days, not months. The majority of our students had zero technical background when they started and were building real AI products within their first two weeks." },
-    { q: "What's the difference between the Free Strategy Call and the paid plans?", a: "The Free Strategy Call is a zero-pressure 30-minute consultation where we map out a personalised AI business roadmap for you — completely free. The AI Starter ($197/mo) gives you full curriculum access, group coaching, and templates to build your first AI product. The AI Accelerator ($497/mo) adds 1-on-1 mentorship, direct client introductions, and a done-with-you delivery model — plus our income guarantee." },
+    { q: "What's the difference between the Free Strategy Call and the paid plans?", a: "The Free Strategy Call is a zero-pressure 1-hour 1-on-1 consultation where we map out a personalised AI business roadmap for you — completely free. The AI Starter ($197/mo) gives you full curriculum access, group coaching, and templates to build your first AI product. The AI Accelerator ($497/mo) adds 2× weekly 1-on-1 mentorship, direct client introductions, and a done-with-you delivery model." },
     { q: "How soon can I expect to land my first paying client?", a: "Students who follow the program consistently typically land their first paid project between weeks 4 and 8. The AI Accelerator plan includes direct client introductions, which dramatically shortens that timeline. Our record is 11 days from enrolment to first payment." },
     { q: "What kind of AI products will I be building and selling?", a: "You'll build AI voice assistants, chatbots, sales automation tools, content AI systems, lead generation bots, and custom AI agents. These solutions solve real business problems and typically sell for $2,000–$15,000 as one-time builds, or $500–$3,000/month as managed services." },
     { q: "How much time do I need to commit each week?", a: "We recommend 8–12 hours per week to follow the program at full pace — roughly 2 hours of live sessions and the rest on projects and client work. Many of our students run this alongside a full-time job. You can also go at your own pace with the self-study materials." },
-    { q: "Is there a refund policy?", a: "Yes. We offer a 15-day money-back guarantee on all paid plans. If you complete the first module, attend your onboarding call, and still feel the program isn't right for you, we'll refund 100% of your payment — no questions asked. The AI Accelerator also includes an income guarantee: if you follow the program and don't generate income, we'll work with you for free until you do." },
+    { q: "Is there a refund policy?", a: "Refunds on paid mentorship plans (AI Starter, AI Accelerator, Full Project Delivery) are considered on a case-by-case basis before meaningful access has been granted or work has commenced. Please contact info@chrixlin.tech with your order details. Marketplace purchases (AI systems, templates, digital tools) are strictly non-refundable once the product has been downloaded or made available from your dashboard." },
     { q: "Can I switch between Monthly and Yearly billing?", a: "Yes. You can start monthly and upgrade to an annual plan at any time to lock in the savings (up to 20% off). Contact us at info@chrixlin.tech and we'll handle the switch immediately." },
     { q: "What AI tools and platforms do you teach?", a: "We cover the most in-demand tools businesses are paying for right now: Make.com, Zapier, Voiceflow, Botpress, OpenAI API, Retell AI, Vapi, and more. We update the curriculum every quarter so you're always learning what's current and sellable." }
   ]
@@ -1921,9 +1921,9 @@ function populateAll() {
   document.getElementById('hero_subtitle').value = val('hero.subtitle', 'Learn to create, sell, and scale AI automation solutions for real businesses. Get your first paying client by Week 4 — or you don\'t pay a cent.');
   document.getElementById('hero_cta1').value = val('hero.cta1', 'Book My Free Strategy Call');
   document.getElementById('hero_cta2').value = val('hero.cta2', 'See Real Results');
-  document.getElementById('hero_trust1').value = val('hero.trust1', '100% Risk-Free');
+  document.getElementById('hero_trust1').value = val('hero.trust1', 'Proven Results');
   document.getElementById('hero_trust2').value = val('hero.trust2', 'No Experience Required');
-  document.getElementById('hero_trust3').value = val('hero.trust3', 'Results in 60 Days');
+  document.getElementById('hero_trust3').value = val('hero.trust3', 'Real Business Results');
 
   // Story text keys
   document.getElementById('story_title').value = val('story.title', "From College Student to <span class='text-grad'>AI Business Pioneer</span>");
@@ -1954,7 +1954,7 @@ function populateAll() {
 
   // CTA
   document.getElementById('cta_title').value = val('cta.title', "Your AI Business <span class='text-grad'>Starts Today</span>");
-  document.getElementById('cta_subtitle').value = val('cta.subtitle', "Join 160+ entrepreneurs who took the first step. Book your free 1-on-1 strategy call and get a custom 60-day roadmap — no strings attached.");
+  document.getElementById('cta_subtitle').value = val('cta.subtitle', "Join 160+ entrepreneurs who took the first step. Book your free 1-on-1 strategy call and get a personalised AI business roadmap — no strings attached.");
   document.getElementById('cta_btnText').value = val('cta.btnText', 'Book My Free Strategy Call →');
   document.getElementById('cta_btnUrl').value = val('cta.btnUrl', 'mailto:info@chrixlin.tech');
   document.getElementById('cta_note').value = val('cta.note', '100% Free · No obligation · Limited spots available each week');
@@ -1962,7 +1962,7 @@ function populateAll() {
   // Footer
   document.getElementById('brand_name').value = val('nav.logo', 'Chrixlin AI Rise');
   document.getElementById('footer_logo').value = val('footer.logo', 'Chrixlin AI Rise');
-  document.getElementById('footer_tagline').value = val('footer.tagline', 'Helping ambitious people build profitable AI businesses through mentorship, real projects, and a proven 60-day system.');
+  document.getElementById('footer_tagline').value = val('footer.tagline', 'Helping ambitious people build profitable AI businesses through mentorship, real projects, and a proven results-driven system.');
   document.getElementById('footer_email').value = val('footer.email', 'info@chrixlin.tech');
   document.getElementById('footer_copy').value = val('footer.copy', '© 2025 Chrixlin AI Rise. All rights reserved.');
   document.getElementById('footer_privacy').value = val('footer.privacy', 'Privacy Policy');
@@ -1970,7 +1970,7 @@ function populateAll() {
 
   // SEO
   document.getElementById('seo_title').value = val('seo.title', 'Chrixlin AI Rise — Build Your AI Bot Business');
-  document.getElementById('seo_description').value = val('seo.description', 'Learn to build and sell AI automation bots. Join 160+ entrepreneurs who hit $5K–$50K/month — risk-free income share model.');
+  document.getElementById('seo_description').value = val('seo.description', 'Learn to build and sell AI automation bots. Join 160+ entrepreneurs who hit $5K–$50K/month — results-driven mentorship model.');
 
   // Build array editors
   buildStatsEditor();
@@ -2162,11 +2162,11 @@ function addForWhoItem() {
 // ─── PRICING PLANS MANAGER ────────────────────────────────────────────────────
 const DEFAULT_PRICING_PLANS_ADMIN = [
   { id:1, name:"Free Strategy Call", priceLabel:"FREE", price:0, period:"No credit card needed", billingCycle:"monthly", badge:"🎯 No Risk", badgeColor:"#22c55e", badgeBg:"rgba(34,197,94,0.12)", description:"Come with your business idea — we'll help you validate it, spot the opportunity, and map a clear path forward. No sales pitch, just honest strategy.", cta:"Book My Free Call →", ctaStyle:"outline", highlighted:false, features:["1-hour 1-on-1 strategy session","Market opportunity audit","Skill gap analysis","Income potential assessment","Competitor landscape overview","Zero sales pressure · No credit card required"] },
-  { id:2, name:"AI Starter", priceLabel:"$197", price:197, period:"Per month", billingCycle:"monthly", badge:"🔥 Most Popular", badgeColor:"#6366f1", badgeBg:"rgba(99,102,241,0.15)", description:"Everything you need to build your first AI product and land your first clients.", cta:"Get Started Today", ctaStyle:"primary", highlighted:false, features:["Full 60-day curriculum access","Weekly group coaching calls","AI tools & automation templates","Private community membership","Client proposal templates","Email & chat support"] },
-  { id:3, name:"AI Accelerator", priceLabel:"$497", price:497, period:"Per month · Cancel anytime", billingCycle:"monthly", badge:"⚡ Best Value", badgeColor:"#f59e0b", badgeBg:"rgba(245,158,11,0.12)", description:"Hands-on monthly support from first client to final delivery. We guide you through every project, help manage client expectations, and stay by your side every step of the way.", cta:"Join AI Accelerator", ctaStyle:"primary", highlighted:true, features:["2× weekly 1-on-1 mentorship calls","New client onboarding support","Post-sale client relationship guidance","Project delivery coaching","Ongoing partial support between milestones","Priority support channel","Income guarantee or full refund"] },
+  { id:2, name:"AI Starter", priceLabel:"$197", price:197, period:"Per month", billingCycle:"monthly", badge:"🔥 Most Popular", badgeColor:"#6366f1", badgeBg:"rgba(99,102,241,0.15)", description:"Everything you need to build your first AI product and land your first clients.", cta:"Get Started Today", ctaStyle:"primary", highlighted:false, features:["Full curriculum access","Weekly group coaching calls","AI tools & automation templates","Private community membership","Client proposal templates","Email & chat support"] },
+  { id:3, name:"AI Accelerator", priceLabel:"$497", price:497, period:"Per month · Cancel anytime", billingCycle:"monthly", badge:"⚡ Best Value", badgeColor:"#f59e0b", badgeBg:"rgba(245,158,11,0.12)", description:"Hands-on monthly support from first client to final delivery. We guide you through every project, help manage client expectations, and stay by your side every step of the way.", cta:"Join AI Accelerator", ctaStyle:"primary", highlighted:true, features:["2× weekly 1-on-1 mentorship calls","New client onboarding support","Post-sale client relationship guidance","Project delivery coaching","Ongoing partial support between milestones","Priority support channel","Dedicated results support"] },
   { id:4, name:"Free Strategy Call", priceLabel:"FREE", price:0, period:"No credit card needed", billingCycle:"yearly", badge:"🎯 No Risk", badgeColor:"#22c55e", badgeBg:"rgba(34,197,94,0.12)", description:"Come with your business idea — we'll help you validate it, spot the opportunity, and map a clear path forward. No sales pitch, just honest strategy.", cta:"Book My Free Call →", ctaStyle:"outline", highlighted:false, features:["1-hour 1-on-1 strategy session","Market opportunity audit","Skill gap analysis","Income potential assessment","Competitor landscape overview","Zero sales pressure · No credit card required"] },
-  { id:5, name:"AI Starter Yearly", priceLabel:"$1,497", price:1497, period:"Per year · Save 37%", billingCycle:"yearly", badge:"🔥 Most Popular", badgeColor:"#6366f1", badgeBg:"rgba(99,102,241,0.15)", description:"Everything you need to build your first AI product and land your first clients.", cta:"Get Started Today", ctaStyle:"primary", highlighted:false, features:["Full 60-day curriculum access","Weekly group coaching calls","AI tools & automation templates","Private community membership","Client proposal templates","Email & chat support"] },
-  { id:6, name:"AI Accelerator Yearly", priceLabel:"$3,997", price:3997, period:"Per year · Best value", billingCycle:"yearly", badge:"⚡ Best Value", badgeColor:"#f59e0b", badgeBg:"rgba(245,158,11,0.12)", description:"Done-with-you. We connect you with clients, co-deliver projects, and guarantee results.", cta:"Join AI Accelerator", ctaStyle:"primary", highlighted:true, features:["Everything in Starter, plus:","2× weekly 1-on-1 mentorship calls","Direct client introductions","Done-with-you project delivery","Priority Slack support channel","Income guarantee or full refund"] },
+  { id:5, name:"AI Starter Yearly", priceLabel:"$1,497", price:1497, period:"Per year · Save 37%", billingCycle:"yearly", badge:"🔥 Most Popular", badgeColor:"#6366f1", badgeBg:"rgba(99,102,241,0.15)", description:"Everything you need to build your first AI product and land your first clients.", cta:"Get Started Today", ctaStyle:"primary", highlighted:false, features:["Full curriculum access","Weekly group coaching calls","AI tools & automation templates","Private community membership","Client proposal templates","Email & chat support"] },
+  { id:6, name:"AI Accelerator Yearly", priceLabel:"$3,997", price:3997, period:"Per year · Best value", billingCycle:"yearly", badge:"⚡ Best Value", badgeColor:"#f59e0b", badgeBg:"rgba(245,158,11,0.12)", description:"Done-with-you. We connect you with clients, co-deliver projects, and guarantee results.", cta:"Join AI Accelerator", ctaStyle:"primary", highlighted:true, features:["Everything in Starter, plus:","2× weekly 1-on-1 mentorship calls","Direct client introductions","Done-with-you project delivery","Priority Slack support channel","Dedicated results support"] },
   { id:7, name:"Free Strategy Call", priceLabel:"FREE", price:0, period:"No credit card needed", billingCycle:"one-time", badge:"🎯 No Risk", badgeColor:"#22c55e", badgeBg:"rgba(34,197,94,0.12)", description:"Come with your business idea — we'll help you validate it, spot the opportunity, and map a clear path forward. No sales pitch, just honest strategy.", cta:"Book My Free Call →", ctaStyle:"outline", highlighted:false, features:["1-hour 1-on-1 strategy session","Market opportunity audit","Skill gap analysis","Income potential assessment","Competitor landscape overview","Zero sales pressure · No credit card required"] },
   { id:8, name:"Full Project Delivery", priceLabel:"$1,497", price:1497, period:"One-time · Base project price", billingCycle:"one-time", badge:"🚀 Done For You", badgeColor:"#7c3aed", badgeBg:"rgba(124,58,237,0.15)", description:"You bring the vision — we handle everything from scoping to final delivery. Complete end-to-end AI project support at a single flat rate. Complex scope discussed transparently before any extra charge.", cta:"Start My Project →", ctaStyle:"primary", highlighted:true, features:["End-to-end project scoping & planning","Full AI solution design & build","Testing, QA & quality assurance","Deployment & integration setup","Client handover documentation","Team training session included","30-day post-launch support","Transparent pricing — no surprise fees"] }
 ];
@@ -3301,7 +3301,7 @@ var DEFAULT_CHECKOUT = {
   cgst: 0, cgstEnabled: false,
   sgst: 0, sgstEnabled: false,
   successMsg: 'Thank you for your purchase! Our team will contact you within 24 hours to schedule your onboarding call.',
-  refundPolicy: '15-day money-back guarantee. Contact us within 15 days for a full refund if you\'re not satisfied.'
+  refundPolicy: 'Plan refunds considered on a case-by-case basis before access is granted. Marketplace purchases are non-refundable once downloaded. Contact info@chrixlin.tech for queries.'
 };
 
 function loadCheckoutSettings() {
