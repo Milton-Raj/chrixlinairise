@@ -420,7 +420,13 @@
     const client = _getClient();
     if (!client) return [];
     try {
-      const { data, error } = await client.from('customer_orders').select('*').order('created_at', { ascending: false });
+      const session = await getCustomerSession();
+      if (!session) return [];
+      const { data, error } = await client
+        .from('customer_orders')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .order('created_at', { ascending: false });
       if (error) throw error;
       return data || [];
     } catch (err) {
