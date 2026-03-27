@@ -730,7 +730,11 @@ const _isPlanMode    = !!(_planId && _planName && _planPrice > 0);
         const thumbEl2 = document.getElementById('orderThumb');
         const tc2 = ({  'voice-ai':'cat-thumb-voice-ai','sales':'cat-thumb-sales','content':'cat-thumb-content','lead':'cat-thumb-lead','automation':'cat-thumb-automation'})[dbProduct.category]||'cat-thumb-voice-ai';
         if (dbProduct.image) {
-          thumbEl2.innerHTML = '<img src="'+dbProduct.image+'" style="width:100%;height:100%;object-fit:cover">';
+          var img = document.createElement('img');
+          img.src = dbProduct.image;
+          img.style.cssText = 'width:100%;height:100%;object-fit:cover';
+          thumbEl2.innerHTML = '';
+          thumbEl2.appendChild(img);
         } else {
           thumbEl2.textContent = dbProduct.emoji||'🤖';
         }
@@ -792,6 +796,19 @@ function goBack() {
   else { history.back(); }
 }
 
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function showToast(msg, type) {
+  var t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);'
+    + 'background:'+(type==='error'?'#ef4444':'#22c55e')+';color:#fff;'
+    + 'padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;'
+    + 'z-index:99999;box-shadow:0 4px 16px rgba(0,0,0,0.3);pointer-events:none;'
+    + 'transition:opacity 0.4s';
+  document.body.appendChild(t);
+  setTimeout(function(){ t.style.opacity='0'; setTimeout(function(){ t.remove(); },400); }, 2800);
+}
+
 function goToStep1() {
   document.getElementById('step1Wrap').style.display = '';
   document.getElementById('step2Wrap').style.display = 'none';
@@ -828,7 +845,7 @@ function removePdf() {
 async function uploadPdfToSupabase(file) {
   if (!file || typeof ChrixlinDB === 'undefined') return null;
   try {
-    const client = ChrixlinDB._client && ChrixlinDB._client();
+    const client = ChrixlinDB._getClient && ChrixlinDB._getClient();
     if (!client) return null;
     const fname = 'customer-docs/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
     const { data, error } = await client.storage.from('product-images').upload(fname, file, { upsert: false, contentType: 'application/pdf' });
@@ -1517,10 +1534,9 @@ function validEmail(id) {
   return ok;
 }
 function validate() {
-  const checks = [required('cardName'),required('cardNumber'),required('cardExpiry'),required('cvv')];
-  // only validate card fields if card is active method
+  // Only validate card fields when card is the active payment method
   if (activeMethod !== 'card') return true;
-  return checks.every(Boolean);
+  return [required('cardName'),required('cardNumber'),required('cardExpiry'),required('cvv')].every(Boolean);
 }
 
 // ─── SUBMIT ───────────────────────────────────────────────────────────────────
