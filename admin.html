@@ -2977,8 +2977,12 @@ const DEFAULT_MP = {
     { ytId: "", title: "Student Success: $12K/Month", desc: "Shubham walks through how he earns $12K/month deploying our AI agents.", thumb: "🏆" }
   ],
   products: [
-    { id: 1, category: "voice-ai", categoryLabel: "Voice AI", categoryClass: "cat-voice", emoji: "📞", title: "Voice AI Appointment Agent", badge: "Bestseller", desc: "AI-powered voice assistant that handles calls, books appointments, and sends reminders 24/7.", longDesc: "Deploy a fully autonomous AI voice agent for your business.", features: ["24/7 automated call handling","Direct calendar integration","SMS & email reminders","CRM integration","Custom voice & script"], price: "$1,499", buyUrl: "mailto:info@chrixlin.tech?subject=Buying: Voice AI Appointment Agent" },
-    { id: 2, category: "sales", categoryLabel: "Sales AI", categoryClass: "cat-sales", emoji: "🔥", title: "Lead Reactivation AI Platform", badge: "Hot", desc: "Autonomous system that turns dormant CRM contacts into confirmed bookings.", longDesc: "Stop leaving money on the table with your cold leads.", features: ["CRM integration","AI-personalized outreach","Multi-channel: SMS, email","Automatic booking","Detailed analytics"], price: "$499", buyUrl: "mailto:info@chrixlin.tech?subject=Buying: Lead Reactivation AI Platform" }
+    { id: 1, category: "voice-ai", categoryLabel: "Voice AI", categoryClass: "cat-voice", emoji: "📞", title: "Voice AI Appointment Agent", badge: "Bestseller", desc: "AI-powered voice assistant that handles incoming calls, books appointments, and sends follow-up reminders — 24/7 without human intervention.", longDesc: "Deploy a fully autonomous AI voice agent that handles every incoming call for your business. It answers questions, qualifies leads, books appointments directly into your calendar, and sends automated SMS/email reminders — all without any human involvement.", features: ["24/7 automated call handling","Direct calendar integration","SMS & email appointment reminders","CRM pipeline integration","Custom voice, tone & script","Multilingual support","Full setup & onboarding included"], price: "$1,499", sortOrder: 1, isActive: true, buyUrl: "mailto:info@chrixlin.tech?subject=Buying: Voice AI Appointment Agent" },
+    { id: 2, category: "sales", categoryLabel: "Sales AI", categoryClass: "cat-sales", emoji: "🔥", title: "Lead Reactivation AI Platform", badge: "Hot", desc: "Autonomous system that identifies dormant contacts in your CRM and turns them into confirmed bookings through personalized AI outreach.", longDesc: "Stop leaving money on the table. This platform automatically scans your CRM for leads that went cold, crafts personalized follow-up messages based on their history, and drives them to take action.", features: ["CRM integration (GoHighLevel, HubSpot, etc.)","AI-personalized outreach sequences","Multi-channel: SMS, email, voicemail drops","Automatic booking on positive replies","Detailed analytics dashboard","A/B testing for message optimization"], price: "$499", sortOrder: 2, isActive: true, buyUrl: "mailto:info@chrixlin.tech?subject=Buying: Lead Reactivation AI Platform" },
+    { id: 3, category: "voice-ai", categoryLabel: "Voice AI", categoryClass: "cat-voice", emoji: "🏥", title: "Patient Acquisition AI System", badge: "Premium", desc: "Complete patient acquisition pipeline with AI voice agent, marketing funnels, CRM pipeline, and automated appointment scheduling for healthcare.", longDesc: "A turnkey patient acquisition system built specifically for healthcare providers. Includes a custom AI voice agent for inbound calls, automated marketing funnels, HIPAA-compliant CRM pipeline, and seamless appointment scheduling.", features: ["HIPAA-compliant architecture","AI inbound & outbound calling","Automated marketing funnels","GoHighLevel snapshot included","Patient intake automation","Review collection system","White-label ready"], price: "$1,497", sortOrder: 3, isActive: true, buyUrl: "mailto:info@chrixlin.tech?subject=Buying: Patient Acquisition AI System" },
+    { id: 4, category: "content", categoryLabel: "Content AI", categoryClass: "cat-content", emoji: "✍️", title: "AI Content & Marketing Agent", badge: "", desc: "Plug-and-play AI agent that generates and publishes social content, ad copy, email campaigns, and blog posts from a single prompt.", longDesc: "Give this AI agent a topic, product, or goal and it produces a full content calendar: social media posts, email sequences, ad copy, and blog articles — all optimized for your brand voice.", features: ["Multi-platform content generation","Brand voice training","Auto-publish to social media","Email sequence writer","SEO-optimized blog posts","Ad copy generator","Content calendar scheduler"], price: "$997", sortOrder: 4, isActive: true, buyUrl: "mailto:info@chrixlin.tech?subject=Buying: AI Content & Marketing Agent" },
+    { id: 5, category: "lead", categoryLabel: "Lead Gen", categoryClass: "cat-lead", emoji: "🎯", title: "AI Lead Generation System", badge: "", desc: "End-to-end lead generation machine that finds prospects, qualifies them with AI conversations, and books them directly into your sales calendar.", longDesc: "Automate your entire top-of-funnel. This system sources targeted leads from LinkedIn, web scraping, and third-party data, then engages them with personalized AI conversations that qualify interest and intent.", features: ["Multi-source lead sourcing","AI qualification conversations","LinkedIn outreach automation","Automatic calendar booking","Lead scoring & prioritization","Custom ICP targeting","Full analytics & reporting"], price: "$1,297", sortOrder: 5, isActive: true, buyUrl: "mailto:info@chrixlin.tech?subject=Buying: AI Lead Generation System" },
+    { id: 6, category: "automation", categoryLabel: "Automation", categoryClass: "cat-automation", emoji: "⚙️", title: "Business Automation Workflow Suite", badge: "New", desc: "A comprehensive suite of AI-powered automation workflows that eliminate repetitive tasks across your entire business operation.", longDesc: "Stop wasting hours on tasks a machine can do. This suite includes pre-built automation workflows for onboarding, invoicing, follow-ups, reporting, and internal communications — all connected via AI.", features: ["200+ app integrations","Automated client onboarding","Invoice & payment automation","AI-powered reporting","Internal workflow automation","Custom trigger + action builder","Zapier/Make compatible"], price: "$799", sortOrder: 6, isActive: true, buyUrl: "mailto:info@chrixlin.tech?subject=Buying: Business Automation Workflow Suite" }
   ],
   book: { email: "info@chrixlin.tech" }
 };
@@ -2998,19 +3002,30 @@ const mpData = loadMPData();
 let _pmEditId = null;
 
 async function populateMarketplace() {
-  // Show loading state
   const grid = document.getElementById('mpProductCards');
   const empty = document.getElementById('mpEmptyState');
   if (grid) grid.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--muted)"><div style="font-size:32px;margin-bottom:12px">⏳</div><div style="font-size:14px">Loading products from database…</div></div>';
   if (empty) empty.style.display = 'none';
 
-  // Always pull fresh from Supabase (admin sees ALL products, active + inactive)
   if (typeof ChrixlinDB !== 'undefined' && ChrixlinDB.loadAllProductsAdmin) {
     try {
       const products = await ChrixlinDB.loadAllProductsAdmin();
-      mpData.products = products || [];
+      if (products && products.length > 0) {
+        mpData.products = products;
+      } else {
+        // DB is empty — seed all default products so Admin→DB→Landing Page chain works
+        var defaults = JSON.parse(JSON.stringify(DEFAULT_MP.products));
+        mpData.products = defaults;
+        var blob = JSON.parse(localStorage.getItem('chrixlin_marketplace') || '{}');
+        blob.products = defaults;
+        localStorage.setItem('chrixlin_marketplace', JSON.stringify(blob));
+        defaults.forEach(function(p) {
+          ChrixlinDB.upsertProduct(p).catch(function() {});
+        });
+        showToast('📦 Products seeded to database');
+      }
     } catch(e) {
-      // fallback to whatever is already in mpData
+      // fallback: keep whatever is in mpData from localStorage
     }
   }
   renderProductCards();
