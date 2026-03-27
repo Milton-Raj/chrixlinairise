@@ -1130,32 +1130,46 @@
       </div>
 
       <!-- ── TERMS & CONDITIONS ────────────────────────────── -->
+      <!-- ── TERMS & CONDITIONS ────────────────────────────── -->
       <div id="panel-terms" class="panel">
         <div class="panel-title">📄 Terms &amp; Conditions</div>
-        <div class="panel-desc">Edit the Terms &amp; Conditions shown at <a href="/terms.html" target="_blank" style="color:#a78bfa">chrixlin.tech/terms.html</a>. Supports HTML formatting.</div>
-
-        <div style="margin-top:24px">
-          <!-- Toolbar -->
-          <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
-            <button onclick="termsInsert('<h2>New Section</h2>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">H2</button>
-            <button onclick="termsInsert('<h3>Sub-heading</h3>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">H3</button>
-            <button onclick="termsInsert('<p>Paragraph text here.</p>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">¶ Para</button>
-            <button onclick="termsInsert('<ul>\n  <li>Item 1</li>\n  <li>Item 2</li>\n</ul>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">• List</button>
-            <button onclick="termsInsert('<strong>bold text</strong>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer"><b>B</b></button>
-            <button onclick="termsInsert('<a href=\"mailto:info@chrixlin.tech\">info@chrixlin.tech</a>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">Link</button>
-            <a href="terms.html" target="_blank" style="margin-left:auto;padding:5px 14px;font-size:12px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);border-radius:6px;color:#a78bfa;text-decoration:none">👁 Preview Page</a>
+        <div class="panel-desc">Edit the Terms &amp; Conditions shown at <a href="/terms.html" target="_blank" style="color:#a78bfa">chrixlin.tech/terms.html</a>.</div>
+        <div style="margin-top:20px">
+          <div class="rich-toolbar">
+            <select class="rtb-select" onchange="richFmtBlock('termsRE',this.value);this.value=''">
+              <option value="">Format…</option>
+              <option value="p">Normal</option>
+              <option value="h2">Heading 2</option>
+              <option value="h3">Heading 3</option>
+              <option value="h4">Heading 4</option>
+              <option value="blockquote">Quote</option>
+            </select>
+            <span class="rtb-sep"></span>
+            <button class="rtb-btn" onclick="richCmd('termsRE','bold')" title="Bold"><b>B</b></button>
+            <button class="rtb-btn" onclick="richCmd('termsRE','italic')" title="Italic"><i>I</i></button>
+            <button class="rtb-btn" onclick="richCmd('termsRE','underline')" title="Underline"><u>U</u></button>
+            <button class="rtb-btn" onclick="richCmd('termsRE','strikeThrough')" title="Strikethrough"><s>S</s></button>
+            <span class="rtb-sep"></span>
+            <button class="rtb-btn" onclick="richCmd('termsRE','justifyLeft')" title="Align Left">⬛ L</button>
+            <button class="rtb-btn" onclick="richCmd('termsRE','justifyCenter')" title="Center">C ≡</button>
+            <button class="rtb-btn" onclick="richCmd('termsRE','justifyRight')" title="Align Right">R ⬛</button>
+            <span class="rtb-sep"></span>
+            <button class="rtb-btn" onclick="richCmd('termsRE','insertUnorderedList')" title="Bullet List">• List</button>
+            <button class="rtb-btn" onclick="richCmd('termsRE','insertOrderedList')" title="Numbered List">1. List</button>
+            <button class="rtb-btn" onclick="richCmd('termsRE','indent')" title="Indent">↦ In</button>
+            <button class="rtb-btn" onclick="richCmd('termsRE','outdent')" title="Outdent">↤ Out</button>
+            <span class="rtb-sep"></span>
+            <button class="rtb-btn" onclick="richInsertLink('termsRE')" title="Insert Link">🔗 Link</button>
+            <button class="rtb-btn" onclick="richCmd('termsRE','insertHorizontalRule')" title="Horizontal Rule">― HR</button>
+            <span style="flex:1"></span>
+            <a href="terms.html" target="_blank" class="rtb-btn" style="text-decoration:none;color:#a78bfa">👁 Preview</a>
+            <button class="rtb-btn rtb-src-active" id="termsRESrcBtn" onclick="richToggleSource('termsRE')" title="Toggle HTML source">&lt;/&gt; HTML</button>
           </div>
-
-          <textarea id="termsEditor"
-            placeholder="Enter your Terms &amp; Conditions HTML here..."
-            style="width:100%;min-height:520px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:monospace;font-size:13px;line-height:1.6;padding:16px;resize:vertical;outline:none;transition:border-color 0.2s"
-            onfocus="this.style.borderColor='var(--primary)'"
-            onblur="this.style.borderColor='var(--border)'"
-          ></textarea>
-
+          <div id="termsRE" class="rich-editor" contenteditable="true" spellcheck="true"></div>
+          <textarea id="termsRESrc" class="rich-editor-src" style="display:none" placeholder="HTML source…"></textarea>
           <div style="display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap">
-            <button onclick="saveTerms()" style="padding:12px 28px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity 0.2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">💾 Save Terms</button>
-            <button onclick="loadTermsDefault()" style="padding:12px 20px;background:var(--bg3);color:var(--sub);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer">↺ Reset to Default</button>
+            <button class="btn btn-primary" onclick="saveTerms()" style="padding:11px 28px">💾 Save Terms</button>
+            <button class="btn" onclick="loadTermsDefault()" style="padding:11px 20px;background:var(--bg3);border:1px solid var(--border)">↺ Reset Default</button>
             <span id="termsSaveStatus" style="font-size:13px;color:#22c55e"></span>
           </div>
         </div>
@@ -1164,30 +1178,43 @@
       <!-- ── PRIVACY POLICY ───────────────────────────────── -->
       <div id="panel-privacy" class="panel">
         <div class="panel-title">🔒 Privacy Policy</div>
-        <div class="panel-desc">Edit the Privacy Policy shown at <a href="/privacy.html" target="_blank" style="color:#a78bfa">chrixlin.tech/privacy.html</a>. Supports HTML formatting.</div>
-
-        <div style="margin-top:24px">
-          <!-- Toolbar -->
-          <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
-            <button onclick="privacyInsert('<h2>New Section</h2>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">H2</button>
-            <button onclick="privacyInsert('<h3>Sub-heading</h3>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">H3</button>
-            <button onclick="privacyInsert('<p>Paragraph text here.</p>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">¶ Para</button>
-            <button onclick="privacyInsert('<ul>\n  <li>Item 1</li>\n  <li>Item 2</li>\n</ul>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">• List</button>
-            <button onclick="privacyInsert('<strong>bold text</strong>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer"><b>B</b></button>
-            <button onclick="privacyInsert('<a href=\"mailto:info@chrixlin.tech\">info@chrixlin.tech</a>')" style="padding:5px 12px;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">Link</button>
-            <a href="privacy.html" target="_blank" style="margin-left:auto;padding:5px 14px;font-size:12px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);border-radius:6px;color:#a78bfa;text-decoration:none">👁 Preview Page</a>
+        <div class="panel-desc">Edit the Privacy Policy shown at <a href="/privacy.html" target="_blank" style="color:#a78bfa">chrixlin.tech/privacy.html</a>.</div>
+        <div style="margin-top:20px">
+          <div class="rich-toolbar">
+            <select class="rtb-select" onchange="richFmtBlock('privacyRE',this.value);this.value=''">
+              <option value="">Format…</option>
+              <option value="p">Normal</option>
+              <option value="h2">Heading 2</option>
+              <option value="h3">Heading 3</option>
+              <option value="h4">Heading 4</option>
+              <option value="blockquote">Quote</option>
+            </select>
+            <span class="rtb-sep"></span>
+            <button class="rtb-btn" onclick="richCmd('privacyRE','bold')" title="Bold"><b>B</b></button>
+            <button class="rtb-btn" onclick="richCmd('privacyRE','italic')" title="Italic"><i>I</i></button>
+            <button class="rtb-btn" onclick="richCmd('privacyRE','underline')" title="Underline"><u>U</u></button>
+            <button class="rtb-btn" onclick="richCmd('privacyRE','strikeThrough')" title="Strikethrough"><s>S</s></button>
+            <span class="rtb-sep"></span>
+            <button class="rtb-btn" onclick="richCmd('privacyRE','justifyLeft')" title="Align Left">⬛ L</button>
+            <button class="rtb-btn" onclick="richCmd('privacyRE','justifyCenter')" title="Center">C ≡</button>
+            <button class="rtb-btn" onclick="richCmd('privacyRE','justifyRight')" title="Align Right">R ⬛</button>
+            <span class="rtb-sep"></span>
+            <button class="rtb-btn" onclick="richCmd('privacyRE','insertUnorderedList')" title="Bullet List">• List</button>
+            <button class="rtb-btn" onclick="richCmd('privacyRE','insertOrderedList')" title="Numbered List">1. List</button>
+            <button class="rtb-btn" onclick="richCmd('privacyRE','indent')" title="Indent">↦ In</button>
+            <button class="rtb-btn" onclick="richCmd('privacyRE','outdent')" title="Outdent">↤ Out</button>
+            <span class="rtb-sep"></span>
+            <button class="rtb-btn" onclick="richInsertLink('privacyRE')" title="Insert Link">🔗 Link</button>
+            <button class="rtb-btn" onclick="richCmd('privacyRE','insertHorizontalRule')" title="Horizontal Rule">― HR</button>
+            <span style="flex:1"></span>
+            <a href="privacy.html" target="_blank" class="rtb-btn" style="text-decoration:none;color:#a78bfa">👁 Preview</a>
+            <button class="rtb-btn rtb-src-active" id="privacyRESrcBtn" onclick="richToggleSource('privacyRE')" title="Toggle HTML source">&lt;/&gt; HTML</button>
           </div>
-
-          <textarea id="privacyEditor"
-            placeholder="Enter your Privacy Policy HTML here..."
-            style="width:100%;min-height:520px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:monospace;font-size:13px;line-height:1.6;padding:16px;resize:vertical;outline:none;transition:border-color 0.2s"
-            onfocus="this.style.borderColor='var(--primary)'"
-            onblur="this.style.borderColor='var(--border)'"
-          ></textarea>
-
+          <div id="privacyRE" class="rich-editor" contenteditable="true" spellcheck="true"></div>
+          <textarea id="privacyRESrc" class="rich-editor-src" style="display:none" placeholder="HTML source…"></textarea>
           <div style="display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap">
-            <button onclick="savePrivacy()" style="padding:12px 28px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity 0.2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">💾 Save Privacy Policy</button>
-            <button onclick="loadPrivacyDefault()" style="padding:12px 20px;background:var(--bg3);color:var(--sub);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer">↺ Reset to Default</button>
+            <button class="btn btn-primary" onclick="savePrivacy()" style="padding:11px 28px">💾 Save Privacy Policy</button>
+            <button class="btn" onclick="loadPrivacyDefault()" style="padding:11px 20px;background:var(--bg3);border:1px solid var(--border)">↺ Reset Default</button>
             <span id="privacySaveStatus" style="font-size:13px;color:#22c55e"></span>
           </div>
         </div>
@@ -2397,132 +2424,157 @@ function savePricing() { showToast('💎 Plans auto-saved!'); }
 // ─── TERMS & CONDITIONS ───────────────────────────────────────────────────────
 var _termsDefault = null; // loaded lazily from terms.html script
 
+// ─── RICH EDITOR HELPERS ──────────────────────────────────────────────────────
+function _richGetHtml(editorId) {
+  var src = document.getElementById(editorId + 'Src');
+  if (src && src.style.display !== 'none') return src.value;
+  var ed = document.getElementById(editorId);
+  return ed ? ed.innerHTML : '';
+}
+function _richSetHtml(editorId, html) {
+  var ed  = document.getElementById(editorId);
+  var src = document.getElementById(editorId + 'Src');
+  if (ed)  ed.innerHTML = html;
+  if (src) src.value    = html;
+}
+function richCmd(editorId, cmd) {
+  var src = document.getElementById(editorId + 'Src');
+  if (src && src.style.display !== 'none') return; // ignore when in source mode
+  var ed = document.getElementById(editorId);
+  if (!ed) return;
+  ed.focus();
+  document.execCommand(cmd, false, null);
+}
+function richFmtBlock(editorId, tag) {
+  if (!tag) return;
+  var src = document.getElementById(editorId + 'Src');
+  if (src && src.style.display !== 'none') return;
+  var ed = document.getElementById(editorId);
+  if (!ed) return;
+  ed.focus();
+  document.execCommand('formatBlock', false, tag);
+}
+function richInsertLink(editorId) {
+  var src = document.getElementById(editorId + 'Src');
+  if (src && src.style.display !== 'none') return;
+  var ed = document.getElementById(editorId);
+  if (!ed) return;
+  var url = prompt('Enter URL (e.g. https://example.com or mailto:info@chrixlin.tech):');
+  if (!url) return;
+  ed.focus();
+  document.execCommand('createLink', false, url);
+}
+function richToggleSource(editorId) {
+  var ed  = document.getElementById(editorId);
+  var src = document.getElementById(editorId + 'Src');
+  var btn = document.getElementById(editorId + 'SrcBtn');
+  if (!ed || !src) return;
+  var isSource = src.style.display !== 'none';
+  if (isSource) {
+    // switch back to visual
+    ed.innerHTML = src.value;
+    ed.style.display  = 'block';
+    src.style.display = 'none';
+    if (btn) btn.classList.remove('on');
+  } else {
+    // switch to HTML source
+    src.value = ed.innerHTML;
+    src.style.display = 'block';
+    ed.style.display  = 'none';
+    if (btn) btn.classList.add('on');
+  }
+}
+
+// ─── TERMS & CONDITIONS ───────────────────────────────────────────────────────
 async function loadTermsPanel() {
-  var ta = document.getElementById('termsEditor');
-  if (!ta) return;
   try {
     if (typeof ChrixlinDB !== 'undefined') {
       var saved = await ChrixlinDB.loadFromSupabase('site_settings', 'terms_and_conditions');
-      if (saved && saved.html) { ta.value = saved.html; return; }
+      if (saved && saved.html) { _richSetHtml('termsRE', saved.html); return; }
     }
   } catch(e) {}
-  // Fallback: load default from terms.html via fetch
   try {
     var r = await fetch('terms.html');
     var txt = await r.text();
     var m = txt.match(/var DEFAULT_TERMS\s*=\s*`([\s\S]*?)`;/);
-    if (m) { ta.value = m[1].trim(); _termsDefault = m[1].trim(); return; }
+    if (m) { _richSetHtml('termsRE', m[1].trim()); return; }
   } catch(e) {}
-  ta.value = '<h2>1. Acceptance of Terms</h2>\n<p>Enter your Terms & Conditions here.</p>';
+  _richSetHtml('termsRE', '<h2>1. Acceptance of Terms</h2><p>Enter your Terms &amp; Conditions here.</p>');
 }
 
 async function saveTerms() {
-  var ta = document.getElementById('termsEditor');
+  var html = _richGetHtml('termsRE').trim();
   var statusEl = document.getElementById('termsSaveStatus');
-  if (!ta) return;
-  var html = ta.value.trim();
   if (!html) { showToast('Terms content cannot be empty', 'error'); return; }
-  statusEl.textContent = 'Saving…';
-  statusEl.style.color = 'var(--muted)';
+  statusEl.textContent = 'Saving…'; statusEl.style.color = 'var(--muted)';
   try {
     if (typeof ChrixlinDB !== 'undefined') {
       await ChrixlinDB.saveToSupabase('site_settings', 'terms_and_conditions', { html: html, updatedAt: new Date().toISOString() });
     }
-    statusEl.textContent = '✓ Saved!';
-    statusEl.style.color = '#22c55e';
+    statusEl.textContent = '✓ Saved!'; statusEl.style.color = '#22c55e';
     showToast('📄 Terms & Conditions saved!');
     setTimeout(function(){ statusEl.textContent = ''; }, 3000);
   } catch(e) {
-    statusEl.textContent = 'Save failed';
-    statusEl.style.color = '#f87171';
+    statusEl.textContent = 'Save failed'; statusEl.style.color = '#f87171';
     showToast('Failed to save terms', 'error');
   }
 }
 
 async function loadTermsDefault() {
-  var ta = document.getElementById('termsEditor');
-  if (!ta) return;
   if (!confirm('Reset to default Terms & Conditions? Current edits will be lost.')) return;
   try {
     var r = await fetch('terms.html');
     var txt = await r.text();
     var m = txt.match(/var DEFAULT_TERMS\s*=\s*`([\s\S]*?)`;/);
-    if (m) { ta.value = m[1].trim(); showToast('↺ Reset to default'); return; }
+    if (m) { _richSetHtml('termsRE', m[1].trim()); showToast('↺ Reset to default'); return; }
   } catch(e) {}
   showToast('Could not load default', 'error');
 }
 
-function termsInsert(snippet) {
-  var ta = document.getElementById('termsEditor');
-  if (!ta) return;
-  var start = ta.selectionStart, end = ta.selectionEnd;
-  ta.value = ta.value.substring(0, start) + '\n' + snippet + '\n' + ta.value.substring(end);
-  ta.selectionStart = ta.selectionEnd = start + snippet.length + 2;
-  ta.focus();
-}
-
 // ─── PRIVACY POLICY ───────────────────────────────────────────────────────────
 async function loadPrivacyPanel() {
-  var ta = document.getElementById('privacyEditor');
-  if (!ta) return;
   try {
     if (typeof ChrixlinDB !== 'undefined') {
       var saved = await ChrixlinDB.loadFromSupabase('site_settings', 'privacy_policy');
-      if (saved && saved.html) { ta.value = saved.html; return; }
+      if (saved && saved.html) { _richSetHtml('privacyRE', saved.html); return; }
     }
   } catch(e) {}
   try {
     var r = await fetch('privacy.html');
     var txt = await r.text();
     var m = txt.match(/var DEFAULT_PRIVACY\s*=\s*`([\s\S]*?)`;/);
-    if (m) { ta.value = m[1].trim(); return; }
+    if (m) { _richSetHtml('privacyRE', m[1].trim()); return; }
   } catch(e) {}
-  ta.value = '<h2>1. Introduction</h2>\n<p>Enter your Privacy Policy here.</p>';
+  _richSetHtml('privacyRE', '<h2>1. Introduction</h2><p>Enter your Privacy Policy here.</p>');
 }
 
 async function savePrivacy() {
-  var ta = document.getElementById('privacyEditor');
+  var html = _richGetHtml('privacyRE').trim();
   var statusEl = document.getElementById('privacySaveStatus');
-  if (!ta) return;
-  var html = ta.value.trim();
   if (!html) { showToast('Privacy Policy content cannot be empty', 'error'); return; }
-  statusEl.textContent = 'Saving…';
-  statusEl.style.color = 'var(--muted)';
+  statusEl.textContent = 'Saving…'; statusEl.style.color = 'var(--muted)';
   try {
     if (typeof ChrixlinDB !== 'undefined') {
       await ChrixlinDB.saveToSupabase('site_settings', 'privacy_policy', { html: html, updatedAt: new Date().toISOString() });
     }
-    statusEl.textContent = '✓ Saved!';
-    statusEl.style.color = '#22c55e';
+    statusEl.textContent = '✓ Saved!'; statusEl.style.color = '#22c55e';
     showToast('🔒 Privacy Policy saved!');
     setTimeout(function(){ statusEl.textContent = ''; }, 3000);
   } catch(e) {
-    statusEl.textContent = 'Save failed';
-    statusEl.style.color = '#f87171';
+    statusEl.textContent = 'Save failed'; statusEl.style.color = '#f87171';
     showToast('Failed to save privacy policy', 'error');
   }
 }
 
 async function loadPrivacyDefault() {
-  var ta = document.getElementById('privacyEditor');
-  if (!ta) return;
   if (!confirm('Reset to default Privacy Policy? Current edits will be lost.')) return;
   try {
     var r = await fetch('privacy.html');
     var txt = await r.text();
     var m = txt.match(/var DEFAULT_PRIVACY\s*=\s*`([\s\S]*?)`;/);
-    if (m) { ta.value = m[1].trim(); showToast('↺ Reset to default'); return; }
+    if (m) { _richSetHtml('privacyRE', m[1].trim()); showToast('↺ Reset to default'); return; }
   } catch(e) {}
   showToast('Could not load default', 'error');
-}
-
-function privacyInsert(snippet) {
-  var ta = document.getElementById('privacyEditor');
-  if (!ta) return;
-  var start = ta.selectionStart, end = ta.selectionEnd;
-  ta.value = ta.value.substring(0, start) + '\n' + snippet + '\n' + ta.value.substring(end);
-  ta.selectionStart = ta.selectionEnd = start + snippet.length + 2;
-  ta.focus();
 }
 
 // ─── BOOK FREE CALLS ──────────────────────────────────────────────────────────
@@ -3714,6 +3766,63 @@ if (savedTheme.text) document.getElementById('theme_text').value = savedTheme.te
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
 #adminLoginOverlay.hidden { display: none; }
+/* ─── RICH TEXT EDITOR ──────────────────────────────────────────────────────── */
+.rich-toolbar {
+  display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-bottom: none; border-radius: 10px 10px 0 0;
+  padding: 8px 10px;
+}
+.rtb-btn {
+  padding: 4px 9px; font-size: 12px; background: transparent;
+  border: 1px solid transparent; border-radius: 5px;
+  color: var(--text); cursor: pointer; transition: all 0.15s;
+  white-space: nowrap; line-height: 1.4;
+}
+.rtb-btn:hover { background: var(--bg2); border-color: var(--border); }
+.rtb-btn.active { background: rgba(99,102,241,0.2); border-color: rgba(99,102,241,0.4); color: #a78bfa; }
+.rtb-select {
+  padding: 4px 8px; font-size: 12px; background: var(--bg2);
+  border: 1px solid var(--border); border-radius: 5px;
+  color: var(--text); cursor: pointer; outline: none;
+}
+.rtb-sep {
+  width: 1px; height: 20px; background: var(--border);
+  margin: 0 4px; flex-shrink: 0;
+}
+.rtb-src-active { color: var(--muted); }
+.rtb-src-active.on { background: rgba(99,102,241,0.2); border-color: rgba(99,102,241,0.4); color: #a78bfa; }
+
+.rich-editor {
+  width: 100%; min-height: 500px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 0 0 10px 10px;
+  color: var(--text); font-size: 14px; line-height: 1.75;
+  padding: 20px 24px; outline: none;
+  overflow-y: auto; cursor: text;
+}
+.rich-editor:focus { border-color: var(--primary); }
+.rich-editor h2 { font-size: 1.35em; font-weight: 700; margin: 1.1em 0 0.4em; color: #e2e8f0; }
+.rich-editor h3 { font-size: 1.15em; font-weight: 700; margin: 0.9em 0 0.35em; color: #cbd5e1; }
+.rich-editor h4 { font-size: 1em; font-weight: 700; margin: 0.8em 0 0.3em; color: #94a3b8; }
+.rich-editor p { margin: 0.4em 0; }
+.rich-editor ul, .rich-editor ol { padding-left: 1.6em; margin: 0.4em 0; }
+.rich-editor li { margin: 0.25em 0; }
+.rich-editor blockquote { border-left: 3px solid #6366f1; padding-left: 1em; color: #94a3b8; font-style: italic; margin: 0.5em 0; }
+.rich-editor a { color: #a78bfa; text-decoration: underline; }
+.rich-editor hr { border: none; border-top: 1px solid var(--border); margin: 1em 0; }
+.rich-editor strong, .rich-editor b { font-weight: 700; }
+
+.rich-editor-src {
+  width: 100%; min-height: 500px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 0 0 10px 10px;
+  color: #94a3b8; font-family: monospace; font-size: 12.5px; line-height: 1.6;
+  padding: 16px 20px; outline: none; resize: vertical;
+}
+.rich-editor-src:focus { border-color: var(--primary); }
+/* ─────────────────────────────────────────────────────────────────────────── */
+
 .login-box {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.1);
