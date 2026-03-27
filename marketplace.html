@@ -665,20 +665,31 @@ function closeMobile() { document.getElementById('mobileMenu').classList.remove(
     }
   } catch(e) {}
 
-  // Apply strategy call booking link from admin settings
+  // Apply strategy call booking link from admin settings (same logic as index.html)
+  function applyBookingLink(link) {
+    if (!link) return;
+    document.querySelectorAll('a').forEach(function(el) {
+      var txt = el.textContent.toLowerCase();
+      if (el.dataset.booking === '1' || txt.includes('book') || txt.includes('free call') || txt.includes('strategy call') || txt.includes('free strategy')) {
+        el.href = link;
+        el.target = '_blank';
+        el.rel = 'noopener';
+      }
+    });
+  }
   try {
-    var bd2 = JSON.parse(localStorage.getItem('chrixlin_bank_details') || '{}');
-    var stratLink = bd2.strategyCallUrl;
-    if (stratLink) {
-      document.querySelectorAll('a').forEach(function(el) {
-        var h = el.getAttribute('href') || '';
-        var isBookLink = h === 'mailto:info@chrixlin.tech' || el.classList.contains('js-strategy-cta');
-        if (isBookLink && (el.textContent.toLowerCase().includes('book') || el.classList.contains('btn-primary'))) {
-          el.href = stratLink;
-          el.target = '_blank';
-          el.rel = 'noopener noreferrer';
-        }
-      });
+    var bl = JSON.parse(localStorage.getItem('chrixlin_booking_link') || '{}');
+    if (bl.url) applyBookingLink(bl.url);
+    else {
+      var bd2 = JSON.parse(localStorage.getItem('chrixlin_bank_details') || '{}');
+      if (bd2.strategyCallUrl) applyBookingLink(bd2.strategyCallUrl);
+    }
+  } catch(e) {}
+  try {
+    var dbVal = await ChrixlinDB.loadFromSupabase('site_settings', 'booking_link');
+    if (dbVal && dbVal.url) {
+      localStorage.setItem('chrixlin_booking_link', JSON.stringify(dbVal));
+      applyBookingLink(dbVal.url);
     }
   } catch(e) {}
 })();
