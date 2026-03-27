@@ -72,10 +72,13 @@
       const { data, error } = await client.from('marketplace_products').select('*').eq('is_active', true).order('sort_order', { ascending: true }).order('id', { ascending: true });
       if (error) throw error;
       const products = (data || []).map(_rowToProduct);
-      const blob = _lsGetMPBlob(); blob.products = products; _lsSetMPBlob(blob);
+      // Only overwrite localStorage when Supabase actually has rows — never wipe with empty
+      if (products.length > 0) {
+        const blob = _lsGetMPBlob(); blob.products = products; _lsSetMPBlob(blob);
+      }
       return products;
     } catch (err) {
-      console.warn('[ChrixlinDB] loadAllProducts() failed.', err);
+      console.error('[ChrixlinDB] loadAllProducts() failed.', err);
       return _lsGetProducts();
     }
   }
