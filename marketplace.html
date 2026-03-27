@@ -552,7 +552,7 @@ function renderProducts() {
         <div class="coming-soon-title">New AI Tools Are Being Prepared</div>
         <div class="coming-soon-sub">We're building powerful, ready-to-deploy AI systems for your business. Something exciting is launching very soon — stay tuned.</div>
         <div class="coming-soon-dots"><span></span><span></span><span></span></div>
-        <a href="#book-call" class="btn btn-primary btn-sm">Book a Free Strategy Call →</a>
+        <a href="#book-call" class="btn btn-primary btn-sm js-strategy-cta">Book a Free Strategy Call →</a>
       </div>`;
     return;
   }
@@ -671,8 +671,11 @@ function closeMobile() { document.getElementById('mobileMenu').classList.remove(
     if (stratLink) {
       document.querySelectorAll('a').forEach(function(el) {
         var h = el.getAttribute('href') || '';
-        if (h === 'mailto:info@chrixlin.tech' && (el.textContent.toLowerCase().includes('book') || el.classList.contains('btn-primary'))) {
+        var isBookLink = h === 'mailto:info@chrixlin.tech' || el.classList.contains('js-strategy-cta');
+        if (isBookLink && (el.textContent.toLowerCase().includes('book') || el.classList.contains('btn-primary'))) {
           el.href = stratLink;
+          el.target = '_blank';
+          el.rel = 'noopener noreferrer';
         }
       });
     }
