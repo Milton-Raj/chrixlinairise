@@ -65,6 +65,7 @@
     .nav-links a { color: var(--c-sub); font-size: 15px; font-weight: 500; transition: var(--transition); }
     .nav-links a:hover, .nav-links a.active { color: var(--c-text); }
     .nav-links a.active { color: #a78bfa; }
+    .nav-cta { display: flex; align-items: center; gap: 10px; }
     .nav-cta .btn { padding: 10px 22px; font-size: 14px; }
     .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
     .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--c-text); border-radius: 2px; transition: var(--transition); }
@@ -189,11 +190,44 @@
       .footer-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 768px) {
-      .nav-links, .nav-cta { display: none; }
+      .nav-links, .nav-cta { display: none !important; }
       .nav-toggle { display: flex; }
+      #navbar { padding: 14px 0; }
+      .container { padding: 0 18px; }
       .products-grid { grid-template-columns: 1fr; }
+      .book-call-inner { grid-template-columns: 1fr; gap: 32px; }
+      .book-form-card { padding: 28px 20px; }
       .footer-grid { grid-template-columns: 1fr; }
-      .footer-bottom { flex-direction: column; text-align: center; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: 10px; }
+      .products-header h2 { font-size: clamp(24px,6vw,36px); }
+      .products-header p { font-size: 15px; }
+    }
+    @media (max-width: 480px) {
+      .container { padding: 0 14px; }
+      .nav-logo { font-size: 17px; }
+      /* Category tabs: smaller padding so they all fit */
+      .cat-tab { padding: 7px 14px; font-size: 13px; }
+      /* Product cards */
+      .product-thumbnail { height: 160px; }
+      .product-thumb-emoji { font-size: 60px; }
+      .product-top { padding: 16px 18px 0; }
+      .product-title { font-size: 16px; }
+      .product-desc { font-size: 12px; }
+      .product-bottom { padding: 12px 18px 18px; }
+      .product-price { font-size: 20px; }
+      /* Booking form */
+      .book-form-card { padding: 20px 14px; }
+      .form-input, .form-select, .form-textarea { font-size: 16px !important; } /* prevent iOS zoom */
+      /* Book call section */
+      #book-call { padding: 60px 0; }
+      .book-call-content h2 { font-size: clamp(22px,6vw,32px); }
+      .book-call-content p { font-size: 15px; }
+      /* Footer */
+      #products { padding: 40px 0 60px; }
+      /* Mobile menu */
+      .mobile-menu a { font-size: 20px; }
+      /* Coming soon section */
+      .coming-soon-state { padding: 40px 14px; }
     }
   </style>
 </head>
@@ -211,7 +245,7 @@
       <a href="index.html#pricing">Pricing</a>
       <a href="index.html#faq">FAQ</a>
     </div>
-    <div class="nav-cta" style="display:flex;align-items:center;gap:10px;">
+    <div class="nav-cta">
       <a href="auth.html" id="navAuthBtn" class="btn btn-outline" style="padding:9px 20px;font-size:14px;">Sign In</a>
       <a href="mailto:info@chrixlin.tech" class="btn btn-primary">Book Free Call</a>
     </div>

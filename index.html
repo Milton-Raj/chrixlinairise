@@ -110,6 +110,7 @@
     .nav-links { display: flex; align-items: center; gap: 32px; }
     .nav-links a { color: var(--c-sub); font-size: 15px; font-weight: 500; transition: var(--transition); }
     .nav-links a:hover { color: var(--c-text); }
+    .nav-cta { display: flex; align-items: center; gap: 10px; }
     .nav-cta .btn { padding: 10px 22px; font-size: 14px; }
     .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
     .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--c-text); transition: var(--transition); border-radius: 2px; }
@@ -474,7 +475,7 @@
     @media (max-width: 768px) {
       .section-pad { padding: 60px 0; }
       .container { padding: 0 18px; }
-      .nav-links, .nav-cta { display: none; }
+      .nav-links, .nav-cta { display: none !important; }
       .nav-toggle { display: flex; }
       #navbar { padding: 14px 0; }
       .hero-section { padding-top: 100px; padding-bottom: 60px; }
@@ -516,6 +517,18 @@
       .faq-q { font-size: 14px; }
       .footer-grid { gap: 24px; }
       .mobile-menu a { font-size: 20px; }
+      /* Pricing on very small screens */
+      .pricing-plan { padding: 20px 14px; }
+      .plan-price { font-size: 32px; }
+      .plan-cta a { padding: 11px 16px; font-size: 14px; }
+      /* Nav logo scaling */
+      .nav-logo { font-size: 18px; }
+      /* Section titles */
+      .section-title { font-size: clamp(22px, 6vw, 32px); }
+      /* Hero trust items */
+      .hero-trust { flex-direction: column; gap: 8px; }
+      /* Stat values */
+      .stat-val { font-size: 28px; }
     }
   </style>
 </head>
@@ -533,7 +546,7 @@
       <a href="#pricing" data-key="nav.link4">Pricing</a>
       <a href="#faq" data-key="nav.link5">FAQ</a>
     </div>
-    <div class="nav-cta" style="display:flex;align-items:center;gap:10px;">
+    <div class="nav-cta">
       <a href="auth.html" id="navAuthBtn" class="btn btn-outline" style="padding:9px 20px;font-size:14px;">Sign In</a>
       <a href="mailto:info@chrixlin.tech" class="btn btn-primary" data-key="nav.cta">Book Free Call</a>
     </div>
@@ -767,9 +780,9 @@
       <div id="strategyCallForm" style="max-width:480px;margin:32px auto 0;">
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
           <input type="text" id="scfName" placeholder="Your Full Name *" required
-            style="flex:1;min-width:200px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:14px 18px;color:#f1f5f9;font-size:15px;outline:none;font-family:inherit;" />
+            style="flex:1;min-width:0;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:14px 18px;color:#f1f5f9;font-size:16px;outline:none;font-family:inherit;box-sizing:border-box;width:100%;" />
           <input type="email" id="scfEmail" placeholder="Email Address *" required
-            style="flex:1;min-width:200px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:14px 18px;color:#f1f5f9;font-size:15px;outline:none;font-family:inherit;" />
+            style="flex:1;min-width:0;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:14px 18px;color:#f1f5f9;font-size:16px;outline:none;font-family:inherit;box-sizing:border-box;width:100%;" />
         </div>
         <input type="tel" id="scfPhone" placeholder="Phone Number (optional)"
           style="width:100%;margin-top:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:14px 18px;color:#f1f5f9;font-size:15px;outline:none;font-family:inherit;box-sizing:border-box;" />

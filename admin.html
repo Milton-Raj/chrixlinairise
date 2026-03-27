@@ -366,9 +366,17 @@
       .topbar-actions { gap:6px }
       .topbar-actions .btn { padding:7px 10px; font-size:12px }
       .settings-grid { grid-template-columns:1fr }
+      .form-input, .form-select, .form-textarea, input[type="text"], input[type="email"], input[type="url"], input[type="tel"], input[type="number"], textarea, select { font-size:16px !important }
     }
     @media (max-width: 400px) {
       .topbar-title { font-size:14px }
+      .topbar { padding:0 10px }
+      .topbar-actions .btn { padding:6px 8px; font-size:11px }
+      .panel { padding:16px 12px }
+      .billing-tab { min-width:60px; font-size:12px; padding:6px 8px }
+      .dash-grid { grid-template-columns:1fr }
+      .kpi-row { grid-template-columns:1fr }
+      .form-input, .form-select, .form-textarea, input[type="text"], input[type="email"], input[type="url"], input[type="tel"], input[type="number"], textarea, select { font-size:16px !important } /* prevent iOS zoom */
     }
   </style>
 </head>
