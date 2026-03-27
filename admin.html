@@ -1705,6 +1705,11 @@
             <div class="settings-card-title">Content Editor</div>
             <div class="settings-card-desc">Edit hero, features, FAQ, testimonials, and all page sections</div>
           </div>
+          <div class="settings-card" onclick="showPanel('changepassword')">
+            <div class="settings-card-icon">🔒</div>
+            <div class="settings-card-title">Change Password</div>
+            <div class="settings-card-desc">Update your admin account password securely</div>
+          </div>
         </div>
         <!-- Content Editor sub-section -->
         <div id="contentEditorSub" style="display:none;margin-top:24px">
@@ -1720,6 +1725,26 @@
             <button class="settings-card sm" onclick="showPanel('faq')"><span>❓</span> FAQ</button>
             <button class="settings-card sm" onclick="showPanel('cta')"><span>🚀</span> CTA Section</button>
             <button class="settings-card sm" onclick="showPanel('footer')"><span>📄</span> Footer</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── CHANGE PASSWORD PANEL ─────────────────────────────────────────── -->
+      <div id="panel-changepassword" class="panel">
+        <div class="panel-title">🔒 Change Password</div>
+        <div class="panel-desc">Update your admin account password. You'll stay logged in after changing it.</div>
+        <div style="max-width:420px;margin-top:28px;display:flex;flex-direction:column;gap:16px">
+          <div class="form-group">
+            <label style="display:block;margin-bottom:6px;font-size:13px;color:var(--muted)">New Password</label>
+            <input type="password" id="newPasswordInput" placeholder="Minimum 8 characters" style="width:100%;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px" />
+          </div>
+          <div class="form-group">
+            <label style="display:block;margin-bottom:6px;font-size:13px;color:var(--muted)">Confirm New Password</label>
+            <input type="password" id="confirmPasswordInput" placeholder="Repeat new password" style="width:100%;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px" onkeydown="if(event.key==='Enter')changeAdminPassword()" />
+          </div>
+          <div id="changePasswordMsg" style="font-size:13px;min-height:18px"></div>
+          <div>
+            <button class="btn btn-primary" onclick="changeAdminPassword()" style="padding:10px 28px">Update Password</button>
           </div>
         </div>
       </div>
@@ -1850,7 +1875,7 @@ function showPanel(name) {
     submissions:'Call Submissions',
     analytics:'Analytics & Reports', settings:'Settings',
     bankdetails:'Bank Details', theme:'Theme & Colors', seo:'SEO Settings',
-    terms:'Terms & Conditions', privacy:'Privacy Policy',
+    terms:'Terms & Conditions', privacy:'Privacy Policy', changepassword:'Change Password',
     hero:'Hero Section', stats:'Stats Bar', story:'Founder Story', process:'How It Works',
     features:'Features', testimonials:'Testimonials', forwho:"Who It's For",
     faq:'FAQ', cta:'CTA Section', footer:'Footer'
@@ -3749,16 +3774,27 @@ if (savedTheme.text) document.getElementById('theme_text').value = savedTheme.te
     }
   }
 
-  // Check existing session on load
+  const ADMIN_EMAIL = 'admin@chrixlin.tech';
+
+  // Check existing session on load — sign out immediately if not the admin account
   const { data: { session } } = await _sb.auth.getSession();
   if (session) {
-    overlay.classList.add('hidden');
-    _initAdminPanels();
+    if (session.user.email.toLowerCase() !== ADMIN_EMAIL) {
+      await _sb.auth.signOut();
+    } else {
+      overlay.classList.add('hidden');
+      _initAdminPanels();
+    }
   }
 
   // Listen for auth changes (covers login + token refresh + logout)
   _sb.auth.onAuthStateChange(function(event, session) {
     if (session) {
+      if (session.user.email.toLowerCase() !== ADMIN_EMAIL) {
+        _sb.auth.signOut(); // kick out non-admin users
+        overlay.classList.remove('hidden');
+        return;
+      }
       overlay.classList.add('hidden');
       // SIGNED_IN fires both on login and on token refresh; only init panels once
       if (event === 'SIGNED_IN') {
@@ -3773,6 +3809,11 @@ if (savedTheme.text) document.getElementById('theme_text').value = savedTheme.te
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
     loginErr.textContent = '';
+    // Block any email that isn't the admin account before even hitting Supabase
+    if (email.toLowerCase() !== ADMIN_EMAIL) {
+      loginErr.textContent = 'Access denied. Admin account only.';
+      return;
+    }
     loginBtn.textContent = 'Signing in...';
     loginBtn.disabled = true;
     const { error } = await _sb.auth.signInWithPassword({ email, password });
@@ -3788,6 +3829,37 @@ if (savedTheme.text) document.getElementById('theme_text').value = savedTheme.te
     if (e.key === 'Enter') loginBtn.click();
   });
 })();
+
+// ─── CHANGE ADMIN PASSWORD ────────────────────────────────────────────────────
+async function changeAdminPassword() {
+  const newPass    = (document.getElementById('newPasswordInput').value || '').trim();
+  const confirmPass= (document.getElementById('confirmPasswordInput').value || '').trim();
+  const msgEl      = document.getElementById('changePasswordMsg');
+  msgEl.textContent = '';
+  msgEl.style.color = 'var(--red)';
+
+  if (newPass.length < 8) {
+    msgEl.textContent = '⚠ Password must be at least 8 characters.';
+    return;
+  }
+  if (newPass !== confirmPass) {
+    msgEl.textContent = '⚠ Passwords do not match.';
+    return;
+  }
+  try {
+    const client = ChrixlinDB._getClient ? ChrixlinDB._getClient() : null;
+    if (!client) throw new Error('Not connected to database.');
+    const { error } = await client.auth.updateUser({ password: newPass });
+    if (error) throw error;
+    document.getElementById('newPasswordInput').value = '';
+    document.getElementById('confirmPasswordInput').value = '';
+    msgEl.style.color = '#22c55e';
+    msgEl.textContent = '✅ Password updated successfully!';
+    showToast('🔒 Admin password updated!');
+  } catch(e) {
+    msgEl.textContent = '⚠ ' + (e.message || 'Failed to update password.');
+  }
+}
 
 // ─── ADMIN LOGOUT ─────────────────────────────────────────────────────────────
 async function adminLogout() {
