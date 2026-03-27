@@ -80,6 +80,24 @@
     }
   }
 
+  // Admin version — fetches ALL products regardless of is_active so hidden products stay editable
+  async function loadAllProductsAdmin() {
+    const client = _getClient();
+    if (!client) return _lsGetProducts();
+    try {
+      const { data, error } = await client.from('marketplace_products').select('*').order('sort_order', { ascending: true }).order('id', { ascending: true });
+      if (error) throw error;
+      const products = (data || []).map(_rowToProduct);
+      if (products.length > 0) {
+        const blob = _lsGetMPBlob(); blob.products = products; _lsSetMPBlob(blob);
+      }
+      return products;
+    } catch (err) {
+      console.warn('[ChrixlinDB] loadAllProductsAdmin() failed.', err);
+      return _lsGetProducts();
+    }
+  }
+
   async function upsertProduct(product) {
     const blob = _lsGetMPBlob();
     const idx = blob.products.findIndex(p => p.id === product.id);
@@ -626,7 +644,7 @@
   // ─── PUBLIC API ───────────────────────────────────────────────────
   global.ChrixlinDB = {
     loadFromSupabase, saveToSupabase,
-    loadAllProducts, upsertProduct, deleteProduct,
+    loadAllProducts, loadAllProductsAdmin, upsertProduct, deleteProduct,
     loadAllPricingPlans, loadAllPricingPlansAdmin, upsertPricingPlan, deletePricingPlan,
     loadPaymentSettings, loadPublicPaymentSettings, savePaymentSettings,
     submitOrder, submitContactMessage,

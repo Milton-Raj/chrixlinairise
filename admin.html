@@ -1908,7 +1908,7 @@ function showPanel(name) {
     faq:'FAQ', cta:'CTA Section', footer:'Footer'
   };
   document.getElementById('panelTitle').textContent = titles[name] || name;
-  if (name === 'marketplace') { populateMarketplace(); loadCategoriesAdmin(); }
+  if (name === 'marketplace') { loadCategoriesAdmin(); populateMarketplace(); }
   if (name === 'pricing') {
     var pricingCont = document.getElementById('pricingTabContent');
     if (pricingCont) pricingCont.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--muted)"><div style="font-size:32px;margin-bottom:12px">⏳</div><div style="font-size:14px">Loading plans from database…</div></div>';
@@ -2997,7 +2997,22 @@ const mpData = loadMPData();
 // ── current product being edited (null = new product)
 let _pmEditId = null;
 
-function populateMarketplace() {
+async function populateMarketplace() {
+  // Show loading state
+  const grid = document.getElementById('mpProductCards');
+  const empty = document.getElementById('mpEmptyState');
+  if (grid) grid.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--muted)"><div style="font-size:32px;margin-bottom:12px">⏳</div><div style="font-size:14px">Loading products from database…</div></div>';
+  if (empty) empty.style.display = 'none';
+
+  // Always pull fresh from Supabase (admin sees ALL products, active + inactive)
+  if (typeof ChrixlinDB !== 'undefined' && ChrixlinDB.loadAllProductsAdmin) {
+    try {
+      const products = await ChrixlinDB.loadAllProductsAdmin();
+      mpData.products = products || [];
+    } catch(e) {
+      // fallback to whatever is already in mpData
+    }
+  }
   renderProductCards();
 }
 
