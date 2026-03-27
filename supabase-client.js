@@ -72,12 +72,11 @@
       const { data, error } = await client.from('marketplace_products').select('*').eq('is_active', true).order('sort_order', { ascending: true }).order('id', { ascending: true });
       if (error) throw error;
       const products = (data || []).map(_rowToProduct);
-      // Only overwrite localStorage when Supabase actually has rows — never wipe with empty
-      if (products.length > 0) {
-        const blob = _lsGetMPBlob(); blob.products = products; _lsSetMPBlob(blob);
-      }
+      // Always sync localStorage with DB — deletions on landing page must reflect immediately
+      const blob = _lsGetMPBlob(); blob.products = products; _lsSetMPBlob(blob);
       return products;
     } catch (err) {
+      // Only fall back to localStorage on a network/auth error, not on empty result
       console.error('[ChrixlinDB] loadAllProducts() failed.', err);
       return _lsGetProducts();
     }
