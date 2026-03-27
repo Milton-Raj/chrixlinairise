@@ -164,6 +164,22 @@
     .empty-state { text-align: center; padding: 60px 20px; color: var(--c-muted); grid-column: 1 / -1; }
     .empty-state-icon { font-size: 48px; margin-bottom: 12px; }
     .empty-state-text { font-size: 16px; }
+    /* ─── COMING SOON STATE ─── */
+    .coming-soon-wrap { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; }
+    .coming-soon-glow { position: relative; width: 120px; height: 120px; margin-bottom: 32px; }
+    .coming-soon-glow::before { content:''; position:absolute; inset:-20px; border-radius:50%; background: radial-gradient(circle, rgba(124,58,237,0.35) 0%, transparent 70%); animation: csGlowPulse 2.5s ease-in-out infinite; }
+    .coming-soon-icon { position:relative; z-index:1; width:120px; height:120px; border-radius:50%; background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.1)); border: 1.5px solid rgba(124,58,237,0.4); display:flex; align-items:center; justify-content:center; font-size:52px; }
+    .coming-soon-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(124,58,237,0.12); border:1px solid rgba(124,58,237,0.35); color:#a78bfa; padding:5px 16px; border-radius:50px; font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:20px; }
+    .coming-soon-badge::before { content:''; width:7px; height:7px; border-radius:50%; background:#a78bfa; animation:csDot 1.4s ease-in-out infinite; }
+    .coming-soon-title { font-family: var(--font-h); font-size: clamp(22px,3.5vw,34px); font-weight:900; margin-bottom:14px; background: linear-gradient(135deg,#fff 40%,#a78bfa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-align:center; }
+    .coming-soon-sub { color: var(--c-sub); font-size:16px; max-width:480px; text-align:center; line-height:1.7; margin-bottom:32px; }
+    .coming-soon-dots { display:flex; gap:10px; margin-bottom:36px; }
+    .coming-soon-dots span { width:10px; height:10px; border-radius:50%; background:var(--c-primary); opacity:0.3; animation: csBounce 1.4s ease-in-out infinite; }
+    .coming-soon-dots span:nth-child(2) { animation-delay:.2s; }
+    .coming-soon-dots span:nth-child(3) { animation-delay:.4s; }
+    @keyframes csGlowPulse { 0%,100%{opacity:0.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.08)} }
+    @keyframes csDot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    @keyframes csBounce { 0%,100%{opacity:0.3;transform:translateY(0)} 50%{opacity:1;transform:translateY(-6px)} }
 
     /* ─── RESPONSIVE ──────────────────────────────────────── */
     @media (max-width: 1024px) {
@@ -464,12 +480,12 @@ const DEFAULT_MP = {
 function loadMP() {
   try {
     const s = localStorage.getItem('chrixlin_marketplace');
-    if (!s) return DEFAULT_MP;
+    if (!s) return { hero: DEFAULT_MP.hero, videos: DEFAULT_MP.videos, products: [], book: DEFAULT_MP.book };
     const parsed = JSON.parse(s);
     return {
       hero: Object.assign({}, DEFAULT_MP.hero, parsed.hero || {}),
       videos: (parsed.videos && parsed.videos.length) ? parsed.videos : DEFAULT_MP.videos,
-      products: (parsed.products && parsed.products.length) ? parsed.products : DEFAULT_MP.products,
+      products: parsed.products || [],
       book: Object.assign({}, DEFAULT_MP.book, parsed.book || {})
     };
   } catch { return DEFAULT_MP; }
@@ -528,6 +544,18 @@ function filterProducts(cat, btnEl) {
 function renderProducts() {
   buildCategoryTabs();
   const grid = document.getElementById('productsGrid');
+  if (!mp.products || mp.products.length === 0) {
+    grid.innerHTML = `
+      <div class="coming-soon-wrap">
+        <div class="coming-soon-glow"><div class="coming-soon-icon">🤖</div></div>
+        <div class="coming-soon-badge">Coming Soon</div>
+        <div class="coming-soon-title">New AI Tools Are Being Prepared</div>
+        <div class="coming-soon-sub">We're building powerful, ready-to-deploy AI systems for your business. Something exciting is launching very soon — stay tuned.</div>
+        <div class="coming-soon-dots"><span></span><span></span><span></span></div>
+        <a href="#book-call" class="btn btn-primary btn-sm">Book a Free Strategy Call →</a>
+      </div>`;
+    return;
+  }
   const thumbClass = { 'voice-ai':'cat-thumb-voice-ai','sales':'cat-thumb-sales','content':'cat-thumb-content','lead':'cat-thumb-lead','automation':'cat-thumb-automation' };
   grid.innerHTML = mp.products.map((p, i) => {
     const tc = thumbClass[p.category] || 'cat-thumb-voice-ai';
