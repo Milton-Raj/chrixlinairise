@@ -1094,7 +1094,8 @@ function loadPricingPlans(cycle) {
 function renderPricingPlans(overridePlans) {
   const el = document.getElementById('pricingGrid');
   if (!el) return;
-  const plans = overridePlans || loadPricingPlans(_activeBilling);
+  const rawPlans = overridePlans || loadPricingPlans(_activeBilling);
+  const plans = [...rawPlans].sort((a, b) => (a.price === 0 ? -1 : 1) - (b.price === 0 ? -1 : 1));
   el.innerHTML = plans.map(p => `
     <div class="pricing-plan animate-in${p.highlighted ? ' featured' : ''}">
       ${p.highlighted ? '<div class="plan-popular-tag">⭐ Most Recommended</div>' : ''}
