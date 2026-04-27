@@ -1,586 +1,1391 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Marketplace — Chrixlin AI Rise</title>
-  <meta name="description" content="Browse and buy ready-to-deploy AI bots, voice agents, and automation systems. Or book a call for a custom build." />
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    /* ─── RESET & TOKENS ──────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --c-bg:      #05050c;
-      --c-bg2:     #0a0a16;
-      --c-bg3:     #10101e;
-      --c-card:    #1a1a2e;
-      --c-card-h:  #22223a;
-      --c-border:  rgba(255,255,255,0.12);
-      --c-border-h:rgba(124,58,237,0.6);
-      --c-primary: #7c3aed;
-      --c-cyan:    #06b6d4;
-      --c-gold:    #f59e0b;
-      --c-green:   #22c55e;
-      --c-text:    #f1f5f9;
-      --c-sub:     #94a3b8;
-      --c-muted:   #64748b;
-      --grad:      linear-gradient(135deg, #7c3aed, #06b6d4);
-      --grad-gold: linear-gradient(135deg, #f59e0b, #ef4444);
-      --r-card:    16px;
-      --shadow:    0 20px 50px rgba(0,0,0,0.5);
-      --glow:      0 0 40px rgba(124,58,237,0.25);
-      --transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
-      --font-h:    'Plus Jakarta Sans', sans-serif;
-      --font-b:    'Inter', sans-serif;
-    }
-    html { scroll-behavior: smooth; }
-    body { background: var(--c-bg); color: var(--c-text); font-family: var(--font-b); line-height: 1.6; overflow-x: hidden; }
-    a { text-decoration: none; color: inherit; }
-    ul { list-style: none; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marketplace — Chrixlin AI Rise</title>
+    <meta
+      name="description"
+      content="Browse and buy ready-to-deploy AI bots, voice agents, and automation systems. Or book a call for a custom build."
+    />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ─── RESET & TOKENS ──────────────────────────────────── */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --c-bg: #05050c;
+        --c-bg2: #0a0a16;
+        --c-bg3: #10101e;
+        --c-card: #1a1a2e;
+        --c-card-h: #22223a;
+        --c-border: rgba(255, 255, 255, 0.12);
+        --c-border-h: rgba(124, 58, 237, 0.6);
+        --c-primary: #7c3aed;
+        --c-cyan: #06b6d4;
+        --c-gold: #f59e0b;
+        --c-green: #22c55e;
+        --c-text: #f1f5f9;
+        --c-sub: #94a3b8;
+        --c-muted: #64748b;
+        --grad: linear-gradient(135deg, #7c3aed, #06b6d4);
+        --grad-gold: linear-gradient(135deg, #f59e0b, #ef4444);
+        --r-card: 16px;
+        --shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        --glow: 0 0 40px rgba(124, 58, 237, 0.25);
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --font-h: "Plus Jakarta Sans", sans-serif;
+        --font-b: "Inter", sans-serif;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--c-bg);
+        color: var(--c-text);
+        font-family: var(--font-b);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      ul {
+        list-style: none;
+      }
 
-    /* ─── UTILS ───────────────────────────────────────────── */
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-    .text-grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .text-gold { background: var(--grad-gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.35); color: #a78bfa; padding: 6px 16px; border-radius: 50px; font-size: 13px; font-weight: 600; font-family: var(--font-h); }
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 50px; font-family: var(--font-h); font-weight: 700; font-size: 15px; cursor: pointer; border: none; transition: var(--transition); white-space: nowrap; }
-    .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 8px 24px rgba(124,58,237,0.35); }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(124,58,237,0.55); }
-    .btn-outline { background: transparent; color: var(--c-text); border: 1.5px solid var(--c-border); }
-    .btn-outline:hover { border-color: var(--c-primary); color: #a78bfa; }
-    .btn-gold { background: var(--grad-gold); color: #fff; box-shadow: 0 8px 24px rgba(245,158,11,0.3); }
-    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(245,158,11,0.5); }
-    .btn-sm { padding: 10px 20px; font-size: 14px; }
-    .animate-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .animate-in.visible { opacity: 1; transform: translateY(0); }
+      /* ─── UTILS ───────────────────────────────────────────── */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      .text-grad {
+        background: var(--grad);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .text-gold {
+        background: var(--grad-gold);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(124, 58, 237, 0.15);
+        border: 1px solid rgba(124, 58, 237, 0.35);
+        color: #a78bfa;
+        padding: 6px 16px;
+        border-radius: 50px;
+        font-size: 13px;
+        font-weight: 600;
+        font-family: var(--font-h);
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 14px 28px;
+        border-radius: 50px;
+        font-family: var(--font-h);
+        font-weight: 700;
+        font-size: 15px;
+        cursor: pointer;
+        border: none;
+        transition: var(--transition);
+        white-space: nowrap;
+      }
+      .btn-primary {
+        background: var(--grad);
+        color: #fff;
+        box-shadow: 0 8px 24px rgba(124, 58, 237, 0.35);
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 36px rgba(124, 58, 237, 0.55);
+      }
+      .btn-outline {
+        background: transparent;
+        color: var(--c-text);
+        border: 1.5px solid var(--c-border);
+      }
+      .btn-outline:hover {
+        border-color: var(--c-primary);
+        color: #a78bfa;
+      }
+      .btn-gold {
+        background: var(--grad-gold);
+        color: #fff;
+        box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+      }
+      .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 36px rgba(245, 158, 11, 0.5);
+      }
+      .btn-sm {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+      .animate-in {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+      .animate-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
 
-    /* ─── NAVBAR ──────────────────────────────────────────── */
-    #navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 18px 0; transition: var(--transition); }
-    #navbar.scrolled { background: rgba(5,5,12,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--c-border); padding: 12px 0; }
-    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
-    .nav-logo { font-family: var(--font-h); font-weight: 800; font-size: 20px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .nav-links { display: flex; align-items: center; gap: 28px; }
-    .nav-links a { color: var(--c-sub); font-size: 15px; font-weight: 500; transition: var(--transition); }
-    .nav-links a:hover, .nav-links a.active { color: var(--c-text); }
-    .nav-links a.active { color: #a78bfa; }
-    .nav-cta { display: flex; align-items: center; gap: 10px; }
-    .nav-cta .btn { padding: 10px 22px; font-size: 14px; }
-    .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
-    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--c-text); border-radius: 2px; transition: var(--transition); }
-    .mobile-menu { display: none; position: fixed; inset: 0; background: rgba(5,5,12,0.98); backdrop-filter: blur(20px); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 28px; }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu a { font-family: var(--font-h); font-size: 22px; font-weight: 700; color: var(--c-sub); }
-    .mobile-close { position: absolute; top: 24px; right: 24px; font-size: 30px; cursor: pointer; color: var(--c-muted); background: none; border: none; }
+      /* ─── NAVBAR ──────────────────────────────────────────── */
+      #navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 18px 0;
+        transition: var(--transition);
+      }
+      #navbar.scrolled {
+        background: rgba(5, 5, 12, 0.9);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--c-border);
+        padding: 12px 0;
+      }
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .nav-logo {
+        font-family: var(--font-h);
+        font-weight: 800;
+        font-size: 20px;
+        background: var(--grad);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+      }
+      .nav-links a {
+        color: var(--c-sub);
+        font-size: 15px;
+        font-weight: 500;
+        transition: var(--transition);
+      }
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: var(--c-text);
+      }
+      .nav-links a.active {
+        color: #a78bfa;
+      }
+      .nav-cta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .nav-cta .btn {
+        padding: 10px 22px;
+        font-size: 14px;
+      }
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        background: none;
+        border: none;
+      }
+      .nav-toggle span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: var(--c-text);
+        border-radius: 2px;
+        transition: var(--transition);
+      }
+      .mobile-menu {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 5, 12, 0.98);
+        backdrop-filter: blur(20px);
+        z-index: 999;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+      }
+      .mobile-menu.open {
+        display: flex;
+      }
+      .mobile-menu a {
+        font-family: var(--font-h);
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--c-sub);
+      }
+      .mobile-close {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        font-size: 30px;
+        cursor: pointer;
+        color: var(--c-muted);
+        background: none;
+        border: none;
+      }
 
-    /* ─── CATEGORY TABS ───────────────────────────────────── */
-    #products { padding: 60px 0 80px; isolation: isolate; background: #070712; }
-    .products-header { text-align: center; margin-bottom: 40px; }
-    .products-header h2 { font-family: var(--font-h); font-size: clamp(28px,4vw,44px); font-weight: 800; margin-bottom: 12px; }
-    .products-header p { color: var(--c-sub); font-size: 17px; }
-    .category-tabs { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 40px; }
-    .cat-tab { padding: 9px 20px; border-radius: 50px; font-family: var(--font-h); font-size: 14px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--c-border); background: transparent; color: var(--c-sub); transition: var(--transition); }
-    .cat-tab:hover { border-color: var(--c-primary); color: #a78bfa; }
-    .cat-tab.active { background: rgba(124,58,237,0.15); border-color: rgba(124,58,237,0.5); color: #a78bfa; }
+      /* ─── CATEGORY TABS ───────────────────────────────────── */
+      #products {
+        padding: 60px 0 80px;
+        isolation: isolate;
+        background: #070712;
+      }
+      .products-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .products-header h2 {
+        font-family: var(--font-h);
+        font-size: clamp(28px, 4vw, 44px);
+        font-weight: 800;
+        margin-bottom: 12px;
+      }
+      .products-header p {
+        color: var(--c-sub);
+        font-size: 17px;
+      }
+      .category-tabs {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+      }
+      .cat-tab {
+        padding: 9px 20px;
+        border-radius: 50px;
+        font-family: var(--font-h);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        border: 1.5px solid var(--c-border);
+        background: transparent;
+        color: var(--c-sub);
+        transition: var(--transition);
+      }
+      .cat-tab:hover {
+        border-color: var(--c-primary);
+        color: #a78bfa;
+      }
+      .cat-tab.active {
+        background: rgba(124, 58, 237, 0.15);
+        border-color: rgba(124, 58, 237, 0.5);
+        color: #a78bfa;
+      }
 
-    /* ─── PRODUCT GRID ────────────────────────────────────── */
-    .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    .product-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: 20px; overflow: hidden; transition: var(--transition); display: flex; flex-direction: column; text-decoration: none; color: inherit; cursor: pointer; }
-    .product-card:hover { border-color: var(--c-border-h); transform: translateY(-6px); box-shadow: var(--shadow), var(--glow); }
-    .product-card.hidden { display: none; }
+      /* ─── PRODUCT GRID ────────────────────────────────────── */
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+      .product-card {
+        background: var(--c-card);
+        border: 1px solid var(--c-border);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+      }
+      .product-card:hover {
+        border-color: var(--c-border-h);
+        transform: translateY(-6px);
+        box-shadow: var(--shadow), var(--glow);
+      }
+      .product-card.hidden {
+        display: none;
+      }
 
-    /* ─── PRODUCT THUMBNAIL ────────────────────────────────── */
-    .product-thumbnail { position: relative; height: 190px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .product-thumbnail::after { content:''; position:absolute; inset:0; background: linear-gradient(to bottom, transparent 40%, var(--c-card) 100%); }
-    .cat-thumb-voice-ai  { background: linear-gradient(135deg, rgba(124,58,237,0.45) 0%, rgba(6,182,212,0.18) 100%); }
-    .cat-thumb-sales     { background: linear-gradient(135deg, rgba(245,158,11,0.45) 0%, rgba(239,68,68,0.18) 100%); }
-    .cat-thumb-content   { background: linear-gradient(135deg, rgba(6,182,212,0.45) 0%, rgba(34,197,94,0.18) 100%); }
-    .cat-thumb-lead      { background: linear-gradient(135deg, rgba(34,197,94,0.45) 0%, rgba(6,182,212,0.18) 100%); }
-    .cat-thumb-automation{ background: linear-gradient(135deg, rgba(239,68,68,0.40) 0%, rgba(124,58,237,0.18) 100%); }
-    .product-thumb-img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
-    .product-thumb-emoji { font-size: 80px; line-height: 1; filter: drop-shadow(0 8px 30px rgba(0,0,0,0.5)); position: relative; z-index: 1; }
-    .product-thumb-badge { position: absolute; top: 14px; right: 14px; z-index: 2; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; background: rgba(245,158,11,0.9); color: #fff; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(6px); }
+      /* ─── PRODUCT THUMBNAIL ────────────────────────────────── */
+      .product-thumbnail {
+        position: relative;
+        height: 190px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .product-thumbnail::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          transparent 40%,
+          var(--c-card) 100%
+        );
+      }
+      .cat-thumb-voice-ai {
+        background: linear-gradient(
+          135deg,
+          rgba(124, 58, 237, 0.45) 0%,
+          rgba(6, 182, 212, 0.18) 100%
+        );
+      }
+      .cat-thumb-sales {
+        background: linear-gradient(
+          135deg,
+          rgba(245, 158, 11, 0.45) 0%,
+          rgba(239, 68, 68, 0.18) 100%
+        );
+      }
+      .cat-thumb-content {
+        background: linear-gradient(
+          135deg,
+          rgba(6, 182, 212, 0.45) 0%,
+          rgba(34, 197, 94, 0.18) 100%
+        );
+      }
+      .cat-thumb-lead {
+        background: linear-gradient(
+          135deg,
+          rgba(34, 197, 94, 0.45) 0%,
+          rgba(6, 182, 212, 0.18) 100%
+        );
+      }
+      .cat-thumb-automation {
+        background: linear-gradient(
+          135deg,
+          rgba(239, 68, 68, 0.4) 0%,
+          rgba(124, 58, 237, 0.18) 100%
+        );
+      }
+      .product-thumb-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        inset: 0;
+      }
+      .product-thumb-emoji {
+        font-size: 80px;
+        line-height: 1;
+        filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.5));
+        position: relative;
+        z-index: 1;
+      }
+      .product-thumb-badge {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        z-index: 2;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 20px;
+        background: rgba(245, 158, 11, 0.9);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(6px);
+      }
 
-    .product-top { padding: 20px 24px 0; }
-    .product-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-    .product-cat-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .cat-voice { background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.25); }
-    .cat-content { background: rgba(6,182,212,0.15); color: #22d3ee; border: 1px solid rgba(6,182,212,0.25); }
-    .cat-sales { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
-    .cat-lead { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
-    .cat-automation { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
-    .product-special-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
-    .product-title { font-family: var(--font-h); font-size: 18px; font-weight: 800; margin-bottom: 8px; line-height: 1.3; }
-    .product-desc { font-size: 13px; color: var(--c-sub); line-height: 1.6; margin-bottom: 16px; }
-    .product-bottom { padding: 16px 24px 22px; margin-top: auto; border-top: 1px solid var(--c-border); display: flex; align-items: center; justify-content: space-between; }
-    .product-price { font-family: var(--font-h); font-size: 24px; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .product-price-note { font-size: 11px; color: var(--c-muted); margin-top: 2px; }
-    .product-cta-arrow { font-size: 20px; color: var(--c-primary); opacity: 0.7; transition: var(--transition); }
-    .product-card:hover .product-cta-arrow { opacity: 1; transform: translateX(4px); }
+      .product-top {
+        padding: 20px 24px 0;
+      }
+      .product-meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .product-cat-badge {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .cat-voice {
+        background: rgba(124, 58, 237, 0.15);
+        color: #a78bfa;
+        border: 1px solid rgba(124, 58, 237, 0.25);
+      }
+      .cat-content {
+        background: rgba(6, 182, 212, 0.15);
+        color: #22d3ee;
+        border: 1px solid rgba(6, 182, 212, 0.25);
+      }
+      .cat-sales {
+        background: rgba(245, 158, 11, 0.15);
+        color: #fbbf24;
+        border: 1px solid rgba(245, 158, 11, 0.25);
+      }
+      .cat-lead {
+        background: rgba(34, 197, 94, 0.15);
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.25);
+      }
+      .cat-automation {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.25);
+      }
+      .product-special-badge {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 20px;
+        background: rgba(245, 158, 11, 0.15);
+        color: #fbbf24;
+        border: 1px solid rgba(245, 158, 11, 0.3);
+      }
+      .product-title {
+        font-family: var(--font-h);
+        font-size: 18px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        line-height: 1.3;
+      }
+      .product-desc {
+        font-size: 13px;
+        color: var(--c-sub);
+        line-height: 1.6;
+        margin-bottom: 16px;
+      }
+      .product-bottom {
+        padding: 16px 24px 22px;
+        margin-top: auto;
+        border-top: 1px solid var(--c-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .product-price {
+        font-family: var(--font-h);
+        font-size: 24px;
+        font-weight: 900;
+        background: var(--grad);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .product-price-note {
+        font-size: 11px;
+        color: var(--c-muted);
+        margin-top: 2px;
+      }
+      .product-cta-arrow {
+        font-size: 20px;
+        color: var(--c-primary);
+        opacity: 0.7;
+        transition: var(--transition);
+      }
+      .product-card:hover .product-cta-arrow {
+        opacity: 1;
+        transform: translateX(4px);
+      }
 
-    /* ─── (modal removed — products now open product.html) ── */
+      /* ─── (modal removed — products now open product.html) ── */
 
-    /* ─── BOOK A CALL ─────────────────────────────────────── */
-    #book-call {
-      padding: 100px 0; position: relative; overflow: hidden; isolation: isolate;
-      background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(124,58,237,0.1), transparent), var(--c-bg2);
-    }
-    #book-call::before { display: none; }
-    .book-call-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-    .book-call-content h2 { font-family: var(--font-h); font-size: clamp(28px,4vw,44px); font-weight: 900; margin-bottom: 16px; line-height: 1.15; }
-    .book-call-content p { color: var(--c-sub); font-size: 17px; margin-bottom: 28px; line-height: 1.7; }
-    .book-call-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
-    .book-call-item { display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--c-sub); }
-    .book-call-icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.25); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-    .book-form-card { background: var(--c-bg2); border: 1px solid var(--c-border); border-radius: 20px; padding: 36px; }
-    .book-form-card h3 { font-family: var(--font-h); font-weight: 800; font-size: 20px; margin-bottom: 6px; }
-    .book-form-card p { font-size: 14px; color: var(--c-muted); margin-bottom: 24px; }
-    .form-group { margin-bottom: 16px; }
-    .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--c-sub); margin-bottom: 8px; }
-    .form-input, .form-select { width: 100%; padding: 12px 16px; background: var(--c-bg); border: 1px solid var(--c-border); border-radius: 10px; color: var(--c-text); font-family: var(--font-b); font-size: 15px; outline: none; transition: var(--transition); }
-    .form-input:focus, .form-select:focus { border-color: var(--c-primary); box-shadow: 0 0 0 3px rgba(124,58,237,0.12); }
-    .form-select { cursor: pointer; }
-    .form-submit { width: 100%; margin-top: 8px; }
-    .form-submit-note { text-align: center; font-size: 12px; color: var(--c-muted); margin-top: 10px; }
+      /* ─── BOOK A CALL ─────────────────────────────────────── */
+      #book-call {
+        padding: 100px 0;
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+        background:
+          radial-gradient(
+            ellipse 80% 60% at 50% 50%,
+            rgba(124, 58, 237, 0.1),
+            transparent
+          ),
+          var(--c-bg2);
+      }
+      #book-call::before {
+        display: none;
+      }
+      .book-call-inner {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+      }
+      .book-call-content h2 {
+        font-family: var(--font-h);
+        font-size: clamp(28px, 4vw, 44px);
+        font-weight: 900;
+        margin-bottom: 16px;
+        line-height: 1.15;
+      }
+      .book-call-content p {
+        color: var(--c-sub);
+        font-size: 17px;
+        margin-bottom: 28px;
+        line-height: 1.7;
+      }
+      .book-call-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-bottom: 32px;
+      }
+      .book-call-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 15px;
+        color: var(--c-sub);
+      }
+      .book-call-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: rgba(124, 58, 237, 0.15);
+        border: 1px solid rgba(124, 58, 237, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+      .book-form-card {
+        background: var(--c-bg2);
+        border: 1px solid var(--c-border);
+        border-radius: 20px;
+        padding: 36px;
+      }
+      .book-form-card h3 {
+        font-family: var(--font-h);
+        font-weight: 800;
+        font-size: 20px;
+        margin-bottom: 6px;
+      }
+      .book-form-card p {
+        font-size: 14px;
+        color: var(--c-muted);
+        margin-bottom: 24px;
+      }
+      .form-group {
+        margin-bottom: 16px;
+      }
+      .form-label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--c-sub);
+        margin-bottom: 8px;
+      }
+      .form-input,
+      .form-select {
+        width: 100%;
+        padding: 12px 16px;
+        background: var(--c-bg);
+        border: 1px solid var(--c-border);
+        border-radius: 10px;
+        color: var(--c-text);
+        font-family: var(--font-b);
+        font-size: 15px;
+        outline: none;
+        transition: var(--transition);
+      }
+      .form-input:focus,
+      .form-select:focus {
+        border-color: var(--c-primary);
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+      }
+      .form-select {
+        cursor: pointer;
+      }
+      .form-submit {
+        width: 100%;
+        margin-top: 8px;
+      }
+      .form-submit-note {
+        text-align: center;
+        font-size: 12px;
+        color: var(--c-muted);
+        margin-top: 10px;
+      }
 
-    /* ─── FOOTER ──────────────────────────────────────────── */
-    footer { background: var(--c-bg2); border-top: 1px solid var(--c-border); padding: 48px 0 24px; }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
-    .footer-brand p { color: var(--c-muted); font-size: 14px; margin-top: 12px; max-width: 240px; line-height: 1.6; }
-    .footer-col h4 { font-family: var(--font-h); font-weight: 700; font-size: 13px; color: var(--c-text); margin-bottom: 14px; }
-    .footer-col ul li { margin-bottom: 9px; }
-    .footer-col ul li a { color: var(--c-muted); font-size: 14px; transition: var(--transition); }
-    .footer-col ul li a:hover { color: var(--c-text); }
-    .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 20px; border-top: 1px solid var(--c-border); flex-wrap: wrap; gap: 12px; }
-    .footer-copy { font-size: 13px; color: var(--c-muted); }
-    .footer-social { display: flex; gap: 10px; }
-    .social-btn { width: 34px; height: 34px; border-radius: 8px; background: var(--c-card); border: 1px solid var(--c-border); display: flex; align-items: center; justify-content: center; color: var(--c-muted); font-size: 13px; transition: var(--transition); }
-    .social-btn:hover { border-color: var(--c-primary); color: #a78bfa; }
+      /* ─── FOOTER ──────────────────────────────────────────── */
+      footer {
+        background: var(--c-bg2);
+        border-top: 1px solid var(--c-border);
+        padding: 48px 0 24px;
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+      .footer-brand p {
+        color: var(--c-muted);
+        font-size: 14px;
+        margin-top: 12px;
+        max-width: 240px;
+        line-height: 1.6;
+      }
+      .footer-col h4 {
+        font-family: var(--font-h);
+        font-weight: 700;
+        font-size: 13px;
+        color: var(--c-text);
+        margin-bottom: 14px;
+      }
+      .footer-col ul li {
+        margin-bottom: 9px;
+      }
+      .footer-col ul li a {
+        color: var(--c-muted);
+        font-size: 14px;
+        transition: var(--transition);
+      }
+      .footer-col ul li a:hover {
+        color: var(--c-text);
+      }
+      .footer-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 20px;
+        border-top: 1px solid var(--c-border);
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .footer-copy {
+        font-size: 13px;
+        color: var(--c-muted);
+      }
+      .footer-social {
+        display: flex;
+        gap: 10px;
+      }
+      .social-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        background: var(--c-card);
+        border: 1px solid var(--c-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--c-muted);
+        font-size: 13px;
+        transition: var(--transition);
+      }
+      .social-btn:hover {
+        border-color: var(--c-primary);
+        color: #a78bfa;
+      }
 
-    /* ─── SCROLL TOP ──────────────────────────────────────── */
-    #scrollTop { position: fixed; bottom: 28px; right: 28px; z-index: 100; width: 44px; height: 44px; border-radius: 50%; background: var(--grad); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; box-shadow: 0 8px 20px rgba(124,58,237,0.4); opacity: 0; transform: translateY(20px); transition: var(--transition); pointer-events: none; }
-    #scrollTop.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+      /* ─── SCROLL TOP ──────────────────────────────────────── */
+      #scrollTop {
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        z-index: 100;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--grad);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 18px;
+        box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: var(--transition);
+        pointer-events: none;
+      }
+      #scrollTop.show {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: all;
+      }
 
-    /* ─── EMPTY STATE ─────────────────────────────────────── */
-    .empty-state { text-align: center; padding: 60px 20px; color: var(--c-muted); grid-column: 1 / -1; }
-    .empty-state-icon { font-size: 48px; margin-bottom: 12px; }
-    .empty-state-text { font-size: 16px; }
-    /* ─── COMING SOON STATE ─── */
-    .coming-soon-wrap { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; }
-    .coming-soon-glow { position: relative; width: 120px; height: 120px; margin-bottom: 32px; }
-    .coming-soon-glow::before { content:''; position:absolute; inset:-20px; border-radius:50%; background: radial-gradient(circle, rgba(124,58,237,0.35) 0%, transparent 70%); animation: csGlowPulse 2.5s ease-in-out infinite; }
-    .coming-soon-icon { position:relative; z-index:1; width:120px; height:120px; border-radius:50%; background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.1)); border: 1.5px solid rgba(124,58,237,0.4); display:flex; align-items:center; justify-content:center; font-size:52px; }
-    .coming-soon-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(124,58,237,0.12); border:1px solid rgba(124,58,237,0.35); color:#a78bfa; padding:5px 16px; border-radius:50px; font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:20px; }
-    .coming-soon-badge::before { content:''; width:7px; height:7px; border-radius:50%; background:#a78bfa; animation:csDot 1.4s ease-in-out infinite; }
-    .coming-soon-title { font-family: var(--font-h); font-size: clamp(22px,3.5vw,34px); font-weight:900; margin-bottom:14px; background: linear-gradient(135deg,#fff 40%,#a78bfa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-align:center; }
-    .coming-soon-sub { color: var(--c-sub); font-size:16px; max-width:480px; text-align:center; line-height:1.7; margin-bottom:32px; }
-    .coming-soon-dots { display:flex; gap:10px; margin-bottom:36px; }
-    .coming-soon-dots span { width:10px; height:10px; border-radius:50%; background:var(--c-primary); opacity:0.3; animation: csBounce 1.4s ease-in-out infinite; }
-    .coming-soon-dots span:nth-child(2) { animation-delay:.2s; }
-    .coming-soon-dots span:nth-child(3) { animation-delay:.4s; }
-    @keyframes csGlowPulse { 0%,100%{opacity:0.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.08)} }
-    @keyframes csDot { 0%,100%{opacity:1} 50%{opacity:0.3} }
-    @keyframes csBounce { 0%,100%{opacity:0.3;transform:translateY(0)} 50%{opacity:1;transform:translateY(-6px)} }
+      /* ─── EMPTY STATE ─────────────────────────────────────── */
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--c-muted);
+        grid-column: 1 / -1;
+      }
+      .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+      }
+      .empty-state-text {
+        font-size: 16px;
+      }
+      /* ─── COMING SOON STATE ─── */
+      .coming-soon-wrap {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 20px;
+      }
+      .coming-soon-glow {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin-bottom: 32px;
+      }
+      .coming-soon-glow::before {
+        content: "";
+        position: absolute;
+        inset: -20px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(124, 58, 237, 0.35) 0%,
+          transparent 70%
+        );
+        animation: csGlowPulse 2.5s ease-in-out infinite;
+      }
+      .coming-soon-icon {
+        position: relative;
+        z-index: 1;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          rgba(124, 58, 237, 0.2),
+          rgba(6, 182, 212, 0.1)
+        );
+        border: 1.5px solid rgba(124, 58, 237, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 52px;
+      }
+      .coming-soon-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(124, 58, 237, 0.12);
+        border: 1px solid rgba(124, 58, 237, 0.35);
+        color: #a78bfa;
+        padding: 5px 16px;
+        border-radius: 50px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+      }
+      .coming-soon-badge::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #a78bfa;
+        animation: csDot 1.4s ease-in-out infinite;
+      }
+      .coming-soon-title {
+        font-family: var(--font-h);
+        font-size: clamp(22px, 3.5vw, 34px);
+        font-weight: 900;
+        margin-bottom: 14px;
+        background: linear-gradient(135deg, #fff 40%, #a78bfa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+      }
+      .coming-soon-sub {
+        color: var(--c-sub);
+        font-size: 16px;
+        max-width: 480px;
+        text-align: center;
+        line-height: 1.7;
+        margin-bottom: 32px;
+      }
+      .coming-soon-dots {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 36px;
+      }
+      .coming-soon-dots span {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--c-primary);
+        opacity: 0.3;
+        animation: csBounce 1.4s ease-in-out infinite;
+      }
+      .coming-soon-dots span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .coming-soon-dots span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+      @keyframes csGlowPulse {
+        0%,
+        100% {
+          opacity: 0.6;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.08);
+        }
+      }
+      @keyframes csDot {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+      @keyframes csBounce {
+        0%,
+        100% {
+          opacity: 0.3;
+          transform: translateY(0);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(-6px);
+        }
+      }
 
-    /* ─── RESPONSIVE ──────────────────────────────────────── */
-    @media (max-width: 1024px) {
-      .products-grid { grid-template-columns: repeat(2, 1fr); }
-      .book-call-inner { grid-template-columns: 1fr; gap: 40px; }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 768px) {
-      .nav-links, .nav-cta { display: none !important; }
-      .nav-toggle { display: flex; }
-      #navbar { padding: 14px 0; }
-      .container { padding: 0 18px; }
-      .products-grid { grid-template-columns: 1fr; }
-      .book-call-inner { grid-template-columns: 1fr; gap: 32px; }
-      .book-form-card { padding: 28px 20px; }
-      .footer-grid { grid-template-columns: 1fr; }
-      .footer-bottom { flex-direction: column; text-align: center; gap: 10px; }
-      .products-header h2 { font-size: clamp(24px,6vw,36px); }
-      .products-header p { font-size: 15px; }
-    }
-    @media (max-width: 480px) {
-      .container { padding: 0 14px; }
-      .nav-logo { font-size: 17px; }
-      /* Category tabs: smaller padding so they all fit */
-      .cat-tab { padding: 7px 14px; font-size: 13px; }
-      /* Product cards */
-      .product-thumbnail { height: 160px; }
-      .product-thumb-emoji { font-size: 60px; }
-      .product-top { padding: 16px 18px 0; }
-      .product-title { font-size: 16px; }
-      .product-desc { font-size: 12px; }
-      .product-bottom { padding: 12px 18px 18px; }
-      .product-price { font-size: 20px; }
-      /* Booking form */
-      .book-form-card { padding: 20px 14px; }
-      .form-input, .form-select, .form-textarea { font-size: 16px !important; } /* prevent iOS zoom */
-      /* Book call section */
-      #book-call { padding: 60px 0; }
-      .book-call-content h2 { font-size: clamp(22px,6vw,32px); }
-      .book-call-content p { font-size: 15px; }
-      /* Footer */
-      #products { padding: 40px 0 60px; }
-      /* Mobile menu */
-      .mobile-menu a { font-size: 20px; }
-      /* Coming soon section */
-      .coming-soon-state { padding: 40px 14px; }
-    }
-  </style>
-</head>
-<body>
-
-<!-- NAVBAR -->
-<nav id="navbar">
-  <div class="container nav-inner">
-    <a href="index.html" class="nav-logo" id="navLogo">Chrixlin AI Rise</a>
-    <div class="nav-links">
-      <a href="index.html#process">How It Works</a>
-      <a href="index.html#features">What You Get</a>
-      <a href="index.html#testimonials">Results</a>
-      <a href="marketplace.html" class="active">Marketplace</a>
-      <a href="index.html#pricing">Pricing</a>
-      <a href="index.html#faq">FAQ</a>
-    </div>
-    <div class="nav-cta">
-      <a href="auth.html" id="navAuthBtn" class="btn btn-outline" style="padding:9px 20px;font-size:14px;">Sign In</a>
-      <a href="mailto:info@chrixlin.tech" class="btn btn-primary">Book Free Call</a>
-    </div>
-    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
-  </div>
-</nav>
-
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
-  <button class="mobile-close" id="mobileClose">✕</button>
-  <a href="index.html#process" onclick="closeMobile()">How It Works</a>
-  <a href="index.html#features" onclick="closeMobile()">What You Get</a>
-  <a href="index.html#testimonials" onclick="closeMobile()">Results</a>
-  <a href="marketplace.html" onclick="closeMobile()">Marketplace</a>
-  <a href="index.html#pricing" onclick="closeMobile()">Pricing</a>
-  <a href="index.html#faq" onclick="closeMobile()">FAQ</a>
-  <a href="auth.html" id="mobileAuthBtn" onclick="closeMobile()" style="color:#a78bfa;">Sign In</a>
-  <a href="#book-call" class="btn btn-primary" onclick="closeMobile()">Book Free Call</a>
-</div>
-
-<!-- PRODUCTS -->
-<section id="products">
-  <div class="container">
-    <div class="products-header animate-in">
-      <div class="badge" style="margin-bottom:16px">🤖 Available Now</div>
-      <h2 id="productsTitle">Our <span class="text-grad">AI Product</span> Library</h2>
-      <p id="productsSub">All products are fully tested, documented, and ready to deploy for your clients.</p>
-    </div>
-    <div class="category-tabs" id="categoryTabs">
-      <button class="cat-tab active" data-cat="all" onclick="filterProducts('all')">All Products</button>
-      <!-- Dynamic categories inserted by JS -->
-    </div>
-    <div class="products-grid" id="productsGrid">
-      <!-- Populated by JS -->
-    </div>
-  </div>
-</section>
-
-<!-- BOOK A CALL -->
-<section id="book-call">
-  <div class="container">
-    <div class="book-call-inner">
-      <div class="book-call-content animate-in">
-        <div class="badge" style="margin-bottom:20px" id="bookBadge">📞 Need Something Custom?</div>
-        <h2 id="bookTitle">Get a <span class="text-grad">Custom-Built</span><br>AI Solution</h2>
-        <p id="bookSub">Don't see exactly what you need? We build custom AI bots, voice agents, and automation systems designed around your specific business. Book a free strategy call to get started.</p>
-        <div class="book-call-list">
-          <div class="book-call-item"><div class="book-call-icon">🎯</div><span>Tell us your exact requirements</span></div>
-          <div class="book-call-item"><div class="book-call-icon">🛠️</div><span>We build a fully custom AI solution</span></div>
-          <div class="book-call-item"><div class="book-call-icon">🚀</div><span>Deployed and tested within your timeline</span></div>
-          <div class="book-call-item"><div class="book-call-icon">🤝</div><span>Ongoing support and updates included</span></div>
+      /* ─── RESPONSIVE ──────────────────────────────────────── */
+      @media (max-width: 1024px) {
+        .products-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .book-call-inner {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 768px) {
+        .nav-links,
+        .nav-cta {
+          display: none !important;
+        }
+        .nav-toggle {
+          display: flex;
+        }
+        #navbar {
+          padding: 14px 0;
+        }
+        .container {
+          padding: 0 18px;
+        }
+        .products-grid {
+          grid-template-columns: 1fr;
+        }
+        .book-call-inner {
+          grid-template-columns: 1fr;
+          gap: 32px;
+        }
+        .book-form-card {
+          padding: 28px 20px;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr;
+        }
+        .footer-bottom {
+          flex-direction: column;
+          text-align: center;
+          gap: 10px;
+        }
+        .products-header h2 {
+          font-size: clamp(24px, 6vw, 36px);
+        }
+        .products-header p {
+          font-size: 15px;
+        }
+      }
+      @media (max-width: 480px) {
+        .container {
+          padding: 0 14px;
+        }
+        .nav-logo {
+          font-size: 17px;
+        }
+        /* Category tabs: smaller padding so they all fit */
+        .cat-tab {
+          padding: 7px 14px;
+          font-size: 13px;
+        }
+        /* Product cards */
+        .product-thumbnail {
+          height: 160px;
+        }
+        .product-thumb-emoji {
+          font-size: 60px;
+        }
+        .product-top {
+          padding: 16px 18px 0;
+        }
+        .product-title {
+          font-size: 16px;
+        }
+        .product-desc {
+          font-size: 12px;
+        }
+        .product-bottom {
+          padding: 12px 18px 18px;
+        }
+        .product-price {
+          font-size: 20px;
+        }
+        /* Booking form */
+        .book-form-card {
+          padding: 20px 14px;
+        }
+        .form-input,
+        .form-select,
+        .form-textarea {
+          font-size: 16px !important;
+        } /* prevent iOS zoom */
+        /* Book call section */
+        #book-call {
+          padding: 60px 0;
+        }
+        .book-call-content h2 {
+          font-size: clamp(22px, 6vw, 32px);
+        }
+        .book-call-content p {
+          font-size: 15px;
+        }
+        /* Footer */
+        #products {
+          padding: 40px 0 60px;
+        }
+        /* Mobile menu */
+        .mobile-menu a {
+          font-size: 20px;
+        }
+        /* Coming soon section */
+        .coming-soon-state {
+          padding: 40px 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav id="navbar">
+      <div class="container nav-inner">
+        <a href="index.html" class="nav-logo" id="navLogo">Chrixlin AI Rise</a>
+        <div class="nav-links">
+          <a href="index.html#process">How It Works</a>
+          <a href="index.html#features">What You Get</a>
+          <a href="index.html#testimonials">Results</a>
+          <a href="marketplace.html" class="active">Marketplace</a>
+          <a href="index.html#pricing">Pricing</a>
+          <a href="index.html#faq">FAQ</a>
         </div>
-        <a href="mailto:info@chrixlin.tech" class="btn btn-primary" id="bookEmailBtn">
-          Email Us Directly →
-        </a>
+        <div class="nav-cta">
+          <a
+            href="auth.html"
+            id="navAuthBtn"
+            class="btn btn-outline"
+            style="padding: 9px 20px; font-size: 14px"
+            >Sign In</a
+          >
+          <a href="mailto:info@chrixlin.tech" class="btn btn-primary"
+            >Book Free Call</a
+          >
+        </div>
+        <button class="nav-toggle" id="navToggle">
+          <span></span><span></span><span></span>
+        </button>
       </div>
-      <div class="book-form-card animate-in">
-        <h3>Book Your Free Strategy Call</h3>
-        <p>Complete this quick form and we'll be in touch within 24 hours.</p>
-        <form onsubmit="submitBooking(event)">
-          <div class="form-group">
-            <label class="form-label">Full Name</label>
-            <input class="form-input" type="text" placeholder="Your full name" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Email Address</label>
-            <input class="form-input" type="email" placeholder="your@email.com" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label">What do you need?</label>
-            <select class="form-select">
-              <option value="">Select a category...</option>
-              <option>Voice AI Agent</option>
-              <option>Lead Generation Bot</option>
-              <option>Content / Marketing AI</option>
-              <option>Customer Service Bot</option>
-              <option>Automation Workflow</option>
-              <option>Custom Solution</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Tell us about your project</label>
-            <input class="form-input" type="text" placeholder="Brief description of what you need..." />
-          </div>
-          <button type="submit" class="btn btn-primary form-submit">Book My Free Call →</button>
-          <p class="form-submit-note">100% Free · No obligation · We reply within 24 hours</p>
-        </form>
-      </div>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobileMenu">
+      <button class="mobile-close" id="mobileClose">✕</button>
+      <a href="index.html#process" onclick="closeMobile()">How It Works</a>
+      <a href="index.html#features" onclick="closeMobile()">What You Get</a>
+      <a href="index.html#testimonials" onclick="closeMobile()">Results</a>
+      <a href="marketplace.html" onclick="closeMobile()">Marketplace</a>
+      <a href="index.html#pricing" onclick="closeMobile()">Pricing</a>
+      <a href="index.html#faq" onclick="closeMobile()">FAQ</a>
+      <a
+        href="auth.html"
+        id="mobileAuthBtn"
+        onclick="closeMobile()"
+        style="color: #a78bfa"
+        >Sign In</a
+      >
+      <a href="#book-call" class="btn btn-primary" onclick="closeMobile()"
+        >Book Free Call</a
+      >
     </div>
-  </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="nav-logo" id="footerLogo">Chrixlin AI Rise</div>
-        <p>Ready-to-deploy AI bots and custom automation solutions for ambitious businesses.</p>
+    <!-- PRODUCTS -->
+    <section id="products">
+      <div class="container">
+        <div class="products-header animate-in">
+          <div class="badge" style="margin-bottom: 16px">🤖 Available Now</div>
+          <h2 id="productsTitle">
+            Our <span class="text-grad">AI Product</span> Library
+          </h2>
+          <p id="productsSub">
+            All products are fully tested, documented, and ready to deploy for
+            your clients.
+          </p>
+        </div>
+        <div class="category-tabs" id="categoryTabs">
+          <button
+            class="cat-tab active"
+            data-cat="all"
+            onclick="filterProducts('all')"
+          >
+            All Products
+          </button>
+          <!-- Dynamic categories inserted by JS -->
+        </div>
+        <div class="products-grid" id="productsGrid">
+          <!-- Populated by JS -->
+        </div>
       </div>
-      <div class="footer-col">
-        <h4>Marketplace</h4>
-        <ul>
-          <li><a href="#products">All Products</a></li>
-          <li><a href="#videos">Watch Demos</a></li>
-          <li><a href="#book-call">Custom Build</a></li>
-        </ul>
+    </section>
+
+    <!-- BOOK A CALL -->
+    <section id="book-call">
+      <div class="container">
+        <div class="book-call-inner">
+          <div class="book-call-content animate-in">
+            <div class="badge" style="margin-bottom: 20px" id="bookBadge">
+              📞 Need Something Custom?
+            </div>
+            <h2 id="bookTitle">
+              Get a <span class="text-grad">Custom-Built</span><br />AI Solution
+            </h2>
+            <p id="bookSub">
+              Don't see exactly what you need? We build custom AI bots, voice
+              agents, and automation systems designed around your specific
+              business. Book a free strategy call to get started.
+            </p>
+            <div class="book-call-list">
+              <div class="book-call-item">
+                <div class="book-call-icon">🎯</div>
+                <span>Tell us your exact requirements</span>
+              </div>
+              <div class="book-call-item">
+                <div class="book-call-icon">🛠️</div>
+                <span>We build a fully custom AI solution</span>
+              </div>
+              <div class="book-call-item">
+                <div class="book-call-icon">🚀</div>
+                <span>Deployed and tested within your timeline</span>
+              </div>
+              <div class="book-call-item">
+                <div class="book-call-icon">🤝</div>
+                <span>Ongoing support and updates included</span>
+              </div>
+            </div>
+            <a
+              href="mailto:info@chrixlin.tech"
+              class="btn btn-primary"
+              id="bookEmailBtn"
+            >
+              Email Us Directly →
+            </a>
+          </div>
+          <div class="book-form-card animate-in">
+            <h3>Book Your Free Strategy Call</h3>
+            <p>
+              Complete this quick form and we'll be in touch within 24 hours.
+            </p>
+            <form onsubmit="submitBooking(event)">
+              <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  placeholder="Your full name"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input
+                  class="form-input"
+                  type="email"
+                  placeholder="your@email.com"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">What do you need?</label>
+                <select class="form-select">
+                  <option value="">Select a category...</option>
+                  <option>Voice AI Agent</option>
+                  <option>Lead Generation Bot</option>
+                  <option>Content / Marketing AI</option>
+                  <option>Customer Service Bot</option>
+                  <option>Automation Workflow</option>
+                  <option>Custom Solution</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tell us about your project</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  placeholder="Brief description of what you need..."
+                />
+              </div>
+              <button type="submit" class="btn btn-primary form-submit">
+                Book My Free Call →
+              </button>
+              <p class="form-submit-note">
+                100% Free · No obligation · We reply within 24 hours
+              </p>
+            </form>
+          </div>
+        </div>
       </div>
-      <div class="footer-col">
-        <h4>Program</h4>
-        <ul>
-          <li><a href="index.html#process">How It Works</a></li>
-          <li><a href="index.html#features">What You Get</a></li>
-          <li><a href="index.html#testimonials">Results</a></li>
-          <li><a href="index.html#pricing">Pricing</a></li>
-        </ul>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="nav-logo" id="footerLogo">Chrixlin AI Rise</div>
+            <p>
+              Ready-to-deploy AI bots and custom automation solutions for
+              ambitious businesses.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Marketplace</h4>
+            <ul>
+              <li><a href="#products">All Products</a></li>
+              <li><a href="#videos">Watch Demos</a></li>
+              <li><a href="#book-call">Custom Build</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Program</h4>
+            <ul>
+              <li><a href="index.html#process">How It Works</a></li>
+              <li><a href="index.html#features">What You Get</a></li>
+              <li><a href="index.html#testimonials">Results</a></li>
+              <li><a href="index.html#pricing">Pricing</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="mailto:info@chrixlin.tech">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <div class="footer-copy" id="footerCopy">
+            © 2025 Chrixlin AI Rise. All rights reserved.
+          </div>
+          <div class="footer-social">
+            <a href="#" class="social-btn">𝕏</a>
+            <a href="#" class="social-btn">in</a>
+            <a href="#" class="social-btn">▶</a>
+            <a href="#" class="social-btn">✦</a>
+          </div>
+        </div>
       </div>
-      <div class="footer-col">
-        <h4>Legal</h4>
-        <ul>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms of Service</a></li>
-          <li><a href="mailto:info@chrixlin.tech">Contact Us</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="footer-copy" id="footerCopy">© 2025 Chrixlin AI Rise. All rights reserved.</div>
-      <div class="footer-social">
-        <a href="#" class="social-btn">𝕏</a>
-        <a href="#" class="social-btn">in</a>
-        <a href="#" class="social-btn">▶</a>
-        <a href="#" class="social-btn">✦</a>
-      </div>
-    </div>
-  </div>
-</footer>
+    </footer>
 
-<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+    <button
+      id="scrollTop"
+      onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+    >
+      ↑
+    </button>
 
-<script>
-// ─── DEFAULT DATA ─────────────────────────────────────────────────────────────
-const DEFAULT_MP = {
-  hero: {
-    badge: "🛒 AI Bot Marketplace",
-    title: "Ready-to-Deploy <span class='text-grad'>AI Bots & Agents</span><br>For Your Business",
-    subtitle: "Browse our library of pre-built AI automation systems. Buy and deploy in 48 hours — or book a call for a custom-built solution tailored to your exact needs.",
-    stats: [
-      { value: "20+", label: "AI Products" },
-      { value: "$499", label: "Starting From" },
-      { value: "48h", label: "Avg. Deploy Time" },
-      { value: "100%", label: "Setup Included" }
-    ]
-  },
-  videos: [
-    {
-      ytId: "",
-      title: "AI Voice Agent — Live Demo",
-      desc: "Watch our Voice AI handle a real appointment booking call from start to finish without any human involvement.",
-      thumb: "📞"
-    },
-    {
-      ytId: "",
-      title: "Lead Reactivation Bot in Action",
-      desc: "See how our autonomous system sends personalized follow-ups and turns cold leads into booked appointments.",
-      thumb: "📈"
-    },
-    {
-      ytId: "",
-      title: "Student Success: $12K/Month",
-      desc: "Shubham walks through how he deployed 3 of our AI agents for clients and now earns $12K/month on the side.",
-      thumb: "🏆"
-    }
-  ],
-  products: [
-    {
-      id: 1,
-      category: "voice-ai",
-      categoryLabel: "Voice AI",
-      categoryClass: "cat-voice",
-      emoji: "📞",
-      title: "Voice AI Appointment Agent",
-      badge: "Bestseller",
-      desc: "AI-powered voice assistant that handles incoming calls, books appointments, and sends follow-up reminders — 24/7 without human intervention.",
-      longDesc: "Deploy a fully autonomous AI voice agent that handles every incoming call for your business. It answers questions, qualifies leads, books appointments directly into your calendar, and sends automated SMS/email reminders — all without any human involvement. Perfect for clinics, service businesses, salons, and any business that relies on phone bookings.",
-      features: ["24/7 automated call handling", "Direct calendar integration", "SMS & email appointment reminders", "CRM pipeline integration", "Custom voice, tone & script", "Multilingual support", "Full setup & onboarding included"],
-      price: "$1,499",
-      buyUrl: "mailto:info@chrixlin.tech?subject=Buying: Voice AI Appointment Agent"
-    },
-    {
-      id: 2,
-      category: "sales",
-      categoryLabel: "Sales AI",
-      categoryClass: "cat-sales",
-      emoji: "🔥",
-      title: "Lead Reactivation AI Platform",
-      badge: "Hot",
-      desc: "Autonomous system that identifies dormant contacts in your CRM and turns them into confirmed bookings through personalized AI outreach.",
-      longDesc: "Stop leaving money on the table. This platform automatically scans your CRM for leads that went cold, crafts personalized follow-up messages based on their history, and drives them to take action — whether that's booking a call, signing up for a trial, or making a purchase. 100% automated.",
-      features: ["CRM integration (GoHighLevel, HubSpot, etc.)", "AI-personalized outreach sequences", "Multi-channel: SMS, email, voicemail drops", "Automatic booking on positive replies", "Detailed analytics dashboard", "A/B testing for message optimization"],
-      price: "$499",
-      buyUrl: "mailto:info@chrixlin.tech?subject=Buying: Lead Reactivation AI Platform"
-    },
-    {
-      id: 3,
-      category: "voice-ai",
-      categoryLabel: "Voice AI",
-      categoryClass: "cat-voice",
-      emoji: "🏥",
-      title: "Patient Acquisition AI System",
-      badge: "Premium",
-      desc: "Complete patient acquisition pipeline with AI voice agent, marketing funnels, CRM pipeline, and automated appointment scheduling for healthcare.",
-      longDesc: "A turnkey patient acquisition system built specifically for healthcare providers. Includes a custom AI voice agent for inbound calls, automated marketing funnels, HIPAA-compliant CRM pipeline, and seamless appointment scheduling. Delivered as a ready-to-import GoHighLevel snapshot.",
-      features: ["HIPAA-compliant architecture", "AI inbound & outbound calling", "Automated marketing funnels", "GoHighLevel snapshot included", "Patient intake automation", "Review collection system", "White-label ready"],
-      price: "$1,497",
-      buyUrl: "mailto:info@chrixlin.tech?subject=Buying: Patient Acquisition AI System"
-    },
-    {
-      id: 4,
-      category: "content",
-      categoryLabel: "Content AI",
-      categoryClass: "cat-content",
-      emoji: "✍️",
-      title: "AI Content & Marketing Agent",
-      badge: "",
-      desc: "Plug-and-play AI agent that generates and publishes social content, ad copy, email campaigns, and blog posts from a single prompt.",
-      longDesc: "Give this AI agent a topic, product, or goal and it produces a full content calendar: social media posts, email sequences, ad copy, and blog articles — all optimized for your brand voice. Integrates directly with your publishing tools. Save 20+ hours per week on content creation.",
-      features: ["Multi-platform content generation", "Brand voice training", "Auto-publish to social media", "Email sequence writer", "SEO-optimized blog posts", "Ad copy generator", "Content calendar scheduler"],
-      price: "$997",
-      buyUrl: "mailto:info@chrixlin.tech?subject=Buying: AI Content & Marketing Agent"
-    },
-    {
-      id: 5,
-      category: "lead",
-      categoryLabel: "Lead Gen",
-      categoryClass: "cat-lead",
-      emoji: "🎯",
-      title: "AI Lead Generation System",
-      badge: "",
-      desc: "End-to-end lead generation machine that finds prospects, qualifies them with AI conversations, and books them directly into your sales calendar.",
-      longDesc: "Automate your entire top-of-funnel. This system sources targeted leads from LinkedIn, web scraping, and third-party data, then engages them with personalized AI conversations that qualify interest and intent. Hot leads get automatically booked into your calendar — zero manual effort required.",
-      features: ["Multi-source lead sourcing", "AI qualification conversations", "LinkedIn outreach automation", "Automatic calendar booking", "Lead scoring & prioritization", "Custom ICP targeting", "Full analytics & reporting"],
-      price: "$1,297",
-      buyUrl: "mailto:info@chrixlin.tech?subject=Buying: AI Lead Generation System"
-    },
-    {
-      id: 6,
-      category: "automation",
-      categoryLabel: "Automation",
-      categoryClass: "cat-automation",
-      emoji: "⚙️",
-      title: "Business Automation Workflow Suite",
-      badge: "New",
-      desc: "A comprehensive suite of AI-powered automation workflows that eliminate repetitive tasks across your entire business operation.",
-      longDesc: "Stop wasting hours on tasks a machine can do. This suite includes pre-built automation workflows for onboarding, invoicing, follow-ups, reporting, and internal communications — all connected via AI. Works with 200+ apps including Slack, Google Workspace, Notion, QuickBooks, and more.",
-      features: ["200+ app integrations", "Automated client onboarding", "Invoice & payment automation", "AI-powered reporting", "Internal workflow automation", "Custom trigger + action builder", "Zapier/Make compatible"],
-      price: "$799",
-      buyUrl: "mailto:info@chrixlin.tech?subject=Buying: Business Automation Workflow Suite"
-    }
-  ],
-  book: {
-    email: "info@chrixlin.tech"
-  }
-};
+    <script>
+      // ─── DEFAULT DATA ─────────────────────────────────────────────────────────────
+      const DEFAULT_MP = {
+        hero: {
+          badge: "🛒 AI Bot Marketplace",
+          title:
+            "Ready-to-Deploy <span class='text-grad'>AI Bots & Agents</span><br>For Your Business",
+          subtitle:
+            "Browse our library of pre-built AI automation systems. Buy and deploy in 48 hours — or book a call for a custom-built solution tailored to your exact needs.",
+          stats: [
+            { value: "20+", label: "AI Products" },
+            { value: "$499", label: "Starting From" },
+            { value: "48h", label: "Avg. Deploy Time" },
+            { value: "100%", label: "Setup Included" },
+          ],
+        },
+        videos: [
+          {
+            ytId: "",
+            title: "AI Voice Agent — Live Demo",
+            desc: "Watch our Voice AI handle a real appointment booking call from start to finish without any human involvement.",
+            thumb: "📞",
+          },
+          {
+            ytId: "",
+            title: "Lead Reactivation Bot in Action",
+            desc: "See how our autonomous system sends personalized follow-ups and turns cold leads into booked appointments.",
+            thumb: "📈",
+          },
+          {
+            ytId: "",
+            title: "Student Success: $12K/Month",
+            desc: "Shubham walks through how he deployed 3 of our AI agents for clients and now earns $12K/month on the side.",
+            thumb: "🏆",
+          },
+        ],
+        products: [],
+        book: {
+          email: "info@chrixlin.tech",
+        },
+      };
 
-// ─── LOAD DATA ────────────────────────────────────────────────────────────────
-function loadMP() {
-  try {
-    const s = localStorage.getItem('chrixlin_marketplace');
-    if (!s) return { hero: DEFAULT_MP.hero, videos: DEFAULT_MP.videos, products: [], book: DEFAULT_MP.book };
-    const parsed = JSON.parse(s);
-    return {
-      hero: Object.assign({}, DEFAULT_MP.hero, parsed.hero || {}),
-      videos: (parsed.videos && parsed.videos.length) ? parsed.videos : DEFAULT_MP.videos,
-      products: parsed.products || [],
-      book: Object.assign({}, DEFAULT_MP.book, parsed.book || {})
-    };
-  } catch { return DEFAULT_MP; }
-}
+      // ─── LOAD DATA ────────────────────────────────────────────────────────────────
+      function loadMP() {
+        try {
+          const s = localStorage.getItem("chrixlin_marketplace");
+          if (!s)
+            return {
+              hero: DEFAULT_MP.hero,
+              videos: DEFAULT_MP.videos,
+              products: [],
+              book: DEFAULT_MP.book,
+            };
+          const parsed = JSON.parse(s);
+          return {
+            hero: Object.assign({}, DEFAULT_MP.hero, parsed.hero || {}),
+            videos:
+              parsed.videos && parsed.videos.length
+                ? parsed.videos
+                : DEFAULT_MP.videos,
+            products: parsed.products || [],
+            book: Object.assign({}, DEFAULT_MP.book, parsed.book || {}),
+          };
+        } catch {
+          return DEFAULT_MP;
+        }
+      }
 
-const mp = loadMP();
-// Expose mp data so product.html can reference the same localStorage key
-// (product.html reads 'chrixlin_marketplace' directly, same as here)
+      const mp = loadMP();
+      // Expose mp data so product.html can reference the same localStorage key
+      // (product.html reads 'chrixlin_marketplace' directly, same as here)
 
-// Apply brand name from main site
-(function applyBrand() {
-  try {
-    const keys = JSON.parse(localStorage.getItem('agentrise_textkeys') || '{}');
-    const brand = keys['nav.logo'] || 'Chrixlin AI Rise';
-    document.getElementById('navLogo').textContent = brand;
-    document.getElementById('footerLogo').textContent = brand;
-    if (keys['footer.copy']) document.getElementById('footerCopy').textContent = keys['footer.copy'];
-  } catch {}
-})();
+      // Apply brand name from main site
+      (function applyBrand() {
+        try {
+          const keys = JSON.parse(
+            localStorage.getItem("agentrise_textkeys") || "{}",
+          );
+          const brand = keys["nav.logo"] || "Chrixlin AI Rise";
+          document.getElementById("navLogo").textContent = brand;
+          document.getElementById("footerLogo").textContent = brand;
+          if (keys["footer.copy"])
+            document.getElementById("footerCopy").textContent =
+              keys["footer.copy"];
+        } catch {}
+      })();
 
-// ─── RENDER PRODUCTS ──────────────────────────────────────────────────────────
-let currentCat = 'all';
-const CATEGORIES = [
-  { key: 'voice-ai', label: 'Voice AI' },
-  { key: 'sales', label: 'Sales AI' },
-  { key: 'content', label: 'Content AI' },
-  { key: 'lead', label: 'Lead Gen' },
-  { key: 'automation', label: 'Automation' }
-];
+      // ─── RENDER PRODUCTS ──────────────────────────────────────────────────────────
+      let currentCat = "all";
+      const CATEGORIES = [
+        { key: "voice-ai", label: "Voice AI" },
+        { key: "sales", label: "Sales AI" },
+        { key: "content", label: "Content AI" },
+        { key: "lead", label: "Lead Gen" },
+        { key: "automation", label: "Automation" },
+      ];
 
-function buildCategoryTabs() {
-  const tabs = document.getElementById('categoryTabs');
-  const usedCats = [...new Set(mp.products.map(p => p.category))];
-  const catBtns = CATEGORIES.filter(c => usedCats.includes(c.key)).map(c =>
-    `<button class="cat-tab" data-cat="${c.key}" onclick="filterProducts('${c.key}', this)">${c.label}</button>`
-  ).join('');
-  tabs.innerHTML = `<button class="cat-tab active" data-cat="all" onclick="filterProducts('all', this)">All Products</button>${catBtns}`;
-}
+      function buildCategoryTabs() {
+        const tabs = document.getElementById("categoryTabs");
+        const usedCats = [...new Set(mp.products.map((p) => p.category))];
+        const catBtns = CATEGORIES.filter((c) => usedCats.includes(c.key))
+          .map(
+            (c) =>
+              `<button class="cat-tab" data-cat="${c.key}" onclick="filterProducts('${c.key}', this)">${c.label}</button>`,
+          )
+          .join("");
+        tabs.innerHTML = `<button class="cat-tab active" data-cat="all" onclick="filterProducts('all', this)">All Products</button>${catBtns}`;
+      }
 
-function filterProducts(cat, btnEl) {
-  currentCat = cat;
-  document.querySelectorAll('.cat-tab').forEach(t => t.classList.toggle('active', t.dataset.cat === cat));
-  document.querySelectorAll('.product-card').forEach(card => {
-    const match = cat === 'all' || card.dataset.category === cat;
-    card.classList.toggle('hidden', !match);
-  });
-  const grid = document.getElementById('productsGrid');
-  const visible = grid.querySelectorAll('.product-card:not(.hidden)').length;
-  const empty = grid.querySelector('.empty-state');
-  if (empty) empty.remove();
-  if (visible === 0) {
-    grid.insertAdjacentHTML('beforeend', `<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-text">No products in this category yet. <a href="#book-call" style="color:#a78bfa">Book a custom build →</a></div></div>`);
-  }
-}
+      function filterProducts(cat, btnEl) {
+        currentCat = cat;
+        document
+          .querySelectorAll(".cat-tab")
+          .forEach((t) => t.classList.toggle("active", t.dataset.cat === cat));
+        document.querySelectorAll(".product-card").forEach((card) => {
+          const match = cat === "all" || card.dataset.category === cat;
+          card.classList.toggle("hidden", !match);
+        });
+        const grid = document.getElementById("productsGrid");
+        const visible = grid.querySelectorAll(
+          ".product-card:not(.hidden)",
+        ).length;
+        const empty = grid.querySelector(".empty-state");
+        if (empty) empty.remove();
+        if (visible === 0) {
+          grid.insertAdjacentHTML(
+            "beforeend",
+            `<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-text">No products in this category yet. <a href="#book-call" style="color:#a78bfa">Book a custom build →</a></div></div>`,
+          );
+        }
+      }
 
-function renderProducts() {
-  buildCategoryTabs();
-  const grid = document.getElementById('productsGrid');
-  if (!mp.products || mp.products.length === 0) {
-    grid.innerHTML = `
+      function renderProducts() {
+        buildCategoryTabs();
+        const grid = document.getElementById("productsGrid");
+        if (!mp.products || mp.products.length === 0) {
+          grid.innerHTML = `
       <div class="coming-soon-wrap">
         <div class="coming-soon-glow"><div class="coming-soon-icon">🤖</div></div>
         <div class="coming-soon-badge">Coming Soon</div>
@@ -589,21 +1394,30 @@ function renderProducts() {
         <div class="coming-soon-dots"><span></span><span></span><span></span></div>
         <a href="#book-call" class="btn btn-primary btn-sm js-strategy-cta">Book a Free Strategy Call →</a>
       </div>`;
-    return;
-  }
-  const thumbClass = { 'voice-ai':'cat-thumb-voice-ai','sales':'cat-thumb-sales','content':'cat-thumb-content','lead':'cat-thumb-lead','automation':'cat-thumb-automation' };
-  grid.innerHTML = mp.products.map((p, i) => {
-    const tc = thumbClass[p.category] || 'cat-thumb-voice-ai';
-    const imgTag = p.image ? `<img class="product-thumb-img" src="${p.image}" alt="${p.title}" loading="lazy">` : '';
-    return `
-    <a class="product-card animate-in visible" href="product.html?slug=${p.slug || p.id}" data-category="${p.category}" style="animation-delay:${(i%3)*0.1}s">
+          return;
+        }
+        const thumbClass = {
+          "voice-ai": "cat-thumb-voice-ai",
+          sales: "cat-thumb-sales",
+          content: "cat-thumb-content",
+          lead: "cat-thumb-lead",
+          automation: "cat-thumb-automation",
+        };
+        grid.innerHTML = mp.products
+          .map((p, i) => {
+            const tc = thumbClass[p.category] || "cat-thumb-voice-ai";
+            const imgTag = p.image
+              ? `<img class="product-thumb-img" src="${p.image}" alt="${p.title}" loading="lazy">`
+              : "";
+            return `
+    <a class="product-card animate-in visible" href="product.html?slug=${p.slug || p.id}" data-category="${p.category}" style="animation-delay:${(i % 3) * 0.1}s">
       <div class="product-thumbnail ${tc}">
         ${imgTag}
-        ${p.badge ? `<div class="product-thumb-badge">⚡ ${p.badge}</div>` : ''}
+        ${p.badge ? `<div class="product-thumb-badge">⚡ ${p.badge}</div>` : ""}
       </div>
       <div class="product-top">
         <div class="product-meta">
-          <span class="product-cat-badge ${p.categoryClass || 'cat-voice'}">${p.categoryLabel}</span>
+          <span class="product-cat-badge ${p.categoryClass || "cat-voice"}">${p.categoryLabel}</span>
         </div>
         <div class="product-title">${p.title}</div>
         <div class="product-desc">${p.desc}</div>
@@ -616,117 +1430,176 @@ function renderProducts() {
         <div class="product-cta-arrow">→</div>
       </div>
     </a>
-  `}).join('');
-}
-renderProducts();
-
-// ─── BOOKING FORM ─────────────────────────────────────────────────────────────
-function submitBooking(e) {
-  e.preventDefault();
-  const email = mp.book.email || 'info@chrixlin.tech';
-  window.location.href = `mailto:${email}?subject=Marketplace%20Custom%20Build%20Request`;
-}
-
-// ─── SCROLL ANIMATIONS ────────────────────────────────────────────────────────
-var _scrollObserver = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); _scrollObserver.unobserve(e.target); } });
-}, { threshold: 0.1 });
-
-function _runAnimations() {
-  document.querySelectorAll('.animate-in').forEach(function(el) {
-    var r = el.getBoundingClientRect();
-    if (r.top < window.innerHeight) { el.classList.add('visible'); }
-    else { _scrollObserver.observe(el); }
-  });
-}
-setTimeout(_runAnimations, 200);
-window.addEventListener('load', function() { setTimeout(_runAnimations, 50); });
-
-// ─── NAVBAR ───────────────────────────────────────────────────────────────────
-const navbar = document.getElementById('navbar');
-const scrollTopBtn = document.getElementById('scrollTop');
-window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 50);
-  scrollTopBtn.classList.toggle('show', window.scrollY > 400);
-});
-
-document.getElementById('navToggle').addEventListener('click', () => document.getElementById('mobileMenu').classList.add('open'));
-document.getElementById('mobileClose').addEventListener('click', closeMobile);
-function closeMobile() { document.getElementById('mobileMenu').classList.remove('open'); }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="supabase-client.js"></script>
-<script>
-(async function() {
-  try {
-    // Load categories from DB
-    const cats = await ChrixlinDB.loadCategories();
-    if (cats && cats.length) {
-      // Rebuild category tabs with DB categories
-      const tabsEl = document.getElementById('categoryTabs');
-      if (tabsEl) {
-        tabsEl.innerHTML = '<button class="cat-tab active" data-cat="all" onclick="filterProducts(\'all\', this)">All Products</button>' +
-          cats.map(c => `<button class="cat-tab" data-cat="${c.slug}" onclick="filterProducts('${c.slug}', this)">${c.label}</button>`).join('');
+  `;
+          })
+          .join("");
       }
-      // Also add category CSS dynamically for any custom categories
-      cats.forEach(c => {
-        if (!document.querySelector('.cat-' + c.slug.replace(/-/g,'_'))) {
-          const style = document.createElement('style');
-          style.textContent = `.cat-${c.slug.replace(/-/g,'_')} { background: ${c.color_hex}22; color: ${c.color_hex}; border: 1px solid ${c.color_hex}44; }`;
-          document.head.appendChild(style);
-        }
-      });
-    }
-    // Load products from DB
-    const products = await ChrixlinDB.loadAllProducts();
-    if (products && products.length) {
-      mp.products = products;
       renderProducts();
-      setTimeout(_runAnimations, 50);
-    }
-  } catch(e) { console.warn('Marketplace load error:', e); }
 
-  // Update auth nav button based on session
-  try {
-    var session = await ChrixlinDB.getCustomerSession();
-    var desktopBtn = document.getElementById('navAuthBtn');
-    var mobileBtn  = document.getElementById('mobileAuthBtn');
-    if (session && session.user) {
-      var name = (session.user.user_metadata && session.user.user_metadata.full_name)
-                   ? session.user.user_metadata.full_name.split(' ')[0] : 'Dashboard';
-      if (desktopBtn) { desktopBtn.href = 'dashboard.html'; desktopBtn.textContent = '👤 ' + name; desktopBtn.style.borderColor = 'rgba(124,58,237,0.5)'; desktopBtn.style.color = '#a78bfa'; }
-      if (mobileBtn)  { mobileBtn.href  = 'dashboard.html'; mobileBtn.textContent  = '👤 ' + name; }
-    }
-  } catch(e) {}
-
-  // Apply strategy call booking link from admin settings (same logic as index.html)
-  function applyBookingLink(link) {
-    if (!link) return;
-    document.querySelectorAll('a').forEach(function(el) {
-      var txt = el.textContent.toLowerCase();
-      if (el.dataset.booking === '1' || txt.includes('book') || txt.includes('free call') || txt.includes('strategy call') || txt.includes('free strategy')) {
-        el.href = link;
-        el.target = '_blank';
-        el.rel = 'noopener';
+      // ─── BOOKING FORM ─────────────────────────────────────────────────────────────
+      function submitBooking(e) {
+        e.preventDefault();
+        const email = mp.book.email || "info@chrixlin.tech";
+        window.location.href = `mailto:${email}?subject=Marketplace%20Custom%20Build%20Request`;
       }
-    });
-  }
-  try {
-    var bl = JSON.parse(localStorage.getItem('chrixlin_booking_link') || '{}');
-    if (bl.url) applyBookingLink(bl.url);
-    else {
-      var bd2 = JSON.parse(localStorage.getItem('chrixlin_bank_details') || '{}');
-      if (bd2.strategyCallUrl) applyBookingLink(bd2.strategyCallUrl);
-    }
-  } catch(e) {}
-  try {
-    var dbVal = await ChrixlinDB.loadFromSupabase('site_settings', 'booking_link');
-    if (dbVal && dbVal.url) {
-      localStorage.setItem('chrixlin_booking_link', JSON.stringify(dbVal));
-      applyBookingLink(dbVal.url);
-    }
-  } catch(e) {}
-})();
-</script>
-</body>
+
+      // ─── SCROLL ANIMATIONS ────────────────────────────────────────────────────────
+      var _scrollObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              _scrollObserver.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.1 },
+      );
+
+      function _runAnimations() {
+        document.querySelectorAll(".animate-in").forEach(function (el) {
+          var r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight) {
+            el.classList.add("visible");
+          } else {
+            _scrollObserver.observe(el);
+          }
+        });
+      }
+      setTimeout(_runAnimations, 200);
+      window.addEventListener("load", function () {
+        setTimeout(_runAnimations, 50);
+      });
+
+      // ─── NAVBAR ───────────────────────────────────────────────────────────────────
+      const navbar = document.getElementById("navbar");
+      const scrollTopBtn = document.getElementById("scrollTop");
+      window.addEventListener("scroll", () => {
+        navbar.classList.toggle("scrolled", window.scrollY > 50);
+        scrollTopBtn.classList.toggle("show", window.scrollY > 400);
+      });
+
+      document
+        .getElementById("navToggle")
+        .addEventListener("click", () =>
+          document.getElementById("mobileMenu").classList.add("open"),
+        );
+      document
+        .getElementById("mobileClose")
+        .addEventListener("click", closeMobile);
+      function closeMobile() {
+        document.getElementById("mobileMenu").classList.remove("open");
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="supabase-client.js"></script>
+    <script>
+      (async function () {
+        try {
+          // Load categories from DB
+          const cats = await ChrixlinDB.loadCategories();
+          if (cats && cats.length) {
+            // Rebuild category tabs with DB categories
+            const tabsEl = document.getElementById("categoryTabs");
+            if (tabsEl) {
+              tabsEl.innerHTML =
+                '<button class="cat-tab active" data-cat="all" onclick="filterProducts(\'all\', this)">All Products</button>' +
+                cats
+                  .map(
+                    (c) =>
+                      `<button class="cat-tab" data-cat="${c.slug}" onclick="filterProducts('${c.slug}', this)">${c.label}</button>`,
+                  )
+                  .join("");
+            }
+            // Also add category CSS dynamically for any custom categories
+            cats.forEach((c) => {
+              if (
+                !document.querySelector(".cat-" + c.slug.replace(/-/g, "_"))
+              ) {
+                const style = document.createElement("style");
+                style.textContent = `.cat-${c.slug.replace(/-/g, "_")} { background: ${c.color_hex}22; color: ${c.color_hex}; border: 1px solid ${c.color_hex}44; }`;
+                document.head.appendChild(style);
+              }
+            });
+          }
+          // Load products from DB
+          const products = await ChrixlinDB.loadAllProducts();
+          if (products && products.length) {
+            mp.products = products;
+            renderProducts();
+            setTimeout(_runAnimations, 50);
+          }
+        } catch (e) {
+          console.warn("Marketplace load error:", e);
+        }
+
+        // Update auth nav button based on session
+        try {
+          var session = await ChrixlinDB.getCustomerSession();
+          var desktopBtn = document.getElementById("navAuthBtn");
+          var mobileBtn = document.getElementById("mobileAuthBtn");
+          if (session && session.user) {
+            var name =
+              session.user.user_metadata && session.user.user_metadata.full_name
+                ? session.user.user_metadata.full_name.split(" ")[0]
+                : "Dashboard";
+            if (desktopBtn) {
+              desktopBtn.href = "dashboard.html";
+              desktopBtn.textContent = "👤 " + name;
+              desktopBtn.style.borderColor = "rgba(124,58,237,0.5)";
+              desktopBtn.style.color = "#a78bfa";
+            }
+            if (mobileBtn) {
+              mobileBtn.href = "dashboard.html";
+              mobileBtn.textContent = "👤 " + name;
+            }
+          }
+        } catch (e) {}
+
+        // Apply strategy call booking link from admin settings (same logic as index.html)
+        function applyBookingLink(link) {
+          if (!link) return;
+          document.querySelectorAll("a").forEach(function (el) {
+            var txt = el.textContent.toLowerCase();
+            if (
+              el.dataset.booking === "1" ||
+              txt.includes("book") ||
+              txt.includes("free call") ||
+              txt.includes("strategy call") ||
+              txt.includes("free strategy")
+            ) {
+              el.href = link;
+              el.target = "_blank";
+              el.rel = "noopener";
+            }
+          });
+        }
+        try {
+          var bl = JSON.parse(
+            localStorage.getItem("chrixlin_booking_link") || "{}",
+          );
+          if (bl.url) applyBookingLink(bl.url);
+          else {
+            var bd2 = JSON.parse(
+              localStorage.getItem("chrixlin_bank_details") || "{}",
+            );
+            if (bd2.strategyCallUrl) applyBookingLink(bd2.strategyCallUrl);
+          }
+        } catch (e) {}
+        try {
+          var dbVal = await ChrixlinDB.loadFromSupabase(
+            "site_settings",
+            "booking_link",
+          );
+          if (dbVal && dbVal.url) {
+            localStorage.setItem(
+              "chrixlin_booking_link",
+              JSON.stringify(dbVal),
+            );
+            applyBookingLink(dbVal.url);
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </body>
 </html>
