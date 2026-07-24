@@ -1576,7 +1576,7 @@
           <a href="#testimonials" data-key="nav.link3" data-navkey="results"
             >Results</a
           >
-          <a href="marketplace.html" data-navkey="marketplace">Marketplace</a>
+          <a href="marketplace.html" data-navkey="marketplace">Projects</a>
           <a href="#pricing" data-key="nav.link4" data-navkey="pricing"
             >Pricing</a
           >
@@ -1619,7 +1619,7 @@
         href="marketplace.html"
         onclick="closeMobile()"
         data-navkey="marketplace"
-        >Marketplace</a
+        >Projects</a
       >
       <a href="#pricing" onclick="closeMobile()" data-navkey="pricing"
         >Pricing</a
@@ -1894,7 +1894,7 @@
         </h2>
         <p class="section-sub">
           Start free. Upgrade when you're ready. No hidden fees, no contracts.
-          Plan refunds available — marketplace purchases are non-refundable once
+          Plan refunds available — project purchases are non-refundable once
           downloaded.
         </p>
         <div class="pricing-tabs-wrap">
@@ -1932,7 +1932,7 @@
           "
         >
           🔒 Secure checkout · Refunds available on plans only · No refund after
-          marketplace download
+          project download
         </p>
       </div>
     </section>
@@ -2700,8 +2700,6 @@
       ${p.highlighted ? '<div class="plan-popular-tag">⭐ Most Recommended</div>' : ""}
       <div class="plan-badge" style="background:${p.badgeBg || "rgba(99,102,241,0.15)"};color:${p.badgeColor || "#a78bfa"}">${p.badge}</div>
       <div class="plan-name">${p.name}</div>
-      <div class="plan-price">${p.priceLabel}</div>
-      <div class="plan-period">${p.period}</div>
       <div class="plan-desc">${p.description}</div>
       <div class="plan-features">
         ${(p.features || [])

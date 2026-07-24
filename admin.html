@@ -943,7 +943,7 @@
       }
       .dash-table-row {
         display: grid;
-        grid-template-columns: 1fr auto auto;
+        grid-template-columns: 1fr auto;
         gap: 16px;
         padding: 10px 0;
         border-bottom: 1px solid var(--border);
@@ -955,7 +955,7 @@
       }
       .dash-table-header {
         display: grid;
-        grid-template-columns: 1fr auto auto;
+        grid-template-columns: 1fr auto;
         gap: 16px;
         padding: 0 0 8px;
         font-size: 11px;
@@ -1379,47 +1379,10 @@
           </button>
           <button
             class="sidebar-btn"
-            onclick="showPanel('booking')"
-            data-panel="booking"
-          >
-            <span class="sb-icon">📅</span> Book Free Calls
-          </button>
-          <button
-            class="sidebar-btn"
-            onclick="showPanel('planorders')"
-            data-panel="planorders"
-          >
-            <span class="sb-icon">🧾</span> Plan Orders
-          </button>
-          <button
-            class="sidebar-btn"
             onclick="showPanel('marketplace')"
             data-panel="marketplace"
           >
-            <span class="sb-icon">🛒</span> Marketplace
-          </button>
-          <button
-            class="sidebar-btn"
-            onclick="showPanel('orders')"
-            data-panel="orders"
-          >
-            <span class="sb-icon">📦</span> Orders & Transactions
-          </button>
-          <button
-            class="sidebar-btn"
-            onclick="showPanel('submissions')"
-            data-panel="submissions"
-          >
-            <span class="sb-icon">📋</span> Call Submissions
-          </button>
-
-          <div class="sidebar-section-label">Insights</div>
-          <button
-            class="sidebar-btn"
-            onclick="showPanel('analytics')"
-            data-panel="analytics"
-          >
-            <span class="sb-icon">📈</span> Analytics & Reports
+            <span class="sb-icon">🛒</span> Projects
           </button>
 
           <div class="sidebar-section-label">Settings</div>
@@ -1439,62 +1402,19 @@
           <div id="settingsSubMenu" style="display: none; padding-left: 12px">
             <button
               class="sidebar-btn"
-              onclick="
-                showPanel('settings');
-                toggleContentEditor();
-              "
-              data-panel="settings-content"
-              style="font-size: 13px"
-            >
-              <span class="sb-icon">✍️</span> Content Editor
-            </button>
-            <button
-              class="sidebar-btn"
               onclick="showPanel('bankdetails')"
               data-panel="bankdetails"
               style="font-size: 13px"
             >
-              <span class="sb-icon">💳</span> Payment Gateways
+              <span class="sb-icon">📞</span> Booking Link
             </button>
             <button
               class="sidebar-btn"
-              onclick="showPanel('theme')"
-              data-panel="theme"
+              onclick="showPanel('changepassword')"
+              data-panel="changepassword"
               style="font-size: 13px"
             >
-              <span class="sb-icon">🎨</span> Theme & Colors
-            </button>
-            <button
-              class="sidebar-btn"
-              onclick="showPanel('seo')"
-              data-panel="seo"
-              style="font-size: 13px"
-            >
-              <span class="sb-icon">🔍</span> SEO Settings
-            </button>
-            <button
-              class="sidebar-btn"
-              onclick="showPanel('terms')"
-              data-panel="terms"
-              style="font-size: 13px"
-            >
-              <span class="sb-icon">📄</span> Terms &amp; Conditions
-            </button>
-            <button
-              class="sidebar-btn"
-              onclick="showPanel('privacy')"
-              data-panel="privacy"
-              style="font-size: 13px"
-            >
-              <span class="sb-icon">🔒</span> Privacy Policy
-            </button>
-            <button
-              class="sidebar-btn"
-              onclick="showPanel('navmenu')"
-              data-panel="navmenu"
-              style="font-size: 13px"
-            >
-              <span class="sb-icon">🧭</span> Navigation Menu
+              <span class="sb-icon">🔒</span> Change Password
             </button>
           </div>
         </nav>
@@ -1513,7 +1433,7 @@
               color: #22d3ee;
             "
           >
-            <span>🛒</span> Preview Marketplace
+            <span>🛒</span> Preview Projects
           </a>
           <button
             class="sidebar-link"
@@ -1620,97 +1540,23 @@
               </button>
             </div>
 
-            <!-- Revenue KPI Row -->
-            <div class="dash-kpi-row">
-              <div
-                class="dash-kpi kpi-purple"
-                onclick="showPanel('analytics')"
-                style="cursor: pointer"
-              >
-                <div class="dash-kpi-icon">💰</div>
-                <div class="dash-kpi-val" id="kpi_totalRevenue">$0</div>
-                <div class="dash-kpi-label">Total Revenue</div>
-                <div class="dash-kpi-sub">All time</div>
-                <div
-                  style="font-size: 11px; color: var(--muted); margin-top: 4px"
-                >
-                  Click for details →
-                </div>
-              </div>
-              <div
-                class="dash-kpi kpi-cyan"
-                onclick="showPanel('analytics')"
-                style="cursor: pointer"
-              >
-                <div class="dash-kpi-icon">📦</div>
-                <div class="dash-kpi-val" id="kpi_marketplaceSales">$0</div>
-                <div class="dash-kpi-label">Marketplace Sales</div>
-                <div class="dash-kpi-sub">Product purchases</div>
-                <div
-                  style="font-size: 11px; color: var(--muted); margin-top: 4px"
-                >
-                  Click for details →
-                </div>
-              </div>
-              <div
-                class="dash-kpi kpi-gold"
-                onclick="showPanel('analytics')"
-                style="cursor: pointer"
-              >
-                <div class="dash-kpi-icon">💎</div>
-                <div class="dash-kpi-val" id="kpi_subRevenue">$0</div>
-                <div class="dash-kpi-label">Subscription Revenue</div>
-                <div class="dash-kpi-sub">Plan subscriptions</div>
-                <div
-                  style="font-size: 11px; color: var(--muted); margin-top: 4px"
-                >
-                  Click for details →
-                </div>
-              </div>
-              <div
-                class="dash-kpi kpi-green"
-                onclick="showPanel('users')"
-                style="cursor: pointer"
-              >
-                <div class="dash-kpi-icon">👥</div>
-                <div class="dash-kpi-val" id="dashRegisteredUsers">—</div>
-                <div class="dash-kpi-label">Registered Users</div>
-                <div class="dash-kpi-sub">All accounts</div>
-                <div
-                  style="font-size: 11px; color: var(--muted); margin-top: 4px"
-                >
-                  Click for details →
-                </div>
-              </div>
-            </div>
-
-            <!-- Second Row: 3 cards -->
+            <!-- KPI Row -->
             <div class="kpi-row2">
               <div
                 class="kpi-card2"
-                onclick="showPanel('orders')"
+                onclick="showPanel('users')"
                 style="cursor: pointer"
               >
+                <div class="kpi-card2-val" id="dashRegisteredUsers">—</div>
+                <div class="kpi-card2-label">Registered Users</div>
+              </div>
+              <div class="kpi-card2">
                 <div class="kpi-card2-val" id="kpi_totalPurchases">0</div>
                 <div class="kpi-card2-label">Total Purchases</div>
-                <div
-                  style="font-size: 11px; color: var(--muted); margin-top: 4px"
-                >
-                  Click for details →
-                </div>
               </div>
-              <div
-                class="kpi-card2"
-                onclick="showPanel('orders')"
-                style="cursor: pointer"
-              >
+              <div class="kpi-card2">
                 <div class="kpi-card2-val" id="dashPurchasingUsers">—</div>
                 <div class="kpi-card2-label">Purchasing Customers</div>
-                <div
-                  style="font-size: 11px; color: var(--muted); margin-top: 4px"
-                >
-                  Click for details →
-                </div>
               </div>
             </div>
 
@@ -1719,7 +1565,7 @@
               <div class="dash-section">
                 <div class="dash-section-title">🔥 Trending Products</div>
                 <div class="dash-table-header">
-                  <span>Product</span><span>Purchases</span><span>Revenue</span>
+                  <span>Product</span><span>Purchases</span>
                 </div>
                 <div id="dash_trendingProducts">
                   <div
@@ -1930,7 +1776,7 @@
             <button
               class="btn btn-primary"
               style="margin-top: 16px"
-              onclick="saveSection('stats', 'statsEditor', buildStatsData)"
+              onclick="saveStats()"
             >
               Save Stats
             </button>
@@ -2511,23 +2357,15 @@
                 </div>
                 <div class="form-grid" style="margin-bottom: 20px">
                   <div class="form-row" style="margin: 0">
-                    <label>Price Display</label>
-                    <input
-                      type="text"
-                      id="pp_priceLabel"
-                      placeholder="e.g. $497 or FREE"
-                    />
+                    <label>Plan Type</label>
+                    <select class="field-input" id="pp_planType">
+                      <option value="free">Free</option>
+                      <option value="paid">Paid</option>
+                    </select>
                     <div class="input-hint">
-                      Shown as the large price number on the card
+                      Controls whether visitors get the "Book a Call" flow or
+                      the checkout flow
                     </div>
-                  </div>
-                  <div class="form-row" style="margin: 0">
-                    <label>Price Period / Note</label>
-                    <input
-                      type="text"
-                      id="pp_period"
-                      placeholder="e.g. One-time · No subscription"
-                    />
                   </div>
                 </div>
                 <div class="form-grid" style="margin-bottom: 20px">
@@ -3471,10 +3309,10 @@
 
           <!-- ── MARKETPLACE ─────────────────────────────────────── -->
           <div id="panel-marketplace" class="panel">
-            <div class="panel-title">🛒 Marketplace Products</div>
+            <div class="panel-title">🛒 Projects</div>
             <div class="panel-desc">
               Create, edit, and manage all AI product listings shown on your
-              marketplace page.
+              projects page.
             </div>
 
             <!-- Categories Management -->
@@ -3506,7 +3344,7 @@
                       margin-top: 4px;
                     "
                   >
-                    Manage categories — updates marketplace filter tabs
+                    Manage categories — updates project filter tabs
                     automatically
                   </div>
                 </div>
@@ -3907,14 +3745,6 @@
                       </option>
                     </select>
                   </div>
-                  <div class="form-row" style="margin: 0">
-                    <label>Price</label>
-                    <input
-                      type="text"
-                      id="pm_price"
-                      placeholder="e.g. $1,499"
-                    />
-                  </div>
                 </div>
                 <input type="hidden" id="pm_emoji" value="🤖" />
 
@@ -4180,538 +4010,35 @@
 
           <!-- ── PAYMENT GATEWAYS ───────────────────────────────── -->
           <div id="panel-bankdetails" class="panel">
-            <div class="panel-title">💳 Payment Gateways</div>
+            <div class="panel-title">📞 Booking Link</div>
             <div class="panel-desc">
-              Select and configure payment methods for your customers. Enable
-              multiple gateways — customers can choose at checkout.
+              Set the link used site-wide for every "Book Free Strategy Call"
+              / "Book Free Call" button.
             </div>
 
-            <!-- Gateway Cards -->
-            <div
-              style="
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 16px;
-                margin-bottom: 32px;
-              "
-              id="gatewayCardsGrid"
-            >
-              <div
-                style="
-                  color: var(--muted);
-                  font-size: 13px;
-                  padding: 24px;
-                  text-align: center;
-                  grid-column: 1/-1;
-                "
-              >
-                Loading gateways...
-              </div>
-            </div>
-
-            <!-- Checkout Settings -->
-            <div class="section-box">
-              <div class="section-box-header" onclick="toggleBox(this)">
-                <div class="section-box-title">
-                  <span class="section-box-icon">⚙️</span> Checkout Settings
-                </div>
-                <span class="section-box-toggle">▾</span>
-              </div>
-              <div class="section-box-body">
-                <div class="form-row">
-                  <label>📞 Strategy Call / Booking Link</label
-                  ><input
-                    type="url"
-                    id="strategy_call_url"
-                    placeholder="https://calendly.com/yourname or mailto:info@chrixlin.tech"
-                  />
-                </div>
-                <div
-                  class="input-hint"
-                  style="margin-top: -10px; margin-bottom: 16px"
-                >
-                  Used for ALL "Book Free Strategy Call" / "Book Free Call"
-                  buttons across the entire website.
-                </div>
-                <div class="form-row">
-                  <label>Payment Contact Email</label
-                  ><input
-                    type="email"
-                    id="payment_contact_email"
-                    placeholder="info@chrixlin.tech"
-                  />
-                </div>
-                <div
-                  class="input-hint"
-                  style="margin-top: -10px; margin-bottom: 16px"
-                >
-                  Shown on checkout as the contact for payment questions.
-                </div>
-                <div class="form-row">
-                  <label>Currency Symbol</label
-                  ><input
-                    type="text"
-                    id="payment_currency"
-                    placeholder="$"
-                    style="max-width: 80px"
-                  />
-                </div>
-
-                <div class="form-row">
-                  <label>Success Page Message</label
-                  ><textarea
-                    id="payment_success_msg"
-                    placeholder="Thank you for your purchase! Our team will contact you within 24 hours."
-                  ></textarea>
-                </div>
-                <div class="form-row">
-                  <label>Refund / Money-Back Policy</label
-                  ><textarea
-                    id="payment_refund_policy"
-                    placeholder="e.g. 15-day money-back guarantee. Contact us within 15 days for a full refund."
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-
-            <!-- Tax / GST Settings -->
-            <div class="section-box" style="margin-top: 16px">
-              <div class="section-box-header" onclick="toggleBox(this)">
-                <div class="section-box-title">
-                  <span class="section-box-icon">🧾</span> Tax / GST Settings
-                </div>
-                <span class="section-box-toggle">▾</span>
-              </div>
-              <div class="section-box-body">
-                <div
-                  style="
-                    font-size: 12px;
-                    color: var(--muted);
-                    margin-bottom: 20px;
-                  "
-                >
-                  Enable each tax individually. When enabled the percentage is
-                  added to the product price and shown as a separate line item
-                  on the checkout page.
-                </div>
-                <div class="form-grid">
-                  <div class="form-row">
-                    <label>CGST — Central Goods &amp; Services Tax</label>
-                    <div
-                      style="
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-                        flex-wrap: wrap;
-                        margin-top: 4px;
-                      "
-                    >
-                      <button
-                        type="button"
-                        id="tax_cgst_toggle"
-                        onclick="toggleTax('cgst')"
-                        style="
-                          padding: 6px 18px;
-                          border-radius: 20px;
-                          font-size: 12px;
-                          font-weight: 700;
-                          cursor: pointer;
-                          background: rgba(100, 116, 139, 0.1);
-                          color: #64748b;
-                          border: 1px solid rgba(100, 116, 139, 0.3);
-                          transition: all 0.2s;
-                          white-space: nowrap;
-                        "
-                      >
-                        ✗ Disabled
-                      </button>
-                      <div style="display: flex; align-items: center; gap: 8px">
-                        <input
-                          type="number"
-                          id="tax_cgst"
-                          placeholder="9"
-                          min="0"
-                          max="100"
-                          step="0.5"
-                          style="
-                            max-width: 90px;
-                            opacity: 0.4;
-                            pointer-events: none;
-                          "
-                          disabled
-                        />
-                        <span style="font-size: 13px; color: var(--muted)"
-                          >%</span
-                        >
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <label>SGST — State Goods &amp; Services Tax</label>
-                    <div
-                      style="
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-                        flex-wrap: wrap;
-                        margin-top: 4px;
-                      "
-                    >
-                      <button
-                        type="button"
-                        id="tax_sgst_toggle"
-                        onclick="toggleTax('sgst')"
-                        style="
-                          padding: 6px 18px;
-                          border-radius: 20px;
-                          font-size: 12px;
-                          font-weight: 700;
-                          cursor: pointer;
-                          background: rgba(100, 116, 139, 0.1);
-                          color: #64748b;
-                          border: 1px solid rgba(100, 116, 139, 0.3);
-                          transition: all 0.2s;
-                          white-space: nowrap;
-                        "
-                      >
-                        ✗ Disabled
-                      </button>
-                      <div style="display: flex; align-items: center; gap: 8px">
-                        <input
-                          type="number"
-                          id="tax_sgst"
-                          placeholder="9"
-                          min="0"
-                          max="100"
-                          step="0.5"
-                          style="
-                            max-width: 90px;
-                            opacity: 0.4;
-                            pointer-events: none;
-                          "
-                          disabled
-                        />
-                        <span style="font-size: 13px; color: var(--muted)"
-                          >%</span
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <button
-              class="btn btn-primary"
-              style="margin-top: 16px"
-              onclick="saveCheckoutSettings()"
-            >
-              💾 Save Checkout Settings
-            </button>
-
-            <!-- Gateway Config Modal -->
-            <div
-              id="gatewayModalOverlay"
-              style="
-                display: none;
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.75);
-                backdrop-filter: blur(8px);
-                z-index: 2000;
-                align-items: center;
-                justify-content: center;
-              "
-              onclick="if (event.target === this) closeGatewayModal();"
-            >
-              <div
-                style="
-                  background: #1a1a2e;
-                  border: 1px solid rgba(255, 255, 255, 0.12);
-                  border-radius: 20px;
-                  padding: 36px;
-                  width: min(580px, 96vw);
-                  max-height: 88vh;
-                  overflow-y: auto;
-                  position: relative;
-                "
-              >
-                <button
-                  onclick="closeGatewayModal()"
-                  style="
-                    position: absolute;
-                    top: 16px;
-                    right: 16px;
-                    background: none;
-                    border: none;
-                    color: var(--muted);
-                    font-size: 22px;
-                    cursor: pointer;
-                  "
-                >
-                  ✕
-                </button>
-                <div
-                  id="gatewayModalTitle"
-                  style="font-size: 20px; font-weight: 800; margin-bottom: 4px"
-                >
-                  Configure Gateway
-                </div>
-                <div
-                  id="gatewayModalDesc"
-                  style="
-                    font-size: 13px;
-                    color: var(--muted);
-                    margin-bottom: 24px;
-                  "
-                ></div>
-                <div id="gatewayModalFields"></div>
-                <div style="display: flex; gap: 10px; margin-top: 24px">
-                  <button class="btn btn-ghost" onclick="closeGatewayModal()">
-                    Cancel
-                  </button>
-                  <button class="btn btn-primary" onclick="saveGatewayConfig()">
-                    💾 Save Configuration
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- ── ORDERS & TRANSACTIONS ───────────────────────────── -->
-          <div id="panel-orders" class="panel">
-            <div class="panel-title">📦 Orders & Transactions</div>
-            <div class="panel-desc">
-              All customer purchases and payment records. Updates in real-time.
-            </div>
-
-            <div
-              style="
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 16px;
-                margin-bottom: 28px;
-              "
-            >
-              <div
-                style="
-                  background: var(--card);
-                  border: 1px solid var(--border);
-                  border-radius: 12px;
-                  padding: 20px;
-                "
-              >
-                <div
-                  style="
-                    font-size: 12px;
-                    color: var(--muted);
-                    margin-bottom: 6px;
-                    text-transform: uppercase;
-                    letter-spacing: 0.5px;
-                  "
-                >
-                  Total Orders
-                </div>
-                <div
-                  id="ordStatTotal"
-                  style="font-size: 28px; font-weight: 800"
-                >
-                  —
-                </div>
+            <div style="max-width: 560px; margin-top: 12px">
+              <div class="form-row">
+                <label>📞 Strategy Call / Booking Link</label
+                ><input
+                  type="url"
+                  id="strategy_call_url"
+                  placeholder="https://calendly.com/yourname or mailto:info@chrixlin.tech"
+                />
               </div>
               <div
-                style="
-                  background: var(--card);
-                  border: 1px solid var(--border);
-                  border-radius: 12px;
-                  padding: 20px;
-                "
+                class="input-hint"
+                style="margin-top: -10px; margin-bottom: 16px"
               >
-                <div
-                  style="
-                    font-size: 12px;
-                    color: var(--muted);
-                    margin-bottom: 6px;
-                    text-transform: uppercase;
-                    letter-spacing: 0.5px;
-                  "
-                >
-                  Total Revenue
-                </div>
-                <div
-                  id="ordStatRevenue"
-                  style="font-size: 28px; font-weight: 800; color: #22c55e"
-                >
-                  —
-                </div>
+                Used for ALL "Book Free Strategy Call" / "Book Free Call"
+                buttons across the entire website.
               </div>
-            </div>
-
-            <div
-              style="
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                margin-bottom: 20px;
-              "
-            >
-              <input
-                type="text"
-                id="ordSearchInput"
-                placeholder="🔍 Search by order ref, product or user..."
-                oninput="filterOrdersTable()"
-                style="
-                  flex: 1;
-                  background: var(--card);
-                  border: 1px solid var(--border);
-                  border-radius: 10px;
-                  padding: 10px 16px;
-                  color: var(--text);
-                  font-size: 14px;
-                  outline: none;
-                "
-              />
               <button
-                class="btn btn-ghost"
-                onclick="loadOrdersPanel()"
-                style="white-space: nowrap"
+                class="btn btn-primary"
+                style="margin-top: 4px"
+                onclick="saveCheckoutSettings()"
               >
-                ↻ Refresh
+                💾 Save
               </button>
-              <button
-                class="btn btn-ghost"
-                onclick="exportOrdersExcel()"
-                style="
-                  white-space: nowrap;
-                  border-color: rgba(34, 197, 94, 0.4);
-                  color: #22c55e;
-                "
-              >
-                ⬇ Export Excel
-              </button>
-            </div>
-
-            <div
-              style="
-                background: var(--card);
-                border: 1px solid var(--border);
-                border-radius: 16px;
-                overflow: hidden;
-              "
-            >
-              <table
-                style="width: 100%; border-collapse: collapse; font-size: 13px"
-              >
-                <thead>
-                  <tr style="border-bottom: 1px solid var(--border)">
-                    <th
-                      style="
-                        padding: 13px 16px;
-                        text-align: left;
-                        color: var(--muted);
-                        font-weight: 600;
-                        font-size: 11px;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      "
-                    >
-                      Order Ref
-                    </th>
-                    <th
-                      style="
-                        padding: 13px 16px;
-                        text-align: left;
-                        color: var(--muted);
-                        font-weight: 600;
-                        font-size: 11px;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      "
-                    >
-                      Customer
-                    </th>
-                    <th
-                      style="
-                        padding: 13px 16px;
-                        text-align: left;
-                        color: var(--muted);
-                        font-weight: 600;
-                        font-size: 11px;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      "
-                    >
-                      Product
-                    </th>
-                    <th
-                      style="
-                        padding: 13px 16px;
-                        text-align: left;
-                        color: var(--muted);
-                        font-weight: 600;
-                        font-size: 11px;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      "
-                    >
-                      Amount
-                    </th>
-                    <th
-                      style="
-                        padding: 13px 16px;
-                        text-align: left;
-                        color: var(--muted);
-                        font-weight: 600;
-                        font-size: 11px;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      "
-                    >
-                      Method
-                    </th>
-                    <th
-                      style="
-                        padding: 13px 16px;
-                        text-align: left;
-                        color: var(--muted);
-                        font-weight: 600;
-                        font-size: 11px;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      "
-                    >
-                      Status
-                    </th>
-                    <th
-                      style="
-                        padding: 13px 16px;
-                        text-align: left;
-                        color: var(--muted);
-                        font-weight: 600;
-                        font-size: 11px;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      "
-                    >
-                      Date
-                    </th>
-                  </tr>
-                </thead>
-                <tbody id="ordersTableBody">
-                  <tr>
-                    <td
-                      colspan="7"
-                      style="
-                        padding: 48px;
-                        text-align: center;
-                        color: var(--muted);
-                      "
-                    >
-                      Loading orders...
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
             </div>
           </div>
 
@@ -4720,7 +4047,7 @@
             <div class="panel-title">📋 Strategy Call Submissions</div>
             <div class="panel-desc">
               All "Book Free Strategy Call" form submissions from landing page
-              and marketplace.
+              and projects.
             </div>
             <div
               style="
@@ -4923,7 +4250,7 @@
             <div
               style="
                 display: grid;
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(2, 1fr);
                 gap: 16px;
                 margin-bottom: 28px;
               "
@@ -4973,30 +4300,6 @@
                 <div
                   id="statTotalOrders"
                   style="font-size: 28px; font-weight: 800; color: var(--text)"
-                >
-                  —
-                </div>
-              </div>
-              <div
-                style="
-                  background: var(--card);
-                  border: 1px solid var(--border);
-                  border-radius: 12px;
-                  padding: 20px;
-                "
-              >
-                <div
-                  style="
-                    font-size: 13px;
-                    color: var(--muted);
-                    margin-bottom: 6px;
-                  "
-                >
-                  Total Revenue
-                </div>
-                <div
-                  id="statTotalRevenue"
-                  style="font-size: 28px; font-weight: 800; color: #22c55e"
                 >
                   —
                 </div>
@@ -5113,19 +4416,6 @@
                         letter-spacing: 0.5px;
                       "
                     >
-                      Total Spent
-                    </th>
-                    <th
-                      style="
-                        padding: 14px 20px;
-                        text-align: left;
-                        color: var(--muted);
-                        font-weight: 600;
-                        font-size: 12px;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      "
-                    >
                       Joined
                     </th>
                     <th
@@ -5206,228 +4496,12 @@
             </div>
           </div>
 
-          <!-- ── ANALYTICS & REPORTS ────────────────────────────── -->
-          <div id="panel-analytics" class="panel">
-            <div class="panel-title">📈 Analytics & Reports</div>
-            <div class="panel-desc">
-              Complete business overview — revenue, users, products, monthly
-              trends.
-            </div>
-
-            <!-- Export Buttons -->
-            <div
-              style="
-                display: flex;
-                gap: 12px;
-                margin-bottom: 28px;
-                flex-wrap: wrap;
-              "
-            >
-              <button class="btn btn-primary" onclick="exportAnalyticsPDF()">
-                📄 Export PDF
-              </button>
-              <button class="btn btn-ghost" onclick="exportAnalyticsExcel()">
-                📊 Export Excel
-              </button>
-              <button class="btn btn-ghost" onclick="loadAnalytics()">
-                ↻ Refresh
-              </button>
-            </div>
-
-            <!-- KPI Cards -->
-            <div
-              style="
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 16px;
-                margin-bottom: 28px;
-              "
-              id="analyticsKPIs"
-            >
-              <div
-                style="
-                  background: var(--card);
-                  border: 1px solid var(--border);
-                  border-radius: 12px;
-                  padding: 20px;
-                "
-              >
-                <div
-                  style="
-                    font-size: 12px;
-                    color: var(--muted);
-                    margin-bottom: 6px;
-                    text-transform: uppercase;
-                    letter-spacing: 0.5px;
-                  "
-                >
-                  Total Revenue
-                </div>
-                <div
-                  id="akpRevenue"
-                  style="font-size: 28px; font-weight: 800; color: #22c55e"
-                >
-                  —
-                </div>
-              </div>
-              <div
-                style="
-                  background: var(--card);
-                  border: 1px solid var(--border);
-                  border-radius: 12px;
-                  padding: 20px;
-                "
-              >
-                <div
-                  style="
-                    font-size: 12px;
-                    color: var(--muted);
-                    margin-bottom: 6px;
-                    text-transform: uppercase;
-                    letter-spacing: 0.5px;
-                  "
-                >
-                  Total Orders
-                </div>
-                <div id="akpOrders" style="font-size: 28px; font-weight: 800">
-                  —
-                </div>
-              </div>
-              <div
-                style="
-                  background: var(--card);
-                  border: 1px solid var(--border);
-                  border-radius: 12px;
-                  padding: 20px;
-                "
-              >
-                <div
-                  style="
-                    font-size: 12px;
-                    color: var(--muted);
-                    margin-bottom: 6px;
-                    text-transform: uppercase;
-                    letter-spacing: 0.5px;
-                  "
-                >
-                  Registered Users
-                </div>
-                <div id="akpUsers" style="font-size: 28px; font-weight: 800">
-                  —
-                </div>
-              </div>
-              <div
-                style="
-                  background: var(--card);
-                  border: 1px solid var(--border);
-                  border-radius: 12px;
-                  padding: 20px;
-                "
-              >
-                <div
-                  style="
-                    font-size: 12px;
-                    color: var(--muted);
-                    margin-bottom: 6px;
-                    text-transform: uppercase;
-                    letter-spacing: 0.5px;
-                  "
-                >
-                  Avg Order Value
-                </div>
-                <div
-                  id="akpAvg"
-                  style="font-size: 28px; font-weight: 800; color: #22c55e"
-                >
-                  —
-                </div>
-              </div>
-            </div>
-
-            <!-- Charts row -->
-            <div
-              style="
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 24px;
-                margin-bottom: 28px;
-              "
-            >
-              <div
-                style="
-                  background: var(--card);
-                  border: 1px solid var(--border);
-                  border-radius: 16px;
-                  padding: 24px;
-                "
-              >
-                <div
-                  style="font-size: 15px; font-weight: 700; margin-bottom: 16px"
-                >
-                  📊 Monthly Revenue
-                </div>
-                <canvas id="chartRevenue" height="200"></canvas>
-              </div>
-              <div
-                style="
-                  background: var(--card);
-                  border: 1px solid var(--border);
-                  border-radius: 16px;
-                  padding: 24px;
-                "
-              >
-                <div
-                  style="font-size: 15px; font-weight: 700; margin-bottom: 16px"
-                >
-                  👥 New Users Per Month
-                </div>
-                <canvas id="chartUsers" height="200"></canvas>
-              </div>
-            </div>
-
-            <div
-              style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px"
-            >
-              <!-- Top Products -->
-              <div
-                style="
-                  background: var(--card);
-                  border: 1px solid var(--border);
-                  border-radius: 16px;
-                  padding: 24px;
-                "
-              >
-                <div
-                  style="font-size: 15px; font-weight: 700; margin-bottom: 16px"
-                >
-                  🏆 Top Products by Revenue
-                </div>
-                <div id="analyticsTopProducts"></div>
-              </div>
-              <!-- Order Status Breakdown -->
-              <div
-                style="
-                  background: var(--card);
-                  border: 1px solid var(--border);
-                  border-radius: 16px;
-                  padding: 24px;
-                "
-              >
-                <div
-                  style="font-size: 15px; font-weight: 700; margin-bottom: 16px"
-                >
-                  📋 Order Status Breakdown
-                </div>
-                <canvas id="chartStatus" height="180"></canvas>
-              </div>
-            </div>
-          </div>
 
           <!-- ── SETTINGS ────────────────────────────────────────── -->
           <div id="panel-settings" class="panel">
             <div class="panel-title">⚙️ Settings</div>
             <div class="panel-desc">
-              Configure your site, payment settings, and appearance.
+              Configure your site's booking link, password, and appearance.
             </div>
             <div
               style="
@@ -5438,31 +4512,10 @@
               "
             >
               <div class="settings-card" onclick="showPanel('bankdetails')">
-                <div class="settings-card-icon">💳</div>
-                <div class="settings-card-title">Payment Gateways</div>
+                <div class="settings-card-icon">📞</div>
+                <div class="settings-card-title">Booking Link</div>
                 <div class="settings-card-desc">
-                  Bank, Razorpay, PayPal, Wise — enable and configure
-                </div>
-              </div>
-              <div class="settings-card" onclick="showPanel('theme')">
-                <div class="settings-card-icon">🎨</div>
-                <div class="settings-card-title">Theme & Colors</div>
-                <div class="settings-card-desc">
-                  Customize brand colors and visual appearance
-                </div>
-              </div>
-              <div class="settings-card" onclick="showPanel('seo')">
-                <div class="settings-card-icon">🔍</div>
-                <div class="settings-card-title">SEO Settings</div>
-                <div class="settings-card-desc">
-                  Meta title, description, Open Graph for search ranking
-                </div>
-              </div>
-              <div class="settings-card" onclick="toggleContentEditor()">
-                <div class="settings-card-icon">✍️</div>
-                <div class="settings-card-title">Content Editor</div>
-                <div class="settings-card-desc">
-                  Edit hero, features, FAQ, testimonials, and all page sections
+                  Set the link used by "Book Free Strategy Call" buttons
                 </div>
               </div>
               <div class="settings-card" onclick="showPanel('changepassword')">
@@ -5472,65 +4525,9 @@
                   Update your admin account password securely
                 </div>
               </div>
-              <div class="settings-card" onclick="showPanel('navmenu')">
-                <div class="settings-card-icon">🧭</div>
-                <div class="settings-card-title">Navigation Menu</div>
-                <div class="settings-card-desc">
-                  Show or hide menu items on the landing page
-                </div>
-              </div>
             </div>
             <!-- Content Editor sub-section -->
-            <div id="contentEditorSub" style="display: none; margin-top: 24px">
-              <div class="dash-section-title" style="margin-bottom: 16px">
-                ✍️ Page Sections
-              </div>
-              <div
-                style="
-                  display: grid;
-                  grid-template-columns: repeat(3, 1fr);
-                  gap: 10px;
-                "
-              >
-                <button class="settings-card sm" onclick="showPanel('hero')">
-                  <span>⚡</span> Hero Section
-                </button>
-                <button class="settings-card sm" onclick="showPanel('stats')">
-                  <span>📊</span> Stats Bar
-                </button>
-                <button class="settings-card sm" onclick="showPanel('story')">
-                  <span>📖</span> Founder Story
-                </button>
-                <button class="settings-card sm" onclick="showPanel('process')">
-                  <span>🗺️</span> How It Works
-                </button>
-                <button
-                  class="settings-card sm"
-                  onclick="showPanel('features')"
-                >
-                  <span>🎁</span> Features
-                </button>
-                <button
-                  class="settings-card sm"
-                  onclick="showPanel('testimonials')"
-                >
-                  <span>⭐</span> Testimonials
-                </button>
-                <button class="settings-card sm" onclick="showPanel('forwho')">
-                  <span>🎯</span> Who It's For
-                </button>
-                <button class="settings-card sm" onclick="showPanel('faq')">
-                  <span>❓</span> FAQ
-                </button>
-                <button class="settings-card sm" onclick="showPanel('cta')">
-                  <span>🚀</span> CTA Section
-                </button>
-                <button class="settings-card sm" onclick="showPanel('footer')">
-                  <span>📄</span> Footer
-                </button>
-              </div>
             </div>
-          </div>
 
           <!-- ─── NAV MENU VISIBILITY PANEL ──────────────────────────────────────── -->
           <div id="panel-navmenu" class="panel">
@@ -5829,7 +4826,7 @@
           },
           {
             q: "Is there a refund policy?",
-            a: "Refunds on paid mentorship plans (AI Starter, AI Accelerator, Full Project Delivery) are considered on a case-by-case basis before meaningful access has been granted or work has commenced. Please contact info@chrixlin.tech with your order details. Marketplace purchases (AI systems, templates, digital tools) are strictly non-refundable once the product has been downloaded or made available from your dashboard.",
+            a: "Refunds on paid mentorship plans (AI Starter, AI Accelerator, Full Project Delivery) are considered on a case-by-case basis before meaningful access has been granted or work has commenced. Please contact info@chrixlin.tech with your order details. Project purchases (AI systems, templates, digital tools) are strictly non-refundable once the product has been downloaded or made available from your dashboard.",
           },
           {
             q: "Can I switch between Monthly and Yearly billing?",
@@ -5893,6 +4890,15 @@
 
       // ─── NAV / PANELS ─────────────────────────────────────────────────────────────
       function showPanel(name) {
+        const hiddenPanels = [
+          'booking','planorders','submissions','analytics',
+          'theme','seo','terms','privacy','navmenu',
+          'hero','stats','story','process','features',
+          'testimonials','forwho','faq','cta','footer'
+        ];
+        if (hiddenPanels.includes(name)) {
+          name = 'dashboard';
+        }
         localStorage.setItem("admin_active_panel", name);
         document
           .querySelectorAll(".panel")
@@ -5911,12 +4917,10 @@
           pricing: "Plans & Pricing",
           booking: "Book Free Calls",
           planorders: "Plan Orders",
-          marketplace: "Marketplace",
-          orders: "Orders & Transactions",
+          marketplace: "Projects",
           submissions: "Call Submissions",
-          analytics: "Analytics & Reports",
           settings: "Settings",
-          bankdetails: "Bank Details",
+          bankdetails: "Booking Link",
           theme: "Theme & Colors",
           seo: "SEO Settings",
           terms: "Terms & Conditions",
@@ -5982,12 +4986,9 @@
         }
         if (name === "dashboard") refreshDashboard();
         if (name === "users") loadUsersPanel();
-        if (name === "orders") loadOrdersPanel();
-        if (name === "analytics") loadAnalytics();
         if (name === "submissions") loadSubmissions();
         if (name === "bankdetails") {
           populateCheckoutSettings();
-          renderGatewayCards();
         }
         if (name === "terms") {
           loadTermsPanel();
@@ -6711,7 +5712,7 @@
               ${p.highlighted ? '<span style="background:rgba(245,158,11,0.15);color:#f59e0b;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600">⭐ Featured</span>' : ""}
               ${p.visible === false ? '<span style="background:rgba(100,100,100,0.15);color:#6b7280;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600">🙈 Hidden</span>' : ""}
             </div>
-            <div style="font-size:13px;color:var(--muted)">${escHtml(p.priceLabel)} · ${escHtml(p.period || "")} · ${(p.features || []).length} features · <span style="color:var(--cyan)">${escHtml(p.billingCycle || "monthly")}</span></div>
+            <div style="font-size:13px;color:var(--muted)">${(p.features || []).length} features · <span style="color:var(--cyan)">${escHtml(p.billingCycle || "monthly")}</span></div>
           </div>
           <div style="display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end">
             <button class="btn btn-sm" onclick="togglePlanVisibility('${p.id}')" style="padding:7px 14px;font-size:13px;${p.visible === false ? "background:rgba(34,197,94,0.12);color:#22c55e;border:1px solid rgba(34,197,94,0.25)" : "background:rgba(107,114,128,0.12);color:#9ca3af;border:1px solid rgba(107,114,128,0.25)"}">${p.visible === false ? "👁 Show" : "🙈 Hide"}</button>
@@ -6737,8 +5738,6 @@
         [
           "pp_name",
           "pp_badge",
-          "pp_priceLabel",
-          "pp_period",
           "pp_cta",
           "pp_desc",
           "pp_features",
@@ -6746,6 +5745,7 @@
           const el = document.getElementById(i);
           if (el) el.value = "";
         });
+        document.getElementById("pp_planType").value = "free";
         document.getElementById("pp_highlighted").checked = false;
         document.getElementById("ppSaveStatus").textContent = "";
         document.getElementById("pp_billingCycle").value =
@@ -6767,8 +5767,8 @@
               "Update the plan details below";
             document.getElementById("pp_name").value = p.name || "";
             document.getElementById("pp_badge").value = p.badge || "";
-            document.getElementById("pp_priceLabel").value = p.priceLabel || "";
-            document.getElementById("pp_period").value = p.period || "";
+            document.getElementById("pp_planType").value =
+              p.price === 0 ? "free" : "paid";
             document.getElementById("pp_badgeColor").value =
               p.badgeColor || "#22c55e";
             _selectedPlanColor = p.badgeColor || "#22c55e";
@@ -6836,9 +5836,7 @@
         const plansForCycle = allPlans.filter(
           (p) => (p.billingCycle || "monthly") === billingCycle,
         );
-        const priceLabel = document
-          .getElementById("pp_priceLabel")
-          .value.trim();
+        const isFree = document.getElementById("pp_planType").value === "free";
         const badgeColor =
           typeof _selectedPlanColor !== "undefined" && _selectedPlanColor
             ? _selectedPlanColor
@@ -6851,26 +5849,13 @@
               : allPlans.reduce((m, p) => Math.max(m, p.id || 0), 0) + 1,
           name,
           badge: document.getElementById("pp_badge").value.trim(),
-          priceLabel,
-          price:
-            priceLabel === "FREE" || priceLabel === "0"
-              ? 0
-              : parseFloat(priceLabel.replace(/[^0-9.]/g, "")) || 0,
-          period: document.getElementById("pp_period").value.trim(),
+          price: isFree ? 0 : 1,
           billingCycle,
           badgeColor,
           badgeBg: badgeColor + "22",
           description: document.getElementById("pp_desc").value.trim(),
           cta: document.getElementById("pp_cta").value.trim(),
-          ctaStyle:
-            (parseFloat(
-              (document.getElementById("pp_priceLabel").value || "0").replace(
-                /[^0-9.]/g,
-                "",
-              ),
-            ) || 0) === 0
-              ? "outline"
-              : "primary",
+          ctaStyle: isFree ? "outline" : "primary",
           highlighted: document.getElementById("pp_highlighted").checked,
           features: document
             .getElementById("pp_features")
@@ -7509,6 +6494,11 @@
         showToast("Hero & brand name saved!");
       }
 
+      function saveStats() {
+        saveData(Object.assign(loadData(), { stats: data.stats }));
+        showToast("Stats bar saved!");
+      }
+
       function saveStory() {
         saveTextKeys({
           "story.title": document.getElementById("story_title").value,
@@ -7810,7 +6800,7 @@
         { key: "howItWorks", label: "How It Works", href: "#process" },
         { key: "whatYouGet", label: "What You Get", href: "#features" },
         { key: "results", label: "Results", href: "#testimonials" },
-        { key: "marketplace", label: "Marketplace", href: "marketplace.html" },
+        { key: "marketplace", label: "Projects", href: "marketplace.html" },
         { key: "pricing", label: "Pricing", href: "#pricing" },
         { key: "faq", label: "FAQ", href: "#faq" },
       ];
@@ -7903,14 +6893,14 @@
       // ─── MARKETPLACE DATA & EDITORS ──────────────────────────────────────────────
       const DEFAULT_MP = {
         hero: {
-          badge: "🛒 AI Bot Marketplace",
+          badge: "🛒 AI Bot Projects",
           title:
             "Ready-to-Deploy <span class='text-grad'>AI Bots & Agents</span><br>For Your Business",
           subtitle:
             "Browse our library of pre-built AI automation systems. Buy and deploy in 48 hours — or book a call for a custom-built solution.",
           stats: [
             { value: "20+", label: "AI Products" },
-            { value: "$499", label: "Starting From" },
+            { value: "24/7", label: "Support Available" },
             { value: "48h", label: "Avg. Deploy Time" },
             { value: "100%", label: "Setup Included" },
           ],
@@ -8015,7 +7005,6 @@
           <div style="font-family:var(--font-h);font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(p.title)}</div>
           <div style="display:flex;align-items:center;gap:10px;margin-top:4px;font-size:12px;color:var(--muted)">
             <span style="background:${color}22;color:${color};padding:2px 8px;border-radius:4px;font-weight:600">${escHtml(p.categoryLabel || p.category)}</span>
-            <span style="font-weight:600;color:var(--gold)">${escHtml(p.price)}</span>
             ${p.badge ? `<span style="background:rgba(245,158,11,0.15);color:var(--gold);padding:2px 8px;border-radius:4px">${escHtml(p.badge)}</span>` : ""}
           </div>
         </div>
@@ -8048,7 +7037,6 @@
         [
           "pm_emoji",
           "pm_badge",
-          "pm_price",
           "pm_title",
           "pm_desc",
           "pm_longdesc",
@@ -8085,7 +7073,6 @@
             document.getElementById("pm_badge").value = p.badge || "";
             document.getElementById("pm_category").value =
               p.category || "voice-ai";
-            document.getElementById("pm_price").value = p.price || "";
             document.getElementById("pm_title").value = p.title || "";
             document.getElementById("pm_desc").value = p.desc || "";
             document.getElementById("pm_longdesc").value =
@@ -8131,7 +7118,6 @@
           sub.textContent = "Fill in the product details below";
           document.getElementById("pm_emoji").value = "🤖";
           document.getElementById("pm_category").value = "voice-ai";
-          document.getElementById("pm_price").value = "$999";
         }
 
         overlay.style.display = "flex";
@@ -8267,7 +7253,6 @@
           category: catEl.value,
           categoryLabel: catOpt ? catOpt.text : catEl.value,
           categoryClass: CAT_CLS[catEl.value] || "cat-thumb-voice-ai",
-          price: document.getElementById("pm_price").value.trim() || "$999",
           title: title,
           desc: document.getElementById("pm_desc").value.trim(),
           longDesc: document.getElementById("pm_longdesc").value.trim(),
@@ -8350,278 +7335,7 @@
 
       function saveMarketplace() {
         localStorage.setItem("chrixlin_marketplace", JSON.stringify(mpData));
-        showToast("🛒 Marketplace saved!");
-      }
-
-      // ─── PAYMENT GATEWAYS ─────────────────────────────────────────────────────────
-      var GATEWAY_DEFS = {
-        paypal: {
-          id: "paypal",
-          icon: "🅿️",
-          name: "PayPal",
-          color: "#009cde",
-          desc: "Accept payments globally via PayPal Smart Buttons — card, PayPal wallet, Google Pay, Apple Pay.",
-          fields: [
-            {
-              id: "g_pp_email",
-              label: "PayPal Email Address *",
-              type: "email",
-              ph: "payments@yourdomain.com",
-            },
-            {
-              id: "g_pp_link",
-              label: "PayPal.me Link (optional)",
-              type: "url",
-              ph: "https://paypal.me/yourname",
-            },
-            {
-              id: "g_pp_clientId",
-              label: "Client ID (for Smart Buttons)",
-              type: "text",
-              ph: "Your PayPal Live Client ID",
-              mono: true,
-            },
-            {
-              id: "g_pp_clientSecret",
-              label: "Client Secret",
-              type: "password",
-              ph: "Your PayPal Client Secret",
-              mono: true,
-            },
-            {
-              id: "g_pp_currency",
-              label: "Currency",
-              type: "text",
-              ph: "USD",
-              style: "max-width:100px",
-            },
-          ],
-        },
-        upi: {
-          id: "upi",
-          icon: "📱",
-          name: "UPI / QR Code",
-          color: "#f59e0b",
-          desc: "Accept payments via UPI QR code — works with GPay, PhonePe, Paytm, BHIM and any UPI app.",
-          fields: [
-            {
-              id: "g_upi_id",
-              label: "UPI ID *",
-              type: "text",
-              ph: "yourname@upi  or  mobile@paytm",
-              mono: true,
-            },
-            {
-              id: "g_upi_name",
-              label: "Display Name",
-              type: "text",
-              ph: "Chrixlin AI Rise",
-            },
-          ],
-        },
-        card: {
-          id: "card",
-          icon: "💳",
-          name: "Card / Net Banking",
-          color: "#2563eb",
-          desc: "Accept credit cards, debit cards and net banking via Razorpay — PCI-DSS compliant, no backend needed.",
-          fields: [
-            {
-              id: "g_rzp_key",
-              label: "Razorpay Key ID *",
-              type: "text",
-              ph: "rzp_live_xxxxxxxxxxxxxxxxxxxx",
-              mono: true,
-            },
-            {
-              id: "g_rzp_currency",
-              label: "Currency Code",
-              type: "text",
-              ph: "INR",
-              style: "max-width:110px",
-            },
-            {
-              id: "g_rzp_name",
-              label: "Business Name",
-              type: "text",
-              ph: "Chrixlin AI Rise",
-            },
-          ],
-        },
-      };
-
-      var _gwConfig = {};
-      var _gwEditType = null;
-
-      function _loadGwConfig() {
-        try {
-          return JSON.parse(localStorage.getItem("chrixlin_gateways") || "{}");
-        } catch (e) {
-          return {};
-        }
-      }
-      function _saveGwConfig(cfg) {
-        localStorage.setItem("chrixlin_gateways", JSON.stringify(cfg));
-      }
-
-      function renderGatewayCards() {
-        _gwConfig = _loadGwConfig();
-        var el = document.getElementById("gatewayCardsGrid");
-        if (!el) return;
-        el.innerHTML = Object.values(GATEWAY_DEFS)
-          .map(function (gw) {
-            var cfg = _gwConfig[gw.id] || {};
-            var enabled = cfg.enabled === true;
-            var configured = Object.keys(cfg).some(function (k) {
-              return k !== "enabled" && cfg[k];
-            });
-            var statusHtml = configured
-              ? '<span style="font-size:11px;background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);padding:2px 10px;border-radius:10px;font-weight:600">✓ Configured</span>'
-              : '<span style="font-size:11px;background:rgba(100,116,139,0.1);color:#94a3b8;border:1px solid rgba(100,116,139,0.25);padding:2px 10px;border-radius:10px">Not configured</span>';
-            var enableBtnStyle = enabled
-              ? "background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.35)"
-              : "background:rgba(100,116,139,0.1);color:#64748b;border:1px solid rgba(100,116,139,0.3)";
-            return (
-              '<div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:14px">' +
-              '<div style="display:flex;align-items:flex-start;gap:14px">' +
-              '<div style="width:48px;height:48px;border-radius:12px;background:' +
-              gw.color +
-              "1a;border:1px solid " +
-              gw.color +
-              '44;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">' +
-              gw.icon +
-              "</div>" +
-              '<div style="flex:1;min-width:0">' +
-              '<div style="font-weight:700;font-size:15px;margin-bottom:2px">' +
-              gw.name +
-              "</div>" +
-              '<div style="font-size:12px;color:var(--muted);line-height:1.4">' +
-              gw.desc +
-              "</div>" +
-              "</div>" +
-              "</div>" +
-              '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">' +
-              statusHtml +
-              '<div style="display:flex;gap:8px">' +
-              '<button type="button" onclick="toggleGateway(\'' +
-              gw.id +
-              '\')" style="padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;' +
-              enableBtnStyle +
-              '">' +
-              (enabled ? "✓ Enabled" : "✗ Disabled") +
-              "</button>" +
-              '<button type="button" onclick="openGatewayModal(\'' +
-              gw.id +
-              '\')" style="background:rgba(124,58,237,0.15);color:#a78bfa;border:1px solid rgba(124,58,237,0.3);padding:6px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">⚙ Configure</button>' +
-              "</div>" +
-              "</div>" +
-              "</div>"
-            );
-          })
-          .join("");
-      }
-
-      function toggleGateway(type) {
-        _gwConfig = _loadGwConfig();
-        if (!_gwConfig[type]) _gwConfig[type] = {};
-        _gwConfig[type].enabled = !(_gwConfig[type].enabled === true);
-        _saveGwConfig(_gwConfig);
-        // Debug safeguard: direct write in case _saveGwConfig is shadowed
-        localStorage.setItem("chrixlin_gateways", JSON.stringify(_gwConfig));
-        // Sync to Supabase so all visitors see live state
-        if (typeof ChrixlinDB !== "undefined") {
-          ChrixlinDB.saveToSupabase(
-            "site_settings",
-            "gateway_config",
-            _gwConfig,
-          ).catch(function () {});
-        }
-        renderGatewayCards();
-        var gw = GATEWAY_DEFS[type];
-        showToast(
-          _gwConfig[type].enabled
-            ? gw.name + " enabled ✓"
-            : gw.name + " disabled",
-        );
-      }
-
-      function openGatewayModal(type) {
-        var gw = GATEWAY_DEFS[type];
-        if (!gw) return;
-        _gwEditType = type;
-        _gwConfig = _loadGwConfig();
-        var cfg = _gwConfig[type] || {};
-        document.getElementById("gatewayModalTitle").textContent =
-          gw.icon + "  Configure " + gw.name;
-        document.getElementById("gatewayModalDesc").textContent = gw.desc;
-        document.getElementById("gatewayModalFields").innerHTML = gw.fields
-          .map(function (f) {
-            var val = escHtml(cfg[f.id] || "");
-            var style =
-              "font-size:14px" +
-              (f.mono ? ";font-family:monospace;letter-spacing:0.03em" : "") +
-              (f.style ? ";" + f.style : "");
-            if (f.type === "textarea") {
-              return (
-                '<div class="form-row"><label>' +
-                f.label +
-                '</label><textarea id="' +
-                f.id +
-                '" placeholder="' +
-                f.ph +
-                '" style="' +
-                style +
-                ';min-height:80px">' +
-                val +
-                "</textarea></div>"
-              );
-            }
-            return (
-              '<div class="form-row"><label>' +
-              f.label +
-              '</label><input type="' +
-              f.type +
-              '" id="' +
-              f.id +
-              '" placeholder="' +
-              f.ph +
-              '" value="' +
-              val +
-              '" style="' +
-              style +
-              '" /></div>'
-            );
-          })
-          .join("");
-        document.getElementById("gatewayModalOverlay").style.display = "flex";
-      }
-
-      function closeGatewayModal() {
-        document.getElementById("gatewayModalOverlay").style.display = "none";
-        _gwEditType = null;
-      }
-
-      function saveGatewayConfig() {
-        if (!_gwEditType) return;
-        var gw = GATEWAY_DEFS[_gwEditType];
-        _gwConfig = _loadGwConfig();
-        if (!_gwConfig[_gwEditType]) _gwConfig[_gwEditType] = {};
-        gw.fields.forEach(function (f) {
-          var el = document.getElementById(f.id);
-          if (el) _gwConfig[_gwEditType][f.id] = el.value.trim();
-        });
-        _saveGwConfig(_gwConfig);
-        // Sync to Supabase so all visitors see live config
-        if (typeof ChrixlinDB !== "undefined") {
-          ChrixlinDB.saveToSupabase(
-            "site_settings",
-            "gateway_config",
-            _gwConfig,
-          ).catch(function () {});
-        }
-        renderGatewayCards();
-        closeGatewayModal();
-        showToast(gw.name + " configuration saved! 💾");
+        showToast("🛒 Projects saved!");
       }
 
       // ─── CHECKOUT SETTINGS ────────────────────────────────────────────────────────
@@ -8636,7 +7350,7 @@
         successMsg:
           "Thank you for your purchase! Our team will contact you within 24 hours to schedule your onboarding call.",
         refundPolicy:
-          "Plan refunds considered on a case-by-case basis before access is granted. Marketplace purchases are non-refundable once downloaded. Contact info@chrixlin.tech for queries.",
+          "Plan refunds considered on a case-by-case basis before access is granted. Project purchases are non-refundable once downloaded. Contact info@chrixlin.tech for queries.",
       };
 
       function loadCheckoutSettings() {
@@ -8654,23 +7368,8 @@
 
       function populateCheckoutSettings() {
         var b = loadCheckoutSettings();
-        var el;
-        el = document.getElementById("strategy_call_url");
+        var el = document.getElementById("strategy_call_url");
         if (el) el.value = b.strategyCallUrl || "";
-        el = document.getElementById("payment_contact_email");
-        if (el) el.value = b.contactEmail || "";
-        el = document.getElementById("payment_currency");
-        if (el) el.value = b.currency || "$";
-        el = document.getElementById("tax_cgst");
-        if (el) el.value = b.cgst != null ? b.cgst : 0;
-        el = document.getElementById("tax_sgst");
-        if (el) el.value = b.sgst != null ? b.sgst : 0;
-        _applyTaxToggleState("cgst", b.cgstEnabled === true);
-        _applyTaxToggleState("sgst", b.sgstEnabled === true);
-        el = document.getElementById("payment_success_msg");
-        if (el) el.value = b.successMsg || "";
-        el = document.getElementById("payment_refund_policy");
-        if (el) el.value = b.refundPolicy || "";
       }
 
       // Keep old name for backward compat
@@ -8682,30 +7381,14 @@
       }
 
       function saveCheckoutSettings() {
-        var b = {
+        var b = Object.assign({}, loadCheckoutSettings(), {
           strategyCallUrl:
             (document.getElementById("strategy_call_url") || {}).value || "",
-          contactEmail:
-            (document.getElementById("payment_contact_email") || {}).value ||
-            "",
-          currency:
-            (document.getElementById("payment_currency") || {}).value || "$",
-          cgst:
-            parseFloat((document.getElementById("tax_cgst") || {}).value) || 0,
-          cgstEnabled: !(document.getElementById("tax_cgst") || {}).disabled,
-          sgst:
-            parseFloat((document.getElementById("tax_sgst") || {}).value) || 0,
-          sgstEnabled: !(document.getElementById("tax_sgst") || {}).disabled,
-          successMsg:
-            (document.getElementById("payment_success_msg") || {}).value || "",
-          refundPolicy:
-            (document.getElementById("payment_refund_policy") || {}).value ||
-            "",
-        };
+        });
         localStorage.setItem("chrixlin_checkout_settings", JSON.stringify(b));
         if (typeof ChrixlinDB !== "undefined")
           ChrixlinDB.savePaymentSettings(b).catch(function () {});
-        showToast("⚙️ Checkout settings saved!");
+        showToast("📞 Booking link saved!");
       }
 
       // Keep old name for backward compat
@@ -8713,53 +7396,12 @@
         saveCheckoutSettings();
       }
 
-      function _applyTaxToggleState(type, enabled) {
-        var btn = document.getElementById("tax_" + type + "_toggle");
-        var input = document.getElementById("tax_" + type);
-        if (!btn || !input) return;
-        if (enabled) {
-          btn.textContent = "✓ Enabled";
-          btn.style.background = "rgba(34,197,94,0.15)";
-          btn.style.color = "#22c55e";
-          btn.style.borderColor = "rgba(34,197,94,0.35)";
-          input.disabled = false;
-          input.style.opacity = "1";
-          input.style.pointerEvents = "auto";
-        } else {
-          btn.textContent = "✗ Disabled";
-          btn.style.background = "rgba(100,116,139,0.1)";
-          btn.style.color = "#64748b";
-          btn.style.borderColor = "rgba(100,116,139,0.3)";
-          input.disabled = true;
-          input.style.opacity = "0.4";
-          input.style.pointerEvents = "none";
-        }
-      }
-
-      function toggleTax(type) {
-        var input = document.getElementById("tax_" + type);
-        if (!input) return;
-        var nowEnabled = input.disabled; // if disabled → we're enabling it
-        _applyTaxToggleState(type, nowEnabled);
-      }
-
-      // ─── ORDERS / CALLS HELPERS ───────────────────────────────────────────────────
       function _getOrdersLS() {
         try {
           return JSON.parse(localStorage.getItem("chrixlin_orders") || "[]");
         } catch {
           return [];
         }
-      }
-      function _getCallsLS() {
-        try {
-          return JSON.parse(localStorage.getItem("chrixlin_calls") || "[]");
-        } catch {
-          return [];
-        }
-      }
-      function _saveCallsLS(calls) {
-        localStorage.setItem("chrixlin_calls", JSON.stringify(calls));
       }
 
       // ─── DASHBOARD REFRESH ────────────────────────────────────────────────────────
@@ -8780,9 +7422,6 @@
         };
         // Show loading placeholders
         [
-          "kpi_totalRevenue",
-          "kpi_marketplaceSales",
-          "kpi_subRevenue",
           "kpi_totalPurchases",
           "dashRegisteredUsers",
           "dashPurchasingUsers",
@@ -8824,23 +7463,6 @@
         var parseAmt = function (o) {
           return parseFloat(o.amount || o.product_price || "0") || 0;
         };
-        var totalRev = filtered.reduce(function (s, o) {
-          return s + parseAmt(o);
-        }, 0);
-        var mktSales = filtered
-          .filter(function (o) {
-            return o.payment_method !== "subscription";
-          })
-          .reduce(function (s, o) {
-            return s + parseAmt(o);
-          }, 0);
-        var subRev = filtered
-          .filter(function (o) {
-            return o.payment_method === "subscription";
-          })
-          .reduce(function (s, o) {
-            return s + parseAmt(o);
-          }, 0);
         var purchasers = new Set(
           filtered.map(function (o) {
             return o.user_id || o.user_email;
@@ -8850,18 +7472,6 @@
           return o.status === "pending" || o.status === "processing";
         }).length;
 
-        set(
-          "kpi_totalRevenue",
-          "$" + totalRev.toLocaleString("en-US", { minimumFractionDigits: 0 }),
-        );
-        set(
-          "kpi_marketplaceSales",
-          "$" + mktSales.toLocaleString("en-US", { minimumFractionDigits: 0 }),
-        );
-        set(
-          "kpi_subRevenue",
-          "$" + subRev.toLocaleString("en-US", { minimumFractionDigits: 0 }),
-        );
         set("kpi_totalPurchases", filtered.length);
         set("dashRegisteredUsers", profiles.length);
         set("dashPurchasingUsers", purchasers || filtered.length);
@@ -8907,8 +7517,6 @@
                     escHtml(e[0]) +
                     "</span><span>" +
                     e[1].purchases +
-                    "</span><span>$" +
-                    e[1].revenue.toLocaleString() +
                     "</span></div>"
                   );
                 })
@@ -8944,227 +7552,6 @@
             '%;background:var(--cyan)"></div></div><span>' +
             Math.round((onetime / total) * 100) +
             "%</span></div>";
-      }
-
-      // ─── ORDERS PANEL ─────────────────────────────────────────────────────────────
-      function renderOrdersPanel() {
-        const orders = _getOrdersLS();
-        const el = document.getElementById("ordersTableWrap");
-        if (!orders.length) {
-          el.innerHTML =
-            '<div style="color:var(--muted);text-align:center;padding:48px 0">No orders yet.</div>';
-          return;
-        }
-        el.innerHTML = `<table class="admin-table"><thead><tr><th>Ref</th><th>Product</th><th>Amount</th><th>Customer</th><th>Method</th><th>Date</th><th>Status</th></tr></thead><tbody>
-    ${orders
-      .map(
-        (o) => `<tr>
-      <td style="font-family:monospace;font-size:12px">${escHtml(o.order_ref || o.orderRef || "-")}</td>
-      <td>${escHtml(o.product_title || o.productTitle || "-")}</td>
-      <td style="color:var(--green);font-weight:700">${escHtml(o.product_price || o.productPrice || "-")}</td>
-      <td>${escHtml((o.first_name || o.firstName || "") + " " + (o.last_name || o.lastName || ""))}<br><span style="font-size:11px;color:var(--muted)">${escHtml(o.email || "")}</span></td>
-      <td style="text-transform:capitalize">${escHtml(o.payment_method || o.paymentMethod || "card")}</td>
-      <td style="font-size:12px;color:var(--muted)">${new Date(o.created_at || o.date || Date.now()).toLocaleDateString()}</td>
-      <td><span style="padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;background:rgba(34,197,94,0.15);color:#4ade80">${escHtml(o.status || "pending")}</span></td>
-    </tr>`,
-      )
-      .join("")}
-  </tbody></table>`;
-      }
-
-      // ─── CALLS PANEL ──────────────────────────────────────────────────────────────
-      function renderCallsPanel() {
-        const calls = _getCallsLS();
-        const el = document.getElementById("callsTableWrap");
-        if (!calls.length) {
-          el.innerHTML =
-            '<div style="color:var(--muted);text-align:center;padding:48px 0">No calls logged yet. Click "+ Log Call" to add one.</div>';
-          return;
-        }
-        el.innerHTML = `<table class="admin-table"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Date</th><th>Status</th><th>Notes</th><th>Actions</th></tr></thead><tbody>
-    ${calls
-      .map(
-        (c) => `<tr>
-      <td style="font-weight:600">${escHtml(c.name || "-")}</td>
-      <td style="font-size:12px;color:var(--muted)">${escHtml(c.email || "-")}</td>
-      <td style="font-size:12px">${escHtml(c.phone || "-")}</td>
-      <td style="font-size:12px;color:var(--muted)">${c.date ? new Date(c.date).toLocaleDateString() : "-"}</td>
-      <td><span style="padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;background:${{ booked: "rgba(99,102,241,0.15)", completed: "rgba(34,197,94,0.15)", "no-show": "rgba(239,68,68,0.15)" }[c.status] || "rgba(99,102,241,0.15)"};color:${{ booked: "#a5b4fc", completed: "#4ade80", "no-show": "#f87171" }[c.status] || "#a5b4fc"}">${escHtml(c.status || "booked")}</span></td>
-      <td style="font-size:12px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(c.notes || "-")}</td>
-      <td style="display:flex;gap:6px;flex-wrap:nowrap">
-        <button class="btn btn-ghost btn-sm" onclick="openCallModal('${escHtml(c.id)}')" style="padding:5px 10px;font-size:12px">✏️</button>
-        <button class="btn btn-sm" onclick="deleteCall('${escHtml(c.id)}')" style="padding:5px 10px;font-size:12px;background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.25)">🗑</button>
-      </td>
-    </tr>`,
-      )
-      .join("")}
-  </tbody></table>`;
-      }
-
-      function openCallModal(id) {
-        const overlay = document.getElementById("callModalOverlay");
-        const drawer = document.getElementById("callModalDrawer");
-        [
-          "call_name",
-          "call_email",
-          "call_phone",
-          "call_date",
-          "call_notes",
-        ].forEach((f) => {
-          const el = document.getElementById(f);
-          if (el) el.value = "";
-        });
-        document.getElementById("call_status").value = "booked";
-        document.getElementById("call_editId").value = "";
-        document.getElementById("callModalTitle").textContent =
-          "Log Strategy Call";
-
-        if (id) {
-          const call = _getCallsLS().find((c) => c.id === id);
-          if (call) {
-            document.getElementById("callModalTitle").textContent =
-              "Edit Strategy Call";
-            document.getElementById("call_editId").value = call.id;
-            document.getElementById("call_name").value = call.name || "";
-            document.getElementById("call_email").value = call.email || "";
-            document.getElementById("call_phone").value = call.phone || "";
-            document.getElementById("call_date").value = call.date || "";
-            document.getElementById("call_status").value =
-              call.status || "booked";
-            document.getElementById("call_notes").value = call.notes || "";
-          }
-        }
-
-        overlay.style.display = "block";
-        requestAnimationFrame(() =>
-          requestAnimationFrame(() => {
-            drawer.style.transform = "translateX(0)";
-          }),
-        );
-        document.body.style.overflow = "hidden";
-      }
-
-      function closeCallModal() {
-        const drawer = document.getElementById("callModalDrawer");
-        drawer.style.transform = "translateX(100%)";
-        setTimeout(() => {
-          document.getElementById("callModalOverlay").style.display = "none";
-        }, 300);
-        document.body.style.overflow = "";
-      }
-
-      function closeCallModalOnBg(e) {
-        if (e.target === document.getElementById("callModalOverlay"))
-          closeCallModal();
-      }
-
-      function saveCall() {
-        const name = document.getElementById("call_name").value.trim();
-        if (!name) {
-          document.getElementById("call_name").style.borderColor = "var(--red)";
-          return;
-        }
-        document.getElementById("call_name").style.borderColor = "";
-        const calls = _getCallsLS();
-        const editId = document.getElementById("call_editId").value;
-        const call = {
-          id: editId || "call_" + Date.now(),
-          name,
-          email: document.getElementById("call_email").value.trim(),
-          phone: document.getElementById("call_phone").value.trim(),
-          date: document.getElementById("call_date").value,
-          status: document.getElementById("call_status").value,
-          notes: document.getElementById("call_notes").value.trim(),
-          created_at: editId
-            ? (calls.find((c) => c.id === editId) || {}).created_at ||
-              new Date().toISOString()
-            : new Date().toISOString(),
-        };
-        if (editId) {
-          const idx = calls.findIndex((c) => c.id === editId);
-          if (idx !== -1) calls[idx] = call;
-          else calls.push(call);
-        } else {
-          calls.push(call);
-        }
-        _saveCallsLS(calls);
-        renderCallsPanel();
-        closeCallModal();
-        showToast("📞 Strategy call saved!");
-      }
-
-      function deleteCall(id) {
-        if (!confirm("Delete this call record?")) return;
-        const calls = _getCallsLS().filter((c) => c.id !== id);
-        _saveCallsLS(calls);
-        renderCallsPanel();
-        showToast("🗑 Call deleted");
-      }
-
-      // ─── ANALYTICS PANEL ──────────────────────────────────────────────────────────
-      function renderAnalyticsPanel() {
-        const orders = _getOrdersLS();
-        const calls = _getCallsLS();
-        const plans = loadPricingPlans();
-        const parsePrice = (s) =>
-          parseFloat((s || "0").replace(/[^0-9.]/g, "")) || 0;
-        const totalRev = orders.reduce(
-          (s, o) => s + parsePrice(o.product_price || o.productPrice),
-          0,
-        );
-        const el = document.getElementById("analyticsContent");
-        if (!el) return;
-
-        // Monthly data for last 6 months
-        const monthlyData = {};
-        for (let i = 5; i >= 0; i--) {
-          const d = new Date();
-          d.setMonth(d.getMonth() - i);
-          const key = d.toLocaleString("en", {
-            month: "short",
-            year: "2-digit",
-          });
-          monthlyData[key] = 0;
-        }
-        orders.forEach((o) => {
-          const d = new Date(o.created_at || o.date || Date.now());
-          const key = d.toLocaleString("en", {
-            month: "short",
-            year: "2-digit",
-          });
-          if (monthlyData[key] !== undefined)
-            monthlyData[key] += parsePrice(o.product_price || o.productPrice);
-        });
-        const maxRev = Math.max(...Object.values(monthlyData), 1);
-
-        el.innerHTML = `
-    <div class="dash-row2">
-      <div class="dash-section">
-        <div class="dash-section-title">💰 Revenue Summary</div>
-        <div style="display:grid;gap:12px;margin-top:12px">
-          <div class="analytics-stat"><span>Total Revenue</span><strong>$${totalRev.toLocaleString()}</strong></div>
-          <div class="analytics-stat"><span>Total Orders</span><strong>${orders.length}</strong></div>
-          <div class="analytics-stat"><span>Avg Order Value</span><strong>$${orders.length ? Math.round(totalRev / orders.length).toLocaleString() : 0}</strong></div>
-          <div class="analytics-stat"><span>Free Calls Booked</span><strong>${calls.length}</strong></div>
-          <div class="analytics-stat"><span>Active Plans</span><strong>${plans.length}</strong></div>
-        </div>
-      </div>
-      <div class="dash-section">
-        <div class="dash-section-title">📅 Monthly Revenue (Last 6 Months)</div>
-        <div style="margin-top:16px">
-          ${Object.entries(monthlyData)
-            .map(
-              ([month, rev]) => `
-            <div class="dist-bar-wrap" style="grid-template-columns:60px 1fr 64px">
-              <span style="font-size:12px">${month}</span>
-              <div class="dist-bar"><div class="dist-fill" style="width:${(rev / maxRev) * 100}%;background:linear-gradient(90deg,var(--primary),var(--cyan))"></div></div>
-              <span style="font-size:12px;text-align:right">$${rev.toLocaleString()}</span>
-            </div>`,
-            )
-            .join("")}
-        </div>
-      </div>
-    </div>`;
       }
 
       function exportPDF() {
@@ -9635,16 +8022,10 @@
           ]);
           renderUsersTable(_allUsers);
           // Update stats
-          var totalSpent = _allOrders.reduce(function (s, o) {
-            return s + (parseFloat(o.amount) || 0);
-          }, 0);
           document.getElementById("statTotalUsers").textContent =
             _allUsers.length;
           document.getElementById("statTotalOrders").textContent =
             _allOrders.length;
-          document.getElementById("statTotalRevenue").textContent =
-            "$" +
-            totalSpent.toLocaleString("en-US", { minimumFractionDigits: 0 });
         } catch (e) {
           document.getElementById("usersTableBody").innerHTML =
             '<tr><td colspan="6" style="padding:48px;text-align:center;color:#ef4444">Error loading users. Make sure you are logged in as admin.</td></tr>';
@@ -9666,9 +8047,6 @@
             var orders = _allOrders.filter(function (o) {
               return o.user_id === u.id;
             });
-            var spent = orders.reduce(function (s, o) {
-              return s + (parseFloat(o.amount) || 0);
-            }, 0);
             var joined = u.created_at
               ? new Date(u.created_at).toLocaleDateString("en-US", {
                   month: "short",
@@ -9702,9 +8080,6 @@
               " order" +
               (orders.length !== 1 ? "s" : "") +
               "</span>" +
-              "</td>" +
-              '<td style="padding:14px 20px;font-weight:700;color:#22c55e">$' +
-              spent.toLocaleString("en-US", { minimumFractionDigits: 0 }) +
               "</td>" +
               '<td style="padding:14px 20px;color:var(--muted);font-size:13px">' +
               joined +
@@ -9846,9 +8221,6 @@
                   billingHtml +
                   "</div>" +
                   '<div style="text-align:right;flex-shrink:0">' +
-                  '<div style="font-weight:700;font-size:16px;color:#22c55e">$' +
-                  (parseFloat(o.amount) || 0).toLocaleString() +
-                  "</div>" +
                   '<div style="font-size:11px;font-weight:700;color:' +
                   statusColor +
                   ";margin-top:4px;text-transform:uppercase;background:" +
@@ -9897,16 +8269,6 @@
           orders.length +
           "</div>" +
           "</div>" +
-          '<div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:14px">' +
-          '<div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px">Total Spent</div>' +
-          '<div style="font-size:22px;font-weight:800;color:#22c55e">$' +
-          orders
-            .reduce(function (s, o) {
-              return s + (parseFloat(o.amount) || 0);
-            }, 0)
-            .toLocaleString() +
-          "</div>" +
-          "</div>" +
           "</div>" +
           '<div style="font-size:14px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px">Purchase History</div>' +
           ordersHtml;
@@ -9917,169 +8279,6 @@
 
       function closeUserModal() {
         document.getElementById("userDetailModal").style.display = "none";
-      }
-
-      // ─── ORDERS PANEL ─────────────────────────────────────────────────────────────
-      var _allOrdersAdmin = [];
-      async function loadOrdersPanel() {
-        if (typeof ChrixlinDB === "undefined") return;
-        var client = ChrixlinDB._getClient ? ChrixlinDB._getClient() : null;
-        if (!client) {
-          document.getElementById("ordersTableBody").innerHTML =
-            '<tr><td colspan="7" style="padding:48px;text-align:center;color:#f59e0b">Please log in as admin to view orders.</td></tr>';
-          return;
-        }
-        document.getElementById("ordersTableBody").innerHTML =
-          '<tr><td colspan="7" style="padding:48px;text-align:center;color:var(--muted)">Loading...</td></tr>';
-        try {
-          _allOrdersAdmin = await ChrixlinDB.adminGetAllOrders();
-          renderOrdersTable(_allOrdersAdmin);
-          var total = _allOrdersAdmin.length;
-          var revenue = _allOrdersAdmin.reduce(function (s, o) {
-            return s + (parseFloat(o.amount) || 0);
-          }, 0);
-          document.getElementById("ordStatTotal").textContent = total;
-          document.getElementById("ordStatRevenue").textContent =
-            "$" + revenue.toLocaleString("en-US", { minimumFractionDigits: 0 });
-        } catch (e) {
-          document.getElementById("ordersTableBody").innerHTML =
-            '<tr><td colspan="7" style="padding:48px;text-align:center;color:#ef4444">Error loading orders.</td></tr>';
-        }
-      }
-      function renderOrdersTable(orders) {
-        var tbody = document.getElementById("ordersTableBody");
-        if (!orders.length) {
-          tbody.innerHTML =
-            '<tr><td colspan="7" style="padding:48px;text-align:center;color:var(--muted)">No orders yet.</td></tr>';
-          return;
-        }
-        var statusColors = {
-          completed: "#22c55e",
-          pending: "#f59e0b",
-          processing: "#06b6d4",
-          refunded: "#ef4444",
-        };
-        tbody.innerHTML = orders
-          .map(function (o) {
-            var sc = statusColors[o.status] || "#94a3b8";
-            var date = o.created_at
-              ? new Date(o.created_at).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })
-              : "—";
-            return (
-              '<tr style="border-bottom:1px solid rgba(255,255,255,0.05)">' +
-              '<td style="padding:12px 16px;font-family:monospace;font-size:12px;color:#a78bfa">' +
-              (o.order_ref || "—") +
-              "</td>" +
-              '<td style="padding:12px 16px"><div style="font-weight:600;font-size:13px">' +
-              (o.user_name || "Guest") +
-              '</div><div style="font-size:11px;color:var(--muted)">' +
-              (o.user_email || "") +
-              "</div></td>" +
-              '<td style="padding:12px 16px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' +
-              (o.product_title || "—") +
-              "</td>" +
-              '<td style="padding:12px 16px;font-weight:700;color:#22c55e">$' +
-              (parseFloat(o.amount) || 0).toLocaleString() +
-              "</td>" +
-              '<td style="padding:12px 16px;color:var(--muted);font-size:12px">' +
-              (o.payment_method || "—") +
-              "</td>" +
-              '<td style="padding:12px 16px"><span style="background:' +
-              sc +
-              "22;color:" +
-              sc +
-              ";border:1px solid " +
-              sc +
-              '44;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase">' +
-              (o.status || "pending") +
-              "</span></td>" +
-              '<td style="padding:12px 16px;font-size:12px;color:var(--muted)">' +
-              date +
-              "</td>" +
-              "</tr>"
-            );
-          })
-          .join("");
-      }
-      function filterOrdersTable() {
-        var q = (
-          document.getElementById("ordSearchInput").value || ""
-        ).toLowerCase();
-        renderOrdersTable(
-          _allOrdersAdmin.filter(function (o) {
-            return (
-              !q ||
-              (o.order_ref || "").toLowerCase().includes(q) ||
-              (o.product_title || "").toLowerCase().includes(q) ||
-              (o.user_name || "").toLowerCase().includes(q) ||
-              (o.user_email || "").toLowerCase().includes(q)
-            );
-          }),
-        );
-      }
-
-      // ─── EXCEL EXPORT ─────────────────────────────────────────────────────────────
-      function exportOrdersExcel() {
-        if (!_allOrdersAdmin.length) {
-          alert("No orders to export.");
-          return;
-        }
-        var rows = [
-          [
-            "Order Ref",
-            "Customer Name",
-            "Customer Email",
-            "Product",
-            "Amount",
-            "Payment Method",
-            "Status",
-            "Date",
-            "Billing Name",
-            "Billing Address",
-            "Billing City",
-            "Billing Country",
-            "Billing Phone",
-          ],
-        ];
-        _allOrdersAdmin.forEach(function (o) {
-          var bd = {};
-          try {
-            bd =
-              typeof o.billing_details === "string"
-                ? JSON.parse(o.billing_details)
-                : o.billing_details || {};
-          } catch (e) {}
-          rows.push([
-            o.order_ref || "",
-            o.user_name ||
-              ((bd.firstName || "") + " " + (bd.lastName || "")).trim() ||
-              "",
-            o.user_email || bd.email || "",
-            o.product_title || "",
-            parseFloat(o.amount) || 0,
-            o.payment_method || "",
-            o.status || "",
-            o.created_at
-              ? new Date(o.created_at).toLocaleDateString("en-US")
-              : "",
-            (bd.firstName || "") + " " + (bd.lastName || ""),
-            bd.address || bd.street || "",
-            bd.city || "",
-            bd.country || "",
-            bd.phone || "",
-          ]);
-        });
-        var ws = XLSX.utils.aoa_to_sheet(rows);
-        var wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Orders");
-        XLSX.writeFile(
-          wb,
-          "orders_export_" + new Date().toISOString().slice(0, 10) + ".xlsx",
-        );
       }
 
       function exportUsersExcel() {
@@ -10093,7 +8292,6 @@
             "Email",
             "Phone",
             "Orders Count",
-            "Total Spent ($)",
             "Joined",
             "Order Refs",
             "Products Purchased",
@@ -10103,15 +8301,11 @@
           var orders = _allOrders.filter(function (o) {
             return o.user_id === u.id;
           });
-          var spent = orders.reduce(function (s, o) {
-            return s + (parseFloat(o.amount) || 0);
-          }, 0);
           rows.push([
             u.full_name || "",
             u.email || "",
             u.phone || "",
             orders.length,
-            spent,
             u.created_at
               ? new Date(u.created_at).toLocaleDateString("en-US")
               : "",
@@ -10135,23 +8329,6 @@
           "users_export_" + new Date().toISOString().slice(0, 10) + ".xlsx",
         );
       }
-
-      async function updateOrderStatus(orderId, newStatus) {
-        if (!newStatus || typeof ChrixlinDB === "undefined") return;
-        try {
-          var client = ChrixlinDB._getClient();
-          if (!client) return;
-          await client
-            .from("customer_orders")
-            .update({ status: newStatus })
-            .eq("id", orderId);
-          await loadOrdersPanel();
-          showToast("Order status updated to " + newStatus, "success");
-        } catch (e) {
-          showToast("Failed to update order status", "error");
-        }
-      }
-
       // ─── CATEGORIES ──────────────────────────────────────────────────────────────
       var _selectedCatColor = "#7c3aed";
       function selectCatColor(hex, el) {
@@ -10469,358 +8646,6 @@
       }
       function closeSubModal() {
         document.getElementById("subDetailModal").style.display = "none";
-      }
-
-      // ─── ANALYTICS ────────────────────────────────────────────────────────────────
-      var _chartRevenue = null,
-        _chartUsers = null,
-        _chartStatus = null;
-      async function loadAnalytics() {
-        if (typeof ChrixlinDB === "undefined") return;
-        var client = ChrixlinDB._getClient ? ChrixlinDB._getClient() : null;
-        if (!client) {
-          document.getElementById("analyticsTopProducts").innerHTML =
-            '<div style="color:#f59e0b;font-size:13px">Please log in to view analytics.</div>';
-          return;
-        }
-        try {
-          var results = await Promise.all([
-            ChrixlinDB.adminGetAllOrders(),
-            ChrixlinDB.adminGetAllProfiles(),
-          ]);
-          var orders = results[0];
-          var profiles = results[1];
-          // KPIs
-          var totalRev = orders.reduce(function (s, o) {
-            return s + (parseFloat(o.amount) || 0);
-          }, 0);
-          var avgOrder = orders.length ? totalRev / orders.length : 0;
-          document.getElementById("akpRevenue").textContent =
-            "$" +
-            totalRev.toLocaleString("en-US", { minimumFractionDigits: 0 });
-          document.getElementById("akpOrders").textContent = orders.length;
-          document.getElementById("akpUsers").textContent = profiles.length;
-          document.getElementById("akpAvg").textContent =
-            "$" + avgOrder.toFixed(0);
-          // Monthly revenue chart
-          var monthlyRev = {};
-          orders.forEach(function (o) {
-            var d = new Date(o.created_at || Date.now());
-            var key =
-              d.getFullYear() +
-              "-" +
-              (d.getMonth() + 1).toString().padStart(2, "0");
-            monthlyRev[key] =
-              (monthlyRev[key] || 0) + (parseFloat(o.amount) || 0);
-          });
-          var revLabels = Object.keys(monthlyRev).sort().slice(-12);
-          var revData = revLabels.map(function (k) {
-            return monthlyRev[k];
-          });
-          if (_chartRevenue) _chartRevenue.destroy();
-          if (typeof Chart !== "undefined") {
-            _chartRevenue = new Chart(document.getElementById("chartRevenue"), {
-              type: "bar",
-              data: {
-                labels: revLabels,
-                datasets: [
-                  {
-                    label: "Revenue ($)",
-                    data: revData,
-                    backgroundColor: "rgba(124,58,237,0.7)",
-                    borderColor: "#7c3aed",
-                    borderWidth: 2,
-                    borderRadius: 6,
-                  },
-                ],
-              },
-              options: {
-                responsive: true,
-                plugins: { legend: { labels: { color: "#94a3b8" } } },
-                scales: {
-                  x: {
-                    ticks: { color: "#64748b" },
-                    grid: { color: "rgba(255,255,255,0.05)" },
-                  },
-                  y: {
-                    ticks: {
-                      color: "#64748b",
-                      callback: function (v) {
-                        return "$" + v.toLocaleString();
-                      },
-                    },
-                    grid: { color: "rgba(255,255,255,0.05)" },
-                  },
-                },
-              },
-            });
-          }
-          // Monthly users chart
-          var monthlyUsers = {};
-          profiles.forEach(function (p) {
-            var d = new Date(p.created_at || Date.now());
-            var key =
-              d.getFullYear() +
-              "-" +
-              (d.getMonth() + 1).toString().padStart(2, "0");
-            monthlyUsers[key] = (monthlyUsers[key] || 0) + 1;
-          });
-          var usrLabels = Object.keys(monthlyUsers).sort().slice(-12);
-          var usrData = usrLabels.map(function (k) {
-            return monthlyUsers[k];
-          });
-          if (_chartUsers) _chartUsers.destroy();
-          if (typeof Chart !== "undefined") {
-            _chartUsers = new Chart(document.getElementById("chartUsers"), {
-              type: "line",
-              data: {
-                labels: usrLabels,
-                datasets: [
-                  {
-                    label: "New Users",
-                    data: usrData,
-                    borderColor: "#06b6d4",
-                    backgroundColor: "rgba(6,182,212,0.1)",
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: "#06b6d4",
-                  },
-                ],
-              },
-              options: {
-                responsive: true,
-                plugins: { legend: { labels: { color: "#94a3b8" } } },
-                scales: {
-                  x: {
-                    ticks: { color: "#64748b" },
-                    grid: { color: "rgba(255,255,255,0.05)" },
-                  },
-                  y: {
-                    ticks: { color: "#64748b" },
-                    grid: { color: "rgba(255,255,255,0.05)" },
-                  },
-                },
-              },
-            });
-          }
-          // Top products
-          var productRevs = {};
-          orders.forEach(function (o) {
-            productRevs[o.product_title || "Unknown"] =
-              (productRevs[o.product_title || "Unknown"] || 0) +
-              (parseFloat(o.amount) || 0);
-          });
-          var topProds = Object.entries(productRevs)
-            .sort(function (a, b) {
-              return b[1] - a[1];
-            })
-            .slice(0, 5);
-          document.getElementById("analyticsTopProducts").innerHTML =
-            topProds.length
-              ? topProds
-                  .map(function (p, i) {
-                    return (
-                      '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06)"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:12px;font-weight:700;color:#64748b">#' +
-                      (i + 1) +
-                      '</span><span style="font-size:13px">' +
-                      (p[0].length > 28 ? p[0].substring(0, 28) + "…" : p[0]) +
-                      '</span></div><span style="font-weight:700;color:#22c55e">$' +
-                      p[1].toLocaleString() +
-                      "</span></div>"
-                    );
-                  })
-                  .join("")
-              : '<div style="color:var(--muted);font-size:13px">No data yet.</div>';
-          // Order status donut
-          var statusCounts = {
-            completed: 0,
-            pending: 0,
-            processing: 0,
-            refunded: 0,
-          };
-          orders.forEach(function (o) {
-            if (statusCounts[o.status] !== undefined) statusCounts[o.status]++;
-          });
-          if (_chartStatus) _chartStatus.destroy();
-          if (typeof Chart !== "undefined") {
-            _chartStatus = new Chart(document.getElementById("chartStatus"), {
-              type: "doughnut",
-              data: {
-                labels: ["Completed", "Pending", "Processing", "Refunded"],
-                datasets: [
-                  {
-                    data: Object.values(statusCounts),
-                    backgroundColor: [
-                      "#22c55e",
-                      "#f59e0b",
-                      "#06b6d4",
-                      "#ef4444",
-                    ],
-                    borderColor: "transparent",
-                    hoverOffset: 8,
-                  },
-                ],
-              },
-              options: {
-                responsive: true,
-                plugins: {
-                  legend: {
-                    position: "bottom",
-                    labels: { color: "#94a3b8", padding: 16 },
-                  },
-                },
-              },
-            });
-          }
-        } catch (e) {
-          console.error("Analytics load error:", e);
-        }
-      }
-
-      async function exportAnalyticsPDF() {
-        if (typeof window.jspdf === "undefined") {
-          showToast("PDF library not loaded", "error");
-          return;
-        }
-        var jsPDF = window.jspdf.jsPDF;
-        var doc = new jsPDF();
-        doc.setFillColor(124, 58, 237);
-        doc.rect(0, 0, 210, 35, "F");
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(20);
-        doc.setFont("helvetica", "bold");
-        doc.text("Chrixlin AI Rise — Analytics Report", 14, 20);
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "normal");
-        doc.text(
-          "Generated: " +
-            new Date().toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            }),
-          14,
-          28,
-        );
-        var orders = _allOrdersAdmin || [];
-        var profiles = _allUsers || [];
-        var totalRev = orders.reduce(function (s, o) {
-          return s + (parseFloat(o.amount) || 0);
-        }, 0);
-        doc.setTextColor(30, 30, 30);
-        doc.setFontSize(13);
-        doc.setFont("helvetica", "bold");
-        doc.text("Key Metrics", 14, 50);
-        doc.autoTable({
-          startY: 55,
-          head: [["Metric", "Value"]],
-          body: [
-            ["Total Revenue", "$" + totalRev.toLocaleString()],
-            ["Total Orders", orders.length],
-            ["Registered Users", profiles.length],
-            [
-              "Avg Order Value",
-              "$" +
-                (orders.length
-                  ? Math.round(totalRev / orders.length)
-                  : 0
-                ).toLocaleString(),
-            ],
-          ],
-          theme: "striped",
-          headStyles: { fillColor: [124, 58, 237] },
-          styles: { fontSize: 11 },
-        });
-        if (orders.length) {
-          doc.autoTable({
-            startY: doc.lastAutoTable.finalY + 16,
-            head: [
-              ["Order Ref", "Product", "User", "Amount", "Status", "Date"],
-            ],
-            body: orders.slice(0, 50).map(function (o) {
-              return [
-                o.order_ref || "—",
-                o.product_title || "—",
-                o.user_name || "Guest",
-                "$" + (parseFloat(o.amount) || 0).toLocaleString(),
-                o.status || "pending",
-                o.created_at
-                  ? new Date(o.created_at).toLocaleDateString()
-                  : "—",
-              ];
-            }),
-            theme: "striped",
-            headStyles: { fillColor: [124, 58, 237] },
-            styles: { fontSize: 9 },
-          });
-        }
-        doc.save(
-          "ChrixlinAIRise-Analytics-" +
-            new Date().toISOString().split("T")[0] +
-            ".pdf",
-        );
-      }
-
-      function exportAnalyticsExcel() {
-        if (typeof XLSX === "undefined") {
-          showToast("Excel library not loaded", "error");
-          return;
-        }
-        var orders = _allOrdersAdmin || [];
-        var profiles = _allUsers || [];
-        var wb = XLSX.utils.book_new();
-        var ordData = [
-          [
-            "Order Ref",
-            "Product",
-            "Customer",
-            "Email",
-            "Amount",
-            "Method",
-            "Status",
-            "Date",
-          ],
-        ].concat(
-          orders.map(function (o) {
-            return [
-              o.order_ref || "",
-              o.product_title || "",
-              o.user_name || "",
-              o.user_email || "",
-              parseFloat(o.amount) || 0,
-              o.payment_method || "",
-              o.status || "",
-              o.created_at ? new Date(o.created_at).toLocaleDateString() : "",
-            ];
-          }),
-        );
-        XLSX.utils.book_append_sheet(
-          wb,
-          XLSX.utils.aoa_to_sheet(ordData),
-          "Orders",
-        );
-        var usrData = [["Name", "Email", "Phone", "Joined"]].concat(
-          profiles.map(function (p) {
-            return [
-              p.full_name || "",
-              p.email || "",
-              p.phone || "",
-              p.created_at ? new Date(p.created_at).toLocaleDateString() : "",
-            ];
-          }),
-        );
-        XLSX.utils.book_append_sheet(
-          wb,
-          XLSX.utils.aoa_to_sheet(usrData),
-          "Users",
-        );
-        XLSX.writeFile(
-          wb,
-          "ChrixlinAIRise-Analytics-" +
-            new Date().toISOString().split("T")[0] +
-            ".xlsx",
-        );
       }
 
       // Panel initialisation is triggered by the admin auth overlay after session is confirmed.

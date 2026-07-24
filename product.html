@@ -221,7 +221,7 @@
       <a href="index.html#process">How It Works</a>
       <a href="index.html#features">What You Get</a>
       <a href="index.html#testimonials">Results</a>
-      <a href="marketplace.html" class="active">Marketplace</a>
+      <a href="marketplace.html" class="active">Projects</a>
       <a href="index.html#pricing">Pricing</a>
     </div>
     <div class="nav-cta">
@@ -235,7 +235,7 @@
 <div class="mobile-menu" id="mobileMenu">
   <button class="mobile-close" id="mobileClose">✕</button>
   <a href="index.html#process" onclick="closeMobile()">How It Works</a>
-  <a href="marketplace.html" onclick="closeMobile()">Marketplace</a>
+  <a href="marketplace.html" onclick="closeMobile()">Projects</a>
   <a href="index.html#pricing" onclick="closeMobile()">Pricing</a>
   <a href="mailto:info@chrixlin.tech" class="btn btn-primary" onclick="closeMobile()">Book Free Call</a>
 </div>
@@ -246,7 +246,7 @@
     <div class="breadcrumb-inner">
       <a href="index.html">Home</a>
       <span class="sep">›</span>
-      <a href="marketplace.html">Marketplace</a>
+      <a href="marketplace.html">Projects</a>
       <span class="sep">›</span>
       <span class="breadcrumb-cur" id="breadcrumbName">Product</span>
     </div>
@@ -279,7 +279,6 @@
       <!-- RIGHT COLUMN — PURCHASE BOX -->
       <div>
         <div class="purchase-box">
-          <div class="purchase-price" id="purchasePrice">$999</div>
           <div class="purchase-price-note">One-time payment · Full setup included · Lifetime access</div>
           <div class="purchase-btns">
             <a href="#" class="btn btn-gold" id="btnBuyNow" onclick="goToPayment(event)">💳 Buy Now</a>
@@ -371,7 +370,7 @@
     <h2>Ready to Deploy <span class="text-grad">This AI Solution?</span></h2>
     <p>Get instant access today with full setup support included. Questions? Book a free call first.</p>
     <div class="cta-btns">
-      <a href="#" class="btn btn-gold" id="btnBuyNow2" onclick="goToPayment(event)">💳 Buy Now — <span id="ctaPrice">$999</span></a>
+      <a href="#" class="btn btn-gold" id="btnBuyNow2" onclick="goToPayment(event)">💳 Buy Now</a>
       <a href="mailto:info@chrixlin.tech" class="btn btn-outline">📞 Book a Free Call First</a>
     </div>
   </div>
@@ -384,7 +383,7 @@
       <div class="footer-logo" id="footerLogo">Chrixlin AI Rise</div>
       <div class="footer-copy" id="footerCopy">© 2025 Chrixlin AI Rise. All rights reserved.</div>
       <div class="footer-links">
-        <a href="marketplace.html">Marketplace</a>
+        <a href="marketplace.html">Projects</a>
         <a href="mailto:info@chrixlin.tech">Contact</a>
       </div>
     </div>
@@ -433,7 +432,7 @@ const DEFAULT_PRODUCTS = [
       { name: "Alex M.", role: "Digital Agency Owner", text: "We had 2,400 dead leads in our CRM. Within 2 weeks this system reactivated 87 of them. That's $43K in closed deals from 'lost' contacts.", rating: 5 },
       { name: "Rachel O.", role: "SaaS Founder", text: "The personalization is incredible. Leads think a real person sent the message. Our reply rate is 34% on cold contacts.", rating: 5 },
       { name: "Tom B.", role: "Insurance Broker", text: "I set it up on a Friday. By Monday I had 12 booked calls. These were people I thought were gone forever.", rating: 5 },
-      { name: "Sarah L.", role: "Coaching Business", text: "The ROI is insane for $499. I made that back in 2 days from reactivated leads.", rating: 5 }
+      { name: "Sarah L.", role: "Coaching Business", text: "The ROI is insane. I made my investment back in 2 days from reactivated leads.", rating: 5 }
     ]
   },
   {
@@ -470,7 +469,7 @@ const DEFAULT_PRODUCTS = [
       { title: "Analyze & Optimize", desc: "The agent tracks performance and automatically adjusts content strategy based on what gets the most engagement." }
     ],
     reviews: [
-      { name: "Nina H.", role: "E-commerce Brand Owner", text: "We used to spend $4K/month on a content agency. Now we spend $997 once and the AI does more in a week than they did in a month.", rating: 5 },
+      { name: "Nina H.", role: "E-commerce Brand Owner", text: "We used to spend thousands every month on a content agency. Now it's a one-time setup and the AI does more in a week than they did in a month.", rating: 5 },
       { name: "Chris W.", role: "Marketing Director", text: "The brand voice training is eerily accurate. Our followers can't tell the difference between human and AI content.", rating: 5 },
       { name: "Amara J.", role: "Life Coach", text: "I went from posting once a week to every day across 4 platforms. My following grew 340% in 3 months.", rating: 5 },
       { name: "Kevin T.", role: "SaaS Startup Founder", text: "The email sequences this AI writes convert better than anything my human copywriters produced. Unreal.", rating: 5 }
@@ -572,7 +571,7 @@ let product = getProductByIdOrSlug(productId, productSlug);
 if (!product) {
   document.title = 'Product Not Found — Chrixlin AI Rise';
   document.getElementById('productName').textContent = 'Product not found';
-  document.getElementById('productShortDesc').textContent = 'This product could not be found. Please return to the marketplace.';
+  document.getElementById('productShortDesc').textContent = 'This product could not be found. Please return to the projects page.';
 } else {
   // Page title & breadcrumb
   document.title = `${product.title} — Chrixlin AI Rise`;
@@ -603,10 +602,6 @@ if (!product) {
   if (product.badge) { specialBadge.textContent = `⚡ ${product.badge}`; specialBadge.style.display = ''; }
   document.getElementById('productName').textContent = product.title;
   document.getElementById('productShortDesc').textContent = product.desc;
-
-  // Price
-  document.getElementById('purchasePrice').textContent = product.price;
-  document.getElementById('ctaPrice').textContent = product.price;
 
   // Long description
   document.getElementById('productLongDesc').textContent = product.longDesc || product.desc;
