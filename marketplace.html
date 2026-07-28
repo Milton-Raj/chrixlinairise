@@ -6,8 +6,30 @@
     <title>Projects — Chrixlin AI Rise</title>
     <meta
       name="description"
-      content="Browse and buy ready-to-deploy AI bots, voice agents, and automation systems. Or book a call for a custom build."
+      content="Browse ready-to-deploy AI bots, voice agents, and automation systems we've built for businesses. Book a call for a custom build."
     />
+    <link rel="canonical" href="https://chrixlin.tech/marketplace.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Chrixlin AI Rise" />
+    <meta property="og:url" content="https://chrixlin.tech/marketplace.html" />
+    <meta property="og:title" content="Projects — Chrixlin AI Rise" />
+    <meta
+      property="og:description"
+      content="Browse ready-to-deploy AI bots, voice agents, and automation systems we've built for businesses. Book a call for a custom build."
+    />
+    <meta property="og:image" content="https://chrixlin.tech/og-image.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Projects — Chrixlin AI Rise" />
+    <meta
+      name="twitter:description"
+      content="Browse ready-to-deploy AI bots, voice agents, and automation systems we've built for businesses. Book a call for a custom build."
+    />
+    <meta name="twitter:image" content="https://chrixlin.tech/og-image.png" />
+
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
@@ -436,6 +458,12 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
+      .product-result {
+        font-size: 12px;
+        font-weight: 700;
+        color: #4ade80;
+        margin-bottom: 6px;
+      }
       .cat-voice {
         background: rgba(124, 58, 237, 0.15);
         color: #a78bfa;
@@ -715,7 +743,7 @@
       /* ─── SCROLL TOP ──────────────────────────────────────── */
       #scrollTop {
         position: fixed;
-        bottom: 28px;
+        bottom: 98px;
         right: 28px;
         z-index: 100;
         width: 44px;
@@ -739,6 +767,124 @@
         opacity: 1;
         transform: translateY(0);
         pointer-events: all;
+      }
+
+      /* ─── CHAT WIDGET ──────────────────────────────────────── */
+      #chatLauncher {
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        z-index: 200;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--grad);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 26px;
+        box-shadow: 0 8px 24px rgba(124, 58, 237, 0.5);
+        transition: var(--transition);
+      }
+      #chatLauncher:hover {
+        transform: scale(1.06);
+      }
+      #chatPanel {
+        position: fixed;
+        bottom: 100px;
+        right: 28px;
+        z-index: 200;
+        width: min(360px, calc(100vw - 40px));
+        max-height: 70vh;
+        background: #0f0f1e;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      #chatPanel.open {
+        display: flex;
+      }
+      .chat-header {
+        background: var(--grad);
+        padding: 18px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .chat-header-title {
+        font-weight: 800;
+        font-size: 15px;
+        color: #fff;
+      }
+      .chat-header-sub {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.85);
+        margin-top: 2px;
+      }
+      .chat-close-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border: none;
+        color: #fff;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+      .chat-body {
+        padding: 16px;
+        overflow-y: auto;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .chat-bubble {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 12px 14px;
+        font-size: 13px;
+        color: #cbd5e1;
+        line-height: 1.5;
+      }
+      .chat-q-btn {
+        text-align: left;
+        width: 100%;
+        background: rgba(124, 58, 237, 0.1);
+        border: 1px solid rgba(124, 58, 237, 0.25);
+        color: #c4b5fd;
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .chat-q-btn:hover {
+        background: rgba(124, 58, 237, 0.2);
+      }
+      .chat-footer {
+        padding: 14px 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .chat-footer a {
+        display: block;
+        text-align: center;
+        background: var(--grad);
+        color: #fff;
+        font-weight: 700;
+        font-size: 13px;
+        padding: 12px;
+        border-radius: 12px;
+        text-decoration: none;
       }
 
       /* ─── EMPTY STATE ─────────────────────────────────────── */
@@ -1022,17 +1168,8 @@
           <a href="index.html#features">What You Get</a>
           <a href="index.html#testimonials">Results</a>
           <a href="marketplace.html" class="active">Projects</a>
-          <a href="index.html#pricing">Pricing</a>
-          <a href="index.html#faq">FAQ</a>
         </div>
         <div class="nav-cta">
-          <a
-            href="auth.html"
-            id="navAuthBtn"
-            class="btn btn-outline"
-            style="padding: 9px 20px; font-size: 14px"
-            >Sign In</a
-          >
           <a href="mailto:info@chrixlin.tech" class="btn btn-primary"
             >Book Free Call</a
           >
@@ -1050,15 +1187,6 @@
       <a href="index.html#features" onclick="closeMobile()">What You Get</a>
       <a href="index.html#testimonials" onclick="closeMobile()">Results</a>
       <a href="marketplace.html" onclick="closeMobile()">Projects</a>
-      <a href="index.html#pricing" onclick="closeMobile()">Pricing</a>
-      <a href="index.html#faq" onclick="closeMobile()">FAQ</a>
-      <a
-        href="auth.html"
-        id="mobileAuthBtn"
-        onclick="closeMobile()"
-        style="color: #a78bfa"
-        >Sign In</a
-      >
       <a href="#book-call" class="btn btn-primary" onclick="closeMobile()"
         >Book Free Call</a
       >
@@ -1216,7 +1344,6 @@
               <li><a href="index.html#process">How It Works</a></li>
               <li><a href="index.html#features">What You Get</a></li>
               <li><a href="index.html#testimonials">Results</a></li>
-              <li><a href="index.html#pricing">Pricing</a></li>
             </ul>
           </div>
           <div class="footer-col">
@@ -1249,6 +1376,73 @@
       ↑
     </button>
 
+    <!-- CHAT WIDGET -->
+    <button id="chatLauncher" onclick="toggleChat()" aria-label="Chat with us">
+      💬
+    </button>
+    <div id="chatPanel">
+      <div class="chat-header">
+        <div>
+          <div class="chat-header-title">🤖 Chrixlin Assistant</div>
+          <div class="chat-header-sub">Ask a quick question</div>
+        </div>
+        <button class="chat-close-btn" onclick="toggleChat()">✕</button>
+      </div>
+      <div class="chat-body" id="chatBody">
+        <div class="chat-bubble">
+          👋 Hi! I can answer quick questions about our projects. Pick one
+          below, or book a free call for anything more specific.
+        </div>
+      </div>
+      <div class="chat-footer">
+        <a href="#book-call" data-booking="1">📞 Book a Free Strategy Call</a>
+      </div>
+    </div>
+
+    <script>
+      var CHAT_QA = [
+        {
+          q: "What kind of projects do you build?",
+          a: "Voice AI agents, chatbots, lead generation and reactivation systems, and custom automation workflows — all built and deployed for your business.",
+        },
+        {
+          q: "Can I customize one of these projects?",
+          a: "Yes — every project here can be customized to your business. Book a call and we'll scope it out with you.",
+        },
+        {
+          q: "How much does a project cost?",
+          a: "It depends on scope and complexity. Book a free call and we'll give you a clear quote — no obligation.",
+        },
+        {
+          q: "How fast can you deploy?",
+          a: "Most projects go live within 48 hours to 2 weeks depending on complexity.",
+        },
+      ];
+
+      function toggleChat() {
+        var panel = document.getElementById("chatPanel");
+        var isOpen = panel.classList.toggle("open");
+        if (isOpen && !panel.dataset.built) {
+          panel.dataset.built = "1";
+          var body = document.getElementById("chatBody");
+          CHAT_QA.forEach(function (item) {
+            var btn = document.createElement("button");
+            btn.className = "chat-q-btn";
+            btn.textContent = item.q;
+            btn.onclick = function () {
+              btn.remove();
+              var bubble = document.createElement("div");
+              bubble.className = "chat-bubble";
+              bubble.textContent = item.a;
+              body.appendChild(bubble);
+              body.scrollTop = body.scrollHeight;
+            };
+            body.appendChild(btn);
+          });
+        }
+      }
+    </script>
+
     <script>
       // ─── DEFAULT DATA ─────────────────────────────────────────────────────────────
       const DEFAULT_MP = {
@@ -1280,8 +1474,8 @@
           },
           {
             ytId: "",
-            title: "Student Success: $12K/Month",
-            desc: "Shubham walks through how he deployed 3 of our AI agents for clients and now earns $12K/month on the side.",
+            title: "Client Success: 90% Faster Response Time",
+            desc: "See how one client deployed 3 of our AI agents and cut their customer response time by 90% almost overnight.",
             thumb: "🏆",
           },
         ],
@@ -1420,6 +1614,7 @@
           <span class="product-cat-badge ${p.categoryClass || "cat-voice"}">${p.categoryLabel}</span>
         </div>
         <div class="product-title">${p.title}</div>
+        ${p.result ? `<div class="product-result">📈 ${p.result}</div>` : ""}
         <div class="product-desc">${p.desc}</div>
       </div>
       <div class="product-bottom">
@@ -1493,6 +1688,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="supabase-client.js"></script>
     <script>
+      if (typeof ChrixlinDB !== "undefined") ChrixlinDB.initTracking();
+    </script>
+    <script>
       (async function () {
         try {
           // Load categories from DB
@@ -1531,29 +1729,6 @@
         } catch (e) {
           console.warn("Marketplace load error:", e);
         }
-
-        // Update auth nav button based on session
-        try {
-          var session = await ChrixlinDB.getCustomerSession();
-          var desktopBtn = document.getElementById("navAuthBtn");
-          var mobileBtn = document.getElementById("mobileAuthBtn");
-          if (session && session.user) {
-            var name =
-              session.user.user_metadata && session.user.user_metadata.full_name
-                ? session.user.user_metadata.full_name.split(" ")[0]
-                : "Dashboard";
-            if (desktopBtn) {
-              desktopBtn.href = "dashboard.html";
-              desktopBtn.textContent = "👤 " + name;
-              desktopBtn.style.borderColor = "rgba(124,58,237,0.5)";
-              desktopBtn.style.color = "#a78bfa";
-            }
-            if (mobileBtn) {
-              mobileBtn.href = "dashboard.html";
-              mobileBtn.textContent = "👤 " + name;
-            }
-          }
-        } catch (e) {}
 
         // Apply strategy call booking link from admin settings (same logic as index.html)
         function applyBookingLink(link) {

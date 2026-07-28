@@ -64,6 +64,52 @@
     }
   }
 
+  // ─── TRACKING & ANALYTICS ─────────────────────────────────────────
+  function _injectGA4(id) {
+    if (!id || global._ga4Loaded) return;
+    global._ga4Loaded = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+    document.head.appendChild(s);
+    global.dataLayer = global.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    global.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', id);
+  }
+
+  function _injectMetaPixel(id) {
+    if (!id || global._metaPixelLoaded) return;
+    global._metaPixelLoaded = true;
+    !(function (f, b, e, v, n, t, s) {
+      if (f.fbq) return;
+      n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+      if (!f._fbq) f._fbq = n;
+      n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
+      t = b.createElement(e); t.async = true; t.src = v;
+      s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+    })(global, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    global.fbq('init', id);
+    global.fbq('track', 'PageView');
+  }
+
+  function _applyTracking(t) {
+    if (!t) return;
+    if (t.ga4) _injectGA4(t.ga4);
+    if (t.metaPixel) _injectMetaPixel(t.metaPixel);
+  }
+
+  function initTracking() {
+    try { _applyTracking(JSON.parse(localStorage.getItem('chrixlin_tracking') || '{}')); } catch (e) {}
+    loadFromSupabase('site_settings', 'tracking_ids').then(function (t) {
+      if (t) {
+        localStorage.setItem('chrixlin_tracking', JSON.stringify(t));
+        _applyTracking(t);
+      }
+    }).catch(function () {});
+  }
+
   // ─── MARKETPLACE PRODUCTS ─────────────────────────────────────────
   async function loadAllProducts() {
     const client = _getClient();
@@ -616,10 +662,10 @@
     return (str||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
   }
   function _productToRow(p) {
-    return { id: p.id, emoji: p.emoji||'🤖', badge: p.badge||'', category: p.category||'voice-ai', category_label: p.categoryLabel||'', category_class: p.categoryClass||'', price: p.price||'$999', title: p.title||'', slug: p.slug || _slugify(p.title||''), description: p.desc||'', long_desc: p.longDesc||'', image_url: p.image||'', yt_id: p.ytId||'', buy_url: p.buyUrl||'', download_url: p.downloadUrl||'', features: p.features||[], how_it_works: p.howItWorks||[], reviews: p.reviews||[], screenshots: p.screenshots||[], sort_order: p.sortOrder||0, is_active: p.isActive!==false };
+    return { id: p.id, emoji: p.emoji||'🤖', badge: p.badge||'', category: p.category||'voice-ai', category_label: p.categoryLabel||'', category_class: p.categoryClass||'', price: p.price||'$999', title: p.title||'', result: p.result||'', slug: p.slug || _slugify(p.title||''), description: p.desc||'', long_desc: p.longDesc||'', image_url: p.image||'', yt_id: p.ytId||'', buy_url: p.buyUrl||'', download_url: p.downloadUrl||'', features: p.features||[], how_it_works: p.howItWorks||[], reviews: p.reviews||[], screenshots: p.screenshots||[], sort_order: p.sortOrder||0, is_active: p.isActive!==false };
   }
   function _rowToProduct(r) {
-    return { id: r.id, emoji: r.emoji, badge: r.badge, category: r.category, categoryLabel: r.category_label, categoryClass: r.category_class, price: r.price, title: r.title, slug: r.slug || _slugify(r.title||''), desc: r.description, longDesc: r.long_desc, image: r.image_url, ytId: r.yt_id, buyUrl: r.buy_url, downloadUrl: r.download_url||'', features: r.features||[], howItWorks: r.how_it_works||[], reviews: r.reviews||[], screenshots: r.screenshots||[], sortOrder: r.sort_order, isActive: r.is_active };
+    return { id: r.id, emoji: r.emoji, badge: r.badge, category: r.category, categoryLabel: r.category_label, categoryClass: r.category_class, price: r.price, title: r.title, result: r.result||'', slug: r.slug || _slugify(r.title||''), desc: r.description, longDesc: r.long_desc, image: r.image_url, ytId: r.yt_id, buyUrl: r.buy_url, downloadUrl: r.download_url||'', features: r.features||[], howItWorks: r.how_it_works||[], reviews: r.reviews||[], screenshots: r.screenshots||[], sortOrder: r.sort_order, isActive: r.is_active };
   }
   function _planToRow(p) {
     return { id: p.id, name: p.name||'', price: String(p.price||''), price_label: p.priceLabel||'', period: p.period||'', badge: p.badge||'', badge_color: p.badgeColor||'', badge_bg: p.badgeBg||'', description: p.description||'', cta: p.cta||'Get Started', cta_link: p.ctaLink||'', is_highlighted: !!p.highlighted, features: p.features||[], sort_order: p.sortOrder||0, is_active: p.isActive!==false, billing_cycle: p.billingCycle||'monthly', visible: p.visible !== false };
@@ -646,6 +692,7 @@
   // ─── PUBLIC API ───────────────────────────────────────────────────
   global.ChrixlinDB = {
     loadFromSupabase, saveToSupabase,
+    initTracking,
     loadAllProducts, loadAllProductsAdmin, upsertProduct, deleteProduct,
     loadAllPricingPlans, loadAllPricingPlansAdmin, upsertPricingPlan, deletePricingPlan,
     loadPaymentSettings, loadPublicPaymentSettings, savePaymentSettings,

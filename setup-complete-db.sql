@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS public.marketplace_products (
   category_class TEXT        NOT NULL DEFAULT '',
   price          TEXT        NOT NULL DEFAULT '$999',
   title          TEXT        NOT NULL DEFAULT '',
+  result         TEXT        NOT NULL DEFAULT '',
   slug           TEXT        NOT NULL DEFAULT '',
   description    TEXT        NOT NULL DEFAULT '',
   long_desc      TEXT        NOT NULL DEFAULT '',
@@ -68,6 +69,7 @@ CREATE TABLE IF NOT EXISTS public.marketplace_products (
 -- Add missing columns if table already exists
 ALTER TABLE public.marketplace_products ADD COLUMN IF NOT EXISTS slug         TEXT NOT NULL DEFAULT '';
 ALTER TABLE public.marketplace_products ADD COLUMN IF NOT EXISTS download_url TEXT NOT NULL DEFAULT '';
+ALTER TABLE public.marketplace_products ADD COLUMN IF NOT EXISTS result       TEXT NOT NULL DEFAULT '';
 CREATE INDEX IF NOT EXISTS idx_mp_category   ON public.marketplace_products (category);
 CREATE INDEX IF NOT EXISTS idx_mp_is_active  ON public.marketplace_products (is_active);
 CREATE INDEX IF NOT EXISTS idx_mp_sort_order ON public.marketplace_products (sort_order);

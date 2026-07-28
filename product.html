@@ -4,7 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Product — Chrixlin AI Rise</title>
-  <meta name="description" content="Full product details, demo video, features, and purchase options." />
+  <meta name="description" id="metaDescription" content="Full project details, demo video, and features. Book a call to get this built for your business." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Chrixlin AI Rise" />
+  <meta property="og:title" id="ogTitle" content="Chrixlin AI Rise — Custom AI Automation for Your Business" />
+  <meta property="og:description" id="ogDescription" content="Full project details, demo video, and features. Book a call to get this built for your business." />
+  <meta property="og:image" content="https://chrixlin.tech/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" id="twitterTitle" content="Chrixlin AI Rise — Custom AI Automation for Your Business" />
+  <meta name="twitter:description" id="twitterDescription" content="Full project details, demo video, and features. Book a call to get this built for your business." />
+  <meta name="twitter:image" content="https://chrixlin.tech/og-image.png" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
@@ -107,6 +117,7 @@
     .product-special-badge { font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
     .product-name { font-family: var(--font-h); font-size: clamp(28px, 4vw, 44px); font-weight: 900; margin-bottom: 16px; line-height: 1.15; }
     .product-short-desc { font-size: 17px; color: var(--c-sub); line-height: 1.7; margin-bottom: 28px; }
+    .product-result-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; font-weight: 700; font-size: 13px; padding: 6px 14px; border-radius: 20px; margin-bottom: 16px; }
 
     /* ─── PURCHASE BOX ────────────────────────────────────── */
     .purchase-box {
@@ -193,8 +204,24 @@
     .footer-links a:hover { color: var(--c-text); }
 
     /* ─── SCROLL TOP ──────────────────────────────────────── */
-    #scrollTop { position: fixed; bottom: 28px; right: 28px; z-index: 100; width: 44px; height: 44px; border-radius: 50%; background: var(--grad); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; box-shadow: 0 8px 20px rgba(124,58,237,0.4); opacity: 0; transform: translateY(20px); transition: var(--transition); pointer-events: none; }
+    #scrollTop { position: fixed; bottom: 98px; right: 28px; z-index: 100; width: 44px; height: 44px; border-radius: 50%; background: var(--grad); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; box-shadow: 0 8px 20px rgba(124,58,237,0.4); opacity: 0; transform: translateY(20px); transition: var(--transition); pointer-events: none; }
     #scrollTop.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+
+    /* ─── CHAT WIDGET ─────────────────────────────────────── */
+    #chatLauncher { position: fixed; bottom: 28px; right: 28px; z-index: 200; width: 60px; height: 60px; border-radius: 50%; background: var(--grad); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 26px; box-shadow: 0 8px 24px rgba(124,58,237,0.5); transition: var(--transition); }
+    #chatLauncher:hover { transform: scale(1.06); }
+    #chatPanel { position: fixed; bottom: 100px; right: 28px; z-index: 200; width: min(360px, calc(100vw - 40px)); max-height: 70vh; background: #0f0f1e; border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); display: none; flex-direction: column; overflow: hidden; }
+    #chatPanel.open { display: flex; }
+    .chat-header { background: var(--grad); padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .chat-header-title { font-weight: 800; font-size: 15px; color: #fff; }
+    .chat-header-sub { font-size: 12px; color: rgba(255,255,255,0.85); margin-top: 2px; }
+    .chat-close-btn { background: rgba(255,255,255,0.15); border: none; color: #fff; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-size: 14px; flex-shrink: 0; }
+    .chat-body { padding: 16px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .chat-bubble { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 12px 14px; font-size: 13px; color: #cbd5e1; line-height: 1.5; }
+    .chat-q-btn { text-align: left; width: 100%; background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.25); color: #c4b5fd; border-radius: 12px; padding: 10px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition); }
+    .chat-q-btn:hover { background: rgba(124,58,237,0.2); }
+    .chat-footer { padding: 14px 16px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .chat-footer a { display: block; text-align: center; background: var(--grad); color: #fff; font-weight: 700; font-size: 13px; padding: 12px; border-radius: 12px; text-decoration: none; }
 
     /* ─── RESPONSIVE ──────────────────────────────────────── */
     @media (max-width: 900px) {
@@ -222,7 +249,6 @@
       <a href="index.html#features">What You Get</a>
       <a href="index.html#testimonials">Results</a>
       <a href="marketplace.html" class="active">Projects</a>
-      <a href="index.html#pricing">Pricing</a>
     </div>
     <div class="nav-cta">
       <a href="mailto:info@chrixlin.tech" class="btn btn-primary">Book Free Call</a>
@@ -236,7 +262,6 @@
   <button class="mobile-close" id="mobileClose">✕</button>
   <a href="index.html#process" onclick="closeMobile()">How It Works</a>
   <a href="marketplace.html" onclick="closeMobile()">Projects</a>
-  <a href="index.html#pricing" onclick="closeMobile()">Pricing</a>
   <a href="mailto:info@chrixlin.tech" class="btn btn-primary" onclick="closeMobile()">Book Free Call</a>
 </div>
 
@@ -273,19 +298,18 @@
           <span class="product-special-badge" id="productSpecialBadge" style="display:none"></span>
         </div>
         <h1 class="product-name" id="productName">Loading...</h1>
+        <div class="product-result-badge" id="productResultBadge" style="display:none"></div>
         <p class="product-short-desc" id="productShortDesc"></p>
       </div>
 
       <!-- RIGHT COLUMN — PURCHASE BOX -->
       <div>
         <div class="purchase-box">
-          <div class="purchase-price-note">One-time payment · Full setup included · Lifetime access</div>
+          <div class="purchase-price-note">Full setup included · Ongoing support</div>
           <div class="purchase-btns">
-            <a href="#" class="btn btn-gold" id="btnBuyNow" onclick="goToPayment(event)">💳 Buy Now</a>
-            <a href="mailto:info@chrixlin.tech" class="btn btn-outline">📞 Book a Free Call</a>
+            <a href="mailto:info@chrixlin.tech" class="btn btn-gold" id="btnBookCall">📞 Book a Call</a>
           </div>
           <div class="purchase-trust">
-            <div class="purchase-trust-item"><div class="purchase-trust-icon">🔒</div><span>Secure &amp; encrypted payment</span></div>
             <div class="purchase-trust-item"><div class="purchase-trust-icon">📦</div><span>Full setup &amp; onboarding support</span></div>
             <div class="purchase-trust-item"><div class="purchase-trust-icon">📝</div><span>Complete documentation included</span></div>
             <div class="purchase-trust-item"><div class="purchase-trust-icon">🔄</div><span>Updates &amp; revisions included</span></div>
@@ -368,10 +392,9 @@
 <section id="bottom-cta">
   <div class="container">
     <h2>Ready to Deploy <span class="text-grad">This AI Solution?</span></h2>
-    <p>Get instant access today with full setup support included. Questions? Book a free call first.</p>
+    <p>Book a free call and we'll walk you through setup and deployment for your business.</p>
     <div class="cta-btns">
-      <a href="#" class="btn btn-gold" id="btnBuyNow2" onclick="goToPayment(event)">💳 Buy Now</a>
-      <a href="mailto:info@chrixlin.tech" class="btn btn-outline">📞 Book a Free Call First</a>
+      <a href="mailto:info@chrixlin.tech" class="btn btn-gold" id="btnBookCall2">📞 Book a Call</a>
     </div>
   </div>
 </section>
@@ -391,6 +414,56 @@
 </footer>
 
 <button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- CHAT WIDGET -->
+<button id="chatLauncher" onclick="toggleChat()" aria-label="Chat with us">💬</button>
+<div id="chatPanel">
+  <div class="chat-header">
+    <div>
+      <div class="chat-header-title">🤖 Chrixlin Assistant</div>
+      <div class="chat-header-sub">Ask a quick question</div>
+    </div>
+    <button class="chat-close-btn" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-body" id="chatBody">
+    <div class="chat-bubble">👋 Hi! Ask a quick question about this project, or book a free call for anything more specific.</div>
+  </div>
+  <div class="chat-footer">
+    <a href="mailto:info@chrixlin.tech">📞 Book a Free Strategy Call</a>
+  </div>
+</div>
+
+<script>
+  var CHAT_QA = [
+    { q: "How much does this cost?", a: "Pricing depends on your specific setup and requirements. Book a free call and we'll give you a clear quote — no obligation." },
+    { q: "Can this be customized for my business?", a: "Yes — every project can be tailored to your workflows and tools. Book a call and we'll scope it out with you." },
+    { q: "How long does deployment take?", a: "Most projects go live within 48 hours to 2 weeks depending on complexity." },
+    { q: "Do I need technical knowledge?", a: "None. We handle the entire build, deployment, and documentation for you." }
+  ];
+
+  function toggleChat() {
+    var panel = document.getElementById('chatPanel');
+    var isOpen = panel.classList.toggle('open');
+    if (isOpen && !panel.dataset.built) {
+      panel.dataset.built = '1';
+      var body = document.getElementById('chatBody');
+      CHAT_QA.forEach(function (item) {
+        var btn = document.createElement('button');
+        btn.className = 'chat-q-btn';
+        btn.textContent = item.q;
+        btn.onclick = function () {
+          btn.remove();
+          var bubble = document.createElement('div');
+          bubble.className = 'chat-bubble';
+          bubble.textContent = item.a;
+          body.appendChild(bubble);
+          body.scrollTop = body.scrollHeight;
+        };
+        body.appendChild(btn);
+      });
+    }
+  }
+</script>
 
 <script>
 // ─── DEFAULT PRODUCT DATA ─────────────────────────────────────────────────────
@@ -577,6 +650,16 @@ if (!product) {
   document.title = `${product.title} — Chrixlin AI Rise`;
   document.getElementById('breadcrumbName').textContent = product.title;
 
+  // SEO / social meta
+  const metaDesc = (product.desc || '').slice(0, 160);
+  const ogTitle = `${product.title} — Chrixlin AI Rise`;
+  const setMeta = (id, text) => { const el = document.getElementById(id); if (el) el.setAttribute('content', text); };
+  setMeta('metaDescription', metaDesc);
+  setMeta('ogTitle', ogTitle);
+  setMeta('ogDescription', metaDesc);
+  setMeta('twitterTitle', ogTitle);
+  setMeta('twitterDescription', metaDesc);
+
   // Thumbnail
   const thumbEl = document.getElementById('productThumb');
   const thumbClass = { 'voice-ai':'cat-thumb-voice-ai','sales':'cat-thumb-sales','content':'cat-thumb-content','lead':'cat-thumb-lead','automation':'cat-thumb-automation' };
@@ -601,6 +684,8 @@ if (!product) {
   const specialBadge = document.getElementById('productSpecialBadge');
   if (product.badge) { specialBadge.textContent = `⚡ ${product.badge}`; specialBadge.style.display = ''; }
   document.getElementById('productName').textContent = product.title;
+  const resultBadge = document.getElementById('productResultBadge');
+  if (product.result) { resultBadge.textContent = `📈 ${product.result}`; resultBadge.style.display = ''; }
   document.getElementById('productShortDesc').textContent = product.desc;
 
   // Long description
@@ -667,7 +752,7 @@ if (!product) {
 
   // Reviews
   const reviews = product.reviews || [
-    { name: "Student A.", role: "Program Graduate", text: "This AI solution transformed my client business completely. The ROI in the first month was extraordinary.", rating: 5 },
+    { name: "Client A.", role: "Business Owner", text: "This AI solution transformed how we handle client work. The ROI in the first month was extraordinary.", rating: 5 },
     { name: "Client B.", role: "Business Owner", text: "Smooth deployment, great support, and even better results. Couldn't be happier.", rating: 5 }
   ];
   document.getElementById('reviewsGrid').innerHTML = reviews.map(r =>
@@ -684,43 +769,6 @@ if (!product) {
     </div>`
   ).join('');
 }
-
-// ─── BUY NOW ──────────────────────────────────────────────────────────────────
-async function goToPayment(e) {
-  e.preventDefault();
-  // Use actual product ID (works for both ?id= and ?slug= based URLs)
-  const actualId = (product && product.id) ? product.id : productId;
-  const actualSlug = (product && product.slug) ? product.slug : productSlug;
-  const payUrl = `payment.html?product=${actualId}&slug=${actualSlug || ''}`;
-  try {
-    const session = await ChrixlinDB.getCustomerSession();
-    if (session) {
-      window.location.href = payUrl;
-    } else {
-      const encoded = encodeURIComponent(payUrl);
-      window.location.href = `auth.html?next=${encoded}`;
-    }
-  } catch (err) {
-    window.location.href = payUrl;
-  }
-}
-
-// ─── NAV AUTH BUTTON ──────────────────────────────────────────────────────────
-(async function initNavAuth() {
-  try {
-    const session = await ChrixlinDB.getCustomerSession();
-    const navCta = document.querySelector('.nav-cta');
-    if (navCta) {
-      if (session) {
-        const meta = session.user.user_metadata || {};
-        const name = meta.full_name || meta.name || 'Dashboard';
-        navCta.innerHTML = `<a href="dashboard.html" class="btn btn-primary">👤 ${name.split(' ')[0]}</a>`;
-      } else {
-        navCta.innerHTML = `<a href="auth.html?next=dashboard.html" class="btn btn-primary">Sign In</a>`;
-      }
-    }
-  } catch {}
-})();
 
 // ─── SHARE ────────────────────────────────────────────────────────────────────
 function copyLink() {
@@ -745,5 +793,8 @@ function closeMobile() { document.getElementById('mobileMenu').classList.remove(
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="supabase-client.js"></script>
+<script>
+  if (typeof ChrixlinDB !== "undefined") ChrixlinDB.initTracking();
+</script>
 </body>
 </html>

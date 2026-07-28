@@ -872,48 +872,6 @@
       }
 
       /* ─── CEO DASHBOARD ──────────────────────────────────── */
-      .dash-filter-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 24px;
-        flex-wrap: wrap;
-      }
-      .dash-filter-btn {
-        padding: 8px 18px;
-        border-radius: 8px;
-        background: var(--card);
-        border: 1px solid var(--border);
-        color: var(--sub);
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-      }
-      .dash-filter-btn.active,
-      .dash-filter-btn:hover {
-        background: rgba(99, 102, 241, 0.15);
-        color: #a5b4fc;
-        border-color: var(--primary);
-      }
-      .dash-filter-spacer {
-        flex: 1;
-      }
-      .dash-export-btn {
-        padding: 8px 16px;
-        border-radius: 8px;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        border: 1px solid var(--border);
-        background: var(--card);
-        color: var(--sub);
-        transition: var(--transition);
-      }
-      .dash-export-btn:hover {
-        color: var(--text);
-        border-color: var(--border-h);
-      }
       .kpi-row2 {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -943,7 +901,7 @@
       }
       .dash-table-row {
         display: grid;
-        grid-template-columns: 1fr auto;
+        grid-template-columns: 1fr 1fr auto;
         gap: 16px;
         padding: 10px 0;
         border-bottom: 1px solid var(--border);
@@ -955,7 +913,7 @@
       }
       .dash-table-header {
         display: grid;
-        grid-template-columns: 1fr auto;
+        grid-template-columns: 1fr 1fr auto;
         gap: 16px;
         padding: 0 0 8px;
         font-size: 11px;
@@ -965,53 +923,6 @@
         letter-spacing: 0.5px;
         border-bottom: 1px solid var(--border);
         margin-bottom: 4px;
-      }
-      .dist-bar-wrap {
-        display: grid;
-        grid-template-columns: 80px 1fr 48px;
-        gap: 12px;
-        align-items: center;
-        margin-bottom: 12px;
-        font-size: 13px;
-      }
-      .dist-bar {
-        height: 8px;
-        background: var(--border);
-        border-radius: 4px;
-        overflow: hidden;
-      }
-      .dist-fill {
-        height: 100%;
-        border-radius: 4px;
-        transition: width 0.5s ease;
-      }
-
-      /* ─── BILLING TABS ────────────────────────────────────── */
-      .billing-tabs {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 24px;
-        padding: 4px;
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        width: fit-content;
-      }
-      .billing-tab {
-        padding: 10px 20px;
-        border-radius: 9px;
-        background: transparent;
-        border: none;
-        color: var(--sub);
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-      }
-      .billing-tab.active {
-        background: rgba(99, 102, 241, 0.2);
-        color: #a5b4fc;
-        border: 1px solid rgba(99, 102, 241, 0.4);
       }
       .booking-platform-btn {
         padding: 9px 18px;
@@ -1269,17 +1180,6 @@
         .panel {
           padding: 20px 16px;
         }
-        .billing-tabs {
-          flex-wrap: wrap;
-          width: 100%;
-        }
-        .billing-tab {
-          flex: 1;
-          min-width: 80px;
-          text-align: center;
-          padding: 8px 10px;
-          font-size: 13px;
-        }
         .topbar-actions {
           gap: 6px;
         }
@@ -1316,11 +1216,6 @@
         }
         .panel {
           padding: 16px 12px;
-        }
-        .billing-tab {
-          min-width: 60px;
-          font-size: 12px;
-          padding: 6px 8px;
         }
         .dash-grid {
           grid-template-columns: 1fr;
@@ -1361,22 +1256,15 @@
           >
             <span class="sb-icon">🏠</span> Dashboard
           </button>
+          <button
+            class="sidebar-btn"
+            onclick="showPanel('submissions')"
+            data-panel="submissions"
+          >
+            <span class="sb-icon">📋</span> Call Submissions
+          </button>
 
           <div class="sidebar-section-label">Management</div>
-          <button
-            class="sidebar-btn"
-            onclick="showPanel('users')"
-            data-panel="users"
-          >
-            <span class="sb-icon">👥</span> Users
-          </button>
-          <button
-            class="sidebar-btn"
-            onclick="showPanel('pricing')"
-            data-panel="pricing"
-          >
-            <span class="sb-icon">💎</span> Plans & Pricing
-          </button>
           <button
             class="sidebar-btn"
             onclick="showPanel('marketplace')"
@@ -1384,6 +1272,65 @@
           >
             <span class="sb-icon">🛒</span> Projects
           </button>
+
+          <div class="sidebar-section-label">Website Content</div>
+          <button
+            class="sidebar-btn"
+            onclick="toggleContentMenu()"
+            data-panel="content"
+            id="contentMenuBtn"
+          >
+            <span class="sb-icon">✏️</span> Page Editor
+            <span
+              style="margin-left: auto; font-size: 11px; color: var(--muted)"
+              id="contentMenuArrow"
+              >▾</span
+            >
+          </button>
+          <div id="contentSubMenu" style="display: none; padding-left: 12px">
+            <button class="sidebar-btn" onclick="showPanel('hero')" data-panel="hero" style="font-size: 13px">
+              <span class="sb-icon">🖼️</span> Hero Section
+            </button>
+            <button class="sidebar-btn" onclick="showPanel('stats')" data-panel="stats" style="font-size: 13px">
+              <span class="sb-icon">📊</span> Stats Bar
+            </button>
+            <button class="sidebar-btn" onclick="showPanel('story')" data-panel="story" style="font-size: 13px">
+              <span class="sb-icon">📖</span> Founder Story
+            </button>
+            <button class="sidebar-btn" onclick="showPanel('process')" data-panel="process" style="font-size: 13px">
+              <span class="sb-icon">🛠️</span> How It Works
+            </button>
+            <button class="sidebar-btn" onclick="showPanel('features')" data-panel="features" style="font-size: 13px">
+              <span class="sb-icon">✨</span> Features
+            </button>
+            <button class="sidebar-btn" onclick="showPanel('testimonials')" data-panel="testimonials" style="font-size: 13px">
+              <span class="sb-icon">💬</span> Testimonials
+            </button>
+            <button class="sidebar-btn" onclick="showPanel('forwho')" data-panel="forwho" style="font-size: 13px">
+              <span class="sb-icon">🎯</span> Who It's For
+            </button>
+            <button class="sidebar-btn" onclick="showPanel('cta')" data-panel="cta" style="font-size: 13px">
+              <span class="sb-icon">🚀</span> CTA Section
+            </button>
+            <button class="sidebar-btn" onclick="showPanel('footer')" data-panel="footer" style="font-size: 13px">
+              <span class="sb-icon">📄</span> Footer
+            </button>
+            <button class="sidebar-btn" onclick="showPanel('theme')" data-panel="theme" style="font-size: 13px">
+              <span class="sb-icon">🎨</span> Theme & Colors
+            </button>
+            <button class="sidebar-btn" onclick="showPanel('seo')" data-panel="seo" style="font-size: 13px">
+              <span class="sb-icon">🔍</span> SEO Settings
+            </button>
+            <button class="sidebar-btn" onclick="showPanel('terms')" data-panel="terms" style="font-size: 13px">
+              <span class="sb-icon">📜</span> Terms & Conditions
+            </button>
+            <button class="sidebar-btn" onclick="showPanel('privacy')" data-panel="privacy" style="font-size: 13px">
+              <span class="sb-icon">🔏</span> Privacy Policy
+            </button>
+            <button class="sidebar-btn" onclick="showPanel('navmenu')" data-panel="navmenu" style="font-size: 13px">
+              <span class="sb-icon">🧭</span> Nav Menu Visibility
+            </button>
+          </div>
 
           <div class="sidebar-section-label">Settings</div>
           <button
@@ -1402,11 +1349,19 @@
           <div id="settingsSubMenu" style="display: none; padding-left: 12px">
             <button
               class="sidebar-btn"
-              onclick="showPanel('bankdetails')"
-              data-panel="bankdetails"
+              onclick="showPanel('booking')"
+              data-panel="booking"
               style="font-size: 13px"
             >
-              <span class="sb-icon">📞</span> Booking Link
+              <span class="sb-icon">📅</span> Booking Link
+            </button>
+            <button
+              class="sidebar-btn"
+              onclick="showPanel('tracking')"
+              data-panel="tracking"
+              style="font-size: 13px"
+            >
+              <span class="sb-icon">📈</span> Tracking & Analytics
             </button>
             <button
               class="sidebar-btn"
@@ -1499,173 +1454,60 @@
           <!-- ── DASHBOARD ─────────────────────────────────────── -->
           <div id="panel-dashboard" class="panel active">
             <div class="panel-title">CEO Dashboard</div>
-            <div class="panel-desc">Real-time business intelligence</div>
-
-            <!-- Filter Row -->
-            <div class="dash-filter-row">
-              <button
-                class="dash-filter-btn active"
-                data-filter="all"
-                onclick="setDashFilter('all')"
-              >
-                All Time
-              </button>
-              <button
-                class="dash-filter-btn"
-                data-filter="weekly"
-                onclick="setDashFilter('weekly')"
-              >
-                Weekly
-              </button>
-              <button
-                class="dash-filter-btn"
-                data-filter="monthly"
-                onclick="setDashFilter('monthly')"
-              >
-                Monthly
-              </button>
-              <button
-                class="dash-filter-btn"
-                data-filter="yearly"
-                onclick="setDashFilter('yearly')"
-              >
-                Yearly
-              </button>
-              <span class="dash-filter-spacer"></span>
-              <button class="dash-export-btn" onclick="exportPDF()">
-                📄 Export PDF
-              </button>
-              <button class="dash-export-btn" onclick="exportExcel()">
-                📊 Export Excel
-              </button>
+            <div class="panel-desc">
+              Overview of incoming leads and your site content.
             </div>
 
             <!-- KPI Row -->
             <div class="kpi-row2">
               <div
                 class="kpi-card2"
-                onclick="showPanel('users')"
+                onclick="showPanel('submissions')"
                 style="cursor: pointer"
               >
-                <div class="kpi-card2-val" id="dashRegisteredUsers">—</div>
-                <div class="kpi-card2-label">Registered Users</div>
+                <div class="kpi-card2-val" id="kpi_totalLeads">—</div>
+                <div class="kpi-card2-label">Total Leads</div>
               </div>
               <div class="kpi-card2">
-                <div class="kpi-card2-val" id="kpi_totalPurchases">0</div>
-                <div class="kpi-card2-label">Total Purchases</div>
+                <div class="kpi-card2-val" id="kpi_newLeads">—</div>
+                <div class="kpi-card2-label">New Leads (7 Days)</div>
               </div>
-              <div class="kpi-card2">
-                <div class="kpi-card2-val" id="dashPurchasingUsers">—</div>
-                <div class="kpi-card2-label">Purchasing Customers</div>
+              <div
+                class="kpi-card2"
+                onclick="showPanel('marketplace')"
+                style="cursor: pointer"
+              >
+                <div class="kpi-card2-val" id="kpi_totalProjects">—</div>
+                <div class="kpi-card2-label">Projects Listed</div>
               </div>
             </div>
 
-            <!-- Third Row: Trending + Top Plans -->
-            <div class="dash-row2">
-              <div class="dash-section">
-                <div class="dash-section-title">🔥 Trending Products</div>
-                <div class="dash-table-header">
-                  <span>Product</span><span>Purchases</span>
-                </div>
-                <div id="dash_trendingProducts">
-                  <div
-                    style="
-                      color: var(--muted);
-                      padding: 16px 0;
-                      font-size: 13px;
-                    "
-                  >
-                    No orders yet
-                  </div>
-                </div>
-              </div>
-              <div class="dash-section">
-                <div class="dash-section-title">📊 Business Overview</div>
-                <div style="display: grid; gap: 12px; margin-top: 8px">
-                  <div
-                    style="
-                      display: flex;
-                      justify-content: space-between;
-                      padding: 10px 0;
-                      border-bottom: 1px solid var(--border);
-                      font-size: 13px;
-                    "
-                  >
-                    <span>Registered Users</span
-                    ><strong id="dashOvRegistered">—</strong>
-                  </div>
-                  <div
-                    style="
-                      display: flex;
-                      justify-content: space-between;
-                      padding: 10px 0;
-                      border-bottom: 1px solid var(--border);
-                      font-size: 13px;
-                    "
-                  >
-                    <span>Purchasing Customers</span
-                    ><strong id="dashOvPurchasers">—</strong>
-                  </div>
-                  <div
-                    style="
-                      display: flex;
-                      justify-content: space-between;
-                      padding: 10px 0;
-                      border-bottom: 1px solid var(--border);
-                      font-size: 13px;
-                    "
-                  >
-                    <span>Active Plans</span
-                    ><strong id="kpi_activePlans">0</strong>
-                  </div>
-                  <div
-                    style="
-                      display: flex;
-                      justify-content: space-between;
-                      padding: 10px 0;
-                      font-size: 13px;
-                    "
-                  >
-                    <span>Conversion Rate</span
-                    ><strong id="kpi_conversionRate">0%</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Fourth Row: Sales Distribution -->
+            <!-- Recent Leads -->
             <div class="dash-section" style="margin-bottom: 24px">
-              <div class="dash-section-title">📊 Sales Distribution</div>
-              <div id="dash_salesDistribution" style="margin-top: 12px">
-                <div class="dist-bar-wrap">
-                  <span>Monthly</span>
-                  <div class="dist-bar">
-                    <div
-                      class="dist-fill"
-                      style="width: 0%; background: var(--primary)"
-                    ></div>
-                  </div>
-                  <span>0%</span>
-                </div>
-                <div class="dist-bar-wrap">
-                  <span>Yearly</span>
-                  <div class="dist-bar">
-                    <div
-                      class="dist-fill"
-                      style="width: 0%; background: var(--gold)"
-                    ></div>
-                  </div>
-                  <span>0%</span>
-                </div>
-                <div class="dist-bar-wrap">
-                  <span>One-Time</span>
-                  <div class="dist-bar">
-                    <div
-                      class="dist-fill"
-                      style="width: 100%; background: var(--cyan)"
-                    ></div>
-                  </div>
-                  <span>100%</span>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <div class="dash-section-title">📋 Recent Leads</div>
+                <button
+                  class="btn btn-ghost btn-sm"
+                  onclick="showPanel('submissions')"
+                  style="padding: 6px 14px; font-size: 12px"
+                >
+                  View All →
+                </button>
+              </div>
+              <div class="dash-table-header">
+                <span>Name</span><span>Email</span><span>Date</span>
+              </div>
+              <div id="dash_recentLeads">
+                <div
+                  style="color: var(--muted); padding: 16px 0; font-size: 13px"
+                >
+                  Loading...
                 </div>
               </div>
             </div>
@@ -1989,44 +1831,9 @@
             </button>
           </div>
 
-          <!-- ── PRICING ────────────────────────────────────────── -->
-          <div id="panel-pricing" class="panel">
-            <div class="panel-title">💎 Plans & Pricing</div>
-            <div class="panel-desc">
-              Configure pricing plans for each billing model. Up to 6 plans per
-              billing cycle.
-            </div>
-
-            <!-- Billing Tabs -->
-            <div class="billing-tabs">
-              <button
-                class="billing-tab active"
-                data-cycle="monthly"
-                onclick="switchPricingTab('monthly')"
-              >
-                📅 Monthly
-              </button>
-              <button
-                class="billing-tab"
-                data-cycle="yearly"
-                onclick="switchPricingTab('yearly')"
-              >
-                📆 Yearly
-              </button>
-              <button
-                class="billing-tab"
-                data-cycle="one-time"
-                onclick="switchPricingTab('one-time')"
-              >
-                💳 One-Time
-              </button>
-            </div>
-            <div id="pricingTabContent"></div>
-          </div>
-
-          <!-- ── BOOK FREE CALLS ──────────────────────────────────── -->
+          <!-- ── BOOKING LINK ──────────────────────────────────── -->
           <div id="panel-booking" class="panel">
-            <div class="panel-title">📅 Book Free Calls</div>
+            <div class="panel-title">📅 Booking Link</div>
             <div class="panel-desc">
               Set the booking link for all "Book Free Strategy Call" buttons
               across the website. Supports Google Calendar, Calendly, Cal.com,
@@ -2180,404 +1987,52 @@
             </div>
           </div>
 
-          <!-- ── PLAN ORDERS ─────────────────────────────────────── -->
-          <div id="panel-planorders" class="panel">
-            <div class="panel-title">🧾 Plan Orders</div>
+          <!-- ── TRACKING & ANALYTICS ──────────────────────────── -->
+          <div id="panel-tracking" class="panel">
+            <div class="panel-title">📈 Tracking & Analytics</div>
             <div class="panel-desc">
-              All customers who purchased a pricing plan — with their details,
-              requirements, and payment info.
+              Paste your own tracking IDs to enable analytics site-wide.
+              Nothing is tracked until you add an ID here.
             </div>
-            <div
-              style="
-                display: flex;
-                gap: 12px;
-                margin-bottom: 20px;
-                flex-wrap: wrap;
-                align-items: center;
-              "
-            >
+
+            <div style="max-width: 600px">
+              <div class="form-row">
+                <label>Google Analytics 4 — Measurement ID</label>
+                <input
+                  type="text"
+                  id="tracking_ga4"
+                  placeholder="G-XXXXXXXXXX"
+                />
+              </div>
+              <div class="input-hint" style="margin-top: -10px; margin-bottom: 16px">
+                Find this in Google Analytics under Admin → Data Streams → your
+                web stream.
+              </div>
+
+              <div class="form-row">
+                <label>Meta (Facebook) Pixel ID</label>
+                <input
+                  type="text"
+                  id="tracking_metaPixel"
+                  placeholder="123456789012345"
+                />
+              </div>
+              <div class="input-hint" style="margin-top: -10px; margin-bottom: 16px">
+                Find this in Meta Events Manager → Data Sources → your pixel.
+              </div>
+
               <button
-                class="btn btn-primary btn-sm"
-                onclick="loadPlanOrdersPanel()"
+                class="btn btn-primary"
+                style="margin-top: 4px"
+                onclick="saveTrackingSettings()"
               >
-                🔄 Refresh
+                💾 Save Tracking Settings
               </button>
-              <input
-                type="text"
-                id="planOrderSearch"
-                placeholder="Search by name, email, plan..."
-                oninput="filterPlanOrders()"
-                style="
-                  flex: 1;
-                  min-width: 200px;
-                  padding: 9px 14px;
-                  background: var(--bg3);
-                  border: 1px solid var(--border);
-                  border-radius: 8px;
-                  color: var(--text);
-                  font-size: 13px;
-                "
-              />
-              <select
-                id="planOrderStatus"
-                onchange="filterPlanOrders()"
-                style="
-                  padding: 9px 14px;
-                  background: var(--bg3);
-                  border: 1px solid var(--border);
-                  border-radius: 8px;
-                  color: var(--text);
-                  font-size: 13px;
-                  cursor: pointer;
-                "
-              >
-                <option value="pending">Pending</option>
-                <option value="completed">Completed</option>
-              </select>
+              <span
+                id="trackingSaveStatus"
+                style="margin-left: 14px; font-size: 13px; color: var(--green)"
+              ></span>
             </div>
-            <div id="planOrdersContainer">
-              <div
-                style="
-                  text-align: center;
-                  padding: 60px 20px;
-                  color: var(--muted);
-                "
-              >
-                <div style="font-size: 40px; margin-bottom: 12px">🧾</div>
-                <div style="font-size: 15px; font-weight: 600">
-                  Loading plan orders...
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- ── PLAN MODAL ─────────────────────────────────────── -->
-          <div
-            id="planModalOverlay"
-            style="
-              display: none;
-              position: fixed;
-              inset: 0;
-              background: rgba(0, 0, 0, 0.7);
-              z-index: 9001;
-              backdrop-filter: blur(8px);
-            "
-            onclick="closePlanModalOnBg(event)"
-          >
-            <div
-              id="planModalDrawer"
-              style="
-                position: relative;
-                margin: auto;
-                width: min(680px, 96%);
-                max-height: 92vh;
-                background: var(--bg2);
-                border: 1px solid var(--border);
-                border-radius: 20px;
-                display: flex;
-                flex-direction: column;
-                overflow: hidden;
-                transform: scale(0.95);
-                opacity: 0;
-                transition:
-                  transform 0.25s ease,
-                  opacity 0.25s ease;
-              "
-            >
-              <div
-                style="
-                  padding: 24px 28px;
-                  border-bottom: 1px solid var(--border);
-                  display: flex;
-                  align-items: center;
-                  justify-content: space-between;
-                  flex-shrink: 0;
-                  background: var(--bg3);
-                "
-              >
-                <div>
-                  <div
-                    style="
-                      font-family: var(--font-h);
-                      font-weight: 800;
-                      font-size: 18px;
-                    "
-                    id="planModalTitle"
-                  >
-                    Add Pricing Plan
-                  </div>
-                  <div
-                    style="
-                      font-size: 13px;
-                      color: var(--muted);
-                      margin-top: 2px;
-                    "
-                    id="planModalSub"
-                  >
-                    Configure the plan details below
-                  </div>
-                </div>
-                <button
-                  onclick="closePlanModal()"
-                  style="
-                    width: 36px;
-                    height: 36px;
-                    border-radius: 50%;
-                    background: var(--card);
-                    border: 1px solid var(--border);
-                    color: var(--muted);
-                    cursor: pointer;
-                    font-size: 18px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                  "
-                >
-                  ✕
-                </button>
-              </div>
-              <div style="flex: 1; overflow-y: auto; padding: 28px">
-                <div class="form-grid" style="margin-bottom: 20px">
-                  <div class="form-row" style="margin: 0">
-                    <label>Plan Name *</label
-                    ><input
-                      type="text"
-                      id="pp_name"
-                      placeholder="e.g. AI Accelerator"
-                    />
-                  </div>
-                  <div class="form-row" style="margin: 0">
-                    <label>Badge Label</label
-                    ><input
-                      type="text"
-                      id="pp_badge"
-                      placeholder="e.g. ⚡ Best Value"
-                    />
-                  </div>
-                </div>
-                <div class="form-grid" style="margin-bottom: 20px">
-                  <div class="form-row" style="margin: 0">
-                    <label>Plan Type</label>
-                    <select class="field-input" id="pp_planType">
-                      <option value="free">Free</option>
-                      <option value="paid">Paid</option>
-                    </select>
-                    <div class="input-hint">
-                      Controls whether visitors get the "Book a Call" flow or
-                      the checkout flow
-                    </div>
-                  </div>
-                </div>
-                <div class="form-grid" style="margin-bottom: 20px">
-                  <div class="form-row" style="margin: 0">
-                    <label>Billing Cycle</label>
-                    <select class="field-input" id="pp_billingCycle">
-                      <option value="free">Free</option>
-                      <option value="monthly">Monthly</option>
-                      <option value="yearly">Yearly</option>
-                      <option value="one-time">One-Time</option>
-                    </select>
-                  </div>
-                  <div class="form-row" style="margin: 0">
-                    <label>CTA Button Text</label>
-                    <input
-                      type="text"
-                      id="pp_cta"
-                      placeholder="e.g. Get Started Today"
-                    />
-                  </div>
-                </div>
-                <div class="form-row" style="margin-bottom: 20px">
-                  <label>Badge Color</label>
-                  <div
-                    style="
-                      display: flex;
-                      gap: 8px;
-                      flex-wrap: wrap;
-                      margin-top: 8px;
-                    "
-                    id="planColorPicker"
-                  >
-                    <div
-                      onclick="selectPlanColor('#22c55e', this)"
-                      data-color="#22c55e"
-                      style="
-                        width: 28px;
-                        height: 28px;
-                        border-radius: 50%;
-                        background: #22c55e;
-                        cursor: pointer;
-                        border: 3px solid transparent;
-                      "
-                    ></div>
-                    <div
-                      onclick="selectPlanColor('#7c3aed', this)"
-                      data-color="#7c3aed"
-                      style="
-                        width: 28px;
-                        height: 28px;
-                        border-radius: 50%;
-                        background: #7c3aed;
-                        cursor: pointer;
-                        border: 3px solid transparent;
-                      "
-                    ></div>
-                    <div
-                      onclick="selectPlanColor('#f59e0b', this)"
-                      data-color="#f59e0b"
-                      style="
-                        width: 28px;
-                        height: 28px;
-                        border-radius: 50%;
-                        background: #f59e0b;
-                        cursor: pointer;
-                        border: 3px solid transparent;
-                      "
-                    ></div>
-                    <div
-                      onclick="selectPlanColor('#06b6d4', this)"
-                      data-color="#06b6d4"
-                      style="
-                        width: 28px;
-                        height: 28px;
-                        border-radius: 50%;
-                        background: #06b6d4;
-                        cursor: pointer;
-                        border: 3px solid transparent;
-                      "
-                    ></div>
-                    <div
-                      onclick="selectPlanColor('#ef4444', this)"
-                      data-color="#ef4444"
-                      style="
-                        width: 28px;
-                        height: 28px;
-                        border-radius: 50%;
-                        background: #ef4444;
-                        cursor: pointer;
-                        border: 3px solid transparent;
-                      "
-                    ></div>
-                    <div
-                      onclick="selectPlanColor('#ec4899', this)"
-                      data-color="#ec4899"
-                      style="
-                        width: 28px;
-                        height: 28px;
-                        border-radius: 50%;
-                        background: #ec4899;
-                        cursor: pointer;
-                        border: 3px solid transparent;
-                      "
-                    ></div>
-                  </div>
-                  <input type="hidden" id="pp_badgeColor" value="#22c55e" />
-                </div>
-                <div class="form-row">
-                  <label>Short Description</label
-                  ><textarea
-                    id="pp_desc"
-                    rows="2"
-                    placeholder="One or two sentences explaining this plan…"
-                  ></textarea>
-                </div>
-                <div class="form-row">
-                  <label>Features (one per line)</label>
-                  <textarea
-                    id="pp_features"
-                    rows="7"
-                    placeholder="Full curriculum access&#10;Weekly group coaching calls&#10;AI tools & automation templates&#10;Private community membership"
-                  ></textarea>
-                  <div class="input-hint">
-                    One feature per line — shown as ✓ checkmarks on the card
-                  </div>
-                </div>
-                <div
-                  class="form-row"
-                  style="
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    margin-bottom: 0;
-                  "
-                >
-                  <input
-                    type="checkbox"
-                    id="pp_highlighted"
-                    style="width: 18px; height: 18px; flex-shrink: 0"
-                  />
-                  <label
-                    for="pp_highlighted"
-                    style="margin: 0; font-size: 14px; cursor: pointer"
-                    >Mark as Featured / Highlighted plan (shown with purple glow
-                    border)</label
-                  >
-                </div>
-              </div>
-              <div
-                style="
-                  padding: 20px 28px;
-                  border-top: 1px solid var(--border);
-                  display: flex;
-                  align-items: center;
-                  justify-content: space-between;
-                  gap: 12px;
-                  flex-shrink: 0;
-                  background: var(--bg3);
-                "
-              >
-                <div
-                  style="font-size: 13px; color: var(--muted)"
-                  id="ppSaveStatus"
-                ></div>
-                <div style="display: flex; gap: 10px">
-                  <button
-                    class="btn btn-ghost btn-sm"
-                    onclick="closePlanModal()"
-                  >
-                    Cancel
-                  </button>
-                  <button class="btn btn-primary" onclick="savePricingPlan()">
-                    💾 Save Plan
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- ── FAQ ───────────────────────────────────────────── -->
-          <div id="panel-faq" class="panel">
-            <div class="panel-title">❓ FAQ Section</div>
-            <div class="panel-desc">
-              Add, edit, or remove frequently asked questions.
-            </div>
-
-            <div class="form-grid" style="margin-bottom: 20px">
-              <div>
-                <label>Section Title (HTML allowed)</label>
-                <input type="text" id="faq_title" />
-              </div>
-              <div>
-                <label>Section Subtitle</label>
-                <input type="text" id="faq_subtitle" />
-              </div>
-            </div>
-
-            <div class="array-editor" id="faqEditor"></div>
-            <button
-              class="add-item-btn"
-              style="margin-top: 12px"
-              onclick="addFaqItem()"
-            >
-              + Add FAQ Item
-            </button>
-            <button
-              class="btn btn-primary"
-              style="margin-top: 16px"
-              onclick="saveFaq()"
-            >
-              Save FAQ
-            </button>
           </div>
 
           <!-- ── CTA SECTION ────────────────────────────────────── -->
@@ -3757,6 +3212,19 @@
                   />
                 </div>
                 <div class="form-row">
+                  <label
+                    >Result / Outcome
+                    <span style="font-weight: 400; color: var(--muted)"
+                      >(the headline metric — shown as a badge on the card and
+                      product page)</span
+                    ></label
+                  ><input
+                    type="text"
+                    id="pm_result"
+                    placeholder="e.g. 90% faster response time"
+                  />
+                </div>
+                <div class="form-row">
                   <label>Short Description (shown on product card)</label
                   ><textarea id="pm_desc" rows="2"></textarea>
                 </div>
@@ -3830,9 +3298,10 @@
                   </div>
                   <div class="form-row">
                     <label
-                      >Download URL
+                      >Resource Link
                       <span style="font-weight: 400; color: var(--muted)"
-                        >(link shown to customer after purchase)</span
+                        >(optional — a doc, demo, or file to share with
+                        clients)</span
                       ></label
                     ><input
                       type="text"
@@ -4005,40 +3474,6 @@
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <!-- ── PAYMENT GATEWAYS ───────────────────────────────── -->
-          <div id="panel-bankdetails" class="panel">
-            <div class="panel-title">📞 Booking Link</div>
-            <div class="panel-desc">
-              Set the link used site-wide for every "Book Free Strategy Call"
-              / "Book Free Call" button.
-            </div>
-
-            <div style="max-width: 560px; margin-top: 12px">
-              <div class="form-row">
-                <label>📞 Strategy Call / Booking Link</label
-                ><input
-                  type="url"
-                  id="strategy_call_url"
-                  placeholder="https://calendly.com/yourname or mailto:info@chrixlin.tech"
-                />
-              </div>
-              <div
-                class="input-hint"
-                style="margin-top: -10px; margin-bottom: 16px"
-              >
-                Used for ALL "Book Free Strategy Call" / "Book Free Call"
-                buttons across the entire website.
-              </div>
-              <button
-                class="btn btn-primary"
-                style="margin-top: 4px"
-                onclick="saveCheckoutSettings()"
-              >
-                💾 Save
-              </button>
             </div>
           </div>
 
@@ -4238,264 +3673,6 @@
             </div>
           </div>
 
-          <!-- ── USERS ───────────────────────────────────────────── -->
-          <div id="panel-users" class="panel">
-            <div class="panel-title">👥 Users</div>
-            <div class="panel-desc">
-              All registered customers with purchase history. Updates
-              automatically.
-            </div>
-
-            <!-- Stats row -->
-            <div
-              style="
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 16px;
-                margin-bottom: 28px;
-              "
-              id="userStatsRow"
-            >
-              <div
-                style="
-                  background: var(--card);
-                  border: 1px solid var(--border);
-                  border-radius: 12px;
-                  padding: 20px;
-                "
-              >
-                <div
-                  style="
-                    font-size: 13px;
-                    color: var(--muted);
-                    margin-bottom: 6px;
-                  "
-                >
-                  Total Users
-                </div>
-                <div
-                  id="statTotalUsers"
-                  style="font-size: 28px; font-weight: 800; color: var(--text)"
-                >
-                  —
-                </div>
-              </div>
-              <div
-                style="
-                  background: var(--card);
-                  border: 1px solid var(--border);
-                  border-radius: 12px;
-                  padding: 20px;
-                "
-              >
-                <div
-                  style="
-                    font-size: 13px;
-                    color: var(--muted);
-                    margin-bottom: 6px;
-                  "
-                >
-                  Total Orders
-                </div>
-                <div
-                  id="statTotalOrders"
-                  style="font-size: 28px; font-weight: 800; color: var(--text)"
-                >
-                  —
-                </div>
-              </div>
-            </div>
-
-            <!-- Search + Refresh + Export -->
-            <div
-              style="
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                margin-bottom: 20px;
-              "
-            >
-              <input
-                type="text"
-                id="userSearchInput"
-                placeholder="🔍 Search by name or email..."
-                oninput="filterUsersTable()"
-                style="
-                  flex: 1;
-                  background: var(--card);
-                  border: 1px solid var(--border);
-                  border-radius: 10px;
-                  padding: 10px 16px;
-                  color: var(--text);
-                  font-size: 14px;
-                  outline: none;
-                "
-              />
-              <button
-                class="btn btn-ghost"
-                onclick="loadUsersPanel()"
-                style="white-space: nowrap"
-              >
-                ↻ Refresh
-              </button>
-              <button
-                class="btn btn-ghost"
-                onclick="exportUsersExcel()"
-                style="
-                  white-space: nowrap;
-                  border-color: rgba(34, 197, 94, 0.4);
-                  color: #22c55e;
-                "
-              >
-                ⬇ Export Excel
-              </button>
-            </div>
-
-            <!-- Users Table -->
-            <div
-              style="
-                background: var(--card);
-                border: 1px solid var(--border);
-                border-radius: 16px;
-                overflow: hidden;
-              "
-            >
-              <table
-                id="usersTable"
-                style="width: 100%; border-collapse: collapse; font-size: 14px"
-              >
-                <thead>
-                  <tr style="border-bottom: 1px solid var(--border)">
-                    <th
-                      style="
-                        padding: 14px 20px;
-                        text-align: left;
-                        color: var(--muted);
-                        font-weight: 600;
-                        font-size: 12px;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      "
-                    >
-                      User
-                    </th>
-                    <th
-                      style="
-                        padding: 14px 20px;
-                        text-align: left;
-                        color: var(--muted);
-                        font-weight: 600;
-                        font-size: 12px;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      "
-                    >
-                      Phone
-                    </th>
-                    <th
-                      style="
-                        padding: 14px 20px;
-                        text-align: left;
-                        color: var(--muted);
-                        font-weight: 600;
-                        font-size: 12px;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      "
-                    >
-                      Orders
-                    </th>
-                    <th
-                      style="
-                        padding: 14px 20px;
-                        text-align: left;
-                        color: var(--muted);
-                        font-weight: 600;
-                        font-size: 12px;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      "
-                    >
-                      Joined
-                    </th>
-                    <th
-                      style="
-                        padding: 14px 20px;
-                        text-align: left;
-                        color: var(--muted);
-                        font-weight: 600;
-                        font-size: 12px;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      "
-                    >
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody id="usersTableBody">
-                  <tr>
-                    <td
-                      colspan="6"
-                      style="
-                        padding: 48px;
-                        text-align: center;
-                        color: var(--muted);
-                      "
-                    >
-                      Loading users...
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- User Detail Modal -->
-            <div
-              id="userDetailModal"
-              style="
-                display: none;
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.7);
-                backdrop-filter: blur(8px);
-                z-index: 1000;
-                align-items: center;
-                justify-content: center;
-              "
-            >
-              <div
-                style="
-                  background: #1a1a2e;
-                  border: 1px solid rgba(255, 255, 255, 0.12);
-                  border-radius: 20px;
-                  padding: 36px;
-                  width: min(680px, 96vw);
-                  max-height: 80vh;
-                  overflow-y: auto;
-                  position: relative;
-                "
-              >
-                <button
-                  onclick="closeUserModal()"
-                  style="
-                    position: absolute;
-                    top: 16px;
-                    right: 16px;
-                    background: none;
-                    border: none;
-                    color: var(--muted);
-                    font-size: 22px;
-                    cursor: pointer;
-                  "
-                >
-                  ✕
-                </button>
-                <div id="userDetailContent"></div>
-              </div>
-            </div>
-          </div>
-
 
           <!-- ── SETTINGS ────────────────────────────────────────── -->
           <div id="panel-settings" class="panel">
@@ -4511,7 +3688,7 @@
                 margin-top: 8px;
               "
             >
-              <div class="settings-card" onclick="showPanel('bankdetails')">
+              <div class="settings-card" onclick="showPanel('booking')">
                 <div class="settings-card-icon">📞</div>
                 <div class="settings-card-title">Booking Link</div>
                 <div class="settings-card-desc">
@@ -4654,10 +3831,10 @@
       // ─── DEFAULTS (must match index.html) ─────────────────────────────────────────
       const DEFAULT_DATA = {
         stats: [
-          { value: "160+", label: "Entrepreneurs Trained" },
-          { value: "$1.8M+", label: "Mentee Revenue Generated" },
-          { value: "60", label: "Days Avg. to First Client" },
-          { value: "4.9★", label: "Average Mentor Rating" },
+          { value: "160+", label: "Businesses Served" },
+          { value: "$1.8M+", label: "Client Value Delivered" },
+          { value: "48h", label: "Avg. Deployment Time" },
+          { value: "4.9★", label: "Average Client Rating" },
         ],
         story: [
           {
@@ -4668,173 +3845,129 @@
           {
             year: "2021",
             title: "First Big Win",
-            text: "Built a PS5 automation tool during the GPU shortage. First taste of what AI bots could generate.",
+            text: "Built a PS5 automation tool during the GPU shortage. First taste of what AI bots could generate for a business.",
           },
           {
             year: "2022–2023",
             title: "Scaling to $150K",
-            text: "By senior year, crossed $150,000 in revenue. Word spread fast — people wanted to learn the playbook.",
+            text: "By senior year, crossed $150,000 in revenue building automation tools for real businesses. Word spread fast.",
           },
           {
             year: "2024–2025",
             title: "Chrixlin AI Rise Launch",
-            text: "Launched the mentorship program. Featured in Business Insider. 160+ students, $1.8M+ in combined revenue.",
+            text: "Launched Chrixlin AI Rise as a dedicated AI automation studio. Featured in Business Insider. 160+ businesses served.",
           },
         ],
         process: [
           {
-            week: "Week 1–2",
+            week: "Step 1",
             num: "01",
-            title: "Strategy & Foundation",
-            text: "Book your free call. We build your personalized 60-day AI business roadmap based on your skills, goals, and timeline. Zero guesswork.",
+            title: "Strategy Call & Roadmap",
+            text: "Book your free call. We map out exactly what to automate, why, and how — based on your business, tools, and goals. Zero guesswork.",
           },
           {
-            week: "Week 2–4",
+            week: "Step 2",
             num: "02",
-            title: "Build & Master AI Tools",
-            text: "Learn the exact AI tools clients pay $2,000–$10,000+ for. Build real projects under mentor guidance. No tutorials — actual deliverables.",
+            title: "Build & Deploy",
+            text: "We design and build your custom AI bot or automation system, then deploy it to your business — fully tested, fully documented.",
           },
           {
-            week: "Week 4+",
+            week: "Step 3",
             num: "03",
-            title: "Get Clients & Scale",
-            text: "Start earning with live paid projects. We personally connect you with clients. Hit your income targets and scale to $5K–$50K/mo.",
+            title: "Launch & Ongoing Support",
+            text: "Your automation goes live. We handle onboarding, monitor performance, and provide ongoing support and updates as your business grows.",
           },
         ],
         features: [
           {
             icon: "🎯",
             title: "Personalized Strategy Call",
-            text: "A custom 60-day business roadmap tailored to your background, skills, and income goals. Not a generic plan.",
-          },
-          {
-            icon: "📹",
-            title: "Weekly Live Coaching",
-            text: "Group sessions covering AI tools, client acquisition, pricing strategies, and scaling your business.",
-          },
-          {
-            icon: "💼",
-            title: "Real Client Projects",
-            text: "Access to live paid projects starting Week 4. We make warm introductions — you close and deliver.",
-          },
-          {
-            icon: "🤝",
-            title: "1-on-1 Mentorship",
-            text: "Direct access to mentors who have built $50K+/month AI businesses. Get unstuck fast.",
+            text: "A custom automation roadmap tailored to your business, workflows, and goals. Not a generic plan.",
           },
           {
             icon: "🛠️",
-            title: "Done-With-You Support",
-            text: "We don't just teach. We roll up our sleeves and help you build and deliver your first projects.",
+            title: "Custom-Built Automation",
+            text: "Every bot and workflow is built specifically for your business — not a one-size-fits-all template.",
+          },
+          {
+            icon: "⚡",
+            title: "Fast Deployment",
+            text: "Most projects go from strategy call to live automation in days, not months.",
+          },
+          {
+            icon: "📝",
+            title: "Full Documentation",
+            text: "Every project ships with complete documentation and a clean handover — no black boxes.",
+          },
+          {
+            icon: "🤝",
+            title: "Ongoing Support",
+            text: "Direct access to your project team for updates, tweaks, and troubleshooting after launch.",
           },
           {
             icon: "🏆",
-            title: "Private Community",
-            text: "Network with 160+ AI entrepreneurs. Share wins, get feedback, find accountability partners.",
+            title: "Proven Track Record",
+            text: "160+ businesses served, with real results across voice AI, chatbots, and lead generation systems.",
           },
         ],
         testimonials: [
           {
             name: "Shubham S.",
-            role: "Software Engineer @ Big Tech",
+            role: "Operations Lead, Logistics Co.",
             emoji: "👨‍💻",
-            result: "$0 → $120,000+ in profits",
+            result: "90% faster response time",
             quote:
-              "I was skeptical — I already had a good job. But within 8 weeks I was earning an extra $12,000 a month. The mentorship showed me exactly how to package my existing skills for premium AI clients.",
+              "The voice AI agent Chrixlin built now handles most of our incoming appointment calls. Our response time dropped by 90% and the team finally has room to breathe.",
             stars: 5,
           },
           {
             name: "Ilya P.",
-            role: "Former Food Delivery Driver",
+            role: "Founder, D2C E-commerce Brand",
             emoji: "🚗",
-            result: "$0 → $100,000+ in profits",
+            result: "$100K+ in recovered sales",
             quote:
-              "I had zero tech background. The program walked me through everything step by step. I made $1,000 in my very first day selling an AI QR generator. It changed my entire life trajectory.",
+              "We had zero automation before this. The lead recovery bot alone paid for itself in the first week and has since recovered over $100K in sales we would've lost.",
             stars: 5,
           },
           {
             name: "Ron M.",
-            role: "College Student",
+            role: "Owner, Local Service Business",
             emoji: "🎓",
-            result: "$0 → $30,000+ secured",
+            result: "30+ hours saved per month",
             quote:
-              "While my classmates were applying for $15/hr internships, I closed my first $25,000 AI development project. This is the best investment I've made in my college career, bar none.",
+              "Booking, reminders, and follow-ups used to eat my whole week. Now it's all automated. This is the best investment I've made in my business, bar none.",
             stars: 5,
           },
           {
             name: "Sarah C.",
-            role: "Former Marketing Manager",
+            role: "Marketing Director, Growth Agency",
             emoji: "💼",
-            result: "$0 → $30K+/month agency",
+            result: "3x more qualified leads",
             quote:
-              "I quit my corporate job after 3 months in the program. I was terrified at first, but the structured program made it easy to start. Now I run a full AI agency making $30K+ a month on my own terms.",
+              "The custom lead-gen system Chrixlin built plugged straight into our CRM. We're now qualifying 3x more leads with the same size team.",
             stars: 5,
           },
         ],
         forWho: [
           {
             icon: "🏢",
-            title: "9-5 Employees",
-            text: "Tired of trading time for money. Ready to build a business that generates income while you sleep.",
+            title: "Service Businesses",
+            text: "Automate bookings, reminders, and customer follow-ups so your team can focus on the work that matters.",
           },
           {
-            icon: "🎓",
-            title: "College Students",
-            text: "Build real income and high-demand skills while your peers are still figuring out their career.",
+            icon: "🛒",
+            title: "E-commerce Brands",
+            text: "Recover abandoned carts, automate support, and personalize outreach at a scale your team can't match manually.",
           },
           {
             icon: "💻",
-            title: "Freelancers",
-            text: "Level up from generic gigs to high-value AI development projects that pay 10x more.",
+            title: "Agencies & Consultants",
+            text: "White-label AI automation for your clients, or free up your own team's time with custom internal tools.",
           },
           {
             icon: "⚙️",
-            title: "Tech Professionals",
-            text: "Monetize your existing skills in the fastest-growing market before your role gets automated.",
-          },
-        ],
-        pricingFeatures: [
-          "Full mentorship program",
-          "Weekly live coaching sessions",
-          "Direct client introductions",
-          "All AI tools & templates",
-          "1-on-1 mentor access",
-          "Lifetime community access",
-          "Done-with-you project support",
-          "Income strategy playbook",
-        ],
-        faq: [
-          {
-            q: "Do I need any coding or technical experience to start?",
-            a: "None at all. Our program is designed for complete beginners. We use no-code and low-code AI tools that anyone can learn in days, not months. The majority of our students had zero technical background when they started and were building real AI products within their first two weeks.",
-          },
-          {
-            q: "What's the difference between the Free Strategy Call and the paid plans?",
-            a: "The Free Strategy Call is a zero-pressure 60-min 1-on-1 consultation where we map out a personalised AI business roadmap for you — completely free. The AI Starter ($197/mo) gives you full curriculum access, group coaching, and templates to build your first AI product. The AI Accelerator ($497/mo) adds 2× weekly 1-on-1 mentorship, direct client introductions, and a done-with-you delivery model.",
-          },
-          {
-            q: "How soon can I expect to land my first paying client?",
-            a: "Students who follow the program consistently typically land their first paid project between weeks 4 and 8. The AI Accelerator plan includes direct client introductions, which dramatically shortens that timeline. Our record is 11 days from enrolment to first payment.",
-          },
-          {
-            q: "What kind of AI products will I be building and selling?",
-            a: "You'll build AI voice assistants, chatbots, sales automation tools, content AI systems, lead generation bots, and custom AI agents. These solutions solve real business problems and typically sell for $2,000–$15,000 as one-time builds, or $500–$3,000/month as managed services.",
-          },
-          {
-            q: "How much time do I need to commit each week?",
-            a: "We recommend 8–12 hours per week to follow the program at full pace — roughly 2 hours of live sessions and the rest on projects and client work. Many of our students run this alongside a full-time job. You can also go at your own pace with the self-study materials.",
-          },
-          {
-            q: "Is there a refund policy?",
-            a: "Refunds on paid mentorship plans (AI Starter, AI Accelerator, Full Project Delivery) are considered on a case-by-case basis before meaningful access has been granted or work has commenced. Please contact info@chrixlin.tech with your order details. Project purchases (AI systems, templates, digital tools) are strictly non-refundable once the product has been downloaded or made available from your dashboard.",
-          },
-          {
-            q: "Can I switch between Monthly and Yearly billing?",
-            a: "Yes. You can start monthly and upgrade to an annual plan at any time to lock in the savings (up to 20% off). Contact us at info@chrixlin.tech and we'll handle the switch immediately.",
-          },
-          {
-            q: "What AI tools and platforms do you teach?",
-            a: "We cover the most in-demand tools businesses are paying for right now: Make.com, Zapier, Voiceflow, Botpress, OpenAI API, Retell AI, Vapi, and more. We update the curriculum every quarter so you're always learning what's current and sellable.",
+            title: "Local Businesses",
+            text: "Never miss a call or lead again — voice agents and automation that work around the clock, even after hours.",
           },
         ],
       };
@@ -4890,15 +4023,6 @@
 
       // ─── NAV / PANELS ─────────────────────────────────────────────────────────────
       function showPanel(name) {
-        const hiddenPanels = [
-          'booking','planorders','submissions','analytics',
-          'theme','seo','terms','privacy','navmenu',
-          'hero','stats','story','process','features',
-          'testimonials','forwho','faq','cta','footer'
-        ];
-        if (hiddenPanels.includes(name)) {
-          name = 'dashboard';
-        }
         localStorage.setItem("admin_active_panel", name);
         document
           .querySelectorAll(".panel")
@@ -4913,14 +4037,11 @@
           );
         const titles = {
           dashboard: "CEO Dashboard",
-          users: "Users",
-          pricing: "Plans & Pricing",
-          booking: "Book Free Calls",
-          planorders: "Plan Orders",
+          booking: "Booking Link",
+          tracking: "Tracking & Analytics",
           marketplace: "Projects",
           submissions: "Call Submissions",
           settings: "Settings",
-          bankdetails: "Booking Link",
           theme: "Theme & Colors",
           seo: "SEO Settings",
           terms: "Terms & Conditions",
@@ -4933,9 +4054,9 @@
           features: "Features",
           testimonials: "Testimonials",
           forwho: "Who It's For",
-          faq: "FAQ",
           cta: "CTA Section",
           footer: "Footer",
+          navmenu: "Nav Menu Visibility",
         };
         document.getElementById("panelTitle").textContent =
           titles[name] || name;
@@ -4943,53 +4064,14 @@
           loadCategoriesAdmin();
           populateMarketplace();
         }
-        if (name === "pricing") {
-          var pricingCont = document.getElementById("pricingTabContent");
-          if (pricingCont)
-            pricingCont.innerHTML =
-              '<div style="text-align:center;padding:60px 20px;color:var(--muted)"><div style="font-size:32px;margin-bottom:12px">⏳</div><div style="font-size:14px">Loading plans from database…</div></div>';
-          if (window.ChrixlinDB && ChrixlinDB.loadAllPricingPlansAdmin) {
-            ChrixlinDB.loadAllPricingPlansAdmin()
-              .then(function (plans) {
-                if (!plans || plans.length === 0) {
-                  // Supabase table is empty — seed it with the defaults so edits persist going forward
-                  var defaults = JSON.parse(
-                    JSON.stringify(DEFAULT_PRICING_PLANS_ADMIN),
-                  );
-                  localStorage.setItem(
-                    "chrixlin_pricing",
-                    JSON.stringify(defaults),
-                  );
-                  defaults.forEach(function (p, i) {
-                    var planWithOrder = Object.assign({}, p, {
-                      sort_order: i + 1,
-                    });
-                    ChrixlinDB.upsertPricingPlan(planWithOrder).catch(
-                      function () {},
-                    );
-                  });
-                }
-                renderPricingPlanCards(_activePricingCycle);
-              })
-              .catch(function () {
-                renderPricingPlanCards(_activePricingCycle);
-              });
-          } else {
-            renderPricingPlanCards(_activePricingCycle);
-          }
-        }
         if (name === "booking") {
           populateBooking();
         }
-        if (name === "planorders") {
-          loadPlanOrdersPanel();
+        if (name === "tracking") {
+          populateTrackingSettings();
         }
         if (name === "dashboard") refreshDashboard();
-        if (name === "users") loadUsersPanel();
         if (name === "submissions") loadSubmissions();
-        if (name === "bankdetails") {
-          populateCheckoutSettings();
-        }
         if (name === "terms") {
           loadTermsPanel();
         }
@@ -5007,10 +4089,12 @@
         if (!isOpen) showPanel("settings");
       }
 
-      function toggleContentEditor() {
-        const el = document.getElementById("contentEditorSub");
-        if (el)
-          el.style.display = el.style.display === "none" ? "block" : "none";
+      function toggleContentMenu() {
+        const menu = document.getElementById("contentSubMenu");
+        const arrow = document.getElementById("contentMenuArrow");
+        const isOpen = menu.style.display !== "none";
+        menu.style.display = isOpen ? "none" : "block";
+        arrow.textContent = isOpen ? "▾" : "▴";
       }
 
       function toggleBox(header) {
@@ -5034,15 +4118,15 @@
         // Hero
         document.getElementById("hero_badge").value = val(
           "hero.badge",
-          "Join 160+ AI Entrepreneurs",
+          "Trusted by 160+ Businesses",
         );
         document.getElementById("hero_title").value = val(
           "hero.title",
-          "Build a <span class='text-grad'>$5K–$50K/Mo</span> AI Bot Business",
+          "Custom <span class='text-grad'>AI Automation</span> Built For Your Business",
         );
         document.getElementById("hero_subtitle").value = val(
           "hero.subtitle",
-          "Learn to create, sell, and scale AI automation solutions for real businesses. Get your first paying client by Week 4 — or you don't pay a cent.",
+          "We design, build, and deploy AI bots and automation systems that save your team hours every week. Book a free strategy call to see what's possible for your business.",
         );
         document.getElementById("hero_cta1").value = val(
           "hero.cta1",
@@ -5058,7 +4142,7 @@
         );
         document.getElementById("hero_trust2").value = val(
           "hero.trust2",
-          "No Experience Required",
+          "Fast Deployment",
         );
         document.getElementById("hero_trust3").value = val(
           "hero.trust3",
@@ -5068,7 +4152,7 @@
         // Story text keys
         document.getElementById("story_title").value = val(
           "story.title",
-          "From College Student to <span class='text-grad'>AI Business Pioneer</span>",
+          "From College Project to <span class='text-grad'>AI Automation Studio</span>",
         );
         document.getElementById("story_p1").value = val(
           "story.p1",
@@ -5076,7 +4160,7 @@
         );
         document.getElementById("story_p2").value = val(
           "story.p2",
-          "By senior year, I had crossed $150,000 in revenue building AI and automation tools. After being featured in Business Insider, I made it my mission to help others replicate the same path — faster.",
+          "By senior year, I had crossed $150,000 in revenue building AI and automation tools for real businesses. After being featured in Business Insider, I built Chrixlin AI Rise to bring that same playbook to businesses that want automation done right — fast, custom, and hands-off for them.",
         );
         document.getElementById("story_press").value = val(
           "story.press",
@@ -5090,61 +4174,51 @@
         // Process text keys
         document.getElementById("process_title").value = val(
           "process.title",
-          "Your <span class='text-grad'>60-Day Roadmap</span> to Your First AI Client",
+          "From <span class='text-grad'>Call to Live Automation</span> in Weeks, Not Months",
         );
         document.getElementById("process_subtitle").value = val(
           "process.subtitle",
-          "A proven system built on 160+ success stories. No guesswork — just a clear path to income.",
+          "A proven delivery process built on 160+ successful deployments. No guesswork — just a clear path to a working system.",
         );
 
         // Features text keys
         document.getElementById("features_title").value = val(
           "features.title",
-          "Everything You Need to <span class='text-grad'>Succeed</span>",
+          "Everything Included in <span class='text-grad'>Every Project</span>",
         );
         document.getElementById("features_subtitle").value = val(
           "features.subtitle",
-          "Not just a course — a complete system for building your AI business with real support at every step.",
+          "Not just a bot — a complete build with real support at every step, from strategy to launch and beyond.",
         );
 
         // Testimonials text keys
         document.getElementById("testimonials_title").value = val(
           "testimonials.title",
-          "Students Who <span class='text-grad'>Changed Their Lives</span>",
+          "Businesses That <span class='text-grad'>Automated & Scaled</span>",
         );
         document.getElementById("testimonials_subtitle").value = val(
           "testimonials.subtitle",
-          "These aren't cherry-picked outliers. This is what happens when you follow the system.",
+          "These aren't cherry-picked outliers. This is what happens when automation is built right.",
         );
 
         // ForWho text keys
         document.getElementById("forWho_title").value = val(
           "forWho.title",
-          "This Program is Built For <span class='text-grad'>Ambitious People</span>",
+          "Built For <span class='text-grad'>Businesses Ready to Automate</span>",
         );
         document.getElementById("forWho_subtitle").value = val(
           "forWho.subtitle",
-          "Whether you're escaping a 9-5, in college, or already freelancing — we've helped people in every situation.",
-        );
-
-        // FAQ
-        document.getElementById("faq_title").value = val(
-          "faq.title",
-          "Frequently Asked <span class='text-grad'>Questions</span>",
-        );
-        document.getElementById("faq_subtitle").value = val(
-          "faq.subtitle",
-          "Everything you need to know before booking your call.",
+          "Whether you're a solo founder or running a growing team — we've helped businesses in every situation save time with automation.",
         );
 
         // CTA
         document.getElementById("cta_title").value = val(
           "cta.title",
-          "Your AI Business <span class='text-grad'>Starts Today</span>",
+          "Your Automation <span class='text-grad'>Starts Today</span>",
         );
         document.getElementById("cta_subtitle").value = val(
           "cta.subtitle",
-          "Join 160+ entrepreneurs who took the first step. Book your free 1-on-1 strategy call and get a personalised AI business roadmap — no strings attached.",
+          "Join 160+ businesses who took the first step. Book your free 1-on-1 strategy call and get a personalised automation roadmap — no strings attached.",
         );
         document.getElementById("cta_btnText").value = val(
           "cta.btnText",
@@ -5170,7 +4244,7 @@
         );
         document.getElementById("footer_tagline").value = val(
           "footer.tagline",
-          "Helping ambitious people build profitable AI businesses through mentorship, real projects, and a proven results-driven system.",
+          "Helping businesses save time and grow with custom AI automation — built, deployed, and supported end-to-end.",
         );
         document.getElementById("footer_email").value = val(
           "footer.email",
@@ -5192,11 +4266,11 @@
         // SEO
         document.getElementById("seo_title").value = val(
           "seo.title",
-          "Chrixlin AI Rise — Build Your AI Bot Business",
+          "Chrixlin AI Rise — Custom AI Automation for Your Business",
         );
         document.getElementById("seo_description").value = val(
           "seo.description",
-          "Learn to build and sell AI automation bots. Join 160+ entrepreneurs who hit $5K–$50K/month — results-driven mentorship model.",
+          "We design, build, and deploy custom AI bots and automation systems for businesses — voice agents, chatbots, lead generation, and more. Book a free strategy call.",
         );
 
         // Build array editors
@@ -5206,8 +4280,6 @@
         buildFeaturesEditor();
         buildTestimonialsEditor();
         buildForWhoEditor();
-        // buildPricingFeaturesEditor() — removed (pricing now uses billing tabs)
-        buildFaqEditor();
       }
 
       // ─── STATS EDITOR ─────────────────────────────────────────────────────────────
@@ -5436,493 +4508,6 @@
         buildForWhoEditor();
       }
 
-      // ─── PRICING PLANS MANAGER ────────────────────────────────────────────────────
-      const DEFAULT_PRICING_PLANS_ADMIN = [
-        {
-          id: 1,
-          name: "Free Strategy Call",
-          priceLabel: "FREE",
-          price: 0,
-          period: "No credit card needed",
-          billingCycle: "monthly",
-          badge: "🎯 No Risk",
-          badgeColor: "#22c55e",
-          badgeBg: "rgba(34,197,94,0.12)",
-          description:
-            "Come with your business idea — we'll help you validate it, spot the opportunity, and map a clear path forward. No sales pitch, just honest strategy.",
-          cta: "Book My Free Call →",
-          ctaStyle: "outline",
-          highlighted: false,
-          features: [
-            "60-min 1-on-1 strategy session",
-            "Market opportunity audit",
-            "Skill gap analysis",
-            "Income potential assessment",
-            "Competitor landscape overview",
-            "Zero sales pressure · No credit card required",
-          ],
-        },
-        {
-          id: 2,
-          name: "AI Starter",
-          priceLabel: "$197",
-          price: 197,
-          period: "Per month",
-          billingCycle: "monthly",
-          badge: "🔥 Most Popular",
-          badgeColor: "#6366f1",
-          badgeBg: "rgba(99,102,241,0.15)",
-          description:
-            "Everything you need to build your first AI product and land your first clients.",
-          cta: "Get Started Today",
-          ctaStyle: "primary",
-          highlighted: false,
-          features: [
-            "Full curriculum access",
-            "Weekly group coaching calls",
-            "AI tools & automation templates",
-            "Private community membership",
-            "Client proposal templates",
-            "Email & chat support",
-          ],
-        },
-        {
-          id: 3,
-          name: "AI Accelerator",
-          priceLabel: "$497",
-          price: 497,
-          period: "Per month · Cancel anytime",
-          billingCycle: "monthly",
-          badge: "⚡ Best Value",
-          badgeColor: "#f59e0b",
-          badgeBg: "rgba(245,158,11,0.12)",
-          description:
-            "Hands-on monthly support from first client to final delivery. We guide you through every project, help manage client expectations, and stay by your side every step of the way.",
-          cta: "Join AI Accelerator",
-          ctaStyle: "primary",
-          highlighted: true,
-          features: [
-            "2× weekly 1-on-1 mentorship calls",
-            "New client onboarding support",
-            "Post-sale client relationship guidance",
-            "Project delivery coaching",
-            "Ongoing partial support between milestones",
-            "Priority support channel",
-            "Dedicated results support",
-          ],
-        },
-        {
-          id: 4,
-          name: "Free Strategy Call",
-          priceLabel: "FREE",
-          price: 0,
-          period: "No credit card needed",
-          billingCycle: "yearly",
-          badge: "🎯 No Risk",
-          badgeColor: "#22c55e",
-          badgeBg: "rgba(34,197,94,0.12)",
-          description:
-            "Come with your business idea — we'll help you validate it, spot the opportunity, and map a clear path forward. No sales pitch, just honest strategy.",
-          cta: "Book My Free Call →",
-          ctaStyle: "outline",
-          highlighted: false,
-          features: [
-            "60-min 1-on-1 strategy session",
-            "Market opportunity audit",
-            "Skill gap analysis",
-            "Income potential assessment",
-            "Competitor landscape overview",
-            "Zero sales pressure · No credit card required",
-          ],
-        },
-        {
-          id: 5,
-          name: "AI Starter Yearly",
-          priceLabel: "$1,497",
-          price: 1497,
-          period: "Per year · Save 37%",
-          billingCycle: "yearly",
-          badge: "🔥 Most Popular",
-          badgeColor: "#6366f1",
-          badgeBg: "rgba(99,102,241,0.15)",
-          description:
-            "Everything you need to build your first AI product and land your first clients.",
-          cta: "Get Started Today",
-          ctaStyle: "primary",
-          highlighted: false,
-          features: [
-            "Full curriculum access",
-            "Weekly group coaching calls",
-            "AI tools & automation templates",
-            "Private community membership",
-            "Client proposal templates",
-            "Email & chat support",
-          ],
-        },
-        {
-          id: 6,
-          name: "AI Accelerator Yearly",
-          priceLabel: "$3,997",
-          price: 3997,
-          period: "Per year · Best value",
-          billingCycle: "yearly",
-          badge: "⚡ Best Value",
-          badgeColor: "#f59e0b",
-          badgeBg: "rgba(245,158,11,0.12)",
-          description:
-            "Done-with-you. We connect you with clients, co-deliver projects, and guarantee results.",
-          cta: "Join AI Accelerator",
-          ctaStyle: "primary",
-          highlighted: true,
-          features: [
-            "Everything in Starter, plus:",
-            "2× weekly 1-on-1 mentorship calls",
-            "Direct client introductions",
-            "Done-with-you project delivery",
-            "Priority Slack support channel",
-            "Dedicated results support",
-          ],
-        },
-        {
-          id: 7,
-          name: "Free Strategy Call",
-          priceLabel: "FREE",
-          price: 0,
-          period: "No credit card needed",
-          billingCycle: "one-time",
-          badge: "🎯 No Risk",
-          badgeColor: "#22c55e",
-          badgeBg: "rgba(34,197,94,0.12)",
-          description:
-            "Come with your business idea — we'll help you validate it, spot the opportunity, and map a clear path forward. No sales pitch, just honest strategy.",
-          cta: "Book My Free Call →",
-          ctaStyle: "outline",
-          highlighted: false,
-          features: [
-            "60-min 1-on-1 strategy session",
-            "Market opportunity audit",
-            "Skill gap analysis",
-            "Income potential assessment",
-            "Competitor landscape overview",
-            "Zero sales pressure · No credit card required",
-          ],
-        },
-        {
-          id: 8,
-          name: "Full Project Delivery",
-          priceLabel: "$1,497",
-          price: 1497,
-          period: "One-time · Base project price",
-          billingCycle: "one-time",
-          badge: "🚀 Done For You",
-          badgeColor: "#7c3aed",
-          badgeBg: "rgba(124,58,237,0.15)",
-          description:
-            "You bring the vision — we handle everything from scoping to final delivery. Complete end-to-end AI project support at a single flat rate. Complex scope discussed transparently before any extra charge.",
-          cta: "Start My Project →",
-          ctaStyle: "primary",
-          highlighted: true,
-          features: [
-            "End-to-end project scoping & planning",
-            "Full AI solution design & build",
-            "Testing, QA & quality assurance",
-            "Deployment & integration setup",
-            "Client handover documentation",
-            "Team training session included",
-            "30-day post-launch support",
-            "Transparent pricing — no surprise fees",
-          ],
-        },
-      ];
-
-      function loadPricingPlans(cycle) {
-        try {
-          const s = localStorage.getItem("chrixlin_pricing");
-          const parsed = s ? JSON.parse(s) : [];
-          // Always fall back to defaults if localStorage is empty
-          const all =
-            parsed && parsed.length
-              ? parsed
-              : JSON.parse(JSON.stringify(DEFAULT_PRICING_PLANS_ADMIN));
-          if (!cycle) return all;
-          const filtered = all.filter(
-            (p) => (p.billingCycle || "monthly") === cycle,
-          );
-          return filtered.length
-            ? filtered
-            : JSON.parse(JSON.stringify(DEFAULT_PRICING_PLANS_ADMIN)).filter(
-                (p) => (p.billingCycle || "monthly") === cycle,
-              );
-        } catch {
-          return cycle
-            ? JSON.parse(JSON.stringify(DEFAULT_PRICING_PLANS_ADMIN)).filter(
-                (p) => (p.billingCycle || "monthly") === cycle,
-              )
-            : JSON.parse(JSON.stringify(DEFAULT_PRICING_PLANS_ADMIN));
-        }
-      }
-
-      let _ppEditId = null;
-      let _activePricingCycle = "monthly";
-
-      function switchPricingTab(cycle) {
-        _activePricingCycle = cycle;
-        document
-          .querySelectorAll(".billing-tab")
-          .forEach((b) =>
-            b.classList.toggle("active", b.dataset.cycle === cycle),
-          );
-        renderPricingPlanCards(cycle);
-      }
-
-      function populatePricing() {
-        renderPricingPlanCards(_activePricingCycle);
-      }
-
-      function renderPricingPlanCards(cycle) {
-        cycle = cycle || _activePricingCycle || "monthly";
-        const plans = loadPricingPlans(cycle);
-        const container = document.getElementById("pricingTabContent");
-        if (!container) return;
-
-        const cycleLabel =
-          { monthly: "Monthly", yearly: "Yearly", "one-time": "One-Time" }[
-            cycle
-          ] || cycle;
-        let html = "";
-
-        if (!plans.length) {
-          html = `<div style="text-align:center;padding:60px 20px;color:var(--muted)">
-      <div style="font-size:48px;margin-bottom:12px">💎</div>
-      <div style="font-family:var(--font-h);font-weight:700;font-size:16px;margin-bottom:8px">No ${cycleLabel} plans yet</div>
-      <div style="font-size:14px;margin-bottom:20px">Add up to 3 plans for this billing cycle.</div>
-      <button class="btn btn-primary btn-sm" onclick="openPlanModal(null)">＋ Add First Plan</button>
-    </div>`;
-        } else {
-          html =
-            `<div style="display:flex;flex-direction:column;gap:12px">` +
-            plans
-              .map(
-                (p) => `
-        <div style="background:var(--bg3);border:1px solid ${p.visible === false ? "rgba(100,100,100,0.2)" : "var(--border)"};border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:16px;transition:border-color 0.2s;opacity:${p.visible === false ? "0.55" : "1"}" onmouseover="this.style.borderColor='var(--border-h)'" onmouseout="this.style.borderColor='${p.visible === false ? "rgba(100,100,100,0.2)" : "var(--border)"}'">
-          <div style="flex:1;min-width:0">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap">
-              <span style="font-family:var(--font-h);font-weight:700;font-size:15px">${escHtml(p.name)}</span>
-              <span style="background:${p.badgeBg || "rgba(99,102,241,0.15)"};color:${p.badgeColor || "#a78bfa"};padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700">${escHtml(p.badge)}</span>
-              ${p.highlighted ? '<span style="background:rgba(245,158,11,0.15);color:#f59e0b;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600">⭐ Featured</span>' : ""}
-              ${p.visible === false ? '<span style="background:rgba(100,100,100,0.15);color:#6b7280;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600">🙈 Hidden</span>' : ""}
-            </div>
-            <div style="font-size:13px;color:var(--muted)">${(p.features || []).length} features · <span style="color:var(--cyan)">${escHtml(p.billingCycle || "monthly")}</span></div>
-          </div>
-          <div style="display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end">
-            <button class="btn btn-sm" onclick="togglePlanVisibility('${p.id}')" style="padding:7px 14px;font-size:13px;${p.visible === false ? "background:rgba(34,197,94,0.12);color:#22c55e;border:1px solid rgba(34,197,94,0.25)" : "background:rgba(107,114,128,0.12);color:#9ca3af;border:1px solid rgba(107,114,128,0.25)"}">${p.visible === false ? "👁 Show" : "🙈 Hide"}</button>
-            <button class="btn btn-ghost btn-sm" onclick="openPlanModal('${p.id}')" style="padding:7px 14px;font-size:13px">✏️ Edit</button>
-            <button class="btn btn-sm" onclick="deletePricingPlan('${p.id}')" style="padding:7px 14px;font-size:13px;background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.25)">🗑 Delete</button>
-          </div>
-        </div>`,
-              )
-              .join("") +
-            `</div>`;
-
-          if (plans.length < 6) {
-            html += `<div style="margin-top:12px"><button class="btn btn-primary" onclick="openPlanModal(null)">＋ Add ${cycleLabel} Plan</button></div>`;
-          }
-        }
-        container.innerHTML = html;
-      }
-
-      function openPlanModal(id) {
-        _ppEditId = id;
-        const overlay = document.getElementById("planModalOverlay");
-        const drawer = document.getElementById("planModalDrawer");
-        [
-          "pp_name",
-          "pp_badge",
-          "pp_cta",
-          "pp_desc",
-          "pp_features",
-        ].forEach((i) => {
-          const el = document.getElementById(i);
-          if (el) el.value = "";
-        });
-        document.getElementById("pp_planType").value = "free";
-        document.getElementById("pp_highlighted").checked = false;
-        document.getElementById("ppSaveStatus").textContent = "";
-        document.getElementById("pp_billingCycle").value =
-          _activePricingCycle || "monthly";
-        document.getElementById("pp_badgeColor").value = "#22c55e";
-        _selectedPlanColor = "#22c55e";
-        document
-          .querySelectorAll("#planColorPicker div")
-          .forEach((d) => (d.style.border = "3px solid transparent"));
-        var firstSwatch = document.querySelector(
-          '#planColorPicker div[data-color="#22c55e"]',
-        );
-        if (firstSwatch) firstSwatch.style.border = "3px solid white";
-        if (id !== null && id !== undefined) {
-          const p = loadPricingPlans().find((x) => String(x.id) === String(id));
-          if (p) {
-            document.getElementById("planModalTitle").textContent = "Edit Plan";
-            document.getElementById("planModalSub").textContent =
-              "Update the plan details below";
-            document.getElementById("pp_name").value = p.name || "";
-            document.getElementById("pp_badge").value = p.badge || "";
-            document.getElementById("pp_planType").value =
-              p.price === 0 ? "free" : "paid";
-            document.getElementById("pp_badgeColor").value =
-              p.badgeColor || "#22c55e";
-            _selectedPlanColor = p.badgeColor || "#22c55e";
-            document.querySelectorAll("#planColorPicker div").forEach((d) => {
-              d.style.border =
-                d.dataset.color === _selectedPlanColor
-                  ? "3px solid white"
-                  : "3px solid transparent";
-            });
-            document.getElementById("pp_cta").value = p.cta || "";
-            document.getElementById("pp_desc").value = p.description || "";
-            document.getElementById("pp_features").value = (
-              p.features || []
-            ).join("\n");
-            document.getElementById("pp_highlighted").checked = !!p.highlighted;
-            document.getElementById("pp_billingCycle").value =
-              p.billingCycle || _activePricingCycle || "monthly";
-          }
-        } else {
-          document.getElementById("planModalTitle").textContent =
-            "Add Pricing Plan";
-          document.getElementById("planModalSub").textContent =
-            "Configure the plan details below";
-        }
-        overlay.style.display = "flex";
-        overlay.style.alignItems = "center";
-        overlay.style.justifyContent = "center";
-        setTimeout(() => {
-          drawer.style.transform = "scale(1)";
-          drawer.style.opacity = "1";
-        }, 10);
-        document.body.style.overflow = "hidden";
-      }
-
-      function closePlanModal() {
-        const drawer = document.getElementById("planModalDrawer");
-        drawer.style.transform = "scale(0.95)";
-        drawer.style.opacity = "0";
-        setTimeout(() => {
-          document.getElementById("planModalOverlay").style.display = "none";
-        }, 250);
-        document.body.style.overflow = "";
-      }
-
-      function closePlanModalOnBg(e) {
-        if (e.target === document.getElementById("planModalOverlay"))
-          closePlanModal();
-      }
-
-      function savePricingPlan() {
-        const name = document.getElementById("pp_name").value.trim();
-        if (!name) {
-          document.getElementById("pp_name").style.borderColor = "var(--red)";
-          document.getElementById("ppSaveStatus").textContent =
-            "⚠ Plan name required";
-          document.getElementById("ppSaveStatus").style.color = "var(--red)";
-          return;
-        }
-        document.getElementById("pp_name").style.borderColor = "";
-        const allPlans = loadPricingPlans();
-        const billingCycle =
-          document.getElementById("pp_billingCycle").value ||
-          _activePricingCycle ||
-          "monthly";
-        const plansForCycle = allPlans.filter(
-          (p) => (p.billingCycle || "monthly") === billingCycle,
-        );
-        const isFree = document.getElementById("pp_planType").value === "free";
-        const badgeColor =
-          typeof _selectedPlanColor !== "undefined" && _selectedPlanColor
-            ? _selectedPlanColor
-            : document.getElementById("pp_badgeColor").value.trim() ||
-              "#6366f1";
-        const plan = {
-          id:
-            _ppEditId !== null
-              ? _ppEditId
-              : allPlans.reduce((m, p) => Math.max(m, p.id || 0), 0) + 1,
-          name,
-          badge: document.getElementById("pp_badge").value.trim(),
-          price: isFree ? 0 : 1,
-          billingCycle,
-          badgeColor,
-          badgeBg: badgeColor + "22",
-          description: document.getElementById("pp_desc").value.trim(),
-          cta: document.getElementById("pp_cta").value.trim(),
-          ctaStyle: isFree ? "outline" : "primary",
-          highlighted: document.getElementById("pp_highlighted").checked,
-          features: document
-            .getElementById("pp_features")
-            .value.split("\n")
-            .map((f) => f.trim())
-            .filter(Boolean),
-        };
-        if (_ppEditId !== null && _ppEditId !== undefined) {
-          const idx = allPlans.findIndex(
-            (p) => String(p.id) === String(_ppEditId),
-          );
-          if (idx !== -1) allPlans[idx] = plan;
-          else allPlans.push(plan);
-        } else {
-          if (plansForCycle.length >= 6) {
-            document.getElementById("ppSaveStatus").textContent =
-              "Max 6 plans per billing cycle";
-            document.getElementById("ppSaveStatus").style.color = "var(--red)";
-            return;
-          }
-          allPlans.push(plan);
-        }
-        localStorage.setItem("chrixlin_pricing", JSON.stringify(allPlans));
-        if (typeof ChrixlinDB !== "undefined")
-          ChrixlinDB.upsertPricingPlan(plan).catch(() => {});
-        renderPricingPlanCards(_activePricingCycle);
-        showToast("💎 Pricing plan saved!");
-        closePlanModal();
-      }
-
-      function deletePricingPlan(id) {
-        const plans = loadPricingPlans();
-        const p = plans.find((x) => String(x.id) === String(id));
-        if (!p) return;
-        if (!confirm(`Delete "${p.name}"?`)) return;
-        localStorage.setItem(
-          "chrixlin_pricing",
-          JSON.stringify(plans.filter((x) => String(x.id) !== String(id))),
-        );
-        if (typeof ChrixlinDB !== "undefined")
-          ChrixlinDB.deletePricingPlan(id).catch(() => {});
-        renderPricingPlanCards(_activePricingCycle);
-        showToast("🗑 Plan deleted");
-      }
-
-      function togglePlanVisibility(id) {
-        const plans = loadPricingPlans();
-        const p = plans.find((x) => String(x.id) === String(id));
-        if (!p) return;
-        p.visible = p.visible === false ? true : false;
-        localStorage.setItem("chrixlin_pricing", JSON.stringify(plans));
-        if (typeof ChrixlinDB !== "undefined")
-          ChrixlinDB.upsertPricingPlan(p).catch(() => {});
-        renderPricingPlanCards(_activePricingCycle);
-        showToast(
-          p.visible
-            ? "👁 Plan visible on landing page"
-            : "🙈 Plan hidden from landing page",
-        );
-      }
-
-      // Keep old savePricing for backwards compatibility (no-op now)
-      function savePricing() {
-        showToast("💎 Plans auto-saved!");
-      }
-
-      // ─── TERMS & CONDITIONS ───────────────────────────────────────────────────────
       var _termsDefault = null; // loaded lazily from terms.html script
 
       // ─── RICH EDITOR HELPERS ──────────────────────────────────────────────────────
@@ -6241,225 +4826,38 @@
         showToast("📅 Booking link saved!");
       }
 
-      // ─── PLAN ORDERS ──────────────────────────────────────────────────────────────
-      var _allPlanOrders = [];
-
-      async function loadPlanOrdersPanel() {
-        var cont = document.getElementById("planOrdersContainer");
-        if (!cont) return;
-        cont.innerHTML =
-          '<div style="text-align:center;padding:40px;color:var(--muted)"><div style="width:32px;height:32px;border:3px solid rgba(124,58,237,0.2);border-top-color:#7c3aed;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px"></div>Loading orders...</div>';
-        if (typeof ChrixlinDB === "undefined") {
-          cont.innerHTML =
-            '<div style="text-align:center;padding:40px;color:var(--muted)">Supabase not connected. Orders saved when customers purchase plans on chrixlin.tech.</div>';
-          return;
-        }
+      // ─── TRACKING & ANALYTICS ─────────────────────────────────────────────────────
+      function populateTrackingSettings() {
         try {
-          _allPlanOrders = await ChrixlinDB.loadPricingOrders();
-          renderPlanOrders(_allPlanOrders);
-        } catch (e) {
-          cont.innerHTML =
-            '<div style="text-align:center;padding:40px;color:#f87171">Failed to load orders. Check Supabase connection.</div>';
+          var saved = JSON.parse(
+            localStorage.getItem("chrixlin_tracking") || "{}",
+          );
+          document.getElementById("tracking_ga4").value = saved.ga4 || "";
+          document.getElementById("tracking_metaPixel").value =
+            saved.metaPixel || "";
+        } catch (e) {}
+      }
+
+      function saveTrackingSettings() {
+        var obj = {
+          ga4: document.getElementById("tracking_ga4").value.trim(),
+          metaPixel: document
+            .getElementById("tracking_metaPixel")
+            .value.trim(),
+          updatedAt: new Date().toISOString(),
+        };
+        localStorage.setItem("chrixlin_tracking", JSON.stringify(obj));
+        if (typeof ChrixlinDB !== "undefined") {
+          ChrixlinDB.saveToSupabase("site_settings", "tracking_ids", obj).catch(
+            function () {},
+          );
         }
-      }
-
-      function filterPlanOrders() {
-        var q = (
-          document.getElementById("planOrderSearch").value || ""
-        ).toLowerCase();
-        var status =
-          (document.getElementById("planOrderStatus") || {}).value || "";
-        var filtered = _allPlanOrders.filter(function (o) {
-          var matchQ =
-            !q ||
-            (
-              o.first_name +
-              " " +
-              o.last_name +
-              " " +
-              o.email +
-              " " +
-              ((o.extra_data && o.extra_data.plan_name) || "")
-            )
-              .toLowerCase()
-              .includes(q);
-          var matchS = !status || (o.status || "pending") === status;
-          return matchQ && matchS;
-        });
-        renderPlanOrders(filtered);
-      }
-
-      function renderPlanOrders(orders) {
-        var cont = document.getElementById("planOrdersContainer");
-        if (!cont) return;
-        if (!orders.length) {
-          cont.innerHTML =
-            '<div style="text-align:center;padding:60px 20px;color:var(--muted)"><div style="font-size:48px;margin-bottom:12px">🧾</div><div style="font-size:15px;font-weight:600">No plan orders yet</div><div style="font-size:13px;margin-top:8px">Orders will appear here once customers purchase a pricing plan.</div></div>';
-          return;
-        }
-        var html =
-          '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">' +
-          '<thead><tr style="background:var(--bg3);border-bottom:2px solid var(--border)">' +
-          [
-            "Date",
-            "Customer",
-            "Email",
-            "Phone",
-            "Plan",
-            "Amount",
-            "Method",
-            "Status",
-            "Requirements",
-            "PDF",
-          ]
-            .map(function (h) {
-              return (
-                '<th style="padding:12px 14px;text-align:left;font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">' +
-                h +
-                "</th>"
-              );
-            })
-            .join("") +
-          "</tr></thead><tbody>";
-
-        orders.forEach(function (o, i) {
-          var ed = o.extra_data || {};
-          var date = o.created_at
-            ? new Date(o.created_at).toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-              })
-            : "—";
-          var name =
-            ((o.first_name || "") + " " + (o.last_name || "")).trim() || "—";
-          var plan = ed.plan_name || o.product_title || "—";
-          var cycle = ed.plan_cycle ? " (" + ed.plan_cycle + ")" : "";
-          var req = ed.requirements || "";
-          var pdfUrl = ed.pdf_url || "";
-          var statusColor =
-            o.status === "completed"
-              ? "#22c55e"
-              : o.status === "pending"
-                ? "#f59e0b"
-                : "#9ca3af";
-          var bg = i % 2 === 0 ? "" : "background:var(--bg3)";
-          html +=
-            '<tr style="border-bottom:1px solid var(--border);' +
-            bg +
-            '" onmouseover="this.style.background=\'var(--border)\'" onmouseout="this.style.background=\'' +
-            (i % 2 === 0 ? "" : "var(--bg3)") +
-            "'\">" +
-            '<td style="padding:12px 14px;white-space:nowrap;color:var(--muted)">' +
-            date +
-            "</td>" +
-            '<td style="padding:12px 14px;font-weight:600;color:var(--text)">' +
-            escHtml(name) +
-            "</td>" +
-            '<td style="padding:12px 14px"><a href="mailto:' +
-            escHtml(o.email || "") +
-            '" style="color:#a78bfa">' +
-            escHtml(o.email || "—") +
-            "</a></td>" +
-            '<td style="padding:12px 14px;color:var(--sub)">' +
-            escHtml(o.phone || "—") +
-            "</td>" +
-            '<td style="padding:12px 14px"><span style="font-weight:700;color:#a78bfa">' +
-            escHtml(plan) +
-            '</span><span style="color:var(--muted)">' +
-            escHtml(cycle) +
-            "</span></td>" +
-            '<td style="padding:12px 14px;font-weight:800;color:#22c55e">' +
-            escHtml(o.product_price || "—") +
-            "</td>" +
-            '<td style="padding:12px 14px;color:var(--sub)">' +
-            escHtml(o.payment_method || "—") +
-            "</td>" +
-            '<td style="padding:12px 14px"><span style="background:' +
-            statusColor +
-            "22;color:" +
-            statusColor +
-            ';padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">' +
-            escHtml(o.status || "pending") +
-            "</span>" +
-            "<br><button onclick=\"markPlanOrderComplete('" +
-            o.id +
-            '\')" style="margin-top:4px;font-size:11px;padding:2px 8px;border-radius:4px;background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.25);cursor:pointer">Mark Done</button></td>' +
-            '<td style="padding:12px 14px;max-width:200px">' +
-            (req
-              ? '<div title="' +
-                escHtml(req) +
-                '" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px;color:var(--sub);cursor:help">' +
-                escHtml(req.slice(0, 60)) +
-                (req.length > 60 ? "…" : "") +
-                "</div>"
-              : '<span style="color:var(--muted)">—</span>') +
-            "</td>" +
-            '<td style="padding:12px 14px">' +
-            (pdfUrl
-              ? '<a href="' +
-                escHtml(pdfUrl) +
-                '" target="_blank" style="color:#a78bfa;font-size:12px">📎 View</a>'
-              : '<span style="color:var(--muted)">—</span>') +
-            "</td>" +
-            "</tr>";
-        });
-        html += "</tbody></table></div>";
-        html +=
-          '<div style="margin-top:14px;font-size:12px;color:var(--muted)">Showing ' +
-          orders.length +
-          " order" +
-          (orders.length !== 1 ? "s" : "") +
-          "</div>";
-        cont.innerHTML = html;
-      }
-
-      async function markPlanOrderComplete(id) {
-        if (!id || typeof ChrixlinDB === "undefined") return;
-        try {
-          const client = ChrixlinDB._getClient();
-          if (!client) {
-            showToast("Supabase not connected", "error");
-            return;
-          }
-          const { error } = await client
-            .from("orders")
-            .update({ status: "completed" })
-            .eq("id", id);
-          if (error) throw error;
-          showToast("✅ Order marked as completed");
-          loadPlanOrdersPanel();
-        } catch (e) {
-          showToast("Failed to update order", "error");
-        }
-      }
-
-      // ─── FAQ EDITOR ───────────────────────────────────────────────────────────────
-      function buildFaqEditor() {
-        const el = document.getElementById("faqEditor");
-        el.innerHTML = data.faq
-          .map(
-            (f, i) => `
-    <div class="array-item open">
-      <div class="array-item-header" onclick="toggleArrayItem(this)">
-        <div class="array-item-label">${f.q.substring(0, 50)}${f.q.length > 50 ? "..." : ""}</div>
-        <div class="array-item-actions">
-          <button class="array-item-delete" onclick="event.stopPropagation();removeItem(data.faq,${i},buildFaqEditor)">Remove</button>
-        </div>
-      </div>
-      <div class="array-item-body">
-        <div class="form-row"><label>Question</label><input type="text" value="${f.q.replace(/"/g, "&quot;")}" oninput="data.faq[${i}].q=this.value"></div>
-        <div class="form-row"><label>Answer</label><textarea oninput="data.faq[${i}].a=this.value">${f.a}</textarea></div>
-      </div>
-    </div>
-  `,
-          )
-          .join("");
-      }
-
-      function addFaqItem() {
-        data.faq.push({ q: "New Question?", a: "Your answer here." });
-        buildFaqEditor();
+        var statusEl = document.getElementById("trackingSaveStatus");
+        statusEl.textContent = "✓ Saved!";
+        setTimeout(function () {
+          statusEl.textContent = "";
+        }, 3000);
+        showToast("📈 Tracking settings saved!");
       }
 
       // ─── REMOVE ITEM HELPER ────────────────────────────────────────────────────────
@@ -6553,31 +4951,6 @@
         showToast('"Who It\'s For" saved!');
       }
 
-      function savePricing() {
-        saveTextKeys({
-          "pricing.title": document.getElementById("pricing_title").value,
-          "pricing.subtitle": document.getElementById("pricing_subtitle").value,
-          "pricing.cardTitle":
-            document.getElementById("pricing_cardTitle").value,
-          "pricing.cardSub": document.getElementById("pricing_cardSub").value,
-          "pricing.cta": document.getElementById("pricing_cta").value,
-          "pricing.note": document.getElementById("pricing_note").value,
-        });
-        saveData(
-          Object.assign(loadData(), { pricingFeatures: data.pricingFeatures }),
-        );
-        showToast("Pricing section saved!");
-      }
-
-      function saveFaq() {
-        saveTextKeys({
-          "faq.title": document.getElementById("faq_title").value,
-          "faq.subtitle": document.getElementById("faq_subtitle").value,
-        });
-        saveData(Object.assign(loadData(), { faq: data.faq }));
-        showToast("FAQ saved!");
-      }
-
       function saveCta() {
         saveTextKeys({
           "cta.title": document.getElementById("cta_title").value,
@@ -6632,7 +5005,6 @@
         saveFeatures();
         saveTestimonials();
         saveForWho();
-        saveFaq();
         saveCta();
         saveFooter();
         saveSeo();
@@ -6730,17 +5102,6 @@
                 sort_order: i + 1,
               })),
             ).catch(() => {});
-          if (data.faq)
-            ChrixlinDB.saveSectionItems(
-              "faq_items",
-              data.faq.map((s, i) => ({
-                id: i + 1,
-                question: s.q || "",
-                answer: s.a || "",
-                sort_order: i + 1,
-                is_active: true,
-              })),
-            ).catch(() => {});
           // Save hero text keys
           if (keys) {
             const heroData = {};
@@ -6801,8 +5162,6 @@
         { key: "whatYouGet", label: "What You Get", href: "#features" },
         { key: "results", label: "Results", href: "#testimonials" },
         { key: "marketplace", label: "Projects", href: "marketplace.html" },
-        { key: "pricing", label: "Pricing", href: "#pricing" },
-        { key: "faq", label: "FAQ", href: "#faq" },
       ];
 
       function loadNavVisibility() {
@@ -7006,6 +5365,7 @@
           <div style="display:flex;align-items:center;gap:10px;margin-top:4px;font-size:12px;color:var(--muted)">
             <span style="background:${color}22;color:${color};padding:2px 8px;border-radius:4px;font-weight:600">${escHtml(p.categoryLabel || p.category)}</span>
             ${p.badge ? `<span style="background:rgba(245,158,11,0.15);color:var(--gold);padding:2px 8px;border-radius:4px">${escHtml(p.badge)}</span>` : ""}
+            ${p.result ? `<span style="background:rgba(34,197,94,0.12);color:#4ade80;padding:2px 8px;border-radius:4px">📈 ${escHtml(p.result)}</span>` : ""}
           </div>
         </div>
         <div style="display:flex;gap:8px;flex-shrink:0">
@@ -7038,6 +5398,7 @@
           "pm_emoji",
           "pm_badge",
           "pm_title",
+          "pm_result",
           "pm_desc",
           "pm_longdesc",
           "pm_image",
@@ -7074,6 +5435,7 @@
             document.getElementById("pm_category").value =
               p.category || "voice-ai";
             document.getElementById("pm_title").value = p.title || "";
+            document.getElementById("pm_result").value = p.result || "";
             document.getElementById("pm_desc").value = p.desc || "";
             document.getElementById("pm_longdesc").value =
               p.longDesc || p.desc || "";
@@ -7254,6 +5616,7 @@
           categoryLabel: catOpt ? catOpt.text : catEl.value,
           categoryClass: CAT_CLS[catEl.value] || "cat-thumb-voice-ai",
           title: title,
+          result: document.getElementById("pm_result").value.trim(),
           desc: document.getElementById("pm_desc").value.trim(),
           longDesc: document.getElementById("pm_longdesc").value.trim(),
           image: document.getElementById("pm_image").value.trim(),
@@ -7338,269 +5701,66 @@
         showToast("🛒 Projects saved!");
       }
 
-      // ─── CHECKOUT SETTINGS ────────────────────────────────────────────────────────
-      var DEFAULT_CHECKOUT = {
-        strategyCallUrl: "mailto:info@chrixlin.tech",
-        contactEmail: "info@chrixlin.tech",
-        currency: "$",
-        cgst: 0,
-        cgstEnabled: false,
-        sgst: 0,
-        sgstEnabled: false,
-        successMsg:
-          "Thank you for your purchase! Our team will contact you within 24 hours to schedule your onboarding call.",
-        refundPolicy:
-          "Plan refunds considered on a case-by-case basis before access is granted. Project purchases are non-refundable once downloaded. Contact info@chrixlin.tech for queries.",
-      };
-
-      function loadCheckoutSettings() {
-        try {
-          var s = localStorage.getItem("chrixlin_checkout_settings");
-          // Also try old key for backward compat
-          if (!s) s = localStorage.getItem("chrixlin_bank_details");
-          return s
-            ? Object.assign({}, DEFAULT_CHECKOUT, JSON.parse(s))
-            : Object.assign({}, DEFAULT_CHECKOUT);
-        } catch (e) {
-          return Object.assign({}, DEFAULT_CHECKOUT);
-        }
-      }
-
-      function populateCheckoutSettings() {
-        var b = loadCheckoutSettings();
-        var el = document.getElementById("strategy_call_url");
-        if (el) el.value = b.strategyCallUrl || "";
-      }
-
-      // Keep old name for backward compat
-      function populateBankDetails() {
-        populateCheckoutSettings();
-      }
-      function loadBankDetails() {
-        return loadCheckoutSettings();
-      }
-
-      function saveCheckoutSettings() {
-        var b = Object.assign({}, loadCheckoutSettings(), {
-          strategyCallUrl:
-            (document.getElementById("strategy_call_url") || {}).value || "",
-        });
-        localStorage.setItem("chrixlin_checkout_settings", JSON.stringify(b));
-        if (typeof ChrixlinDB !== "undefined")
-          ChrixlinDB.savePaymentSettings(b).catch(function () {});
-        showToast("📞 Booking link saved!");
-      }
-
-      // Keep old name for backward compat
-      function saveBankDetails() {
-        saveCheckoutSettings();
-      }
-
-      function _getOrdersLS() {
-        try {
-          return JSON.parse(localStorage.getItem("chrixlin_orders") || "[]");
-        } catch {
-          return [];
-        }
-      }
-
       // ─── DASHBOARD REFRESH ────────────────────────────────────────────────────────
-      let _dashFilter = "all";
-
-      function setDashFilter(f) {
-        _dashFilter = f;
-        document
-          .querySelectorAll(".dash-filter-btn")
-          .forEach((b) => b.classList.toggle("active", b.dataset.filter === f));
-        refreshDashboard();
-      }
-
       async function refreshDashboard() {
         var set = function (id, val) {
           var el = document.getElementById(id);
           if (el) el.textContent = val;
         };
-        // Show loading placeholders
-        [
-          "kpi_totalPurchases",
-          "dashRegisteredUsers",
-          "dashPurchasingUsers",
-          "dashPendingOrders",
-          "dashOvRegistered",
-          "dashOvPurchasers",
-          "dashOvPending",
-        ].forEach(function (id) {
-          set(id, "…");
-        });
+        set("kpi_totalLeads", "…");
+        set("kpi_newLeads", "…");
+        set("kpi_totalProjects", "…");
 
-        var orders = [],
-          profiles = [];
-        if (typeof ChrixlinDB !== "undefined") {
+        var leads = [];
+        if (
+          typeof ChrixlinDB !== "undefined" &&
+          typeof ChrixlinDB.getStrategyCallSubmissions === "function"
+        ) {
           try {
-            orders = await ChrixlinDB.adminGetAllOrders();
+            leads = await ChrixlinDB.getStrategyCallSubmissions();
           } catch (e) {
-            orders = [];
-          }
-          try {
-            profiles = await ChrixlinDB.adminGetAllProfiles();
-          } catch (e) {
-            profiles = [];
+            leads = [];
           }
         }
-
-        var filter = _dashFilter || "all";
-        var now = Date.now();
-        var filtered = orders.filter(function (o) {
-          if (filter === "weekly")
-            return now - new Date(o.created_at || 0).getTime() < 7 * 86400000;
-          if (filter === "monthly")
-            return now - new Date(o.created_at || 0).getTime() < 30 * 86400000;
-          if (filter === "yearly")
-            return now - new Date(o.created_at || 0).getTime() < 365 * 86400000;
-          return true;
+        leads = leads || [];
+        leads.sort(function (a, b) {
+          return new Date(b.created_at || 0) - new Date(a.created_at || 0);
         });
 
-        var parseAmt = function (o) {
-          return parseFloat(o.amount || o.product_price || "0") || 0;
-        };
-        var purchasers = new Set(
-          filtered.map(function (o) {
-            return o.user_id || o.user_email;
-          }),
-        ).size;
-        var pendingOrds = filtered.filter(function (o) {
-          return o.status === "pending" || o.status === "processing";
+        var now = Date.now();
+        var newLeads = leads.filter(function (l) {
+          return now - new Date(l.created_at || 0).getTime() < 7 * 86400000;
         }).length;
 
-        set("kpi_totalPurchases", filtered.length);
-        set("dashRegisteredUsers", profiles.length);
-        set("dashPurchasingUsers", purchasers || filtered.length);
-        set("dashOvRegistered", profiles.length);
-        set("dashOvPurchasers", purchasers || filtered.length);
+        set("kpi_totalLeads", leads.length);
+        set("kpi_newLeads", newLeads);
+        set("kpi_totalProjects", (mpData && mpData.products ? mpData.products.length : 0));
 
-        // KPIs that may exist from older markup
-        var convEl = document.getElementById("kpi_conversionRate");
-        if (convEl)
-          convEl.textContent =
-            (filtered.length > 0
-              ? Math.round(
-                  (filtered.filter(function (o) {
-                    return parseAmt(o) > 0;
-                  }).length /
-                    filtered.length) *
-                    100,
-                )
-              : 0) + "%";
-        var plansEl = document.getElementById("kpi_activePlans");
-        if (plansEl) plansEl.textContent = loadPricingPlans().length;
-
-        // Trending products
-        var prodMap = {};
-        filtered.forEach(function (o) {
-          var t = o.product_title || "Unknown";
-          if (!prodMap[t]) prodMap[t] = { purchases: 0, revenue: 0 };
-          prodMap[t].purchases++;
-          prodMap[t].revenue += parseAmt(o);
-        });
-        var trending = Object.entries(prodMap)
-          .sort(function (a, b) {
-            return b[1].purchases - a[1].purchases;
-          })
-          .slice(0, 5);
-        var trendEl = document.getElementById("dash_trendingProducts");
-        if (trendEl)
-          trendEl.innerHTML = trending.length
-            ? trending
-                .map(function (e) {
+        var recentEl = document.getElementById("dash_recentLeads");
+        if (recentEl) {
+          var recent = leads.slice(0, 5);
+          recentEl.innerHTML = recent.length
+            ? recent
+                .map(function (l) {
+                  var date = l.created_at
+                    ? new Date(l.created_at).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : "—";
                   return (
                     '<div class="dash-table-row"><span>' +
-                    escHtml(e[0]) +
+                    escHtml(l.name || "—") +
                     "</span><span>" +
-                    e[1].purchases +
+                    escHtml(l.email || "—") +
+                    "</span><span>" +
+                    date +
                     "</span></div>"
                   );
                 })
                 .join("")
-            : '<div style="color:var(--muted);padding:16px 0;font-size:13px">No orders yet</div>';
-
-        // Sales distribution
-        var monthly = filtered.filter(function (o) {
-          return o.billing_cycle === "monthly";
-        }).length;
-        var yearly = filtered.filter(function (o) {
-          return o.billing_cycle === "yearly";
-        }).length;
-        var onetime = filtered.filter(function (o) {
-          return !o.billing_cycle || o.billing_cycle === "one-time";
-        }).length;
-        var total = monthly + yearly + onetime || 1;
-        var distEl = document.getElementById("dash_salesDistribution");
-        if (distEl)
-          distEl.innerHTML =
-            '<div class="dist-bar-wrap"><span>Monthly</span><div class="dist-bar"><div class="dist-fill" style="width:' +
-            Math.round((monthly / total) * 100) +
-            '%;background:var(--primary)"></div></div><span>' +
-            Math.round((monthly / total) * 100) +
-            "%</span></div>" +
-            '<div class="dist-bar-wrap"><span>Yearly</span><div class="dist-bar"><div class="dist-fill" style="width:' +
-            Math.round((yearly / total) * 100) +
-            '%;background:var(--gold)"></div></div><span>' +
-            Math.round((yearly / total) * 100) +
-            "%</span></div>" +
-            '<div class="dist-bar-wrap"><span>One-Time</span><div class="dist-bar"><div class="dist-fill" style="width:' +
-            Math.round((onetime / total) * 100) +
-            '%;background:var(--cyan)"></div></div><span>' +
-            Math.round((onetime / total) * 100) +
-            "%</span></div>";
-      }
-
-      function exportPDF() {
-        window.print();
-      }
-
-      function exportExcel() {
-        const orders = _getOrdersLS();
-        if (!orders.length) {
-          showToast("No orders to export");
-          return;
+            : '<div style="color:var(--muted);padding:16px 0;font-size:13px">No leads yet</div>';
         }
-        const headers = [
-          "Order Ref",
-          "Product",
-          "Price",
-          "First Name",
-          "Last Name",
-          "Email",
-          "Phone",
-          "Country",
-          "Method",
-          "Status",
-          "Date",
-        ];
-        const rows = orders.map((o) => [
-          o.order_ref || o.orderRef || "",
-          o.product_title || o.productTitle || "",
-          o.product_price || o.productPrice || "",
-          o.first_name || o.firstName || "",
-          o.last_name || o.lastName || "",
-          o.email || "",
-          o.phone || "",
-          o.country || "",
-          o.payment_method || o.paymentMethod || "",
-          o.status || "pending",
-          new Date(o.created_at || o.date || Date.now()).toLocaleDateString(),
-        ]);
-        const csv = [headers, ...rows]
-          .map((r) =>
-            r.map((c) => '"' + String(c).replace(/"/g, '""') + '"').join(","),
-          )
-          .join("\n");
-        const a = document.createElement("a");
-        a.href = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
-        a.download =
-          "chrixlin-orders-" + new Date().toISOString().slice(0, 10) + ".csv";
-        a.click();
-        showToast("📊 CSV exported!");
       }
 
       // ─── INIT ─────────────────────────────────────────────────────────────────────
@@ -7997,338 +6157,6 @@
         window.location.reload();
       }
 
-      // ─── USERS PANEL ──────────────────────────────────────────────────────────────
-      var _allUsers = [];
-      var _allOrders = [];
-
-      async function loadUsersPanel() {
-        if (typeof ChrixlinDB === "undefined") {
-          document.getElementById("usersTableBody").innerHTML =
-            '<tr><td colspan="6" style="padding:48px;text-align:center;color:var(--muted)">Database not initialized. Please refresh the page and log in.</td></tr>';
-          return;
-        }
-        var client = ChrixlinDB._getClient ? ChrixlinDB._getClient() : null;
-        if (!client) {
-          document.getElementById("usersTableBody").innerHTML =
-            '<tr><td colspan="6" style="padding:48px;text-align:center;color:#f59e0b">Please log in as admin to view users.</td></tr>';
-          return;
-        }
-        document.getElementById("usersTableBody").innerHTML =
-          '<tr><td colspan="6" style="padding:48px;text-align:center;color:var(--muted)">Loading...</td></tr>';
-        try {
-          [_allUsers, _allOrders] = await Promise.all([
-            ChrixlinDB.adminGetAllProfiles(),
-            ChrixlinDB.adminGetAllOrders(),
-          ]);
-          renderUsersTable(_allUsers);
-          // Update stats
-          document.getElementById("statTotalUsers").textContent =
-            _allUsers.length;
-          document.getElementById("statTotalOrders").textContent =
-            _allOrders.length;
-        } catch (e) {
-          document.getElementById("usersTableBody").innerHTML =
-            '<tr><td colspan="6" style="padding:48px;text-align:center;color:#ef4444">Error loading users. Make sure you are logged in as admin.</td></tr>';
-        }
-      }
-
-      function renderUsersTable(users) {
-        var tbody = document.getElementById("usersTableBody");
-        if (!users.length) {
-          tbody.innerHTML =
-            '<tr><td colspan="6" style="padding:48px;text-align:center;color:var(--muted)">No users registered yet.</td></tr>';
-          return;
-        }
-        tbody.innerHTML = users
-          .map(function (u) {
-            var initials = (u.full_name || u.email || "?")
-              .substring(0, 2)
-              .toUpperCase();
-            var orders = _allOrders.filter(function (o) {
-              return o.user_id === u.id;
-            });
-            var joined = u.created_at
-              ? new Date(u.created_at).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })
-              : "—";
-            return (
-              '<tr style="border-bottom:1px solid rgba(255,255,255,0.06);transition:background 0.2s" onmouseover="this.style.background=\'rgba(124,58,237,0.06)\'" onmouseout="this.style.background=\'\'">' +
-              '<td style="padding:14px 20px">' +
-              '<div style="display:flex;align-items:center;gap:12px">' +
-              '<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0">' +
-              initials +
-              "</div>" +
-              "<div>" +
-              '<div style="font-weight:600;color:var(--text)">' +
-              (u.full_name || "—") +
-              "</div>" +
-              '<div style="font-size:12px;color:var(--muted)">' +
-              (u.email || "") +
-              "</div>" +
-              "</div>" +
-              "</div>" +
-              "</td>" +
-              '<td style="padding:14px 20px;color:var(--sub)">' +
-              (u.phone || "—") +
-              "</td>" +
-              '<td style="padding:14px 20px">' +
-              '<span style="background:rgba(124,58,237,0.15);color:#a78bfa;border:1px solid rgba(124,58,237,0.3);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700">' +
-              orders.length +
-              " order" +
-              (orders.length !== 1 ? "s" : "") +
-              "</span>" +
-              "</td>" +
-              '<td style="padding:14px 20px;color:var(--muted);font-size:13px">' +
-              joined +
-              "</td>" +
-              '<td style="padding:14px 20px">' +
-              "<button onclick=\"viewUserDetail('" +
-              u.id +
-              '\')" style="background:rgba(124,58,237,0.15);color:#a78bfa;border:1px solid rgba(124,58,237,0.3);padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">View Details</button>' +
-              "</td>" +
-              "</tr>"
-            );
-          })
-          .join("");
-      }
-
-      function filterUsersTable() {
-        var q = (
-          document.getElementById("userSearchInput").value || ""
-        ).toLowerCase();
-        if (!q) {
-          renderUsersTable(_allUsers);
-          return;
-        }
-        renderUsersTable(
-          _allUsers.filter(function (u) {
-            return (
-              (u.full_name || "").toLowerCase().includes(q) ||
-              (u.email || "").toLowerCase().includes(q)
-            );
-          }),
-        );
-      }
-
-      function viewUserDetail(userId) {
-        var user = _allUsers.find(function (u) {
-          return u.id === userId;
-        });
-        var orders = _allOrders.filter(function (o) {
-          return o.user_id === userId;
-        });
-        if (!user) return;
-        var joined = user.created_at
-          ? new Date(user.created_at).toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })
-          : "—";
-        var initials = (user.full_name || user.email || "?")
-          .substring(0, 2)
-          .toUpperCase();
-        var ordersHtml = orders.length
-          ? orders
-              .map(function (o) {
-                var statusColor =
-                  o.status === "completed"
-                    ? "#22c55e"
-                    : o.status === "processing"
-                      ? "#f59e0b"
-                      : "#94a3b8";
-                var purchaseDate = o.created_at
-                  ? new Date(o.created_at).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })
-                  : "—";
-                var purchaseTime = o.created_at
-                  ? new Date(o.created_at).toLocaleTimeString("en-US", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })
-                  : "";
-                var billing = {};
-                try {
-                  billing = JSON.parse(o.billing_details || "{}");
-                } catch (e) {}
-                var fullName =
-                  [billing.firstName, billing.lastName]
-                    .filter(Boolean)
-                    .join(" ") ||
-                  o.user_name ||
-                  "—";
-                var billingHtml =
-                  billing.firstName || billing.email || billing.address
-                    ? '<div style="margin-top:10px;padding:10px 14px;background:rgba(255,255,255,0.04);border-radius:10px;font-size:12px">' +
-                      '<div style="font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;font-size:10px;margin-bottom:8px">Billing & Contact</div>' +
-                      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">' +
-                      (billing.firstName
-                        ? '<div><span style="color:var(--muted)">Name: </span>' +
-                          fullName +
-                          "</div>"
-                        : "") +
-                      (billing.email
-                        ? '<div><span style="color:var(--muted)">Email: </span>' +
-                          billing.email +
-                          "</div>"
-                        : "") +
-                      (billing.phone
-                        ? '<div><span style="color:var(--muted)">Phone: </span>' +
-                          billing.phone +
-                          "</div>"
-                        : "") +
-                      (billing.country
-                        ? '<div><span style="color:var(--muted)">Country: </span>' +
-                          billing.country +
-                          "</div>"
-                        : "") +
-                      (billing.address
-                        ? '<div style="grid-column:1/-1"><span style="color:var(--muted)">Address: </span>' +
-                          [billing.address, billing.city, billing.postcode]
-                            .filter(Boolean)
-                            .join(", ") +
-                          "</div>"
-                        : "") +
-                      "</div>" +
-                      "</div>"
-                    : "";
-                return (
-                  '<div style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.06)">' +
-                  '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">' +
-                  '<div style="flex:1">' +
-                  '<div style="font-weight:600;font-size:14px;margin-bottom:4px">' +
-                  (o.product_title || "Unknown Product") +
-                  "</div>" +
-                  '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">' +
-                  '<span style="font-size:11px;color:var(--muted);background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:10px">📋 ' +
-                  (o.order_ref || "—") +
-                  "</span>" +
-                  '<span style="font-size:11px;color:var(--muted);background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:10px">💳 ' +
-                  (o.payment_method || "card") +
-                  "</span>" +
-                  '<span style="font-size:11px;color:var(--muted);background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:10px">📅 ' +
-                  purchaseDate +
-                  " " +
-                  purchaseTime +
-                  "</span>" +
-                  "</div>" +
-                  billingHtml +
-                  "</div>" +
-                  '<div style="text-align:right;flex-shrink:0">' +
-                  '<div style="font-size:11px;font-weight:700;color:' +
-                  statusColor +
-                  ";margin-top:4px;text-transform:uppercase;background:" +
-                  statusColor +
-                  '22;padding:2px 8px;border-radius:10px;display:inline-block">' +
-                  (o.status || "pending") +
-                  "</div>" +
-                  "</div>" +
-                  "</div>" +
-                  "</div>"
-                );
-              })
-              .join("")
-          : '<div style="color:var(--muted);font-size:14px;padding:16px 0">No orders yet.</div>';
-
-        document.getElementById("userDetailContent").innerHTML =
-          '<div style="display:flex;align-items:center;gap:16px;margin-bottom:28px">' +
-          '<div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;flex-shrink:0">' +
-          initials +
-          "</div>" +
-          "<div>" +
-          '<div style="font-size:22px;font-weight:800">' +
-          (user.full_name || "—") +
-          "</div>" +
-          '<div style="color:var(--muted);font-size:14px">' +
-          (user.email || "") +
-          "</div>" +
-          "</div>" +
-          "</div>" +
-          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px">' +
-          '<div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:14px">' +
-          '<div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px">Phone</div>' +
-          '<div style="font-weight:600">' +
-          (user.phone || "—") +
-          "</div>" +
-          "</div>" +
-          '<div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:14px">' +
-          '<div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px">Joined</div>' +
-          '<div style="font-weight:600">' +
-          joined +
-          "</div>" +
-          "</div>" +
-          '<div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:14px">' +
-          '<div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px">Total Orders</div>' +
-          '<div style="font-size:22px;font-weight:800;color:#a78bfa">' +
-          orders.length +
-          "</div>" +
-          "</div>" +
-          "</div>" +
-          '<div style="font-size:14px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px">Purchase History</div>' +
-          ordersHtml;
-
-        var modal = document.getElementById("userDetailModal");
-        modal.style.display = "flex";
-      }
-
-      function closeUserModal() {
-        document.getElementById("userDetailModal").style.display = "none";
-      }
-
-      function exportUsersExcel() {
-        if (!_allUsers.length) {
-          alert("No users to export.");
-          return;
-        }
-        var rows = [
-          [
-            "Full Name",
-            "Email",
-            "Phone",
-            "Orders Count",
-            "Joined",
-            "Order Refs",
-            "Products Purchased",
-          ],
-        ];
-        _allUsers.forEach(function (u) {
-          var orders = _allOrders.filter(function (o) {
-            return o.user_id === u.id;
-          });
-          rows.push([
-            u.full_name || "",
-            u.email || "",
-            u.phone || "",
-            orders.length,
-            u.created_at
-              ? new Date(u.created_at).toLocaleDateString("en-US")
-              : "",
-            orders
-              .map(function (o) {
-                return o.order_ref || "";
-              })
-              .join(", "),
-            orders
-              .map(function (o) {
-                return o.product_title || "";
-              })
-              .join(", "),
-          ]);
-        });
-        var ws = XLSX.utils.aoa_to_sheet(rows);
-        var wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Users");
-        XLSX.writeFile(
-          wb,
-          "users_export_" + new Date().toISOString().slice(0, 10) + ".xlsx",
-        );
-      }
       // ─── CATEGORIES ──────────────────────────────────────────────────────────────
       var _selectedCatColor = "#7c3aed";
       function selectCatColor(hex, el) {
@@ -8442,22 +6270,6 @@
           await ChrixlinDB.deleteCategory(id);
         loadCategoriesAdmin();
         showToast("Category deleted", "success");
-      }
-
-      // ─── PLAN COLOR PICKER ────────────────────────────────────────────────────────
-      var _selectedPlanColor = "#22c55e";
-      function selectPlanColor(hex, el) {
-        _selectedPlanColor = hex;
-        document.getElementById("pp_badgeColor").value = hex;
-        document.querySelectorAll("#planColorPicker div").forEach(function (d) {
-          d.style.border = "3px solid transparent";
-        });
-        el.style.border = "3px solid white";
-      }
-
-      // ─── DELETE PLAN ADMIN (alias — calls main deletePricingPlan) ─────────────────
-      function deletePlanAdmin(id) {
-        deletePricingPlan(id);
       }
 
       // ─── PRODUCT IMAGE UPLOAD ─────────────────────────────────────────────────────

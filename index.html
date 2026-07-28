@@ -4,15 +4,56 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title data-key="seo.title">
-      Chrixlin AI Rise — Build Your AI Bot Business
+      Chrixlin AI Rise — Custom AI Automation for Your Business
     </title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="apple-touch-icon" href="favicon.svg" />
     <meta
       name="description"
       data-key="seo.description"
-      content="Learn to build and sell AI automation bots. Join 160+ entrepreneurs who hit $5K–$50K/month — results-driven mentorship model."
+      content="We design, build, and deploy custom AI bots and automation systems for businesses — voice agents, chatbots, lead generation, and more. Book a free strategy call."
     />
+    <link rel="canonical" href="https://chrixlin.tech/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Chrixlin AI Rise" />
+    <meta property="og:url" content="https://chrixlin.tech/" />
+    <meta
+      property="og:title"
+      content="Chrixlin AI Rise — Custom AI Automation for Your Business"
+    />
+    <meta
+      property="og:description"
+      content="We design, build, and deploy custom AI bots and automation systems for businesses — voice agents, chatbots, lead generation, and more. Book a free strategy call."
+    />
+    <meta property="og:image" content="https://chrixlin.tech/og-image.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Chrixlin AI Rise — Custom AI Automation for Your Business"
+    />
+    <meta
+      name="twitter:description"
+      content="We design, build, and deploy custom AI bots and automation systems for businesses — voice agents, chatbots, lead generation, and more. Book a free strategy call."
+    />
+    <meta name="twitter:image" content="https://chrixlin.tech/og-image.png" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "Chrixlin AI Rise",
+        "url": "https://chrixlin.tech/",
+        "description": "Custom AI automation, voice agents, chatbots, and lead generation systems designed and deployed for businesses.",
+        "areaServed": "Worldwide",
+        "sameAs": []
+      }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap"
@@ -910,297 +951,6 @@
         line-height: 1.6;
       }
 
-      /* ─── PRICING ───────────────────────────────────────── */
-      #pricing {
-        background: var(--c-bg2);
-      }
-      .pricing-tabs-wrap {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        margin-bottom: 36px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid var(--c-border);
-        border-radius: 50px;
-        padding: 5px;
-        width: fit-content;
-        margin-inline: auto;
-      }
-      .pricing-tab {
-        background: transparent;
-        border: none;
-        color: var(--c-muted);
-        padding: 9px 22px;
-        border-radius: 50px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-family: var(--font);
-        white-space: nowrap;
-      }
-      .pricing-tab.active {
-        background: var(--c-primary);
-        color: #fff;
-      }
-      .pricing-tab:hover:not(.active) {
-        color: var(--c-text);
-      }
-      .tab-save-badge {
-        background: rgba(34, 197, 94, 0.18);
-        color: #4ade80;
-        font-size: 11px;
-        font-weight: 700;
-        padding: 2px 7px;
-        border-radius: 50px;
-        margin-left: 5px;
-      }
-      .pricing-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        justify-content: center;
-        gap: 24px;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-      .pricing-grid[data-count="1"] {
-        grid-template-columns: 1fr;
-        max-width: 600px;
-      }
-      .pricing-grid[data-count="1"] .pricing-plan {
-        border-color: rgba(124, 58, 237, 0.5);
-        background: linear-gradient(
-          145deg,
-          rgba(124, 58, 237, 0.1),
-          rgba(6, 182, 212, 0.05)
-        );
-        box-shadow: 0 24px 64px rgba(124, 58, 237, 0.2);
-      }
-      .pricing-grid[data-count="1"] .plan-price {
-        font-size: 60px;
-      }
-      .pricing-grid[data-count="1"] .plan-name {
-        font-size: 22px;
-      }
-      .pricing-grid[data-count="1"] .plan-features {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px 24px;
-      }
-      .pricing-grid[data-count="2"] {
-        grid-template-columns: repeat(2, 1fr);
-        max-width: 860px;
-      }
-      .pricing-plan {
-        background: var(--c-card);
-        border: 1.5px solid var(--c-border);
-        border-radius: 20px;
-        padding: 36px 28px;
-        display: flex;
-        flex-direction: column;
-        transition: var(--transition);
-        position: relative;
-      }
-      .pricing-plan:hover {
-        border-color: rgba(124, 58, 237, 0.45);
-        transform: translateY(-5px);
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-      }
-      .pricing-plan.featured {
-        border-color: rgba(124, 58, 237, 0.55);
-        background: linear-gradient(
-          145deg,
-          rgba(124, 58, 237, 0.09),
-          rgba(6, 182, 212, 0.04)
-        );
-        box-shadow: 0 24px 64px rgba(124, 58, 237, 0.22);
-      }
-      .plan-popular-tag {
-        position: absolute;
-        top: -13px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: var(--grad);
-        color: #fff;
-        font-size: 11px;
-        font-weight: 800;
-        padding: 4px 16px;
-        border-radius: 50px;
-        white-space: nowrap;
-        font-family: var(--font-head);
-      }
-      .plan-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 4px 14px;
-        border-radius: 50px;
-        font-size: 12px;
-        font-weight: 700;
-        margin-bottom: 16px;
-        font-family: var(--font-head);
-      }
-      .plan-name {
-        font-family: var(--font-head);
-        font-size: 18px;
-        font-weight: 800;
-        margin-bottom: 10px;
-      }
-      .plan-price {
-        font-family: var(--font-head);
-        font-size: 46px;
-        font-weight: 900;
-        line-height: 1;
-        margin-bottom: 2px;
-      }
-      .plan-period {
-        font-size: 12px;
-        color: var(--c-muted);
-        margin-bottom: 14px;
-      }
-      .plan-desc {
-        color: var(--c-sub);
-        font-size: 13px;
-        line-height: 1.6;
-        margin-bottom: 20px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid var(--c-border);
-      }
-      .plan-features {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        flex: 1;
-        margin-bottom: 24px;
-      }
-      .plan-feature {
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-        font-size: 13px;
-        line-height: 1.5;
-      }
-      .plan-check {
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 9px;
-        margin-top: 2px;
-        background: rgba(124, 58, 237, 0.18);
-        border: 1px solid rgba(124, 58, 237, 0.35);
-        color: #a78bfa;
-      }
-      .plan-check.green {
-        background: rgba(34, 197, 94, 0.18);
-        border-color: rgba(34, 197, 94, 0.4);
-        color: #4ade80;
-      }
-      .plan-cta {
-        margin-top: auto;
-      }
-      .plan-cta a {
-        display: block;
-        text-align: center;
-        padding: 13px 20px;
-        border-radius: 50px;
-        font-family: var(--font-head);
-        font-weight: 700;
-        font-size: 14px;
-        transition: var(--transition);
-      }
-      .plan-cta a.cta-primary {
-        background: var(--grad);
-        color: #fff;
-        box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3);
-      }
-      .plan-cta a.cta-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 36px rgba(124, 58, 237, 0.5);
-      }
-      .plan-cta a.cta-outline {
-        border: 1.5px solid var(--c-border);
-        color: var(--c-text);
-      }
-      .plan-cta a.cta-outline:hover {
-        border-color: rgba(124, 58, 237, 0.45);
-        color: #a78bfa;
-      }
-
-      /* ─── FAQ ───────────────────────────────────────────── */
-      #faq {
-        background: var(--c-bg);
-      }
-      .faq-wrapper {
-        max-width: 760px;
-        margin: 0 auto;
-      }
-      .faq-item {
-        border: 1px solid var(--c-border);
-        border-radius: 12px;
-        margin-bottom: 12px;
-        overflow: hidden;
-        transition: var(--transition);
-      }
-      .faq-item.open {
-        border-color: rgba(124, 58, 237, 0.4);
-      }
-      .faq-q {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 22px 28px;
-        cursor: pointer;
-        font-family: var(--font-head);
-        font-weight: 700;
-        font-size: 16px;
-        gap: 16px;
-        background: var(--c-card);
-        transition: var(--transition);
-      }
-      .faq-q:hover {
-        background: var(--c-card-h);
-      }
-      .faq-icon {
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        flex-shrink: 0;
-        background: rgba(124, 58, 237, 0.15);
-        border: 1px solid rgba(124, 58, 237, 0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #a78bfa;
-        font-size: 16px;
-        font-weight: 700;
-        transition: var(--transition);
-      }
-      .faq-item.open .faq-icon {
-        background: var(--c-primary);
-        border-color: var(--c-primary);
-        color: #fff;
-        transform: rotate(45deg);
-      }
-      .faq-a {
-        padding: 0 28px;
-        max-height: 0;
-        overflow: hidden;
-        color: var(--c-sub);
-        font-size: 15px;
-        line-height: 1.7;
-        transition:
-          max-height 0.4s ease,
-          padding 0.3s ease;
-      }
-      .faq-item.open .faq-a {
-        max-height: 300px;
-        padding: 0 28px 22px;
-      }
-
       /* ─── FINAL CTA ─────────────────────────────────────── */
       #cta {
         padding: 120px 0;
@@ -1321,7 +1071,7 @@
       /* ─── SCROLL TO TOP ─────────────────────────────────── */
       #scrollTop {
         position: fixed;
-        bottom: 30px;
+        bottom: 100px;
         right: 30px;
         z-index: 100;
         width: 44px;
@@ -1347,6 +1097,125 @@
         pointer-events: all;
       }
 
+      /* ─── CHAT WIDGET ──────────────────────────────────────── */
+      #chatLauncher {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 200;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--grad);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 26px;
+        box-shadow: 0 8px 24px rgba(124, 58, 237, 0.5);
+        transition: var(--transition);
+      }
+      #chatLauncher:hover {
+        transform: scale(1.06);
+      }
+      #chatPanel {
+        position: fixed;
+        bottom: 102px;
+        right: 30px;
+        z-index: 200;
+        width: min(360px, calc(100vw - 40px));
+        max-height: 70vh;
+        background: #0f0f1e;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      #chatPanel.open {
+        display: flex;
+      }
+      .chat-header {
+        background: var(--grad);
+        padding: 18px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .chat-header-title {
+        font-family: var(--font-h);
+        font-weight: 800;
+        font-size: 15px;
+        color: #fff;
+      }
+      .chat-header-sub {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.85);
+        margin-top: 2px;
+      }
+      .chat-close-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border: none;
+        color: #fff;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+      .chat-body {
+        padding: 16px;
+        overflow-y: auto;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .chat-bubble {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 12px 14px;
+        font-size: 13px;
+        color: var(--c-sub, #cbd5e1);
+        line-height: 1.5;
+      }
+      .chat-q-btn {
+        text-align: left;
+        width: 100%;
+        background: rgba(124, 58, 237, 0.1);
+        border: 1px solid rgba(124, 58, 237, 0.25);
+        color: #c4b5fd;
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .chat-q-btn:hover {
+        background: rgba(124, 58, 237, 0.2);
+      }
+      .chat-footer {
+        padding: 14px 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .chat-footer a {
+        display: block;
+        text-align: center;
+        background: var(--grad);
+        color: #fff;
+        font-weight: 700;
+        font-size: 13px;
+        padding: 12px;
+        border-radius: 12px;
+        text-decoration: none;
+      }
+
       /* ─── RESPONSIVE ────────────────────────────────────── */
       @media (max-width: 1024px) {
         .hero-grid {
@@ -1363,9 +1232,6 @@
           grid-template-columns: 1fr 1fr;
         }
         .for-who-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-        .pricing-grid:not([data-count="1"]) {
           grid-template-columns: repeat(2, 1fr);
         }
       }
@@ -1426,32 +1292,6 @@
         }
         .testimonials-grid {
           grid-template-columns: 1fr;
-        }
-        .pricing-grid {
-          grid-template-columns: 1fr;
-          max-width: 420px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-        .pricing-grid[data-count="1"] {
-          max-width: 420px;
-        }
-        .pricing-grid[data-count="1"] .plan-features {
-          grid-template-columns: 1fr;
-        }
-        .pricing-grid[data-count="1"] .plan-price {
-          font-size: 48px;
-        }
-        .pricing-plan {
-          padding: 28px 20px;
-        }
-        .plan-price {
-          font-size: 38px;
-        }
-        .billing-toggle {
-          flex-wrap: wrap;
-          justify-content: center;
-          gap: 8px;
         }
         .footer-grid {
           grid-template-columns: 1fr;
@@ -1519,25 +1359,11 @@
         .testimonial-card {
           padding: 24px 18px;
         }
-        .faq-q {
-          font-size: 14px;
-        }
         .footer-grid {
           gap: 24px;
         }
         .mobile-menu a {
           font-size: 20px;
-        }
-        /* Pricing on very small screens */
-        .pricing-plan {
-          padding: 20px 14px;
-        }
-        .plan-price {
-          font-size: 32px;
-        }
-        .plan-cta a {
-          padding: 11px 16px;
-          font-size: 14px;
         }
         /* Nav logo scaling */
         .nav-logo {
@@ -1577,19 +1403,8 @@
             >Results</a
           >
           <a href="marketplace.html" data-navkey="marketplace">Projects</a>
-          <a href="#pricing" data-key="nav.link4" data-navkey="pricing"
-            >Pricing</a
-          >
-          <a href="#faq" data-key="nav.link5" data-navkey="faq">FAQ</a>
         </div>
         <div class="nav-cta">
-          <a
-            href="auth.html"
-            id="navAuthBtn"
-            class="btn btn-outline"
-            style="padding: 9px 20px; font-size: 14px"
-            >Sign In</a
-          >
           <a
             href="mailto:info@chrixlin.tech"
             class="btn btn-primary"
@@ -1621,17 +1436,6 @@
         data-navkey="marketplace"
         >Projects</a
       >
-      <a href="#pricing" onclick="closeMobile()" data-navkey="pricing"
-        >Pricing</a
-      >
-      <a href="#faq" onclick="closeMobile()" data-navkey="faq">FAQ</a>
-      <a
-        href="auth.html"
-        id="mobileAuthBtn"
-        onclick="closeMobile()"
-        style="color: #a78bfa"
-        >Sign In</a
-      >
       <a
         href="mailto:info@chrixlin.tech"
         class="btn btn-primary"
@@ -1652,7 +1456,7 @@
           <div class="hero-content">
             <div class="hero-badge animate-in">
               <span class="badge" data-key="hero.badge"
-                >🚀 Join 160+ AI Entrepreneurs</span
+                >🚀 Trusted by 160+ Businesses</span
               >
             </div>
             <h1
@@ -1660,17 +1464,17 @@
               style="animation-delay: 0.1s"
               data-key="hero.title"
             >
-              Build a <span class="text-grad">$5K–$50K/Mo</span><br />AI Bot
-              Business
+              Custom <span class="text-grad">AI Automation</span><br />Built
+              For Your Business
             </h1>
             <p
               class="hero-sub animate-in"
               style="animation-delay: 0.2s"
               data-key="hero.subtitle"
             >
-              Learn to create, sell, and scale AI automation solutions for real
-              businesses. Get your first paying client by Week 4 — or you don't
-              pay a cent.
+              We design, build, and deploy AI bots and automation systems that
+              save your team hours every week. Book a free strategy call to
+              see what's possible for your business.
             </p>
             <div class="hero-btns animate-in" style="animation-delay: 0.3s">
               <a
@@ -1693,7 +1497,7 @@
               </div>
               <div class="trust-item">
                 <div class="trust-check">✓</div>
-                <span data-key="hero.trust2">No Experience Required</span>
+                <span data-key="hero.trust2">Fast Deployment</span>
               </div>
               <div class="trust-item">
                 <div class="trust-check">✓</div>
@@ -1713,13 +1517,13 @@
               <div class="hero-card-top">
                 <div class="hero-avatar">🤖</div>
                 <div>
-                  <div class="hero-card-name">Student Revenue Dashboard</div>
+                  <div class="hero-card-name">Client Results Dashboard</div>
                   <div class="hero-card-role">Live results · Updated daily</div>
                 </div>
               </div>
               <div class="hero-earnings">$1.8M+</div>
               <div class="hero-earnings-label">
-                Total mentee revenue generated
+                Total client value delivered
               </div>
               <div class="hero-progress-bar">
                 <div class="hero-progress-fill"></div>
@@ -1727,27 +1531,27 @@
               <div class="hero-stats-mini">
                 <div class="hero-stat-mini">
                   <div class="hero-stat-mini-val text-grad">160+</div>
-                  <div class="hero-stat-mini-label">Students trained</div>
+                  <div class="hero-stat-mini-label">Businesses served</div>
                 </div>
                 <div class="hero-stat-mini">
-                  <div class="hero-stat-mini-val text-grad">60</div>
-                  <div class="hero-stat-mini-label">Days avg. to client</div>
+                  <div class="hero-stat-mini-val text-grad">48h</div>
+                  <div class="hero-stat-mini-label">Avg. deploy time</div>
                 </div>
                 <div class="hero-stat-mini">
-                  <div class="hero-stat-mini-val text-grad">$12K</div>
-                  <div class="hero-stat-mini-label">Avg. monthly income</div>
+                  <div class="hero-stat-mini-val text-grad">24/7</div>
+                  <div class="hero-stat-mini-label">Automation uptime</div>
                 </div>
                 <div class="hero-stat-mini">
                   <div class="hero-stat-mini-val text-grad">4.9★</div>
-                  <div class="hero-stat-mini-label">Mentor rating</div>
+                  <div class="hero-stat-mini-label">Client rating</div>
                 </div>
               </div>
             </div>
             <div class="floating-badge fb-bottom">
-              <div class="fb-icon">💰</div>
+              <div class="fb-icon">⚡</div>
               <div>
-                <div class="fb-val">$12,000/mo</div>
-                <div class="fb-label">Shubham's side income</div>
+                <div class="fb-val">90% Faster</div>
+                <div class="fb-label">Avg. response time for clients</div>
               </div>
             </div>
           </div>
@@ -1776,8 +1580,8 @@
               📖 The Origin Story
             </div>
             <h2 data-key="story.title">
-              From College Student to
-              <span class="text-grad">AI Business Pioneer</span>
+              From College Project to
+              <span class="text-grad">AI Automation Studio</span>
             </h2>
             <p data-key="story.p1">
               In 2020, I was a broke college student with zero connections and
@@ -1787,8 +1591,10 @@
             </p>
             <p data-key="story.p2">
               By senior year, I had crossed $150,000 in revenue building AI and
-              automation tools. After being featured in Business Insider, I made
-              it my mission to help others replicate the same path — faster.
+              automation tools for real businesses. After being featured in
+              Business Insider, I built Chrixlin AI Rise to bring that same
+              playbook to businesses that want automation done right — fast,
+              custom, and hands-off for them.
             </p>
             <div class="story-press">
               <div class="press-icon">📰</div>
@@ -1813,12 +1619,12 @@
           <span class="badge">🗺️ The Roadmap</span>
         </div>
         <h2 class="section-title" data-key="process.title">
-          Your <span class="text-grad">60-Day Roadmap</span> to Your First AI
-          Client
+          From <span class="text-grad">Call to Live Automation</span> in Weeks,
+          Not Months
         </h2>
         <p class="section-sub" data-key="process.subtitle">
-          A proven system built on 160+ success stories. No guesswork — just a
-          clear path to income.
+          A proven delivery process built on 160+ successful deployments. No
+          guesswork — just a clear path to a working system.
         </p>
         <div class="process-grid" id="processGrid">
           <!-- Populated by JS -->
@@ -1833,11 +1639,11 @@
           <span class="badge">🎁 What's Included</span>
         </div>
         <h2 class="section-title" data-key="features.title">
-          Everything You Need to <span class="text-grad">Succeed</span>
+          Everything Included in <span class="text-grad">Every Project</span>
         </h2>
         <p class="section-sub" data-key="features.subtitle">
-          Not just a course — a complete system for building your AI business
-          with real support at every step.
+          Not just a bot — a complete build with real support at every step,
+          from strategy to launch and beyond.
         </p>
         <div class="features-grid" id="featuresGrid">
           <!-- Populated by JS -->
@@ -1852,11 +1658,11 @@
           <span class="badge">🌟 Real Results</span>
         </div>
         <h2 class="section-title" data-key="testimonials.title">
-          Students Who <span class="text-grad">Changed Their Lives</span>
+          Businesses That <span class="text-grad">Automated & Scaled</span>
         </h2>
         <p class="section-sub" data-key="testimonials.subtitle">
-          These aren't cherry-picked outliers. This is what happens when you
-          follow the system.
+          These aren't cherry-picked outliers. This is what happens when
+          automation is built right.
         </p>
         <div class="testimonials-grid" id="testimonialsGrid">
           <!-- Populated by JS -->
@@ -1871,12 +1677,12 @@
           <span class="badge">🎯 Is This For You?</span>
         </div>
         <h2 class="section-title" data-key="forWho.title">
-          This Program is Built For
-          <span class="text-grad">Ambitious People</span>
+          Built For
+          <span class="text-grad">Businesses Ready to Automate</span>
         </h2>
         <p class="section-sub" data-key="forWho.subtitle">
-          Whether you're escaping a 9-5, in college, or already freelancing —
-          we've helped people in every situation.
+          Whether you're a solo founder or running a growing team — we've
+          helped businesses in every situation save time with automation.
         </p>
         <div class="for-who-grid" id="forWhoGrid">
           <!-- Populated by JS -->
@@ -1885,89 +1691,47 @@
     </section>
 
     <!-- PRICING -->
-    <section id="pricing" class="section-pad">
-      <div class="container">
-        <div class="section-label"><span class="badge">💎 Pricing</span></div>
-        <h2 class="section-title">
-          Simple, Transparent
-          <span class="text-grad">Pricing For Everyone</span>
-        </h2>
-        <p class="section-sub">
-          Start free. Upgrade when you're ready. No hidden fees, no contracts.
-          Plan refunds available — project purchases are non-refundable once
-          downloaded.
-        </p>
-        <div class="pricing-tabs-wrap">
-          <button
-            class="pricing-tab active"
-            id="tabMonthly"
-            onclick="setBilling('monthly')"
-          >
-            Monthly
-          </button>
-          <button
-            class="pricing-tab"
-            id="tabYearly"
-            onclick="setBilling('yearly')"
-          >
-            Yearly <span class="tab-save-badge">Save 20%</span>
-          </button>
-          <button
-            class="pricing-tab"
-            id="tabOneTime"
-            onclick="setBilling('one-time')"
-          >
-            One-Time Project
-          </button>
-        </div>
-        <div class="pricing-grid" id="pricingGrid">
-          <!-- Populated by JS -->
-        </div>
-        <p
-          style="
-            text-align: center;
-            color: var(--c-muted);
-            font-size: 13px;
-            margin-top: 28px;
-          "
-        >
-          🔒 Secure checkout · Refunds available on plans only · No refund after
-          project download
-        </p>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq" class="section-pad">
-      <div class="container">
-        <div class="section-label"><span class="badge">❓ FAQ</span></div>
-        <h2 class="section-title" data-key="faq.title">
-          Frequently Asked <span class="text-grad">Questions</span>
-        </h2>
-        <p class="section-sub" data-key="faq.subtitle">
-          Everything you need to know before booking your call.
-        </p>
-        <div class="faq-wrapper" id="faqWrapper">
-          <!-- Populated by JS -->
-        </div>
-      </div>
-    </section>
-
     <!-- FINAL CTA -->
     <section id="cta">
       <div class="container">
         <div class="animate-in">
           <div class="badge" style="margin-bottom: 24px; display: inline-flex">
-            🚀 Ready to Start?
+            🚀 Ready to Automate?
           </div>
           <h2 class="cta-title" data-key="cta.title">
-            Your AI Business <span class="text-grad">Starts Today</span>
+            Your Automation <span class="text-grad">Starts Today</span>
           </h2>
           <p class="cta-sub" data-key="cta.subtitle">
-            Join 160+ entrepreneurs who took the first step. Book your free
-            1-on-1 strategy call and get a personalised AI business roadmap — no
+            Join 160+ businesses who took the first step. Book your free
+            1-on-1 strategy call and get a personalised automation roadmap — no
             strings attached.
           </p>
+          <div
+            id="inlineBookingWrap"
+            style="display: none; max-width: 700px; margin: 32px auto 0"
+          >
+            <div
+              id="calendlyInlineWidget"
+              class="calendly-inline-widget"
+              style="min-width: 280px; height: 700px"
+            ></div>
+            <p
+              style="
+                text-align: center;
+                color: var(--c-muted);
+                font-size: 13px;
+                margin-top: 12px;
+              "
+            >
+              Prefer to just leave your details?
+              <a
+                href="#"
+                onclick="document.getElementById('inlineBookingWrap').style.display='none';document.getElementById('strategyCallForm').style.display='block';return false;"
+                style="color: var(--c-primary)"
+                >Use the contact form instead →</a
+              >
+            </p>
+          </div>
           <div
             id="strategyCallForm"
             style="max-width: 480px; margin: 32px auto 0"
@@ -2078,24 +1842,22 @@
           <div class="footer-brand">
             <div class="nav-logo" data-key="footer.logo">Chrixlin AI Rise</div>
             <p data-key="footer.tagline">
-              Helping ambitious people build profitable AI businesses through
-              mentorship, real projects, and a proven results-driven system.
+              Helping businesses save time and grow with custom AI automation
+              — built, deployed, and supported end-to-end.
             </p>
           </div>
           <div class="footer-col">
-            <h4>Program</h4>
+            <h4>Services</h4>
             <ul>
               <li><a href="#process">How It Works</a></li>
               <li><a href="#features">What You Get</a></li>
               <li><a href="#testimonials">Success Stories</a></li>
-              <li><a href="#pricing">Pricing</a></li>
             </ul>
           </div>
           <div class="footer-col">
             <h4>Company</h4>
             <ul>
               <li><a href="#story">Our Story</a></li>
-              <li><a href="#faq">FAQ</a></li>
               <li>
                 <a href="mailto:info@chrixlin.tech" data-key="footer.email"
                   >Contact Us</a
@@ -2142,14 +1904,39 @@
       ↑
     </button>
 
+    <!-- CHAT WIDGET -->
+    <button id="chatLauncher" onclick="toggleChat()" aria-label="Chat with us">
+      💬
+    </button>
+    <div id="chatPanel">
+      <div class="chat-header">
+        <div>
+          <div class="chat-header-title">🤖 Chrixlin Assistant</div>
+          <div class="chat-header-sub">Ask a quick question</div>
+        </div>
+        <button class="chat-close-btn" onclick="toggleChat()">✕</button>
+      </div>
+      <div class="chat-body" id="chatBody">
+        <div class="chat-bubble">
+          👋 Hi! I can answer quick questions about what we do. Pick one
+          below, or book a free call for anything more specific.
+        </div>
+      </div>
+      <div class="chat-footer">
+        <a href="mailto:info@chrixlin.tech" data-booking="1"
+          >📞 Book a Free Strategy Call</a
+        >
+      </div>
+    </div>
+
     <script>
       // ─── SITE DATA (defaults — overridden by localStorage) ───────────────────────
       const DEFAULT_DATA = {
         stats: [
-          { value: "160+", label: "Entrepreneurs Trained", suffix: "" },
-          { value: "$1.8M+", label: "Mentee Revenue Generated", suffix: "" },
-          { value: "60", label: "Days Avg. to First Client", suffix: "" },
-          { value: "4.9★", label: "Average Mentor Rating", suffix: "" },
+          { value: "160+", label: "Businesses Served", suffix: "" },
+          { value: "$1.8M+", label: "Client Value Delivered", suffix: "" },
+          { value: "48h", label: "Avg. Deployment Time", suffix: "" },
+          { value: "4.9★", label: "Average Client Rating", suffix: "" },
         ],
         story: [
           {
@@ -2160,165 +1947,129 @@
           {
             year: "2021",
             title: "First Big Win",
-            text: "Built a PS5 automation tool during the GPU shortage. First taste of what AI bots could generate.",
+            text: "Built a PS5 automation tool during the GPU shortage. First taste of what AI bots could generate for a business.",
           },
           {
             year: "2022–2023",
             title: "Scaling to $150K",
-            text: "By senior year, crossed $150,000 in revenue. Word spread fast — people wanted to learn the playbook.",
+            text: "By senior year, crossed $150,000 in revenue building automation tools for real businesses. Word spread fast.",
           },
           {
             year: "2024–2025",
             title: "Chrixlin AI Rise Launch",
-            text: "Launched the mentorship program. Featured in Business Insider. 160+ students, $1.8M+ in combined revenue.",
+            text: "Launched Chrixlin AI Rise as a dedicated AI automation studio. Featured in Business Insider. 160+ businesses served.",
           },
         ],
         process: [
           {
-            week: "Week 1–2",
+            week: "Step 1",
             num: "01",
-            title: "Strategy & Foundation",
-            text: "Book your free call. We build your personalised AI business roadmap based on your skills, goals, and timeline. Zero guesswork.",
+            title: "Strategy Call & Roadmap",
+            text: "Book your free call. We map out exactly what to automate, why, and how — based on your business, tools, and goals. Zero guesswork.",
           },
           {
-            week: "Week 2–4",
+            week: "Step 2",
             num: "02",
-            title: "Build & Master AI Tools",
-            text: "Learn the exact AI tools clients pay $2,000–$10,000+ for. Build real projects under mentor guidance. No tutorials — actual deliverables.",
+            title: "Build & Deploy",
+            text: "We design and build your custom AI bot or automation system, then deploy it to your business — fully tested, fully documented.",
           },
           {
-            week: "Week 4+",
+            week: "Step 3",
             num: "03",
-            title: "Get Clients & Scale",
-            text: "Start earning with live paid projects. We personally connect you with clients. Hit your income targets and scale to $5K–$50K/mo.",
+            title: "Launch & Ongoing Support",
+            text: "Your automation goes live. We handle onboarding, monitor performance, and provide ongoing support and updates as your business grows.",
           },
         ],
         features: [
           {
             icon: "🎯",
             title: "Personalized Strategy Call",
-            text: "A custom AI business roadmap tailored to your background, skills, and income goals. Not a generic plan.",
-          },
-          {
-            icon: "📹",
-            title: "Weekly Live Coaching",
-            text: "Group sessions covering AI tools, client acquisition, pricing strategies, and scaling your business.",
-          },
-          {
-            icon: "💼",
-            title: "Real Client Projects",
-            text: "Access to live paid projects starting Week 4. We make warm introductions — you close and deliver.",
-          },
-          {
-            icon: "🤝",
-            title: "1-on-1 Mentorship",
-            text: "Direct access to mentors who have built $50K+/month AI businesses. Get unstuck fast.",
+            text: "A custom automation roadmap tailored to your business, workflows, and goals. Not a generic plan.",
           },
           {
             icon: "🛠️",
-            title: "Done-With-You Support",
-            text: "We don't just teach. We roll up our sleeves and help you build and deliver your first projects.",
+            title: "Custom-Built Automation",
+            text: "Every bot and workflow is built specifically for your business — not a one-size-fits-all template.",
+          },
+          {
+            icon: "⚡",
+            title: "Fast Deployment",
+            text: "Most projects go from strategy call to live automation in days, not months.",
+          },
+          {
+            icon: "📝",
+            title: "Full Documentation",
+            text: "Every project ships with complete documentation and a clean handover — no black boxes.",
+          },
+          {
+            icon: "🤝",
+            title: "Ongoing Support",
+            text: "Direct access to your project team for updates, tweaks, and troubleshooting after launch.",
           },
           {
             icon: "🏆",
-            title: "Private Community",
-            text: "Network with 160+ AI entrepreneurs. Share wins, get feedback, find accountability partners.",
+            title: "Proven Track Record",
+            text: "160+ businesses served, with real results across voice AI, chatbots, and lead generation systems.",
           },
         ],
         testimonials: [
           {
             name: "Shubham S.",
-            role: "Software Engineer @ Big Tech",
+            role: "Operations Lead, Logistics Co.",
             emoji: "👨‍💻",
-            result: "$0 → $120,000+ in profits",
+            result: "90% faster response time",
             quote:
-              "I was skeptical — I already had a good job. But within 8 weeks I was earning an extra $12,000 a month. The mentorship showed me exactly how to package my existing skills for premium AI clients.",
+              "The voice AI agent Chrixlin built now handles most of our incoming appointment calls. Our response time dropped by 90% and the team finally has room to breathe.",
             stars: 5,
           },
           {
             name: "Ilya P.",
-            role: "Former Food Delivery Driver",
+            role: "Founder, D2C E-commerce Brand",
             emoji: "🚗",
-            result: "$0 → $100,000+ in profits",
+            result: "$100K+ in recovered sales",
             quote:
-              "I had zero tech background. The program walked me through everything step by step. I made $1,000 in my very first day selling an AI QR generator. It changed my entire life trajectory.",
+              "We had zero automation before this. The lead recovery bot alone paid for itself in the first week and has since recovered over $100K in sales we would've lost.",
             stars: 5,
           },
           {
             name: "Ron M.",
-            role: "College Student",
+            role: "Owner, Local Service Business",
             emoji: "🎓",
-            result: "$0 → $30,000+ secured",
+            result: "30+ hours saved per month",
             quote:
-              "While my classmates were applying for $15/hr internships, I closed my first $25,000 AI development project. This is the best investment I've made in my college career, bar none.",
+              "Booking, reminders, and follow-ups used to eat my whole week. Now it's all automated. This is the best investment I've made in my business, bar none.",
             stars: 5,
           },
           {
             name: "Sarah C.",
-            role: "Former Marketing Manager",
+            role: "Marketing Director, Growth Agency",
             emoji: "💼",
-            result: "$0 → $30K+/month agency",
+            result: "3x more qualified leads",
             quote:
-              "I quit my corporate job after 3 months in the program. I was terrified at first, but the structured program made it easy to start. Now I run a full AI agency making $30K+ a month on my own terms.",
+              "The custom lead-gen system Chrixlin built plugged straight into our CRM. We're now qualifying 3x more leads with the same size team.",
             stars: 5,
           },
         ],
         forWho: [
           {
             icon: "🏢",
-            title: "9-5 Employees",
-            text: "Tired of trading time for money. Ready to build a business that generates income while you sleep.",
+            title: "Service Businesses",
+            text: "Automate bookings, reminders, and customer follow-ups so your team can focus on the work that matters.",
           },
           {
-            icon: "🎓",
-            title: "College Students",
-            text: "Build real income and high-demand skills while your peers are still figuring out their career.",
+            icon: "🛒",
+            title: "E-commerce Brands",
+            text: "Recover abandoned carts, automate support, and personalize outreach at a scale your team can't match manually.",
           },
           {
             icon: "💻",
-            title: "Freelancers",
-            text: "Level up from generic gigs to high-value AI development projects that pay 10x more.",
+            title: "Agencies & Consultants",
+            text: "White-label AI automation for your clients, or free up your own team's time with custom internal tools.",
           },
           {
             icon: "⚙️",
-            title: "Tech Professionals",
-            text: "Monetize your existing skills in the fastest-growing market before your role gets automated.",
-          },
-        ],
-        pricingFeatures: [
-          "Full mentorship program",
-          "Weekly live coaching sessions",
-          "Direct client introductions",
-          "All AI tools & templates",
-          "1-on-1 mentor access",
-          "Lifetime community access",
-          "Done-with-you project support",
-          "Income strategy playbook",
-        ],
-        faq: [
-          {
-            q: "Do I need coding experience to join?",
-            a: "No coding experience is required. Many of our most successful students started with zero technical background. We teach you exactly what you need, at the pace you need it. What matters most is your drive and commitment.",
-          },
-          {
-            q: "How does the income share model work?",
-            a: "You pay nothing upfront. Once you start generating revenue from the skills and clients we help you land, a small percentage is shared with us for the first 6 months — only from income generated through the program. If you make nothing, we make nothing.",
-          },
-          {
-            q: "When can I realistically expect my first client?",
-            a: "Most students who follow the program diligently land their first paid project between weeks 4 and 8. We actively help make client introductions, so you're not starting from zero.",
-          },
-          {
-            q: "What kind of AI projects will I be building?",
-            a: "You'll build AI chatbots for businesses, automation workflows, AI content tools, lead generation systems, customer service bots, and custom AI agents. These are tools businesses pay $2,000–$15,000+ for.",
-          },
-          {
-            q: "How much time do I need to commit each week?",
-            a: "We recommend 10–15 hours per week to follow the program properly. This includes live sessions (2–3 hours), self-study, and project work. Many students do this alongside a full-time job.",
-          },
-          {
-            q: "What if I don't get results?",
-            a: "Because of our income share model, our incentives are fully aligned — we only win when you win. If you're not making money within the program framework, we don't get paid. We have every reason to ensure your success.",
+            title: "Local Businesses",
+            text: "Never miss a call or lead again — voice agents and automation that work around the clock, even after hours.",
           },
         ],
       };
@@ -2440,336 +2191,6 @@
           .join("");
       }
 
-      // ─── PRICING PLANS ────────────────────────────────────────────────────────────
-      const DEFAULT_PRICING_PLANS = [
-        // Monthly plans
-        {
-          id: 1,
-          billingCycle: "monthly",
-          name: "Free Strategy Call",
-          priceLabel: "FREE",
-          price: 0,
-          period: "No credit card needed",
-          badge: "🎯 No Risk",
-          badgeColor: "#22c55e",
-          badgeBg: "rgba(34,197,94,0.12)",
-          description:
-            "Come with your business idea — we'll help you validate it, spot the opportunity, and map a clear path forward. No sales pitch, just honest strategy.",
-          cta: "Book My Free Call →",
-          ctaStyle: "outline",
-          highlighted: false,
-          features: [
-            "60-min 1-on-1 strategy session",
-            "Market opportunity audit",
-            "Skill gap analysis",
-            "Income potential assessment",
-            "Competitor landscape overview",
-            "Zero sales pressure · No credit card required",
-          ],
-        },
-        {
-          id: 2,
-          billingCycle: "monthly",
-          name: "AI Starter",
-          priceLabel: "$197",
-          price: 197,
-          period: "/month · Cancel anytime",
-          badge: "🔥 Most Popular",
-          badgeColor: "#6366f1",
-          badgeBg: "rgba(99,102,241,0.15)",
-          description:
-            "Everything you need to build your first AI product, attract your first clients, and start generating real income.",
-          cta: "Get Started Today",
-          ctaStyle: "primary",
-          highlighted: false,
-          features: [
-            "Full curriculum access",
-            "Weekly group coaching calls",
-            "AI tools & automation templates",
-            "Private community membership",
-            "Client proposal templates",
-            "Email & chat support",
-          ],
-        },
-        {
-          id: 3,
-          billingCycle: "monthly",
-          name: "AI Accelerator",
-          priceLabel: "$497",
-          price: 497,
-          period: "/month · Cancel anytime",
-          badge: "⚡ Best Value",
-          badgeColor: "#f59e0b",
-          badgeBg: "rgba(245,158,11,0.12)",
-          description:
-            "Hands-on monthly support from first client to final delivery. We guide you through every project, help manage client expectations, and stay by your side every step of the way.",
-          cta: "Join AI Accelerator",
-          ctaStyle: "primary",
-          highlighted: true,
-          features: [
-            "2× weekly 1-on-1 mentorship calls",
-            "New client onboarding support",
-            "Post-sale client relationship guidance",
-            "Project delivery coaching",
-            "Ongoing partial support between milestones",
-            "Priority support channel",
-            "Dedicated results support",
-          ],
-        },
-        // Yearly plans
-        {
-          id: 4,
-          billingCycle: "yearly",
-          name: "Free Strategy Call",
-          priceLabel: "FREE",
-          price: 0,
-          period: "No credit card needed",
-          badge: "🎯 No Risk",
-          badgeColor: "#22c55e",
-          badgeBg: "rgba(34,197,94,0.12)",
-          description:
-            "Come with your business idea — we'll help you validate it, spot the opportunity, and map a clear path forward. No sales pitch, just honest strategy.",
-          cta: "Book My Free Call →",
-          ctaStyle: "outline",
-          highlighted: false,
-          features: [
-            "60-min 1-on-1 strategy session",
-            "Market opportunity audit",
-            "Skill gap analysis",
-            "Income potential assessment",
-            "Competitor landscape overview",
-            "Zero sales pressure · No credit card required",
-          ],
-        },
-        {
-          id: 5,
-          billingCycle: "yearly",
-          name: "AI Starter",
-          priceLabel: "$1,497",
-          price: 1497,
-          period: "/year · Save $867",
-          badge: "🔥 Most Popular",
-          badgeColor: "#6366f1",
-          badgeBg: "rgba(99,102,241,0.15)",
-          description:
-            "Everything you need to build your first AI product, attract your first clients, and start generating real income.",
-          cta: "Get Started Today",
-          ctaStyle: "primary",
-          highlighted: false,
-          features: [
-            "Full curriculum access",
-            "Weekly group coaching calls",
-            "AI tools & automation templates",
-            "Private community membership",
-            "Client proposal templates",
-            "Email & chat support",
-          ],
-        },
-        {
-          id: 6,
-          billingCycle: "yearly",
-          name: "AI Accelerator",
-          priceLabel: "$3,997",
-          price: 3997,
-          period: "/year · Save $1,967",
-          badge: "⚡ Best Value",
-          badgeColor: "#f59e0b",
-          badgeBg: "rgba(245,158,11,0.12)",
-          description:
-            "The complete done-with-you experience. We personally connect you with clients, co-deliver your first projects, and support your success every step of the way.",
-          cta: "Join AI Accelerator",
-          ctaStyle: "primary",
-          highlighted: true,
-          features: [
-            "Everything in Starter, plus:",
-            "2× weekly 1-on-1 mentorship calls",
-            "Direct client introductions",
-            "Done-with-you project delivery",
-            "Priority Slack support channel",
-            "Dedicated results support",
-          ],
-        },
-        // One-time project plans
-        {
-          id: 7,
-          billingCycle: "one-time",
-          name: "Free Strategy Call",
-          priceLabel: "FREE",
-          price: 0,
-          period: "No credit card needed",
-          badge: "🎯 No Risk",
-          badgeColor: "#22c55e",
-          badgeBg: "rgba(34,197,94,0.12)",
-          description:
-            "Come with your business idea — we'll help you validate it, spot the opportunity, and map a clear path forward. No sales pitch, just honest strategy.",
-          cta: "Book My Free Call →",
-          ctaStyle: "outline",
-          highlighted: false,
-          features: [
-            "60-min 1-on-1 strategy session",
-            "Market opportunity audit",
-            "Skill gap analysis",
-            "Income potential assessment",
-            "Competitor landscape overview",
-            "Zero sales pressure · No credit card required",
-          ],
-        },
-        {
-          id: 8,
-          billingCycle: "one-time",
-          name: "Full Project Delivery",
-          priceLabel: "$1,497",
-          price: 1497,
-          period: "One-time · Base project price",
-          badge: "🚀 Done For You",
-          badgeColor: "#7c3aed",
-          badgeBg: "rgba(124,58,237,0.15)",
-          description:
-            "You bring the vision — we handle everything from scoping to final delivery. Complete end-to-end AI project support at a single flat rate. Complex scope discussed transparently before any extra charge.",
-          cta: "Start My Project →",
-          ctaStyle: "primary",
-          highlighted: true,
-          features: [
-            "End-to-end project scoping & planning",
-            "Full AI solution design & build",
-            "Testing, QA & quality assurance",
-            "Deployment & integration setup",
-            "Client handover documentation",
-            "Team training session included",
-            "30-day post-launch support",
-            "Transparent pricing — no surprise fees",
-          ],
-        },
-      ];
-
-      let _activeBilling = "monthly";
-
-      function setBilling(cycle) {
-        _activeBilling = cycle;
-        const tabMap = {
-          monthly: "tabMonthly",
-          yearly: "tabYearly",
-          "one-time": "tabOneTime",
-        };
-        Object.values(tabMap).forEach((id) => {
-          const el = document.getElementById(id);
-          if (el) el.classList.remove("active");
-        });
-        const active = document.getElementById(tabMap[cycle]);
-        if (active) active.classList.add("active");
-        renderPricingPlans();
-      }
-
-      function toggleBilling() {
-        setBilling(_activeBilling === "monthly" ? "yearly" : "monthly");
-      }
-
-      function loadPricingPlans(cycle) {
-        try {
-          const s = localStorage.getItem("chrixlin_pricing");
-          const all = (s ? JSON.parse(s) : DEFAULT_PRICING_PLANS).filter(
-            (p) => p.visible !== false,
-          );
-          if (!cycle) return all;
-          const filtered = all.filter(
-            (p) => (p.billingCycle || "monthly") === cycle,
-          );
-          return filtered.length
-            ? filtered
-            : DEFAULT_PRICING_PLANS.filter(
-                (p) => (p.billingCycle || "monthly") === cycle,
-              );
-        } catch {
-          return DEFAULT_PRICING_PLANS.filter(
-            (p) => (p.billingCycle || "monthly") === (cycle || "monthly"),
-          );
-        }
-      }
-
-      function renderPricingPlans(overridePlans) {
-        const el = document.getElementById("pricingGrid");
-        if (!el) return;
-        const rawPlans = overridePlans || loadPricingPlans(_activeBilling);
-        const plans = [...rawPlans].sort(
-          (a, b) => (a.price === 0 ? -1 : 1) - (b.price === 0 ? -1 : 1),
-        );
-        el.innerHTML = plans
-          .map(
-            (p) => `
-    <div class="pricing-plan animate-in${p.highlighted ? " featured" : ""}">
-      ${p.highlighted ? '<div class="plan-popular-tag">⭐ Most Recommended</div>' : ""}
-      <div class="plan-badge" style="background:${p.badgeBg || "rgba(99,102,241,0.15)"};color:${p.badgeColor || "#a78bfa"}">${p.badge}</div>
-      <div class="plan-name">${p.name}</div>
-      <div class="plan-desc">${p.description}</div>
-      <div class="plan-features">
-        ${(p.features || [])
-          .map(
-            (f) => `
-          <div class="plan-feature">
-            <div class="plan-check${p.price === 0 ? " green" : ""}">✓</div>
-            <span>${f}</span>
-          </div>`,
-          )
-          .join("")}
-      </div>
-      <div class="plan-cta">
-        ${
-          p.price === 0
-            ? `<a href="#" class="cta-${p.ctaStyle || "outline"} plan-book-btn" data-booking="1">${p.cta}</a>`
-            : `<a href="payment.html?planId=${encodeURIComponent(p.id)}&planName=${encodeURIComponent(p.name)}&price=${encodeURIComponent(p.price)}&priceLabel=${encodeURIComponent(p.priceLabel)}&cycle=${encodeURIComponent(p.billingCycle || "monthly")}" class="cta-${p.ctaStyle || "primary"}">${p.cta}</a>`
-        }
-      </div>
-    </div>
-  `,
-          )
-          .join("");
-        // Re-observe new cards; if already in viewport, add visible immediately
-        el.dataset.count = plans.length;
-        // Hide billing tabs when every cycle has ≤1 plan (tabs add no value)
-        const tabsWrap = document.querySelector(".pricing-tabs-wrap");
-        if (tabsWrap) {
-          const cycles = ["monthly", "yearly", "one-time"];
-          const maxPerCycle = Math.max(
-            ...cycles.map((c) => loadPricingPlans(c).length),
-          );
-          tabsWrap.style.display = maxPerCycle <= 1 ? "none" : "";
-        }
-        el.querySelectorAll(".animate-in").forEach((card) => {
-          const rect = card.getBoundingClientRect();
-          if (rect.top < window.innerHeight && rect.bottom > 0) {
-            card.classList.add("visible");
-          } else if (typeof _scrollObserver !== "undefined") {
-            _scrollObserver.observe(card);
-          }
-        });
-      }
-
-      function renderFAQ(data) {
-        const el = document.getElementById("faqWrapper");
-        if (!el) return;
-        el.innerHTML = data.faq
-          .map(
-            (f, i) => `
-    <div class="faq-item animate-in" style="animation-delay:${i * 0.08}s">
-      <div class="faq-q" onclick="toggleFAQ(this.parentElement)">
-        <span>${f.q}</span>
-        <div class="faq-icon">+</div>
-      </div>
-      <div class="faq-a">${f.a}</div>
-    </div>
-  `,
-          )
-          .join("");
-      }
-
-      function toggleFAQ(item) {
-        const wasOpen = item.classList.contains("open");
-        document
-          .querySelectorAll(".faq-item.open")
-          .forEach((el) => el.classList.remove("open"));
-        if (!wasOpen) item.classList.add("open");
-      }
-
       // ─── INLINE TEXT KEYS FROM localStorage ──────────────────────────────────────
       function applyTextKeys(textKeys) {
         if (!textKeys) return;
@@ -2789,8 +2210,6 @@
       renderFeatures(siteData);
       renderTestimonials(siteData);
       renderForWho(siteData);
-      renderPricingPlans();
-      renderFAQ(siteData);
 
       // Apply any custom text keys
       const storedKeys = localStorage.getItem("agentrise_textkeys");
@@ -2888,20 +2307,62 @@
       function closeMobile() {
         document.getElementById("mobileMenu").classList.remove("open");
       }
+
+      // ─── CHAT WIDGET ───────────────────────────────────────────────────────────────
+      var CHAT_QA = [
+        {
+          q: "What does Chrixlin AI Rise do?",
+          a: "We design, build, and deploy custom AI bots and automation systems for businesses — voice agents, chatbots, lead generation, and more.",
+        },
+        {
+          q: "How much does it cost?",
+          a: "Every project is scoped to your business, so cost depends on what you need. Book a free call and we'll give you a clear quote — no obligation.",
+        },
+        {
+          q: "How long does a project take?",
+          a: "Most projects go from strategy call to live automation in days, not months — timelines depend on complexity, but we move fast.",
+        },
+        {
+          q: "Do I need any technical knowledge?",
+          a: "None. We handle the entire build, deployment, and documentation — you just tell us what you need automated.",
+        },
+        {
+          q: "Can you customize a project for my business?",
+          a: "Yes — everything in our Projects showcase can be fully customized. Book a call to discuss your specific use case.",
+        },
+      ];
+
+      function toggleChat() {
+        var panel = document.getElementById("chatPanel");
+        var isOpen = panel.classList.toggle("open");
+        if (isOpen && !panel.dataset.built) {
+          panel.dataset.built = "1";
+          var body = document.getElementById("chatBody");
+          CHAT_QA.forEach(function (item) {
+            var btn = document.createElement("button");
+            btn.className = "chat-q-btn";
+            btn.textContent = item.q;
+            btn.onclick = function () {
+              btn.remove();
+              var bubble = document.createElement("div");
+              bubble.className = "chat-bubble";
+              bubble.textContent = item.a;
+              body.appendChild(bubble);
+              body.scrollTop = body.scrollHeight;
+            };
+            body.appendChild(btn);
+          });
+        }
+      }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="supabase-client.js"></script>
     <script>
+      if (typeof ChrixlinDB !== "undefined") ChrixlinDB.initTracking();
+    </script>
+    <script>
       (async function () {
         if (typeof ChrixlinDB === "undefined") return;
-        try {
-          // Load pricing plans
-          const plans = await ChrixlinDB.loadAllPricingPlans();
-          if (plans && plans.length) {
-            localStorage.setItem("chrixlin_pricing", JSON.stringify(plans));
-            renderPricingPlans();
-          }
-        } catch (e) {}
 
         // Load each content section from its own DB table and re-render
         var refreshed = {};
@@ -2981,19 +2442,6 @@
           }
         } catch (e) {}
 
-        try {
-          var faqItems = await ChrixlinDB.loadSectionItems("faq_items");
-          if (faqItems && faqItems.length) {
-            refreshed.faq = faqItems
-              .filter(function (r) {
-                return r.is_active;
-              })
-              .map(function (r) {
-                return { q: r.question, a: r.answer };
-              });
-          }
-        } catch (e) {}
-
         // If we got any DB data, re-render those sections
         if (Object.keys(refreshed).length > 0) {
           var merged = Object.assign({}, siteData, refreshed);
@@ -3004,7 +2452,6 @@
           if (refreshed.features) renderFeatures(merged);
           if (refreshed.testimonials) renderTestimonials(merged);
           if (refreshed.forWho) renderForWho(merged);
-          if (refreshed.faq) renderFAQ(merged);
           // Re-run animations for newly rendered elements
           setTimeout(_runAnimations, 100);
         }
@@ -3026,31 +2473,6 @@
               heroKeys["footer.logo"] = hero.brand_name;
             }
             if (Object.keys(heroKeys).length) applyTextKeys(heroKeys);
-          }
-        } catch (e) {}
-      })();
-
-      // ─── AUTH NAV BUTTON ──────────────────────────────────────────────────────────
-      (async function () {
-        try {
-          const session = await ChrixlinDB.getCustomerSession();
-          var desktopBtn = document.getElementById("navAuthBtn");
-          var mobileBtn = document.getElementById("mobileAuthBtn");
-          if (session && session.user) {
-            var name =
-              session.user.user_metadata && session.user.user_metadata.full_name
-                ? session.user.user_metadata.full_name.split(" ")[0]
-                : "Dashboard";
-            if (desktopBtn) {
-              desktopBtn.href = "dashboard.html";
-              desktopBtn.textContent = "👤 " + name;
-              desktopBtn.style.borderColor = "rgba(124,58,237,0.5)";
-              desktopBtn.style.color = "#a78bfa";
-            }
-            if (mobileBtn) {
-              mobileBtn.href = "dashboard.html";
-              mobileBtn.textContent = "👤 " + name;
-            }
           }
         } catch (e) {}
       })();
@@ -3141,15 +2563,45 @@
         });
       }
 
+      var _inlineBookingRendered = false;
+      function renderInlineBooking(bookingObj) {
+        if (_inlineBookingRendered || !bookingObj || !bookingObj.url) return;
+        var wrap = document.getElementById("inlineBookingWrap");
+        var widgetEl = document.getElementById("calendlyInlineWidget");
+        var formEl = document.getElementById("strategyCallForm");
+        if (!wrap || !widgetEl || !formEl) return;
+        if (bookingObj.platform === "calendly") {
+          widgetEl.setAttribute("data-url", bookingObj.url);
+          var s = document.createElement("script");
+          s.src = "https://assets.calendly.com/assets/external/widget.js";
+          s.async = true;
+          document.body.appendChild(s);
+          wrap.style.display = "block";
+          formEl.style.display = "none";
+          _inlineBookingRendered = true;
+        } else if (bookingObj.platform === "cal") {
+          var iframe = document.createElement("iframe");
+          iframe.src = bookingObj.url;
+          iframe.style.cssText =
+            "width:100%;height:100%;border:0;border-radius:16px";
+          widgetEl.appendChild(iframe);
+          wrap.style.display = "block";
+          formEl.style.display = "none";
+          _inlineBookingRendered = true;
+        }
+      }
+
       (async function () {
         // 1. Apply from localStorage immediately (fast, no delay)
         try {
           var bl = JSON.parse(
             localStorage.getItem("chrixlin_booking_link") || "{}",
           );
-          if (bl.url) applyBookingLink(bl.url);
-          // Also check old storage key for backwards compat
-          else {
+          if (bl.url) {
+            applyBookingLink(bl.url);
+            renderInlineBooking(bl);
+          } else {
+            // Also check old storage key for backwards compat
             var bd = JSON.parse(
               localStorage.getItem("chrixlin_bank_details") || "{}",
             );
@@ -3170,6 +2622,7 @@
                 JSON.stringify(dbVal),
               );
               applyBookingLink(dbVal.url);
+              renderInlineBooking(dbVal);
             }
           } catch (e) {}
         }
