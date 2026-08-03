@@ -26,8 +26,8 @@ CREATE INDEX IF NOT EXISTS idx_site_settings_key ON public.site_settings (key);
 CREATE TRIGGER trg_site_settings_updated_at BEFORE UPDATE ON public.site_settings FOR EACH ROW EXECUTE FUNCTION trigger_set_updated_at();
 ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "site_settings_public_read"  ON public.site_settings FOR SELECT USING (true);
-CREATE POLICY "site_settings_anon_write"   ON public.site_settings FOR INSERT WITH CHECK (true);
-CREATE POLICY "site_settings_anon_update"  ON public.site_settings FOR UPDATE USING (true);
+CREATE POLICY "site_settings_anon_write"   ON public.site_settings FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "site_settings_anon_update"  ON public.site_settings FOR UPDATE USING (auth.role() = 'authenticated');
 
 -- ── TABLE 2: marketplace_products ─────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.marketplace_products (
@@ -59,9 +59,9 @@ CREATE INDEX IF NOT EXISTS idx_mp_sort_order ON public.marketplace_products (sor
 CREATE TRIGGER trg_mp_products_updated_at BEFORE UPDATE ON public.marketplace_products FOR EACH ROW EXECUTE FUNCTION trigger_set_updated_at();
 ALTER TABLE public.marketplace_products ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "mp_products_public_read"   ON public.marketplace_products FOR SELECT USING (true);
-CREATE POLICY "mp_products_anon_insert"   ON public.marketplace_products FOR INSERT WITH CHECK (true);
-CREATE POLICY "mp_products_anon_update"   ON public.marketplace_products FOR UPDATE USING (true);
-CREATE POLICY "mp_products_anon_delete"   ON public.marketplace_products FOR DELETE USING (true);
+CREATE POLICY "mp_products_anon_insert"   ON public.marketplace_products FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "mp_products_anon_update"   ON public.marketplace_products FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "mp_products_anon_delete"   ON public.marketplace_products FOR DELETE USING (auth.role() = 'authenticated');
 
 INSERT INTO public.marketplace_products (id, emoji, badge, category, category_label, category_class, price, title, description, long_desc, buy_url, features, sort_order, is_active) VALUES
 (1, '📞', 'Bestseller', 'voice-ai', 'Voice AI', 'cat-voice', '$1,499', 'Voice AI Appointment Agent',
@@ -125,9 +125,9 @@ CREATE INDEX IF NOT EXISTS idx_pricing_sort ON public.pricing_plans (sort_order)
 CREATE TRIGGER trg_pricing_updated_at BEFORE UPDATE ON public.pricing_plans FOR EACH ROW EXECUTE FUNCTION trigger_set_updated_at();
 ALTER TABLE public.pricing_plans ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "pricing_public_read"   ON public.pricing_plans FOR SELECT USING (true);
-CREATE POLICY "pricing_anon_insert"   ON public.pricing_plans FOR INSERT WITH CHECK (true);
-CREATE POLICY "pricing_anon_update"   ON public.pricing_plans FOR UPDATE USING (true);
-CREATE POLICY "pricing_anon_delete"   ON public.pricing_plans FOR DELETE USING (true);
+CREATE POLICY "pricing_anon_insert"   ON public.pricing_plans FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "pricing_anon_update"   ON public.pricing_plans FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "pricing_anon_delete"   ON public.pricing_plans FOR DELETE USING (auth.role() = 'authenticated');
 
 -- ── TABLE 4: payment_settings ──────────────────────────────────────
 CREATE TABLE IF NOT EXISTS public.payment_settings (
@@ -275,8 +275,8 @@ CREATE TABLE IF NOT EXISTS public.hero_section (
 CREATE TRIGGER trg_hero_updated_at BEFORE UPDATE ON public.hero_section FOR EACH ROW EXECUTE FUNCTION trigger_set_updated_at();
 ALTER TABLE public.hero_section ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "hero_public_read"  ON public.hero_section FOR SELECT USING (true);
-CREATE POLICY "hero_anon_insert"  ON public.hero_section FOR INSERT WITH CHECK (true);
-CREATE POLICY "hero_anon_update"  ON public.hero_section FOR UPDATE USING (true);
+CREATE POLICY "hero_anon_insert"  ON public.hero_section FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "hero_anon_update"  ON public.hero_section FOR UPDATE USING (auth.role() = 'authenticated');
 INSERT INTO public.hero_section (brand_name) VALUES ('Chrixlin AI Rise') ON CONFLICT DO NOTHING;
 
 -- ── TABLE 9: stat_items ────────────────────────────────────────────
@@ -291,9 +291,9 @@ CREATE TABLE IF NOT EXISTS public.stat_items (
 CREATE TRIGGER trg_stat_updated_at BEFORE UPDATE ON public.stat_items FOR EACH ROW EXECUTE FUNCTION trigger_set_updated_at();
 ALTER TABLE public.stat_items ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "stat_public_read"  ON public.stat_items FOR SELECT USING (true);
-CREATE POLICY "stat_anon_insert"  ON public.stat_items FOR INSERT WITH CHECK (true);
-CREATE POLICY "stat_anon_update"  ON public.stat_items FOR UPDATE USING (true);
-CREATE POLICY "stat_anon_delete"  ON public.stat_items FOR DELETE USING (true);
+CREATE POLICY "stat_anon_insert"  ON public.stat_items FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "stat_anon_update"  ON public.stat_items FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "stat_anon_delete"  ON public.stat_items FOR DELETE USING (auth.role() = 'authenticated');
 INSERT INTO public.stat_items (id, value, label, sort_order) VALUES
   (1, '160+',   'Entrepreneurs Trained',      1),
   (2, '$1.8M+', 'Mentee Revenue Generated',   2),
@@ -313,9 +313,9 @@ CREATE TABLE IF NOT EXISTS public.story_items (
 CREATE TRIGGER trg_story_updated_at BEFORE UPDATE ON public.story_items FOR EACH ROW EXECUTE FUNCTION trigger_set_updated_at();
 ALTER TABLE public.story_items ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "story_public_read"  ON public.story_items FOR SELECT USING (true);
-CREATE POLICY "story_anon_insert"  ON public.story_items FOR INSERT WITH CHECK (true);
-CREATE POLICY "story_anon_update"  ON public.story_items FOR UPDATE USING (true);
-CREATE POLICY "story_anon_delete"  ON public.story_items FOR DELETE USING (true);
+CREATE POLICY "story_anon_insert"  ON public.story_items FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "story_anon_update"  ON public.story_items FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "story_anon_delete"  ON public.story_items FOR DELETE USING (auth.role() = 'authenticated');
 INSERT INTO public.story_items (id, year, title, body, sort_order) VALUES
   (1, '2020',      'The Beginning',             'Broke college student with big ambitions. Discovered that businesses would pay premium prices for automation tools.',                                       1),
   (2, '2021',      'First Big Win',              'Built a PS5 automation tool during the GPU shortage. First taste of what AI bots could generate.',                                                       2),
@@ -336,9 +336,9 @@ CREATE TABLE IF NOT EXISTS public.process_steps (
 CREATE TRIGGER trg_process_updated_at BEFORE UPDATE ON public.process_steps FOR EACH ROW EXECUTE FUNCTION trigger_set_updated_at();
 ALTER TABLE public.process_steps ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "process_public_read"  ON public.process_steps FOR SELECT USING (true);
-CREATE POLICY "process_anon_insert"  ON public.process_steps FOR INSERT WITH CHECK (true);
-CREATE POLICY "process_anon_update"  ON public.process_steps FOR UPDATE USING (true);
-CREATE POLICY "process_anon_delete"  ON public.process_steps FOR DELETE USING (true);
+CREATE POLICY "process_anon_insert"  ON public.process_steps FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "process_anon_update"  ON public.process_steps FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "process_anon_delete"  ON public.process_steps FOR DELETE USING (auth.role() = 'authenticated');
 INSERT INTO public.process_steps (id, num, week_label, title, body, sort_order) VALUES
   (1, '01', 'Week 1–2', 'Strategy & Foundation',   'Book your free call. We build your personalized 60-day AI business roadmap based on your skills, goals, and timeline. Zero guesswork.',                                         1),
   (2, '02', 'Week 2–4', 'Build & Master AI Tools',  'Learn the exact AI tools clients pay $2,000–$10,000+ for. Build real projects under mentor guidance. No tutorials — actual deliverables.',                                     2),
@@ -358,9 +358,9 @@ CREATE TABLE IF NOT EXISTS public.feature_items (
 CREATE TRIGGER trg_feature_updated_at BEFORE UPDATE ON public.feature_items FOR EACH ROW EXECUTE FUNCTION trigger_set_updated_at();
 ALTER TABLE public.feature_items ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "feature_public_read"  ON public.feature_items FOR SELECT USING (true);
-CREATE POLICY "feature_anon_insert"  ON public.feature_items FOR INSERT WITH CHECK (true);
-CREATE POLICY "feature_anon_update"  ON public.feature_items FOR UPDATE USING (true);
-CREATE POLICY "feature_anon_delete"  ON public.feature_items FOR DELETE USING (true);
+CREATE POLICY "feature_anon_insert"  ON public.feature_items FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "feature_anon_update"  ON public.feature_items FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "feature_anon_delete"  ON public.feature_items FOR DELETE USING (auth.role() = 'authenticated');
 INSERT INTO public.feature_items (id, icon, title, body, sort_order) VALUES
   (1, '🎯', 'Personalized Strategy Call', 'A custom 60-day business roadmap tailored to your background, skills, and income goals. Not a generic plan.',            1),
   (2, '📹', 'Weekly Live Coaching',        'Group sessions covering AI tools, client acquisition, pricing strategies, and scaling your business.',                   2),
@@ -386,9 +386,9 @@ CREATE TABLE IF NOT EXISTS public.testimonial_items (
 CREATE TRIGGER trg_testimonial_updated_at BEFORE UPDATE ON public.testimonial_items FOR EACH ROW EXECUTE FUNCTION trigger_set_updated_at();
 ALTER TABLE public.testimonial_items ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "testimonial_public_read"  ON public.testimonial_items FOR SELECT USING (true);
-CREATE POLICY "testimonial_anon_insert"  ON public.testimonial_items FOR INSERT WITH CHECK (true);
-CREATE POLICY "testimonial_anon_update"  ON public.testimonial_items FOR UPDATE USING (true);
-CREATE POLICY "testimonial_anon_delete"  ON public.testimonial_items FOR DELETE USING (true);
+CREATE POLICY "testimonial_anon_insert"  ON public.testimonial_items FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "testimonial_anon_update"  ON public.testimonial_items FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "testimonial_anon_delete"  ON public.testimonial_items FOR DELETE USING (auth.role() = 'authenticated');
 INSERT INTO public.testimonial_items (id, name, role, emoji, result, quote, stars, sort_order) VALUES
   (1, 'Shubham S.', 'Software Engineer @ Big Tech',  '👨‍💻', '$0 → $120,000+ in profits', 'I was skeptical — I already had a good job. But within 8 weeks I was earning an extra $12,000 a month. The mentorship showed me exactly how to package my existing skills for premium AI clients.', 5, 1),
   (2, 'Ilya P.',    'Former Food Delivery Driver',    '🚗',   '$0 → $100,000+ in profits', 'I had zero tech background. The program walked me through everything step by step. I made $1,000 in my very first day selling an AI QR generator. It changed my entire life trajectory.', 5, 2),
@@ -408,9 +408,9 @@ CREATE TABLE IF NOT EXISTS public.for_who_items (
 CREATE TRIGGER trg_for_who_updated_at BEFORE UPDATE ON public.for_who_items FOR EACH ROW EXECUTE FUNCTION trigger_set_updated_at();
 ALTER TABLE public.for_who_items ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "for_who_public_read"  ON public.for_who_items FOR SELECT USING (true);
-CREATE POLICY "for_who_anon_insert"  ON public.for_who_items FOR INSERT WITH CHECK (true);
-CREATE POLICY "for_who_anon_update"  ON public.for_who_items FOR UPDATE USING (true);
-CREATE POLICY "for_who_anon_delete"  ON public.for_who_items FOR DELETE USING (true);
+CREATE POLICY "for_who_anon_insert"  ON public.for_who_items FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "for_who_anon_update"  ON public.for_who_items FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "for_who_anon_delete"  ON public.for_who_items FOR DELETE USING (auth.role() = 'authenticated');
 INSERT INTO public.for_who_items (id, icon, title, body, sort_order) VALUES
   (1, '🏢', '9-5 Employees',     'Tired of trading time for money. Ready to build a business that generates income while you sleep.',                    1),
   (2, '🎓', 'College Students',  'Build real income and high-demand skills while your peers are still figuring out their career.',                      2),
@@ -430,9 +430,9 @@ CREATE TABLE IF NOT EXISTS public.faq_items (
 CREATE TRIGGER trg_faq_updated_at BEFORE UPDATE ON public.faq_items FOR EACH ROW EXECUTE FUNCTION trigger_set_updated_at();
 ALTER TABLE public.faq_items ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "faq_public_read"  ON public.faq_items FOR SELECT USING (true);
-CREATE POLICY "faq_anon_insert"  ON public.faq_items FOR INSERT WITH CHECK (true);
-CREATE POLICY "faq_anon_update"  ON public.faq_items FOR UPDATE USING (true);
-CREATE POLICY "faq_anon_delete"  ON public.faq_items FOR DELETE USING (true);
+CREATE POLICY "faq_anon_insert"  ON public.faq_items FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "faq_anon_update"  ON public.faq_items FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "faq_anon_delete"  ON public.faq_items FOR DELETE USING (auth.role() = 'authenticated');
 INSERT INTO public.faq_items (id, question, answer, sort_order) VALUES
   (1, 'Do I need any coding or technical experience to start?',
       'None at all. Many of our most successful students started with zero technical background. The program teaches you exactly what you need at your own pace. What matters is your commitment and drive — not your current skill level.', 1),

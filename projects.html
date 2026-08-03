@@ -6,18 +6,18 @@
     <title>Projects — Chrixlin AI Rise</title>
     <meta
       name="description"
-      content="Browse ready-to-deploy AI bots, voice agents, and automation systems we've built for businesses. Book a call for a custom build."
+      content="A showcase of AI bots, voice agents, and automation systems we've built for real clients. Book a call to get something similar."
     />
-    <link rel="canonical" href="https://chrixlin.tech/marketplace.html" />
+    <link rel="canonical" href="https://chrixlin.tech/projects.html" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Chrixlin AI Rise" />
-    <meta property="og:url" content="https://chrixlin.tech/marketplace.html" />
+    <meta property="og:url" content="https://chrixlin.tech/projects.html" />
     <meta property="og:title" content="Projects — Chrixlin AI Rise" />
     <meta
       property="og:description"
-      content="Browse ready-to-deploy AI bots, voice agents, and automation systems we've built for businesses. Book a call for a custom build."
+      content="A showcase of AI bots, voice agents, and automation systems we've built for real clients. Book a call to get something similar."
     />
     <meta property="og:image" content="https://chrixlin.tech/og-image.png" />
 
@@ -26,7 +26,7 @@
     <meta name="twitter:title" content="Projects — Chrixlin AI Rise" />
     <meta
       name="twitter:description"
-      content="Browse ready-to-deploy AI bots, voice agents, and automation systems we've built for businesses. Book a call for a custom build."
+      content="A showcase of AI bots, voice agents, and automation systems we've built for real clients. Book a call to get something similar."
     />
     <meta name="twitter:image" content="https://chrixlin.tech/og-image.png" />
 
@@ -1167,7 +1167,7 @@
           <a href="index.html#process">How It Works</a>
           <a href="index.html#features">What You Get</a>
           <a href="index.html#testimonials">Results</a>
-          <a href="marketplace.html" class="active">Projects</a>
+          <a href="projects.html" class="active">Projects</a>
         </div>
         <div class="nav-cta">
           <a href="mailto:info@chrixlin.tech" class="btn btn-primary"
@@ -1186,7 +1186,7 @@
       <a href="index.html#process" onclick="closeMobile()">How It Works</a>
       <a href="index.html#features" onclick="closeMobile()">What You Get</a>
       <a href="index.html#testimonials" onclick="closeMobile()">Results</a>
-      <a href="marketplace.html" onclick="closeMobile()">Projects</a>
+      <a href="projects.html" onclick="closeMobile()">Projects</a>
       <a href="#book-call" class="btn btn-primary" onclick="closeMobile()"
         >Book Free Call</a
       >
@@ -1196,13 +1196,14 @@
     <section id="products">
       <div class="container">
         <div class="products-header animate-in">
-          <div class="badge" style="margin-bottom: 16px">🤖 Available Now</div>
+          <div class="badge" style="margin-bottom: 16px">💼 Our Work</div>
           <h2 id="productsTitle">
-            Our <span class="text-grad">AI Product</span> Library
+            Projects We've <span class="text-grad">Delivered</span> for
+            Clients
           </h2>
           <p id="productsSub">
-            All products are fully tested, documented, and ready to deploy for
-            your clients.
+            A showcase of AI automation systems we've designed, built, and
+            deployed for real businesses.
           </p>
         </div>
         <div class="category-tabs" id="categoryTabs">
@@ -1211,7 +1212,7 @@
             data-cat="all"
             onclick="filterProducts('all')"
           >
-            All Products
+            All Projects
           </button>
           <!-- Dynamic categories inserted by JS -->
         </div>
@@ -1272,6 +1273,7 @@
               <div class="form-group">
                 <label class="form-label">Full Name</label>
                 <input
+                  id="bookName"
                   class="form-input"
                   type="text"
                   placeholder="Your full name"
@@ -1281,6 +1283,7 @@
               <div class="form-group">
                 <label class="form-label">Email Address</label>
                 <input
+                  id="bookEmail"
                   class="form-input"
                   type="email"
                   placeholder="your@email.com"
@@ -1289,7 +1292,7 @@
               </div>
               <div class="form-group">
                 <label class="form-label">What do you need?</label>
-                <select class="form-select">
+                <select id="bookCategory" class="form-select">
                   <option value="">Select a category...</option>
                   <option>Voice AI Agent</option>
                   <option>Lead Generation Bot</option>
@@ -1302,14 +1305,19 @@
               <div class="form-group">
                 <label class="form-label">Tell us about your project</label>
                 <input
+                  id="bookDetails"
                   class="form-input"
                   type="text"
                   placeholder="Brief description of what you need..."
                 />
               </div>
-              <button type="submit" class="btn btn-primary form-submit">
+              <button type="submit" class="btn btn-primary form-submit" id="bookSubmitBtn">
                 Book My Free Call →
               </button>
+              <p
+                id="bookFormMsg"
+                style="display: none; margin-top: 10px; font-size: 13px; text-align: center"
+              ></p>
               <p class="form-submit-note">
                 100% Free · No obligation · We reply within 24 hours
               </p>
@@ -1326,20 +1334,19 @@
           <div class="footer-brand">
             <div class="nav-logo" id="footerLogo">Chrixlin AI Rise</div>
             <p>
-              Ready-to-deploy AI bots and custom automation solutions for
-              ambitious businesses.
+              Custom AI bots and automation systems, designed and deployed
+              for real businesses.
             </p>
           </div>
           <div class="footer-col">
             <h4>Projects</h4>
             <ul>
-              <li><a href="#products">All Products</a></li>
-              <li><a href="#videos">Watch Demos</a></li>
+              <li><a href="#products">All Projects</a></li>
               <li><a href="#book-call">Custom Build</a></li>
             </ul>
           </div>
           <div class="footer-col">
-            <h4>Program</h4>
+            <h4>Company</h4>
             <ul>
               <li><a href="index.html#process">How It Works</a></li>
               <li><a href="index.html#features">What You Get</a></li>
@@ -1349,8 +1356,8 @@
           <div class="footer-col">
             <h4>Legal</h4>
             <ul>
-              <li><a href="#">Privacy Policy</a></li>
-              <li><a href="#">Terms of Service</a></li>
+              <li><a href="privacy.html">Privacy Policy</a></li>
+              <li><a href="terms.html">Terms of Service</a></li>
               <li><a href="mailto:info@chrixlin.tech">Contact Us</a></li>
             </ul>
           </div>
@@ -1447,13 +1454,13 @@
       // ─── DEFAULT DATA ─────────────────────────────────────────────────────────────
       const DEFAULT_MP = {
         hero: {
-          badge: "🛒 AI Bot Projects",
+          badge: "💼 Client Work",
           title:
-            "Ready-to-Deploy <span class='text-grad'>AI Bots & Agents</span><br>For Your Business",
+            "Real AI Automation <span class='text-grad'>Projects We've Built</span><br>For Businesses Like Yours",
           subtitle:
-            "Browse our library of pre-built AI automation systems. Buy and deploy in 48 hours — or book a call for a custom-built solution tailored to your exact needs.",
+            "A showcase of AI bots and automation systems we've designed and deployed for real clients. Want something similar for your business? Book a call and we'll build it.",
           stats: [
-            { value: "20+", label: "AI Products" },
+            { value: "20+", label: "Projects Delivered" },
             { value: "24/7", label: "Support Available" },
             { value: "48h", label: "Avg. Deploy Time" },
             { value: "100%", label: "Setup Included" },
@@ -1549,7 +1556,7 @@
               `<button class="cat-tab" data-cat="${c.key}" onclick="filterProducts('${c.key}', this)">${c.label}</button>`,
           )
           .join("");
-        tabs.innerHTML = `<button class="cat-tab active" data-cat="all" onclick="filterProducts('all', this)">All Products</button>${catBtns}`;
+        tabs.innerHTML = `<button class="cat-tab active" data-cat="all" onclick="filterProducts('all', this)">All Projects</button>${catBtns}`;
       }
 
       function filterProducts(cat, btnEl) {
@@ -1570,7 +1577,7 @@
         if (visible === 0) {
           grid.insertAdjacentHTML(
             "beforeend",
-            `<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-text">No products in this category yet. <a href="#book-call" style="color:#a78bfa">Book a custom build →</a></div></div>`,
+            `<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-text">No projects in this category yet. <a href="#book-call" style="color:#a78bfa">Book a custom build →</a></div></div>`,
           );
         }
       }
@@ -1619,7 +1626,7 @@
       </div>
       <div class="product-bottom">
         <div>
-          <div class="product-price-note">One-time · Setup included</div>
+          <div class="product-price-note">Custom built · Fully deployed</div>
         </div>
         <div class="product-cta-arrow">→</div>
       </div>
@@ -1631,10 +1638,68 @@
       renderProducts();
 
       // ─── BOOKING FORM ─────────────────────────────────────────────────────────────
-      function submitBooking(e) {
+      async function submitBooking(e) {
         e.preventDefault();
-        const email = mp.book.email || "info@chrixlin.tech";
-        window.location.href = `mailto:${email}?subject=Projects%20Custom%20Build%20Request`;
+        const name = document.getElementById("bookName").value.trim();
+        const email = document.getElementById("bookEmail").value.trim();
+        const category = document.getElementById("bookCategory").value;
+        const details = document.getElementById("bookDetails").value.trim();
+        const msg = document.getElementById("bookFormMsg");
+        const btn = document.getElementById("bookSubmitBtn");
+        if (!name || !email) {
+          msg.style.display = "block";
+          msg.style.color = "#f87171";
+          msg.textContent = "Please enter your name and email.";
+          return;
+        }
+        btn.disabled = true;
+        btn.textContent = "Sending...";
+        try {
+          if (typeof ChrixlinDB !== "undefined") {
+            await ChrixlinDB.submitStrategyCall({
+              name,
+              email,
+              message:
+                (category ? "Category: " + category + "\n" : "") +
+                (details || "No additional details provided."),
+              source: "marketplace",
+            });
+          }
+          try {
+            if (
+              typeof emailjs !== "undefined" &&
+              typeof EMAILJS_SERVICE_ID !== "undefined" &&
+              EMAILJS_SERVICE_ID !== "YOUR_SERVICE_ID"
+            ) {
+              emailjs.send(
+                EMAILJS_SERVICE_ID,
+                EMAILJS_TEMPLATE_ID,
+                {
+                  to_name: "Admin",
+                  to_email: "info@chrixlin.tech",
+                  from_name: name,
+                  subject: "New Custom Build Request (Projects page)",
+                  message: `Name: ${name}\nEmail: ${email}\nCategory: ${category || "—"}\nDetails: ${details || "—"}`,
+                },
+                EMAILJS_PUBLIC_KEY,
+              );
+            }
+          } catch (e2) {}
+          msg.style.display = "block";
+          msg.style.color = "#4ade80";
+          msg.textContent = "✅ Thank you! We'll be in touch within 24 hours.";
+          btn.textContent = "✅ Request Sent!";
+          document.getElementById("bookName").value = "";
+          document.getElementById("bookEmail").value = "";
+          document.getElementById("bookCategory").value = "";
+          document.getElementById("bookDetails").value = "";
+        } catch (err) {
+          btn.disabled = false;
+          btn.textContent = "Book My Free Call →";
+          msg.style.display = "block";
+          msg.style.color = "#f87171";
+          msg.textContent = "Something went wrong. Please try again.";
+        }
       }
 
       // ─── SCROLL ANIMATIONS ────────────────────────────────────────────────────────
@@ -1700,7 +1765,7 @@
             const tabsEl = document.getElementById("categoryTabs");
             if (tabsEl) {
               tabsEl.innerHTML =
-                '<button class="cat-tab active" data-cat="all" onclick="filterProducts(\'all\', this)">All Products</button>' +
+                '<button class="cat-tab active" data-cat="all" onclick="filterProducts(\'all\', this)">All Projects</button>' +
                 cats
                   .map(
                     (c) =>
@@ -1774,6 +1839,10 @@
           }
         } catch (e) {}
       })();
+    </script>
+
+    <script>
+      if (typeof ChrixlinDB !== "undefined") ChrixlinDB.initTracking();
     </script>
   </body>
 </html>

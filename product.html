@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Product — Chrixlin AI Rise</title>
+  <title>Project — Chrixlin AI Rise</title>
   <meta name="description" id="metaDescription" content="Full project details, demo video, and features. Book a call to get this built for your business." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Chrixlin AI Rise" />
@@ -248,7 +248,7 @@
       <a href="index.html#process">How It Works</a>
       <a href="index.html#features">What You Get</a>
       <a href="index.html#testimonials">Results</a>
-      <a href="marketplace.html" class="active">Projects</a>
+      <a href="projects.html" class="active">Projects</a>
     </div>
     <div class="nav-cta">
       <a href="mailto:info@chrixlin.tech" class="btn btn-primary">Book Free Call</a>
@@ -261,7 +261,7 @@
 <div class="mobile-menu" id="mobileMenu">
   <button class="mobile-close" id="mobileClose">✕</button>
   <a href="index.html#process" onclick="closeMobile()">How It Works</a>
-  <a href="marketplace.html" onclick="closeMobile()">Projects</a>
+  <a href="projects.html" onclick="closeMobile()">Projects</a>
   <a href="mailto:info@chrixlin.tech" class="btn btn-primary" onclick="closeMobile()">Book Free Call</a>
 </div>
 
@@ -271,9 +271,9 @@
     <div class="breadcrumb-inner">
       <a href="index.html">Home</a>
       <span class="sep">›</span>
-      <a href="marketplace.html">Projects</a>
+      <a href="projects.html">Projects</a>
       <span class="sep">›</span>
-      <span class="breadcrumb-cur" id="breadcrumbName">Product</span>
+      <span class="breadcrumb-cur" id="breadcrumbName">Project</span>
     </div>
   </div>
 </div>
@@ -344,8 +344,8 @@
 
     <!-- FULL DESCRIPTION -->
     <div class="cs-section">
-      <div class="section-label">About This Product</div>
-      <div class="cs-title"><span class="cs-title-icon">📄</span> Product Overview</div>
+      <div class="section-label">About This Project</div>
+      <div class="cs-title"><span class="cs-title-icon">📄</span> Project Overview</div>
       <p class="product-long-desc" id="productLongDesc"></p>
     </div>
 
@@ -406,7 +406,9 @@
       <div class="footer-logo" id="footerLogo">Chrixlin AI Rise</div>
       <div class="footer-copy" id="footerCopy">© 2025 Chrixlin AI Rise. All rights reserved.</div>
       <div class="footer-links">
-        <a href="marketplace.html">Projects</a>
+        <a href="projects.html">Projects</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
         <a href="mailto:info@chrixlin.tech">Contact</a>
       </div>
     </div>
@@ -642,7 +644,7 @@ let product = getProductByIdOrSlug(productId, productSlug);
 
 // ─── RENDER PRODUCT ───────────────────────────────────────────────────────────
 if (!product) {
-  document.title = 'Product Not Found — Chrixlin AI Rise';
+  document.title = 'Project Not Found — Chrixlin AI Rise';
   document.getElementById('productName').textContent = 'Product not found';
   document.getElementById('productShortDesc').textContent = 'This product could not be found. Please return to the projects page.';
 } else {

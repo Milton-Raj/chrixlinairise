@@ -33,8 +33,8 @@ DROP POLICY IF EXISTS "site_settings_public_read" ON public.site_settings;
 DROP POLICY IF EXISTS "site_settings_anon_write"  ON public.site_settings;
 DROP POLICY IF EXISTS "site_settings_anon_update" ON public.site_settings;
 CREATE POLICY "site_settings_public_read" ON public.site_settings FOR SELECT USING (true);
-CREATE POLICY "site_settings_anon_write"  ON public.site_settings FOR INSERT WITH CHECK (true);
-CREATE POLICY "site_settings_anon_update" ON public.site_settings FOR UPDATE USING (true);
+CREATE POLICY "site_settings_anon_write"  ON public.site_settings FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "site_settings_anon_update" ON public.site_settings FOR UPDATE USING (auth.role() = 'authenticated');
 
 
 -- ═══════════════════════════════════════════════════════════════════
@@ -81,9 +81,9 @@ DROP POLICY IF EXISTS "mp_products_anon_insert" ON public.marketplace_products;
 DROP POLICY IF EXISTS "mp_products_anon_update" ON public.marketplace_products;
 DROP POLICY IF EXISTS "mp_products_anon_delete" ON public.marketplace_products;
 CREATE POLICY "mp_products_public_read" ON public.marketplace_products FOR SELECT USING (true);
-CREATE POLICY "mp_products_anon_insert" ON public.marketplace_products FOR INSERT WITH CHECK (true);
-CREATE POLICY "mp_products_anon_update" ON public.marketplace_products FOR UPDATE USING (true);
-CREATE POLICY "mp_products_anon_delete" ON public.marketplace_products FOR DELETE USING (true);
+CREATE POLICY "mp_products_anon_insert" ON public.marketplace_products FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "mp_products_anon_update" ON public.marketplace_products FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "mp_products_anon_delete" ON public.marketplace_products FOR DELETE USING (auth.role() = 'authenticated');
 
 
 -- ═══════════════════════════════════════════════════════════════════
@@ -109,9 +109,9 @@ DROP POLICY IF EXISTS "mcat_anon_insert" ON public.marketplace_categories;
 DROP POLICY IF EXISTS "mcat_anon_update" ON public.marketplace_categories;
 DROP POLICY IF EXISTS "mcat_anon_delete" ON public.marketplace_categories;
 CREATE POLICY "mcat_public_read" ON public.marketplace_categories FOR SELECT USING (true);
-CREATE POLICY "mcat_anon_insert" ON public.marketplace_categories FOR INSERT WITH CHECK (true);
-CREATE POLICY "mcat_anon_update" ON public.marketplace_categories FOR UPDATE USING (true);
-CREATE POLICY "mcat_anon_delete" ON public.marketplace_categories FOR DELETE USING (true);
+CREATE POLICY "mcat_anon_insert" ON public.marketplace_categories FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "mcat_anon_update" ON public.marketplace_categories FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "mcat_anon_delete" ON public.marketplace_categories FOR DELETE USING (auth.role() = 'authenticated');
 -- Seed default categories
 INSERT INTO public.marketplace_categories (label, slug, color_hex, color_class, sort_order) VALUES
   ('Voice AI',    'voice-ai',   '#7c3aed', 'cat-thumb-voice-ai',   1),
@@ -160,9 +160,9 @@ DROP POLICY IF EXISTS "pricing_anon_insert"  ON public.pricing_plans;
 DROP POLICY IF EXISTS "pricing_anon_update"  ON public.pricing_plans;
 DROP POLICY IF EXISTS "pricing_anon_delete"  ON public.pricing_plans;
 CREATE POLICY "pricing_public_read"  ON public.pricing_plans FOR SELECT USING (true);
-CREATE POLICY "pricing_anon_insert"  ON public.pricing_plans FOR INSERT WITH CHECK (true);
-CREATE POLICY "pricing_anon_update"  ON public.pricing_plans FOR UPDATE USING (true);
-CREATE POLICY "pricing_anon_delete"  ON public.pricing_plans FOR DELETE USING (true);
+CREATE POLICY "pricing_anon_insert"  ON public.pricing_plans FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "pricing_anon_update"  ON public.pricing_plans FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "pricing_anon_delete"  ON public.pricing_plans FOR DELETE USING (auth.role() = 'authenticated');
 
 
 -- ═══════════════════════════════════════════════════════════════════
@@ -408,8 +408,8 @@ DROP POLICY IF EXISTS "hero_public_read" ON public.hero_section;
 DROP POLICY IF EXISTS "hero_anon_insert" ON public.hero_section;
 DROP POLICY IF EXISTS "hero_anon_update" ON public.hero_section;
 CREATE POLICY "hero_public_read" ON public.hero_section FOR SELECT USING (true);
-CREATE POLICY "hero_anon_insert" ON public.hero_section FOR INSERT WITH CHECK (true);
-CREATE POLICY "hero_anon_update" ON public.hero_section FOR UPDATE USING (true);
+CREATE POLICY "hero_anon_insert" ON public.hero_section FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "hero_anon_update" ON public.hero_section FOR UPDATE USING (auth.role() = 'authenticated');
 INSERT INTO public.hero_section (brand_name) VALUES ('Chrixlin AI Rise') ON CONFLICT DO NOTHING;
 
 CREATE TABLE IF NOT EXISTS public.stat_items (
@@ -424,9 +424,9 @@ DROP POLICY IF EXISTS "stat_anon_insert" ON public.stat_items;
 DROP POLICY IF EXISTS "stat_anon_update" ON public.stat_items;
 DROP POLICY IF EXISTS "stat_anon_delete" ON public.stat_items;
 CREATE POLICY "stat_public_read" ON public.stat_items FOR SELECT USING (true);
-CREATE POLICY "stat_anon_insert" ON public.stat_items FOR INSERT WITH CHECK (true);
-CREATE POLICY "stat_anon_update" ON public.stat_items FOR UPDATE USING (true);
-CREATE POLICY "stat_anon_delete" ON public.stat_items FOR DELETE USING (true);
+CREATE POLICY "stat_anon_insert" ON public.stat_items FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "stat_anon_update" ON public.stat_items FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "stat_anon_delete" ON public.stat_items FOR DELETE USING (auth.role() = 'authenticated');
 
 CREATE TABLE IF NOT EXISTS public.testimonial_items (
   id         BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -442,9 +442,9 @@ DROP POLICY IF EXISTS "testimonial_anon_insert" ON public.testimonial_items;
 DROP POLICY IF EXISTS "testimonial_anon_update" ON public.testimonial_items;
 DROP POLICY IF EXISTS "testimonial_anon_delete" ON public.testimonial_items;
 CREATE POLICY "testimonial_public_read" ON public.testimonial_items FOR SELECT USING (true);
-CREATE POLICY "testimonial_anon_insert" ON public.testimonial_items FOR INSERT WITH CHECK (true);
-CREATE POLICY "testimonial_anon_update" ON public.testimonial_items FOR UPDATE USING (true);
-CREATE POLICY "testimonial_anon_delete" ON public.testimonial_items FOR DELETE USING (true);
+CREATE POLICY "testimonial_anon_insert" ON public.testimonial_items FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "testimonial_anon_update" ON public.testimonial_items FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "testimonial_anon_delete" ON public.testimonial_items FOR DELETE USING (auth.role() = 'authenticated');
 
 CREATE TABLE IF NOT EXISTS public.faq_items (
   id         BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -458,9 +458,9 @@ DROP POLICY IF EXISTS "faq_anon_insert" ON public.faq_items;
 DROP POLICY IF EXISTS "faq_anon_update" ON public.faq_items;
 DROP POLICY IF EXISTS "faq_anon_delete" ON public.faq_items;
 CREATE POLICY "faq_public_read" ON public.faq_items FOR SELECT USING (true);
-CREATE POLICY "faq_anon_insert" ON public.faq_items FOR INSERT WITH CHECK (true);
-CREATE POLICY "faq_anon_update" ON public.faq_items FOR UPDATE USING (true);
-CREATE POLICY "faq_anon_delete" ON public.faq_items FOR DELETE USING (true);
+CREATE POLICY "faq_anon_insert" ON public.faq_items FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "faq_anon_update" ON public.faq_items FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "faq_anon_delete" ON public.faq_items FOR DELETE USING (auth.role() = 'authenticated');
 
 
 -- ═══════════════════════════════════════════════════════════════════
