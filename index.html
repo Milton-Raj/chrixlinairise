@@ -1019,23 +1019,52 @@
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 24px;
+        margin-bottom: 64px;
       }
       .testimonial-card {
+        position: relative;
         padding: 32px;
         border-radius: var(--r-card);
         background: var(--c-card);
         border: 1px solid var(--c-border);
         transition: var(--transition);
+        overflow: hidden;
+      }
+      .testimonial-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--grad);
+        opacity: 0;
+        transition: var(--transition);
       }
       .testimonial-card:hover {
         border-color: var(--c-border-h);
-        transform: translateY(-3px);
+        transform: translateY(-4px);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+      }
+      .testimonial-card:hover::before {
+        opacity: 1;
+      }
+      .t-quote-mark {
+        position: absolute;
+        top: 14px;
+        right: 22px;
+        font-family: Georgia, serif;
+        font-size: 72px;
+        line-height: 1;
+        color: rgba(124, 58, 237, 0.12);
+        pointer-events: none;
+        user-select: none;
       }
       .t-header {
         display: flex;
         align-items: center;
         gap: 16px;
-        margin-bottom: 20px;
+        margin-bottom: 14px;
       }
       .t-avatar {
         width: 52px;
@@ -1048,6 +1077,7 @@
         justify-content: center;
         font-size: 22px;
         border: 2px solid rgba(124, 58, 237, 0.4);
+        box-shadow: 0 6px 18px rgba(124, 58, 237, 0.3);
       }
       .t-name {
         font-family: var(--font-head);
@@ -1058,6 +1088,20 @@
         font-size: 13px;
         color: var(--c-muted);
       }
+      .t-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(6, 182, 212, 0.1);
+        border: 1px solid rgba(6, 182, 212, 0.25);
+        color: #22d3ee;
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-size: 11.5px;
+        font-weight: 700;
+        font-family: var(--font-head);
+        margin-bottom: 18px;
+      }
       .t-stars {
         display: flex;
         gap: 4px;
@@ -1066,6 +1110,7 @@
         font-size: 14px;
       }
       .t-quote {
+        position: relative;
         color: var(--c-sub);
         font-size: 15px;
         line-height: 1.7;
@@ -1079,11 +1124,89 @@
         background: rgba(34, 197, 94, 0.1);
         border: 1px solid rgba(34, 197, 94, 0.25);
         color: #4ade80;
-        padding: 8px 16px;
+        padding: 9px 18px;
         border-radius: 50px;
-        font-size: 13px;
+        font-size: 13.5px;
         font-weight: 700;
         font-family: var(--font-head);
+      }
+
+      /* ─── INDUSTRIES WE HELP ────────────────────────────── */
+      .industries-head {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+      .industries-head h3 {
+        font-family: var(--font-head);
+        font-weight: 800;
+        font-size: 22px;
+        margin-bottom: 8px;
+      }
+      .industries-head p {
+        color: var(--c-sub);
+        font-size: 14px;
+      }
+      .industries-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+      }
+      .industry-card {
+        padding: 22px 18px;
+        border-radius: 16px;
+        text-align: center;
+        background: var(--c-card);
+        border: 1px solid var(--c-border);
+        transition: var(--transition);
+      }
+      .industry-card:hover {
+        border-color: var(--c-border-h);
+        background: var(--c-card-h);
+        transform: translateY(-3px);
+      }
+      .industry-icon {
+        font-size: 30px;
+        margin-bottom: 10px;
+      }
+      .industry-name {
+        font-family: var(--font-head);
+        font-weight: 700;
+        font-size: 13.5px;
+        margin-bottom: 8px;
+      }
+      .industry-solution {
+        display: inline-block;
+        font-size: 10.5px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 50px;
+        white-space: nowrap;
+      }
+      .industry-solution.sol-voice {
+        background: rgba(6, 182, 212, 0.12);
+        color: #22d3ee;
+      }
+      .industry-solution.sol-automation {
+        background: rgba(124, 58, 237, 0.12);
+        color: #a78bfa;
+      }
+      .industry-solution.sol-leadgen {
+        background: rgba(34, 197, 94, 0.12);
+        color: #4ade80;
+      }
+      .industry-solution.sol-chatbot {
+        background: rgba(245, 158, 11, 0.12);
+        color: #fbbf24;
+      }
+      @media (max-width: 900px) {
+        .industries-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media (max-width: 640px) {
+        .industries-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
       }
 
       /* ─── WHO IS THIS FOR ───────────────────────────────── */
@@ -1867,6 +1990,17 @@
         <div class="testimonials-grid" id="testimonialsGrid">
           <!-- Populated by JS -->
         </div>
+
+        <div class="industries-head">
+          <h3>Industries We've Helped Automate</h3>
+          <p>
+            From voice agents to full workflow automation — tailored to
+            whatever your business runs on.
+          </p>
+        </div>
+        <div class="industries-grid" id="industriesGrid">
+          <!-- Populated by JS -->
+        </div>
       </div>
     </section>
 
@@ -2188,6 +2322,7 @@
             name: "Shubham S.",
             role: "Operations Lead, Logistics Co.",
             emoji: "👨‍💻",
+            tag: "🎙️ AI Voice Agent",
             result: "90% faster response time",
             quote:
               "The voice AI agent Chrixlin built now handles most of our incoming appointment calls. Our response time dropped by 90% and the team finally has room to breathe.",
@@ -2197,6 +2332,7 @@
             name: "Ilya P.",
             role: "Founder, D2C E-commerce Brand",
             emoji: "🚗",
+            tag: "🎯 Lead Recovery Bot",
             result: "$100K+ in recovered sales",
             quote:
               "We had zero automation before this. The lead recovery bot alone paid for itself in the first week and has since recovered over $100K in sales we would've lost.",
@@ -2206,6 +2342,7 @@
             name: "Ron M.",
             role: "Owner, Local Service Business",
             emoji: "🎓",
+            tag: "🔁 Workflow Automation",
             result: "30+ hours saved per month",
             quote:
               "Booking, reminders, and follow-ups used to eat my whole week. Now it's all automated. This is the best investment I've made in my business, bar none.",
@@ -2215,6 +2352,7 @@
             name: "Sarah C.",
             role: "Marketing Director, Growth Agency",
             emoji: "💼",
+            tag: "🎯 Lead Generation System",
             result: "3x more qualified leads",
             quote:
               "The custom lead-gen system Chrixlin built plugged straight into our CRM. We're now qualifying 3x more leads with the same size team.",
@@ -2533,6 +2671,35 @@
 
       renderTechStack();
 
+      // ─── INDUSTRIES WE HELP ───────────────────────────────────────────────────────
+      const INDUSTRIES = [
+        { icon: "🏥", name: "Healthcare & Clinics", sol: "AI Voice Agent", cls: "sol-voice" },
+        { icon: "🚚", name: "Logistics & Delivery", sol: "Automation", cls: "sol-automation" },
+        { icon: "🛒", name: "E-commerce & D2C", sol: "Lead Recovery", cls: "sol-leadgen" },
+        { icon: "🏠", name: "Real Estate", sol: "AI Voice Agent", cls: "sol-voice" },
+        { icon: "🍽️", name: "Restaurants & Hospitality", sol: "Automation", cls: "sol-automation" },
+        { icon: "💼", name: "Agencies & Consultants", sol: "White-Label Bots", cls: "sol-chatbot" },
+        { icon: "⚖️", name: "Legal Services", sol: "Intake Automation", cls: "sol-automation" },
+        { icon: "🔧", name: "Home Services", sol: "AI Voice Agent", cls: "sol-voice" },
+        { icon: "🏋️", name: "Fitness & Wellness", sol: "Lead Nurturing", cls: "sol-leadgen" },
+        { icon: "🎓", name: "Education & Coaching", sol: "Chatbot & CRM", cls: "sol-chatbot" },
+      ];
+
+      function renderIndustries() {
+        const el = document.getElementById("industriesGrid");
+        if (!el) return;
+        el.innerHTML = INDUSTRIES.map(
+          (ind, i) => `
+    <div class="industry-card animate-in" style="animation-delay:${i * 0.05}s">
+      <div class="industry-icon">${ind.icon}</div>
+      <div class="industry-name">${ind.name}</div>
+      <span class="industry-solution ${ind.cls}">${ind.sol}</span>
+    </div>
+  `,
+        ).join("");
+      }
+      renderIndustries();
+
       function renderTestimonials(data) {
         const el = document.getElementById("testimonialsGrid");
         if (!el) return;
@@ -2540,6 +2707,7 @@
           .map(
             (t, i) => `
     <div class="testimonial-card animate-in" style="animation-delay:${i * 0.1}s">
+      <div class="t-quote-mark">❝</div>
       <div class="t-header">
         <div class="t-avatar">${t.emoji}</div>
         <div>
@@ -2547,6 +2715,7 @@
           <div class="t-role">${t.role}</div>
         </div>
       </div>
+      ${t.tag ? `<div class="t-tag">${t.tag}</div>` : ""}
       <div class="t-stars">${"★".repeat(t.stars)}</div>
       <div class="t-quote">"${t.quote}"</div>
       <div class="t-result">📈 ${t.result}</div>
