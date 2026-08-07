@@ -838,6 +838,179 @@
         opacity: 1;
       }
 
+      /* ─── TECH STACK ────────────────────────────────────── */
+      #techstack {
+        background: var(--c-bg);
+        overflow: hidden;
+      }
+      .ts-marquee-wrap {
+        position: relative;
+        margin: 0 auto 56px;
+        max-width: 1000px;
+        -webkit-mask-image: linear-gradient(
+          90deg,
+          transparent,
+          #000 10%,
+          #000 90%,
+          transparent
+        );
+        mask-image: linear-gradient(
+          90deg,
+          transparent,
+          #000 10%,
+          #000 90%,
+          transparent
+        );
+      }
+      .ts-marquee-track {
+        display: flex;
+        align-items: center;
+        gap: 48px;
+        width: max-content;
+        animation: ts-scroll 32s linear infinite;
+      }
+      .ts-marquee-wrap:hover .ts-marquee-track {
+        animation-play-state: paused;
+      }
+      @keyframes ts-scroll {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      .ts-marquee-logo {
+        height: 26px;
+        width: auto;
+        opacity: 0.55;
+        filter: grayscale(1) brightness(2);
+        transition: var(--transition);
+        flex-shrink: 0;
+      }
+      .ts-marquee-logo:hover {
+        opacity: 1;
+        filter: grayscale(0) brightness(1);
+      }
+      .ts-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 40px;
+      }
+      .ts-tab {
+        padding: 9px 18px;
+        border-radius: 50px;
+        font-family: var(--font-head);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--c-sub);
+        background: var(--c-card);
+        border: 1px solid var(--c-border);
+        cursor: pointer;
+        transition: var(--transition);
+        white-space: nowrap;
+      }
+      .ts-tab:hover {
+        color: var(--c-text);
+        border-color: var(--c-border-h);
+      }
+      .ts-tab.active {
+        color: #fff;
+        background: var(--grad);
+        border-color: transparent;
+      }
+      .ts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+      }
+      .ts-card {
+        padding: 28px;
+        border-radius: var(--r-card);
+        background: var(--c-card);
+        border: 1px solid var(--c-border);
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+      }
+      .ts-card.ts-hidden {
+        display: none;
+      }
+      .ts-card:hover {
+        background: var(--c-card-h);
+        border-color: var(--c-border-h);
+        transform: translateY(-3px);
+      }
+      .ts-card-head {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        margin-bottom: 18px;
+      }
+      .ts-card-icon {
+        width: 44px;
+        height: 44px;
+        flex-shrink: 0;
+        border-radius: 12px;
+        background: rgba(124, 58, 237, 0.15);
+        border: 1px solid rgba(124, 58, 237, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
+      .ts-card-title {
+        font-family: var(--font-head);
+        font-weight: 700;
+        font-size: 17px;
+        margin-bottom: 4px;
+      }
+      .ts-card-desc {
+        color: var(--c-sub);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      .ts-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .ts-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 12px 6px 8px;
+        border-radius: 8px;
+        background: var(--c-bg2);
+        border: 1px solid var(--c-border);
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--c-sub);
+        transition: var(--transition);
+      }
+      .ts-chip:hover {
+        color: var(--c-text);
+        border-color: var(--c-border-h);
+        background: rgba(124, 58, 237, 0.1);
+        transform: translateY(-2px);
+      }
+      .ts-chip img {
+        width: 15px;
+        height: 15px;
+        filter: brightness(0) invert(1);
+        opacity: 0.85;
+      }
+      .ts-chip:hover img {
+        opacity: 1;
+      }
+      @media (max-width: 768px) {
+        .ts-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
       /* ─── TESTIMONIALS ──────────────────────────────────── */
       #testimonials {
         background: var(--c-bg2);
@@ -1485,6 +1658,7 @@
           <a href="#features" data-key="nav.link2" data-navkey="whatYouGet"
             >What You Get</a
           >
+          <a href="#techstack" data-navkey="techStack">Tech Stack</a>
           <a href="#testimonials" data-key="nav.link3" data-navkey="results"
             >Results</a
           >
@@ -1512,6 +1686,9 @@
       >
       <a href="#features" onclick="closeMobile()" data-navkey="whatYouGet"
         >What You Get</a
+      >
+      <a href="#techstack" onclick="closeMobile()" data-navkey="techStack"
+        >Tech Stack</a
       >
       <a href="#testimonials" onclick="closeMobile()" data-navkey="results"
         >Results</a
@@ -1734,6 +1911,29 @@
         <div class="features-grid" id="featuresGrid">
           <!-- Populated by JS -->
         </div>
+      </div>
+    </section>
+
+    <!-- TECH STACK -->
+    <section id="techstack" class="section-pad">
+      <div class="container">
+        <div class="section-label">
+          <span class="badge">🛠️ Our Toolkit</span>
+        </div>
+        <h2 class="section-title">
+          Built With the <span class="text-grad">Latest AI & Web Tech</span>
+        </h2>
+        <p class="section-sub">
+          We stay on the cutting edge so your automation does too — here's
+          what powers every project we ship.
+        </p>
+
+        <div class="ts-marquee-wrap">
+          <div class="ts-marquee-track" id="tsMarquee"></div>
+        </div>
+
+        <div class="ts-tabs" id="tsTabs"></div>
+        <div class="ts-grid" id="tsGrid"></div>
       </div>
     </section>
 
@@ -2238,6 +2438,216 @@
           )
           .join("");
       }
+
+      // ─── TECH STACK ───────────────────────────────────────────────────────────────
+      const TECH_STACK = [
+        {
+          key: "ai",
+          icon: "🧠",
+          title: "AI & Large Language Models",
+          desc: "Powering intelligent applications with cutting-edge AI technologies.",
+          tools: [
+            { name: "OpenAI (GPT)", slug: "openai" },
+            { name: "Anthropic Claude", slug: "anthropic" },
+            { name: "Google Gemini", slug: "googlegemini" },
+            { name: "OpenRouter" },
+            { name: "LangGraph" },
+            { name: "CrewAI" },
+            { name: "Model Context Protocol (MCP)" },
+          ],
+        },
+        {
+          key: "voice",
+          icon: "🎙️",
+          title: "AI Voice & Conversational AI",
+          desc: "Building natural, human-like voice assistants and AI receptionists.",
+          tools: [
+            { name: "Vapi" },
+            { name: "Retell AI" },
+            { name: "ElevenLabs" },
+            { name: "Deepgram" },
+            { name: "Cartesia" },
+            { name: "Twilio Voice", slug: "twilio" },
+          ],
+        },
+        {
+          key: "frontend",
+          icon: "💻",
+          title: "Frontend Development",
+          desc: "Creating modern, responsive, and high-performance web applications.",
+          tools: [
+            { name: "Next.js", slug: "nextdotjs" },
+            { name: "React.js", slug: "react" },
+            { name: "TypeScript", slug: "typescript" },
+            { name: "Tailwind CSS", slug: "tailwindcss" },
+            { name: "shadcn/ui" },
+            { name: "HTML5", slug: "html5" },
+            { name: "CSS3", slug: "css3" },
+            { name: "JavaScript", slug: "javascript" },
+          ],
+        },
+        {
+          key: "backend",
+          icon: "⚙️",
+          title: "Backend Development",
+          desc: "Developing secure, scalable, and enterprise-grade backend systems.",
+          tools: [
+            { name: "FastAPI", slug: "fastapi" },
+            { name: "NestJS", slug: "nestjs" },
+            { name: "Node.js", slug: "nodedotjs" },
+            { name: "Python", slug: "python" },
+            { name: "Express.js", slug: "express" },
+            { name: "REST APIs" },
+            { name: "GraphQL", slug: "graphql" },
+          ],
+        },
+        {
+          key: "mobile",
+          icon: "📱",
+          title: "Mobile App Development",
+          desc: "Building high-quality mobile applications for Android and iOS.",
+          tools: [
+            { name: "React Native" },
+            { name: "Flutter", slug: "flutter" },
+            { name: "Expo", slug: "expo" },
+            { name: "Firebase", slug: "firebase" },
+          ],
+        },
+        {
+          key: "database",
+          icon: "🗄️",
+          title: "Database & Storage",
+          desc: "Reliable and scalable data management solutions.",
+          tools: [
+            { name: "PostgreSQL", slug: "postgresql" },
+            { name: "Supabase", slug: "supabase" },
+            { name: "MySQL", slug: "mysql" },
+            { name: "MongoDB", slug: "mongodb" },
+            { name: "Redis", slug: "redis" },
+            { name: "Cloudflare R2", slug: "cloudflare" },
+          ],
+        },
+        {
+          key: "automation",
+          icon: "🔁",
+          title: "Automation & Workflow",
+          desc: "Automating business processes to improve efficiency and reduce manual work.",
+          tools: [
+            { name: "n8n", slug: "n8n" },
+            { name: "Make" },
+            { name: "Zapier", slug: "zapier" },
+            { name: "Pipedream", slug: "pipedream" },
+            { name: "Activepieces" },
+          ],
+        },
+        {
+          key: "cloud",
+          icon: "☁️",
+          title: "Cloud & Hosting",
+          desc: "Reliable cloud infrastructure for maximum uptime and scalability.",
+          tools: [
+            { name: "Hostinger" },
+            { name: "Vercel", slug: "vercel" },
+            { name: "Railway" },
+            { name: "Cloudflare", slug: "cloudflare" },
+            { name: "AWS", slug: "amazonaws" },
+            { name: "DigitalOcean", slug: "digitalocean" },
+            { name: "Docker", slug: "docker" },
+          ],
+        },
+        {
+          key: "devops",
+          icon: "🔧",
+          title: "DevOps & CI/CD",
+          desc: "Automating deployment pipelines for faster and more reliable software delivery.",
+          tools: [
+            { name: "GitHub", slug: "github" },
+            { name: "GitHub Actions", slug: "githubactions" },
+            { name: "Docker", slug: "docker" },
+          ],
+        },
+      ];
+
+      var TS_TAB_LABELS = {
+        ai: "🧠 AI & LLMs",
+        voice: "🎙️ Voice AI",
+        frontend: "💻 Frontend",
+        backend: "⚙️ Backend",
+        mobile: "📱 Mobile",
+        database: "🗄️ Database",
+        automation: "🔁 Automation",
+        cloud: "☁️ Cloud",
+        devops: "🔧 DevOps",
+      };
+
+      function _tsChip(t) {
+        var icon = t.slug
+          ? `<img src="https://cdn.simpleicons.org/${t.slug}" alt="" loading="lazy" onerror="this.remove()">`
+          : "";
+        return `<span class="ts-chip">${icon}${t.name}</span>`;
+      }
+
+      function renderTechStack() {
+        var grid = document.getElementById("tsGrid");
+        var tabs = document.getElementById("tsTabs");
+        var marquee = document.getElementById("tsMarquee");
+        if (!grid || !tabs || !marquee) return;
+
+        tabs.innerHTML =
+          '<button class="ts-tab active" data-cat="all" onclick="filterTechStack(\'all\', this)">All</button>' +
+          TECH_STACK.map(
+            (c) =>
+              `<button class="ts-tab" data-cat="${c.key}" onclick="filterTechStack('${c.key}', this)">${TS_TAB_LABELS[c.key] || c.title}</button>`,
+          ).join("");
+
+        grid.innerHTML = TECH_STACK.map(
+          (c, i) => `
+    <div class="ts-card animate-in" data-cat="${c.key}" style="animation-delay:${i * 0.06}s">
+      <div class="ts-card-head">
+        <div class="ts-card-icon">${c.icon}</div>
+        <div>
+          <div class="ts-card-title">${c.title}</div>
+          <div class="ts-card-desc">${c.desc}</div>
+        </div>
+      </div>
+      <div class="ts-chips">${c.tools.map(_tsChip).join("")}</div>
+    </div>
+  `,
+        ).join("");
+
+        // Marquee: only the tools with a real logo, deduped, doubled for a seamless loop
+        var withLogos = [];
+        var seen = {};
+        TECH_STACK.forEach((c) =>
+          c.tools.forEach((t) => {
+            if (t.slug && !seen[t.slug]) {
+              seen[t.slug] = true;
+              withLogos.push(t);
+            }
+          }),
+        );
+        var logoHtml = withLogos
+          .map(
+            (t) =>
+              `<img class="ts-marquee-logo" src="https://cdn.simpleicons.org/${t.slug}/f1f5f9" alt="${t.name}" title="${t.name}" loading="lazy" onerror="this.remove()">`,
+          )
+          .join("");
+        marquee.innerHTML = logoHtml + logoHtml;
+      }
+
+      function filterTechStack(cat, btn) {
+        document
+          .querySelectorAll(".ts-tab")
+          .forEach((b) => b.classList.toggle("active", b === btn));
+        document.querySelectorAll(".ts-card").forEach((card) => {
+          card.classList.toggle(
+            "ts-hidden",
+            cat !== "all" && card.dataset.cat !== cat,
+          );
+        });
+      }
+
+      renderTechStack();
 
       function renderTestimonials(data) {
         const el = document.getElementById("testimonialsGrid");
