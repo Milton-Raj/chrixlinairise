@@ -1170,92 +1170,6 @@
         margin-top: 20px;
       }
 
-      /* ─── INLINE BOOKING WIDGET ─────────────────────────── */
-      .booking-card {
-        position: relative;
-        background: linear-gradient(
-          180deg,
-          rgba(124, 58, 237, 0.14),
-          rgba(6, 182, 212, 0.04) 40%,
-          rgba(255, 255, 255, 0.02)
-        );
-        border: 1px solid var(--c-border-h);
-        border-radius: 28px;
-        padding: 36px 36px 12px;
-        box-shadow:
-          var(--shadow-glow),
-          0 30px 70px rgba(0, 0, 0, 0.45);
-      }
-      .booking-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60%;
-        height: 3px;
-        border-radius: 0 0 4px 4px;
-        background: var(--grad);
-      }
-      .booking-card-header {
-        text-align: center;
-        margin-bottom: 24px;
-      }
-      .booking-card-icon {
-        width: 52px;
-        height: 52px;
-        margin: 0 auto 14px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        background: var(--grad);
-        box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4);
-      }
-      .booking-card-title {
-        font-family: var(--font-head);
-        font-weight: 800;
-        font-size: 24px;
-        color: var(--c-text);
-        margin-bottom: 8px;
-      }
-      .booking-card-sub {
-        color: var(--c-sub);
-        font-size: 14px;
-        max-width: 380px;
-        margin: 0 auto;
-      }
-      .calendly-inline-widget {
-        border-radius: 20px;
-        overflow: hidden;
-        background: #fff;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-      }
-      .booking-alt-link {
-        text-align: center;
-        color: var(--c-muted);
-        font-size: 13px;
-        margin-top: 20px;
-      }
-      .booking-alt-link a {
-        color: var(--c-primary);
-        font-weight: 600;
-        text-decoration: none;
-      }
-      .booking-alt-link a:hover {
-        text-decoration: underline;
-      }
-      @media (max-width: 640px) {
-        .booking-card {
-          padding: 24px 16px 4px;
-          border-radius: 20px;
-        }
-        .booking-card-title {
-          font-size: 19px;
-        }
-      }
-
       /* ─── FOOTER ────────────────────────────────────────── */
       footer {
         background: var(--c-bg2);
@@ -1989,36 +1903,6 @@
             1-on-1 strategy call and get a personalised automation roadmap — no
             strings attached.
           </p>
-          <div
-            id="inlineBookingWrap"
-            style="display: none; max-width: 800px; margin: 40px auto 0"
-          >
-            <div class="booking-card">
-              <div class="booking-card-header">
-                <div class="booking-card-icon">📅</div>
-                <div class="booking-card-title">
-                  Pick a Time That Works Best
-                </div>
-                <div class="booking-card-sub">
-                  Choose a slot below — you'll get an instant confirmation,
-                  no back-and-forth.
-                </div>
-              </div>
-              <div
-                id="calendlyInlineWidget"
-                class="calendly-inline-widget"
-                style="min-width: 280px; height: 700px"
-              ></div>
-            </div>
-            <p class="booking-alt-link">
-              Prefer to just leave your details?
-              <a
-                href="#"
-                onclick="document.getElementById('inlineBookingWrap').style.display='none';document.getElementById('strategyCallForm').style.display='block';return false;"
-                >Use the contact form instead →</a
-              >
-            </p>
-          </div>
           <div
             id="strategyCallForm"
             style="max-width: 480px; margin: 32px auto 0"
@@ -3060,39 +2944,6 @@
         });
       }
 
-      var _inlineBookingRendered = false;
-      function renderInlineBooking(bookingObj) {
-        if (_inlineBookingRendered || !bookingObj || !bookingObj.url) return;
-        var wrap = document.getElementById("inlineBookingWrap");
-        var widgetEl = document.getElementById("calendlyInlineWidget");
-        var formEl = document.getElementById("strategyCallForm");
-        if (!wrap || !widgetEl || !formEl) return;
-        if (bookingObj.platform === "calendly") {
-          var sep = bookingObj.url.indexOf("?") === -1 ? "?" : "&";
-          var themedUrl =
-            bookingObj.url +
-            sep +
-            "background_color=0a0a16&text_color=f1f5f9&primary_color=7c3aed&hide_gdpr_banner=1";
-          widgetEl.setAttribute("data-url", themedUrl);
-          var s = document.createElement("script");
-          s.src = "https://assets.calendly.com/assets/external/widget.js";
-          s.async = true;
-          document.body.appendChild(s);
-          wrap.style.display = "block";
-          formEl.style.display = "none";
-          _inlineBookingRendered = true;
-        } else if (bookingObj.platform === "cal") {
-          var iframe = document.createElement("iframe");
-          iframe.src = bookingObj.url;
-          iframe.style.cssText =
-            "width:100%;height:100%;border:0;border-radius:16px";
-          widgetEl.appendChild(iframe);
-          wrap.style.display = "block";
-          formEl.style.display = "none";
-          _inlineBookingRendered = true;
-        }
-      }
-
       (async function () {
         // 1. Apply from localStorage immediately (fast, no delay)
         try {
@@ -3101,7 +2952,6 @@
           );
           if (bl.url) {
             applyBookingLink(bl.url);
-            renderInlineBooking(bl);
           } else {
             // Also check old storage key for backwards compat
             var bd = JSON.parse(
@@ -3124,7 +2974,6 @@
                 JSON.stringify(dbVal),
               );
               applyBookingLink(dbVal.url);
-              renderInlineBooking(dbVal);
             }
           } catch (e) {}
         }
